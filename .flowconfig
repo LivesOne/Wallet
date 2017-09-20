@@ -14,6 +14,11 @@
 .*/Libraries/react-native/React.js
 .*/Libraries/react-native/ReactNative.js
 
+; Ignore libraries with broken flow
+.*/node_modules/react-navigation/.*
+.*/node_modules/react-native-tab-view/.*
+.*/node_modules/react-native-linear-gradient/.*
+
 [include]
 
 [libs]
