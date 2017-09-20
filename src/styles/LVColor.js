@@ -13,8 +13,11 @@ const LVColor = {
     white: '#FFFFFF',
     // Navigation Bar 的背景颜色
     navigationBar: '#f9f9f9',
-    // Tab Bar 的背景色
-    tabBar: '#ffffff',
+    // Tab Bar
+    tabBar: {
+        background: '#fff',
+        tintColor: '#FF892E',
+    },
     // 给文本使用
     text: {                
         grey1: '#494949',

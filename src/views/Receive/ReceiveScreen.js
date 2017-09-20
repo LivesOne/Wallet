@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Receipt/ReceiptScreen.js
+ * File: src/views/Receive/ReceiveScreen.js
  * @flow
  */
 "use strict";

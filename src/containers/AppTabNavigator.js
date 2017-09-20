@@ -19,8 +19,8 @@ import TransactionNavigator from '../views/Transaction/TransactionNavigator';
 const assetsIcon = require("../assets/images/tab_assets.png");
 const assetsFocusedIcon = require("../assets/images/tab_assets_h.png");
 
-const receiptIcon = require("../assets/images/tab_receipt.png");
-const receiptFocusedIcon = require("../assets/images/tab_receipt_h.png");
+const receiveIcon = require("../assets/images/tab_receive.png");
+const receiveFocusedIcon = require("../assets/images/tab_receive_h.png");
 
 const transIcon = require("../assets/images/tab_transaction.png");
 const transFocusedIcon = require("../assets/images/tab_transaction_h.png");
@@ -43,7 +43,7 @@ const AppTabNavigator = TabNavigator(
             path: "Receive",
             navigationOptions: ({ navigation }) => ({
                 tabBarLabel: LVStrings.receive,
-                tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? receiptIcon : receiptFocusedIcon} />
+                tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? receiveIcon : receiveFocusedIcon} />
             })
         },
         Transaction: {
@@ -69,8 +69,9 @@ const AppTabNavigator = TabNavigator(
         tabBarOptions: {
             showLabel: true,
             style: {
-                backgroundColor: LVColor.tabBar,
-            }
+                backgroundColor: LVColor.tabBar.background,
+            },
+            activeTintColor: LVColor.tabBar.tintColor,
         },
         mode: Platform.OS === "ios" ? "modal" : "card",
         navigationOptions: {
