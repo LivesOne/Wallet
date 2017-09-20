@@ -7,13 +7,12 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
+import AppTabNavigator from './containers/AppTabNavigator';
 
 class VenusApp extends Component {
     render() {
         return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} >
-                <Text>Venus App</Text>
-            </View>
+            <AppTabNavigator />
         )
     }
 }

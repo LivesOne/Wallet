@@ -15,6 +15,8 @@ export const Color = {
     white: '#FFFFFF',
     // Navigation Bar 的背景颜色
     navigationBar: '#f9f9f9',
+    // Tab Bar 的背景色
+    tabBar: '#ffffff',
     // 给文本使用
     text: {                
         grey1: '#494949',
@@ -23,7 +25,7 @@ export const Color = {
         grey4: '#B5B5B5',
     },
     // 背景色
-    background: {                 
+    background: {             
         grey1: '#ddd',
         grey2: '#eee',
         grey3: '#f7f7f7',
