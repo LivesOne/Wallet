@@ -6,6 +6,7 @@
 import React, { Component, PropTypes } from 'react'
 import { Base, ActiveStyles, InActiveStyles, NormalStyles } from './styles'
 import { TouchableHighlight, View, ViewPropTypes, Image, Text } from 'react-native'
+import LVColor from '../../styles/LVColor'
 
 class MXButton extends Component {
 
@@ -40,6 +41,7 @@ class MXButton extends Component {
       <TouchableHighlight
         activeOpacity={1}
         disabled = {disabled}
+        underlayColor={ LVColor.primary }
         onPressOut={() => {this.setState({ pressStatus: false })}}
         onPressIn={() => {this.setState({ pressStatus: true })}}
         style={[
