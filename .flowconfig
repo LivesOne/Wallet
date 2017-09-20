@@ -16,7 +16,6 @@
 
 ; Ignore libraries with broken flow
 .*/node_modules/react-navigation/.*
-.*/node_modules/react-native-tab-view/.*
 .*/node_modules/react-native-linear-gradient/.*
 
 [include]
@@ -30,6 +29,9 @@ flow/
 emoji=true
 
 module.system=haste
+
+module.name_mapper='^react-navigation$' -> 'emptyObject'
+module.name_mapper='^react-native-linear-gradient$' -> 'emptyObject'
 
 munge_underscores=true
 
