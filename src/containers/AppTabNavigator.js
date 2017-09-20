@@ -8,7 +8,7 @@
 import React from 'react';
 import { Image, Platform, StatusBar } from "react-native";
 import { TabNavigator, TabBarBottom } from "react-navigation";
-import * as GlobalStyle from '../styles';
+import LVColor from '../styles/LVColor';
 
 import AssetsNavigator from '../views/Assets/AssetsNavigator';
 import ReceiptNavigator from '../views/Receipt/ReceiptNavigator';
@@ -64,7 +64,7 @@ const AppTabNavigator = TabNavigator(
         tabBarOptions: {
             showLabel: true,
             style: {
-                backgroundColor: GlobalStyle.Color.tabBar,
+                backgroundColor: LVColor.tabBar,
             }
         },
         mode: Platform.OS === "ios" ? "modal" : "card",
