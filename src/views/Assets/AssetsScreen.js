@@ -9,6 +9,8 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import MXButton from '../../components/MXButton';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
+import MXTextInputWithClear from '../../components/MXTextInputWithClear';
+
 class AssetsScreen extends Component {
     static navigationOptions = {
         header: null
@@ -30,6 +32,10 @@ class AssetsScreen extends Component {
                         alert("button clicked");
                     }}
                     themeStyle={"active"}
+                />
+                <MXTextInputWithClear
+                    rounded
+                    callbackParent = {() => {}}
                 />
                 <Text>Assets Screen</Text>
             </View>

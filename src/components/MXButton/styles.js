@@ -5,7 +5,7 @@
  
 import { StyleSheet, PixelRatio } from 'react-native'
 import PLColors from '../../assets/MXColors';
-import * as PLUtils from "../../utils/MXUtils";
+import * as MXUtils from "../../utils/MXUtils";
 let LVStyleSheet = require('../../styles/LVStyleSheet');
 
 
@@ -14,12 +14,12 @@ const Base = LVStyleSheet.create({
     justifyContent: 'center',
     phone: {
       height: 50,
-      width: PLUtils.getDeviceWidth() - 17 * PixelRatio.get(),
+      width: MXUtils.getDeviceWidth() - 17 * PixelRatio.get(),
       borderRadius: 5,
     },
     pad: {
       height: 60,
-      width:  PLUtils.getDeviceWidth() * 3 / 5,
+      width:  MXUtils.getDeviceWidth() * 3 / 5,
       borderRadius: 10,
     }
   },
