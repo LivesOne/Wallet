@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "allowJs": true,
+        "target": "es2016",
         "allowSyntheticDefaultImports": true
     },
     "exclude": [
