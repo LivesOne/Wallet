@@ -1,6 +1,8 @@
 package com.venus;
 
 import com.facebook.react.ReactActivity;
+import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
 
 public class MainActivity extends ReactActivity {
 
