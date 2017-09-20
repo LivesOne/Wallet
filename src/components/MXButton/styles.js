@@ -4,17 +4,18 @@
 'use strict'
  
 import { StyleSheet, PixelRatio } from 'react-native'
-import PLColors from '../../assets/MXColors';
 import * as MXUtils from "../../utils/MXUtils";
 let LVStyleSheet = require('../../styles/LVStyleSheet');
+import LVColor from '../../styles/LVColor'
 
 
 const Base = LVStyleSheet.create({
   main: {
+    backgroundColor: LVColor.primary,
     justifyContent: 'center',
     phone: {
       height: 50,
-      width: MXUtils.getDeviceWidth() - 17 * PixelRatio.get(),
+      width: 240,
       borderRadius: 5,
     },
     pad: {
@@ -37,67 +38,41 @@ const Base = LVStyleSheet.create({
     alignItems: 'center',
   },
   label: {
-    fontSize: 16,
-  },
-  icon: {
-    height: 30,
-    width: 30,
+    fontSize: 15,
   },
 });
 
 
 const NormalStyles = StyleSheet.create({
   main: {
-    backgroundColor: PLColors.PL_BACKGROUND,
-    borderColor: PLColors.PL_BORDER_GRAY,
+    backgroundColor: LVColor.white,
+    borderColor: LVColor.primary,
     borderWidth: 1,
   },
   label: {
-    color: PLColors.PL_TEXT_BLACK_DARK,
-  },
-  icon: {
-    tintColor: PLColors.PL_BACKGROUND,
-  },
-});
-
-const LightStyles = StyleSheet.create({
-  main: {
-    backgroundColor: PLColors.PL_BACKGROUND,
-    borderColor: PLColors.PL_BORDER_GRAY,
-    borderWidth: 1,
-  },
-  label: {
-    color: PLColors.PL_PRIMARY,
-  },
-  icon: {
-    tintColor: PLColors.PL_BACKGROUND,
+    color: LVColor.primary,
   },
 });
 
 const ActiveStyles = StyleSheet.create({
   main: {
-    backgroundColor: '#3FA2FF',
+    backgroundColor: LVColor.primary,
+    borderWidth: 0,
   },
   label: {
-    color: PLColors.PL_BACKGROUND,
-  },
-  icon: {
-    tintColor: '#fff',
+    color: LVColor.white,
   },
 });
 
 const InActiveStyles = StyleSheet.create({
   main: {
-    backgroundColor: PLColors.PL_FILL,
-    borderColor: PLColors.PL_BACKGROUND,
+    backgroundColor: LVColor.white,
+    borderColor: LVColor.border.grey1,
     borderWidth: 1,
   },
   label: {
-    color: PLColors.PL_TEXT_BLACK_LIGHT,
-  },
-  icon: {
-    tintColor: '#3FA2FF',
+    color: LVColor.text.grey1,
   },
 });
 
-export { Base, ActiveStyles, LightStyles, InActiveStyles, NormalStyles };
+export { Base, ActiveStyles, InActiveStyles, NormalStyles };

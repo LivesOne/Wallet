@@ -8,7 +8,7 @@
 // 全局颜色
 const LVColor = {
     // App主色调
-    primary: '#3FA2FF',
+    primary: '#FC9B33',
     // 白色
     white: '#FFFFFF',
     // Navigation Bar 的背景颜色
@@ -36,4 +36,6 @@ const LVColor = {
     },
 };
 
-export default LVColor;
+export default {
+    ...LVColor,
+  };

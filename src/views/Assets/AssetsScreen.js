@@ -27,7 +27,6 @@ class AssetsScreen extends Component {
                 />
                 <MXButton
                     title={"hello"}
-                    rounded
                     onPress = {() => {
                         alert("button clicked");
                     }}
