@@ -9,6 +9,7 @@ import React from 'react';
 import { Image, Platform, StatusBar } from "react-native";
 import { TabNavigator, TabBarBottom } from "react-navigation";
 import LVColor from '../styles/LVColor';
+import LVStrings from '../assets/localization';
 
 import AssetsNavigator from '../views/Assets/AssetsNavigator';
 import ReceiveNavigator from '../views/Receive/ReceiveNavigator';
@@ -33,6 +34,7 @@ const AppTabNavigator = TabNavigator(
             screen: AssetsNavigator,
             path: "Assets",
             navigationOptions: ({ navigation }) => ({
+                tabBarLabel: LVStrings.assets,
                 tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? assetsIcon : assetsFocusedIcon} />
             })
         },
@@ -40,6 +42,7 @@ const AppTabNavigator = TabNavigator(
             screen: ReceiveNavigator,
             path: "Receive",
             navigationOptions: ({ navigation }) => ({
+                tabBarLabel: LVStrings.receive,
                 tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? receiptIcon : receiptFocusedIcon} />
             })
         },
@@ -47,6 +50,7 @@ const AppTabNavigator = TabNavigator(
             screen: TransactionNavigator,
             path: "Transaction",
             navigationOptions: ({ navigation }) => ({
+                tabBarLabel: LVStrings.transaction,
                 tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? transIcon : transFocusedIcon} />
             })
         },
@@ -54,6 +58,7 @@ const AppTabNavigator = TabNavigator(
             screen: ProfileNavigator,
             path: "Profile",
             navigationOptions: ({ navigation }) => ({
+                tabBarLabel: LVStrings.profile,
                 tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? profileIcon : profileFocusedIcon} />
             })
         }
