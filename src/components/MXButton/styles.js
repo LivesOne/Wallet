@@ -6,10 +6,10 @@
 import { StyleSheet, PixelRatio } from 'react-native'
 import PLColors from '../../assets/MXColors';
 import * as PLUtils from "../../utils/MXUtils";
-var PLStyleSheet = require('../../styles/MXStyleSheet');
+let LVStyleSheet = require('../../styles/LVStyleSheet');
 
 
-const Base = PLStyleSheet.create({
+const Base = LVStyleSheet.create({
   main: {
     justifyContent: 'center',
     phone: {

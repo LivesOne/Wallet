@@ -8,7 +8,7 @@ import React, { Component, PropTypes } from "react";
 import { View, StyleSheet, Image, PixelRatio, Text, TouchableOpacity, Platform } from "react-native";
 
 import PLColors from '../../assets/MXColors';
-let MXStyleSheet = require('../../styles/MXStyleSheet');
+let LVStyleSheet = require('../../styles/LVStyleSheet');
 
 const defaultBackIcon = require("../../assets/images/back.png");
 
@@ -58,7 +58,7 @@ export default class MXNavigatorHeader extends Component {
     }
 }
 
-const styles = MXStyleSheet.create({
+const styles = LVStyleSheet.create({
     container: {
         paddingTop: Platform.OS === "ios" ? 20 : 0,
         width: "100%",
