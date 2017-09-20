@@ -1,0 +1,18 @@
+{
+    "prettier.printWidth": 120,
+    "prettier.tabWidth": 4,
+    "javascript.validate.enable": false,
+    "prettier.singleQuote": true,
+    "flow.enabled": true,
+    "fileHeaderCommentHelper.languageConfigs": {
+        "language_javascript": {
+            "template": [
+                "/*",
+                " * Project: $(projectName)",
+                " * File: $(currentFile)",
+                " * @flow",
+                " */"
+            ]
+        }
+    }
+}
