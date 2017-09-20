@@ -8,7 +8,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-class ReceiptScreen extends Component {
+class ReceiveScreen extends Component {
     static navigationOptions = {
         header: null
     };
@@ -22,4 +22,4 @@ class ReceiptScreen extends Component {
     }
 }
 
-export default ReceiptScreen;
+export default ReceiveScreen;

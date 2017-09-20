@@ -11,7 +11,7 @@ import { TabNavigator, TabBarBottom } from "react-navigation";
 import LVColor from '../styles/LVColor';
 
 import AssetsNavigator from '../views/Assets/AssetsNavigator';
-import ReceiptNavigator from '../views/Receipt/ReceiptNavigator';
+import ReceiveNavigator from '../views/Receive/ReceiveNavigator';
 import ProfileNavigator from '../views/Profile/ProfileNavigator';
 import TransactionNavigator from '../views/Transaction/TransactionNavigator';
 
@@ -36,9 +36,9 @@ const AppTabNavigator = TabNavigator(
                 tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? assetsIcon : assetsFocusedIcon} />
             })
         },
-        Receipt: {
-            screen: ReceiptNavigator,
-            path: "Receipt",
+        Receive: {
+            screen: ReceiveNavigator,
+            path: "Receive",
             navigationOptions: ({ navigation }) => ({
                 tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? receiptIcon : receiptFocusedIcon} />
             })

@@ -8,10 +8,10 @@
 import React from 'react';
 import { StackNavigator } from "react-navigation";
 
-import ReceiptScreen from './ReceiptScreen';
+import ReceiveScreen from './ReceiveScreen';
 
-const ReceiptNavigator = StackNavigator({
-    Receipt: { screen: ReceiptScreen }
+const ReceiveNavigator = StackNavigator({
+    Receive: { screen: ReceiveScreen }
 });
 
-export default ReceiptNavigator;
+export default ReceiveNavigator;
