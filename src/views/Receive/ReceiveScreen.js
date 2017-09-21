@@ -28,6 +28,13 @@ class ReceiveScreen extends Component {
         let pic = {
             uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
           };
+
+        //   return (
+        //     <View style={styles.container}>
+        //       <View style={styles.avatar} />
+        //       <View style={styles.badge} />
+        //     </View>
+        //   );
         
         return (
             <View style={styles.container}>
@@ -64,8 +71,9 @@ class ReceiveScreen extends Component {
                     }}
                     themeStyle={"active"}
                 />
-                <Image source={receiveIcon} style={styles.share}></Image>
                 </View>
+                <Image source={receiveIcon} style={styles.share}></Image>
+
                 {/* </View> */}
             </View>
         );
@@ -80,7 +88,17 @@ const styles = StyleSheet.create({
         backgroundColor: LVColor.white,
     },
 
-    
+    // avatar: {
+    //     backgroundColor: 'black',
+    //     width: 60,
+    //     height: 60,
+    //   },
+    //   badge: {
+    //     backgroundColor: 'red',
+    //     width: 20,
+    //     height: 20,
+    //     translateY: -60,
+    //   },
 
     topContainer:{
         flex:1,
@@ -121,7 +139,6 @@ const styles = StyleSheet.create({
         justifyContent:'space-between',
         backgroundColor: LVColor.navigationBar,
         padding:40,
-        
     },
 
     qrcode_icon: {
@@ -138,6 +155,8 @@ const styles = StyleSheet.create({
     share:{
         height:50,
         width:50,
+        flex:1,
+        translateY:-30,
     }
     
 });
