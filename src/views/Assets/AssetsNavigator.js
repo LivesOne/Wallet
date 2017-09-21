@@ -9,9 +9,11 @@ import React from 'react';
 import { StackNavigator } from "react-navigation";
 
 import AssetsScreen from './AssetsScreen';
+import AssetsImportPage from './AssetsImportPage'
 
 const AssetsNavigator = StackNavigator({
-    Assets: { screen: AssetsScreen }
+    Assets: { screen: AssetsScreen },
+    AssetsImport: { screen: AssetsImportPage }
 });
 
 export default AssetsNavigator;

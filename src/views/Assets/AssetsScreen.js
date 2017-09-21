@@ -43,10 +43,11 @@ class AssetsScreen extends Component {
             lvtRmb: 20000,
             ethRmb: 52000
         };
+        this.onPressSelectPurse = this.onPressSelectPurse.bind(this);
     }
 
     onPressSelectPurse() {
-        alert('change purse');
+        this.props.navigation.navigate("AssetsImport")
     }
 
     onPressShowAll() {
