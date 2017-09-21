@@ -24,6 +24,8 @@ const LVColor = {
         grey2: '#686868',
         grey3: '#9B9B9B',
         grey4: '#B5B5B5',
+        editTextContent: '#677384',
+        placeHolder: '#bfc5d1'
     },
     // 背景色
     background: {             
@@ -36,6 +38,7 @@ const LVColor = {
         grey1: '#ddd',
         grey2: '#eee',
         grey3: '#f4f4f4',
+        editTextBottomBoarder: '#bfc5d1',
     },
 };
 
