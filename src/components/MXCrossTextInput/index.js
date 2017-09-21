@@ -7,7 +7,6 @@ import React, { Component, PropTypes } from 'react'
 import {View, TextInput, TouchableOpacity, Image,} from 'react-native'
 import { Base, DefaultStyles, LightStyles, WhiteStyles } from './styles';
 
-import PLColors from '../../assets/MXColors';
 import LVColor from '../../styles/LVColor'
 
 

@@ -4,7 +4,6 @@
 
 import { StyleSheet, PixelRatio } from 'react-native';
 
-import PLColors from '../../assets/MXColors';
 import * as MXUtils from "../../utils/MXUtils";
 let LVStyleSheet = require('../../styles/LVStyleSheet');
 import LVColor from '../../styles/LVColor'
