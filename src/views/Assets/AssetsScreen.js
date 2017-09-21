@@ -11,12 +11,26 @@ import LVStrings from '../../assets/localization';
 import GradientPanel from '../Common/GradientPanel';
 import MXTouchableImage from '../../components/MXTouchableImage';
 
+const purseIcon = require('../../assets/images/assets_purse.png');
 const selectPurseIcon = require('../../assets/images/select_purse.png');
 
 class AssetsScreen extends Component {
     static navigationOptions = {
         header: null
     };
+
+    state: {
+        purseTitle: string,
+        purseAddress: string
+    };
+
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            purseTitle: '傲游LivesToken',
+            purseAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7'
+        };
+    }
 
     onPressSelectPurse() {
         alert('change purse');
@@ -36,6 +50,28 @@ class AssetsScreen extends Component {
                                 onPress={this.onPressSelectPurse}
                             />
                         </View>
+
+                        <View style={styles.purseInfoPanel}>
+                            <Image source={purseIcon} />
+                            <View style={{ flex: 1, marginLeft: 10 }}>
+                                <Text
+                                    style={[styles.purseText, styles.purseTitle]}
+                                    numberOfLines={1}
+                                    ellipsizeMode="middle"
+                                >
+                                    {this.state.purseTitle}
+                                </Text>
+                                <Text
+                                    style={[styles.purseText, styles.purseAddress]}
+                                    numberOfLines={1}
+                                    ellipsizeMode="middle"
+                                >
+                                    {this.state.purseAddress}
+                                </Text>
+                            </View>
+                        </View>
+
+                        <View style={{}} />
                     </GradientPanel>
                 </View>
             </View>
@@ -76,7 +112,30 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#ffffff',
         backgroundColor: 'transparent'
-    }
+    },
+    purseInfoPanel: {
+        marginLeft: 12.5,
+        marginRight: 12.5,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center'
+    },
+    purseText: {
+        marginTop: 2.5,
+        marginBottom: 2.5,
+        textAlign: 'left',
+        color: '#ffffff',
+        backgroundColor: 'transparent'
+    },
+    purseTitle: {
+        fontSize: 18,
+        fontWeight: '500'
+    },
+    purseAddress: {
+        width: 170,
+        fontSize: 12
+    },
+    balance: {}
 });
 
 export default AssetsScreen;
