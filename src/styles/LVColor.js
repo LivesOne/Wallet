@@ -18,13 +18,15 @@ const LVColor = {
         background: '#fff',
         tintColor: '#FF892E'
     },
+    // 分隔线
+    separateLine: '#EEEFF2',
     // 给文本使用
     text: {
         white: '#fff',
-        grey1: '#494949',
-        grey2: '#686868',
-        grey3: '#9B9B9B',
-        grey4: '#B5B5B5',
+        grey1: '#667383',
+        grey2: '#677384',
+        grey3: '#bec4d0',
+        grey4: '#c3c8d3',
         editTextContent: '#677384',
         placeHolder: '#bfc5d1'
     },
