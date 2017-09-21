@@ -3,42 +3,44 @@
  * File: src/styles/LVColor.js
  * @flow
  */
-"use strict";
+'use strict';
 
 // 全局颜色
 const LVColor = {
     // App主色调
     primary: '#FC9B33',
     // 白色
-    white: '#FFFFFF',
+    white: '#fff',
     // Navigation Bar 的背景颜色
     navigationBar: '#f9f9f9',
     // Tab Bar
     tabBar: {
         background: '#fff',
-        tintColor: '#FF892E',
+        tintColor: '#FF892E'
     },
     // 给文本使用
-    text: {                
+    text: {
+        white: '#fff',
         grey1: '#494949',
         grey2: '#686868',
         grey3: '#9B9B9B',
-        grey4: '#B5B5B5',
+        grey4: '#B5B5B5'
     },
     // 背景色
-    background: {             
+    background: {
+        white: '#fff',
         grey1: '#ddd',
         grey2: '#eee',
-        grey3: '#f7f7f7',
+        grey3: '#f7f7f7'
     },
     // 边框颜色
-    border: {            
+    border: {
         grey1: '#ddd',
         grey2: '#eee',
-        grey3: '#f4f4f4',
-    },
+        grey3: '#f4f4f4'
+    }
 };
 
 export default {
-    ...LVColor,
-  };
+    ...LVColor
+};
