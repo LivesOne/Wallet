@@ -6,13 +6,16 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions, View, Text, Image, TouchableHighlight } from 'react-native';
+import { StyleSheet, Dimensions, View, Text, Image } from 'react-native';
+import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import GradientPanel from '../Common/GradientPanel';
 import MXTouchableImage from '../../components/MXTouchableImage';
 
-const purseIcon = require('../../assets/images/assets_purse.png');
+import PurseInfoView from './PurseInfoView';
+import PurseBanlenceView from './PurseBanlenceView';
+
 const selectPurseIcon = require('../../assets/images/select_purse.png');
 
 class AssetsScreen extends Component {
@@ -22,14 +25,22 @@ class AssetsScreen extends Component {
 
     state: {
         purseTitle: string,
-        purseAddress: string
+        purseAddress: string,
+        lvt: number,
+        eth: number,
+        lvtRmb: number,
+        ethRmb: number,
     };
 
     constructor(props: any) {
         super(props);
         this.state = {
             purseTitle: '傲游LivesToken',
-            purseAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7'
+            purseAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
+            lvt: 2100000,
+            eth: 26.035,
+            lvtRmb: 20000,
+            ethRmb: 52000,
         };
     }
 
@@ -38,46 +49,33 @@ class AssetsScreen extends Component {
     }
 
     render() {
+        const { purseTitle, purseAddress, lvt, eth, lvtRmb, ethRmb } = this.state;
+
         return (
             <View style={styles.container}>
-                <View style={styles.header}>
-                    <GradientPanel style={styles.gradient}>
-                        <View style={styles.nav}>
-                            <View style={styles.navButton} />
-                            <Text style={styles.title}>{LVStrings.assets_title}</Text>
-                            <MXTouchableImage
-                                style={styles.navButton}
-                                source={selectPurseIcon}
-                                onPress={this.onPressSelectPurse}
-                            />
-                        </View>
+                <GradientPanel style={styles.gradient}>
+                    <View style={styles.nav}>
+                        <View style={styles.navButton} />
+                        <Text style={styles.title}>{LVStrings.assets_title}</Text>
+                        <MXTouchableImage
+                            style={styles.navButton}
+                            source={selectPurseIcon}
+                            onPress={this.onPressSelectPurse}
+                        />
+                    </View>
 
-                        <View style={styles.purseInfoPanel}>
-                            <Image source={purseIcon} />
-                            <View style={{ flex: 1, marginLeft: 10 }}>
-                                <Text
-                                    style={[styles.purseText, styles.purseTitle]}
-                                    numberOfLines={1}
-                                    ellipsizeMode="middle"
-                                >
-                                    {this.state.purseTitle}
-                                </Text>
-                                <Text
-                                    style={[styles.purseText, styles.purseAddress]}
-                                    numberOfLines={1}
-                                    ellipsizeMode="middle"
-                                >
-                                    {this.state.purseAddress}
-                                </Text>
-                            </View>
-                        </View>
+                    <PurseInfoView style={styles.purseInfo} title={purseTitle} address={purseAddress} />
 
-                        <View style={styles.balance} ></View>
-                    </GradientPanel>
-                </View>
+                    <PurseBanlenceView style={styles.balance} lvt={lvt} eth={eth} extLvt={lvtRmb} extEth={ethRmb} />
+                </GradientPanel>
             </View>
         );
     }
+}
+
+const Window = {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
 }
 
 const styles = StyleSheet.create({
@@ -86,17 +84,16 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center'
     },
-    header: {
-        width: '100%', height: 315
-    },
     gradient: {
-        flex: 1,
+        width: '100%',
+        height: 315,
         justifyContent: 'flex-start',
         alignItems: 'center'
     },
     nav: {
-        width: '100%', height: 64,
-        paddingTop: 20, paddingLeft: 12.5, paddingRight: 12.5,
+        width: Window.width - 25,
+        height: 64,
+        paddingTop: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
@@ -105,37 +102,18 @@ const styles = StyleSheet.create({
         width: 27
     },
     title: {
-        fontSize: 18,
+        fontSize: LVSize.large,
         textAlign: 'center',
         color: '#ffffff',
         backgroundColor: 'transparent'
     },
-    purseInfoPanel: {
-        marginLeft: 12.5, marginRight: 12.5,
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center'
-    },
-    purseText: {
-        marginTop: 2.5, marginBottom: 2.5,
-        textAlign: 'left',
-        color: '#ffffff',
-        backgroundColor: 'transparent'
-    },
-    purseTitle: {
-        fontSize: 18,
-        fontWeight: '500'
-    },
-    purseAddress: {
-        width: 170,
-        fontSize: 12
+    purseInfo: {
+        width: Window.width - 25,
     },
     balance: {
-        width: Dimensions.get('window').width - 25, 
-        height: 150, 
-        marginTop: 15, 
-        borderRadius: 4,
-        backgroundColor: LVColor.white
+        width: Window.width - 25,
+        height: 150,
+        marginTop: 15
     }
 });
 
