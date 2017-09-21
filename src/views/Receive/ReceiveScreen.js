@@ -29,16 +29,18 @@ class ReceiveScreen extends Component {
             uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
           };
 
-        //   return (
+        
+        
+        // return (
         //     <View style={styles.container}>
-        //       <View style={styles.avatar} />
-        //       <View style={styles.badge} />
+        //       <View style={styles.rec} />
         //     </View>
         //   );
-        
+
         return (
             <View style={styles.container}>
                 <View style={styles.topContainer}>
+                    <Text style={styles.qrcode_icon}></Text>
                     <Text style={styles.title}>
                         我的收款码
                     </Text>
@@ -80,6 +82,28 @@ class ReceiveScreen extends Component {
     }
 }
 
+// const styles = StyleSheet.create({
+//     container: {
+//       flex: 1,
+//       justifyContent: 'center',
+//       alignItems: 'center',
+//       backgroundColor: 'red',
+//     },
+//     rec: {
+//       height: 120,
+//       width: 120,
+//       backgroundColor: 'green',
+//       elevation: 20,
+//       shadowOffset: {width: 5, height: 5},
+//       shadowColor: 'blue',
+//       shadowOpacity: 20,
+//       shadowRadius: 10,
+//     }
+//   });
+  
+  
+
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -88,17 +112,6 @@ const styles = StyleSheet.create({
         backgroundColor: LVColor.white,
     },
 
-    // avatar: {
-    //     backgroundColor: 'black',
-    //     width: 60,
-    //     height: 60,
-    //   },
-    //   badge: {
-    //     backgroundColor: 'red',
-    //     width: 20,
-    //     height: 20,
-    //     translateY: -60,
-    //   },
 
     topContainer:{
         flex:1,
@@ -138,7 +151,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent:'space-between',
         backgroundColor: LVColor.navigationBar,
-        padding:40,
+        // backgroundColor:'black',
+        elevation: 20,
+        shadowOffset: {width: 0, height: 0},
+        shadowColor: 'black',
+        shadowOpacity: 1,
+        shadowRadius: 5,
+        padding:50,
     },
 
     qrcode_icon: {
@@ -159,30 +178,14 @@ const styles = StyleSheet.create({
         transform: [
         { translateY:-30,}
         ],
+        elevation: 21,
+        shadowOffset: {width: 0, height: 0},
+        shadowColor: 'black',
+        shadowOpacity: 1,
+        shadowRadius: 5,
     }
     
 });
 
-const notificationStyles = StyleSheet.create({
-    container: {
-        justifyContent: "center",
-        marginTop:  20,
-        opacity: 0,
-        width: "100%",
-        height: 0,
-        backgroundColor: "blue"
-    },
-    netLost: {
-        opacity: 1,
-        height: 50
-    },
-    text: {
-        marginLeft: 15,
-        marginRight: 15,
-        fontSize: 14,
-        textAlign: "center",
-        color: "black"
-    }
-});
 
 export default ReceiveScreen;
