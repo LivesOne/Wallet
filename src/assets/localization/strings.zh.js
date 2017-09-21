@@ -5,7 +5,7 @@
 const localized_strings = {
     app_name: '共生币钱包',
 
-    // major
+    // Major
     assets: '资产',
     receive: '收款',
     profile: '我的',
@@ -20,7 +20,9 @@ const localized_strings = {
     assets_import_keystore_hint: 'Keystore 文本内容',
     assets_import_private_password_hint: '输入6~12位字母数字组合',
     assets_import_private_pwd_confirm_hint: '重复输入你的密码',
-    assets_import_keystore_password_hint: '请输入Keystore密码'
+    assets_import_keystore_password_hint: '请输入Keystore密码',
+    // Assets Screen
+    assets_title: '我的资产',
 };
 
 export default localized_strings;

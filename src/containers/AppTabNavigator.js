@@ -81,4 +81,32 @@ const AppTabNavigator = TabNavigator(
     }
 );
 
-export default AppTabNavigator;
+// gets the current screen from navigation state
+function getRouteName(navigationState) {
+    if (!navigationState) {
+        return "";
+    }
+    const route = navigationState.routes[navigationState.index];
+    // dive into nested navigators
+    if (route.routes) {
+        return getRouteName(route);
+    }
+    return route.routeName;
+}
+
+export default () =>
+<AppTabNavigator
+    onNavigationStateChange={(prevState, currentState) => {
+        const preScreen = getRouteName(prevState);
+        const curScreen = getRouteName(currentState);
+
+        if (preScreen !== curScreen) {
+            // set statusBarStyle to light in native
+            if (curScreen === "Assets") {
+                StatusBar.setBarStyle("light-content", true);
+            } else {
+                StatusBar.setBarStyle("default", true);
+            }
+        }
+    }}
+/>;

@@ -1,0 +1,25 @@
+/*
+ * Project: Venus
+ * File: src/views/Common/GradientPanel.js
+ * @flow
+ */
+'use strict';
+
+import React, { Component } from 'react';
+import { StyleSheet, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+
+export default class GradientPanel extends Component {
+    render() {
+        return (
+            <LinearGradient
+                start={{ x: 0.0, y: 0.5 }}
+                end={{ x: 1.0, y: 0.5 }}
+                colors={['#FFA424', '#FF892E']}
+                style={this.props.style}
+            >
+                {this.props.children}
+            </LinearGradient>
+        );
+    }
+}
