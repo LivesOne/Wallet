@@ -156,7 +156,9 @@ const styles = StyleSheet.create({
         height:50,
         width:50,
         flex:1,
-        translateY:-30,
+        transform: [
+        { translateY:-30,}
+        ],
     }
     
 });
