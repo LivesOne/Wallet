@@ -13,7 +13,7 @@ import TestComponent from './components/TestComponent';
 
 class VenusApp extends Component {
     render() {
-        StatusBar.setBarStyle("light-content", true);
+        StatusBar.setBarStyle("light-content", false);
         return (
             <AppTabNavigator />
         )

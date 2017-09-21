@@ -11,12 +11,13 @@ import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import GradientPanel from '../Common/GradientPanel';
+import DetailTextCell from '../Common/DetailTextCell';
 import MXTouchableImage from '../../components/MXTouchableImage';
 
 import PurseInfoView from './PurseInfoView';
 import PurseBanlenceView from './PurseBanlenceView';
 
-const selectPurseIcon = require('../../assets/images/select_purse.png');
+const selectImg = require('../../assets/images/select_purse.png');
 
 class AssetsScreen extends Component {
     static navigationOptions = {
@@ -29,7 +30,7 @@ class AssetsScreen extends Component {
         lvt: number,
         eth: number,
         lvtRmb: number,
-        ethRmb: number,
+        ethRmb: number
     };
 
     constructor(props: any) {
@@ -40,12 +41,16 @@ class AssetsScreen extends Component {
             lvt: 2100000,
             eth: 26.035,
             lvtRmb: 20000,
-            ethRmb: 52000,
+            ethRmb: 52000
         };
     }
 
     onPressSelectPurse() {
         alert('change purse');
+    }
+
+    onPressShowAll() {
+        alert('show all records');
     }
 
     render() {
@@ -55,19 +60,22 @@ class AssetsScreen extends Component {
             <View style={styles.container}>
                 <GradientPanel style={styles.gradient}>
                     <View style={styles.nav}>
-                        <View style={styles.navButton} />
-                        <Text style={styles.title}>{LVStrings.assets_title}</Text>
-                        <MXTouchableImage
-                            style={styles.navButton}
-                            source={selectPurseIcon}
-                            onPress={this.onPressSelectPurse}
-                        />
+                        <View style={{ width: 27 }} />
+                        <Text style={styles.navTitle}>{LVStrings.assets_title}</Text>
+                        <MXTouchableImage style={{ width: 27 }} source={selectImg} onPress={this.onPressSelectPurse} />
                     </View>
-
                     <PurseInfoView style={styles.purseInfo} title={purseTitle} address={purseAddress} />
-
                     <PurseBanlenceView style={styles.balance} lvt={lvt} eth={eth} extLvt={lvtRmb} extEth={ethRmb} />
                 </GradientPanel>
+
+                <View style={styles.listPanel}>
+                    <DetailTextCell
+                        text={LVStrings.recent_records}
+                        detailText={LVStrings.view_all_records}
+                        onPress={this.onPressShowAll}
+                    />
+                    <View style={styles.listView} />
+                </View>
             </View>
         );
     }
@@ -75,13 +83,13 @@ class AssetsScreen extends Component {
 
 const Window = {
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-}
+    height: Dimensions.get('window').height
+};
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between',
         alignItems: 'center'
     },
     gradient: {
@@ -98,22 +106,31 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center'
     },
-    navButton: {
-        width: 27
-    },
-    title: {
+    navTitle: {
         fontSize: LVSize.large,
         textAlign: 'center',
         color: '#ffffff',
         backgroundColor: 'transparent'
     },
     purseInfo: {
-        width: Window.width - 25,
+        width: Window.width - 25
     },
     balance: {
         width: Window.width - 25,
         height: 150,
         marginTop: 15
+    },
+    listPanel: {
+        flex: 1,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: LVColor.white
+    },
+    listView: {
+        flex: 1,
+        width: '100%',
+        backgroundColor: LVColor.background.grey1
     }
 });
 

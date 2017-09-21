@@ -13,6 +13,8 @@ const localized_strings = {
 
     // Assets Screen
     assets_title: '我的资产',
+    recent_records: '最近交易记录',
+    view_all_records: '查看全部记录',
 };
 
 export default localized_strings;
