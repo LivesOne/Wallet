@@ -10,6 +10,17 @@ const localized_strings = {
     receive: 'Receive',
     profile: 'Profile',
     transaction: 'Transaction',
+
+    //AssetsImport
+    assets_import: 'Import',
+    assets_import_header: 'Import wallet',
+    assets_import_keyStore: 'Import by keystore',
+    assets_import_private_key: 'Import by private key',
+    assets_import_plain_private_key_hint: 'Plain private key',
+    assets_import_keystore_hint: 'Keystore content',
+    assets_import_private_password_hint: 'Enter 6 to 12 alphanumeric groups',
+    assets_import_private_pwd_confirm_hint: 'Confirm password',
+    assets_import_keystore_password_hint: 'Enter keystore password'
 };
 
 export default localized_strings;

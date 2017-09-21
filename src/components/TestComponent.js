@@ -9,6 +9,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import MXButton from './MXButton';
 import MXNavigatorHeader from './MXNavigatorHeader';
 import MXCrossTextInput from './MXCrossTextInput';
+import { MXSwitchTab } from './MXSwitchTab';
 
 class TestComponent extends Component {
 
@@ -33,6 +34,13 @@ class TestComponent extends Component {
                     rounded
                     placeholder={"hello"}
                     onTextChanged = {(newText) => {alert(newText)}}
+                />
+
+                <MXSwitchTab
+                    leftText= {'共生币'}
+                    rightText={'right'}
+                    onTabSwitched={(leftPressed)=>{
+                        alert(leftPressed ? "leftPressed" : "rightPressed")}}
                 />
             </View>
         )

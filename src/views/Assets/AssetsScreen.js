@@ -6,7 +6,7 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Button } from 'react-native';
 
 class AssetsScreen extends Component {
     static navigationOptions = {
@@ -15,9 +15,16 @@ class AssetsScreen extends Component {
 
     render() {
         return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} >
+            <View style={{flex: 1, justifyContent: 'space-around', alignItems: 'center'}} >
                
-                <Text>Assets Screen</Text>
+               <Button
+                    onPress={() => { alert("create wallet")}}
+                    title={"create"}
+                />
+                <Button
+                    onPress={() => { this.props.navigation.navigate("AssetsImport")}}
+                    title={"import"}
+                />
             </View>
         )
     }
