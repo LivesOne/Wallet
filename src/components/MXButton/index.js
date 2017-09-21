@@ -4,45 +4,46 @@
 'use strict'
 
 import React, { Component, PropTypes } from 'react'
-import { Base, ActiveStyles, LightStyles, InActiveStyles, NormalStyles } from './styles'
-import { TouchableOpacity, View, ViewPropTypes, Image, Text } from 'react-native'
+import { Base, ActiveStyles, InActiveStyles, NormalStyles } from './styles'
+import { TouchableHighlight, View, ViewPropTypes, Image, Text } from 'react-native'
+import LVColor from '../../styles/LVColor'
 
 class MXButton extends Component {
 
   static propTypes = {
     title: PropTypes.string.isRequired,
-    titleFont: PropTypes.number,
-    icon: PropTypes.node,
     rounded: PropTypes.bool,
     disabled: PropTypes.bool,
-    themeStyle: PropTypes.string,
     style: View.propTypes.style,
     onPress: PropTypes.func,
   };
 
-  getTheme() {
-    switch (this.props.themeStyle) {
-      case "normal":
-        return NormalStyles;
-      case "light":
-        return LightStyles;
-      case "active":
-        return ActiveStyles;
-      case "inactive":
-        return InActiveStyles;
+  constructor(props) {
+    super(props);
+    this.state = { 
+      pressStatus: false,
+    };
+  }
+
+  getTheme(disabled: boolean) {
+    if (disabled) {
+      return InActiveStyles;
+    } else {
+      return this.state.pressStatus ? ActiveStyles : NormalStyles;
     }
-    return ActiveStyles;
   }
 
   render() {
-
-    const theme = this.getTheme();
-    const {title, icon, rounded, style, titleFont, onPress, disabled, } = this.props;
+    const {title, rounded, style, onPress, disabled,} = this.props;
+    const theme = this.getTheme(disabled);
 
     return (
-      <TouchableOpacity
-        activeOpacity={0.8}
+      <TouchableHighlight
+        activeOpacity={1}
         disabled = {disabled}
+        underlayColor={ LVColor.primary }
+        onPressOut={() => {this.setState({ pressStatus: false })}}
+        onPressIn={() => {this.setState({ pressStatus: true })}}
         style={[
           Base.main,
           theme.main,
@@ -51,15 +52,12 @@ class MXButton extends Component {
         onPress={onPress}
       >
         <View style={Base.inner}>
-          {icon ? <Image source={icon.source} style={[Base.icon, theme.icon]} {...icon.props}/> : null}
           <Text style={[
             Base.label,
             theme.label,
-            icon ? {marginLeft: 5} : null,
-            titleFont ? {fontSize: titleFont} : null,
           ]}>{title}</Text>
         </View>
-      </TouchableOpacity>
+      </TouchableHighlight>
     );
   }
 }
