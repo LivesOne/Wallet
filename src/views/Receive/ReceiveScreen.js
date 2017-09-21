@@ -42,7 +42,7 @@ class ReceiveScreen extends Component {
                 <View style={styles.topContainer}>
                     <Text style={styles.qrcode_icon}></Text>
                     <Text style={styles.title}>
-                        我的收款码
+                        {LVStrings.receive_title}
                     </Text>
                     <Image source={receiveIcon} style={styles.qrcode_icon}></Image>
                 </View>
@@ -51,7 +51,7 @@ class ReceiveScreen extends Component {
                 <View style={styles.mainContainer}>
 
                 <Text style={styles.name} >
-                    钱包地址
+                    {LVStrings.receive_name}
                 </Text>
                 <Text style={styles.address}>
                     abcdefhigjklmopqrst
@@ -60,14 +60,14 @@ class ReceiveScreen extends Component {
                 <Image source={pic} style={styles.qrcode_pic}></Image>
 
                 <MXButton
-                    title={"复制地址"}
+                    title={LVStrings.receive_copy}
                     onPress = {() => {
                     alert("button clicked");
                     }}
                     themeStyle={"active"}
                 /> 
                 <MXButton
-                    title={"保存二维码"}
+                    title={LVStrings.receive_save}
                     onPress = {() => {
                     alert("button clicked");
                     }}
@@ -81,27 +81,6 @@ class ReceiveScreen extends Component {
         );
     }
 }
-
-// const styles = StyleSheet.create({
-//     container: {
-//       flex: 1,
-//       justifyContent: 'center',
-//       alignItems: 'center',
-//       backgroundColor: 'red',
-//     },
-//     rec: {
-//       height: 120,
-//       width: 120,
-//       backgroundColor: 'green',
-//       elevation: 20,
-//       shadowOffset: {width: 5, height: 5},
-//       shadowColor: 'blue',
-//       shadowOpacity: 20,
-//       shadowRadius: 10,
-//     }
-//   });
-  
-  
 
 
 const styles = StyleSheet.create({
