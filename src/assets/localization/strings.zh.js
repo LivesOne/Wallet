@@ -21,6 +21,7 @@ const localized_strings = {
     assets_import_private_password_hint: '输入6~12位字母数字组合',
     assets_import_private_pwd_confirm_hint: '重复输入你的密码',
     assets_import_keystore_password_hint: '请输入Keystore密码',
+    
     // Assets Screen
     assets_title: '我的资产',
     recent_records: '最近交易记录',
