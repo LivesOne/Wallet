@@ -7,7 +7,7 @@ import React, { Component, PropTypes } from "react";
 
 import { View, StyleSheet, Image, PixelRatio, Text, TouchableOpacity, Platform } from "react-native";
 
-import PLColors from '../../assets/MXColors';
+import LVColor from '../../styles/LVColor'
 let LVStyleSheet = require('../../styles/LVStyleSheet');
 
 const defaultBackIcon = require("../../assets/images/back.png");
@@ -82,7 +82,7 @@ const styles = LVStyleSheet.create({
     },
 
     titleStyle: {
-        color: PLColors.PL_TEXT_BLACK_DARK,
+        color: LVColor.text.editTextContent,
         fontSize: 18
     },
 

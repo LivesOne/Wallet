@@ -4,9 +4,9 @@
 
 import { StyleSheet, PixelRatio } from 'react-native';
 
-import PLColors from '../../assets/MXColors';
 import * as MXUtils from "../../utils/MXUtils";
 let LVStyleSheet = require('../../styles/LVStyleSheet');
+import LVColor from '../../styles/LVColor'
 
 const Base = LVStyleSheet.create({
   main: {
@@ -14,9 +14,12 @@ const Base = LVStyleSheet.create({
       flexDirection: 'row',
       height: 50,
       width: MXUtils.getDeviceWidth() - 17 * PixelRatio.get(),
-      borderRadius: 3,
-      paddingLeft: 18,
       paddingRight: 15,
+      paddingLeft: 15,
+      borderWidth: 0.5,
+      backgroundColor: LVColor.white,
+      borderColor : "transparent",
+      borderBottomColor: LVColor.border.editTextBottomBoarder,
     },
     pad: {
       flexDirection: 'row',
@@ -38,7 +41,7 @@ const Base = LVStyleSheet.create({
 
   label: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 15,
   },
 
   clearButton: {
@@ -49,30 +52,28 @@ const Base = LVStyleSheet.create({
 
 const DefaultStyles = StyleSheet.create({
   main: {
-    backgroundColor: PLColors.PL_FILL,
+    backgroundColor: LVColor.white,
   },
   label: {
-    color: '#414853',
+    color: LVColor.text.editTextContent,
   },
 });
 
 const WhiteStyles = StyleSheet.create({
   main: {
-    backgroundColor: PLColors.PL_BACKGROUND,
+    backgroundColor: LVColor.white,
   },
   label: {
-    color: PLColors.PL_TEXT_BLACK_DARK,
+    color: LVColor.text.editTextContent,
   },
 });
 
 const LightStyles = StyleSheet.create({
   main: {
-    backgroundColor: PLColors.PL_BACKGROUND,
-    borderColor: PLColors.PL_BORDER_GRAY,
-    borderWidth: 1,
+    backgroundColor: LVColor.white,
   },
   label: {
-    color: '#414853',
+    color: LVColor.text.editTextContent,
   },
 });
 
