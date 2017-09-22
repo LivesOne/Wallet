@@ -17,10 +17,11 @@ class TestComponent extends Component {
         return (
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} >
                 <MXNavigatorHeader
-                    title = {"header"}
-                    onBackPress = {() => {
-                    alert("back clicked")
-                    }}
+                    title = {"title"}
+                    left = {'left'}
+                    onLeftPress = {() => {alert("left")}}
+                    right = {require("../assets/images/qrScan.png")}
+                    onRightPress = {() => {alert("right")}}
                 />
                 <MXButton
                     title={"hello"}

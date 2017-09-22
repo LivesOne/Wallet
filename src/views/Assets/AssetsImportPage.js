@@ -40,12 +40,14 @@ import { MXSwitchTab } from './../../components/MXSwitchTab';
       return (
         <View style = {styles.container}>
           <MXNavigatorHeader
-            style={ styles.header }
-            titleColor={ LVColor.white }
             title = {LVStrings.assets_import_header}
-            onBackPress = {() => {
+            onLeftPress = {() => {
               this.props.navigation.goBack();
             }}
+            right={ require("../../assets/images/qrScan.png") }
+            onRightPress = {
+              () => { alert('click Qr')}
+            }
             />
             <MXSwitchTab
               leftText={ LVStrings.assets_import_keyStore }
@@ -115,10 +117,6 @@ import { MXSwitchTab } from './../../components/MXSwitchTab';
  }
 
   const styles = LVStyleSheet.create({
-    header: {
-      backgroundColor: LVColor.primary,
-      height: 50,
-    },
     container: {
       flex: 1,
       alignItems: "center",
