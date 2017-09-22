@@ -9,7 +9,7 @@ const localized_strings = {
     assets: '资产',
     receive: '收款',
     profile: '我的',
-    transaction: '交易',
+    transfer: '转账',
 
     //AssetsImport
     assets_import: '导入',

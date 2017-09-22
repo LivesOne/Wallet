@@ -9,7 +9,7 @@ const localized_strings = {
     assets: 'Assets',
     receive: 'Receive',
     profile: 'Profile',
-    transaction: 'Transaction',
+    transfer: 'Transfer',
 
     //AssetsImport
     assets_import: 'Import',
