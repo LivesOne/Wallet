@@ -49,12 +49,11 @@ export default class PurseCreateOrImportPage extends Component {
 const styles = LVStyleSheet.create({
     container: {
         flex: 1, 
-        justifyContent: 'flex-start', 
+        justifyContent: 'center', 
         alignItems: 'center', 
         backgroundColor: LVColor.white,
     },
     image: {
-        marginTop: 110, 
         width: 220, 
         height: 220,
     },
