@@ -14,8 +14,6 @@ const Base = LVStyleSheet.create({
       flexDirection: 'row',
       height: 50,
       width: MXUtils.getDeviceWidth() - 17 * PixelRatio.get(),
-      paddingRight: 15,
-      paddingLeft: 15,
       borderWidth: 0.5,
       backgroundColor: LVColor.white,
       borderColor : "transparent",
