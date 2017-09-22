@@ -6,13 +6,14 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import AppTabNavigator from './containers/AppTabNavigator';
 import LVStrings from './assets/localization';
+import TestComponent from './components/TestComponent';
 
 class VenusApp extends Component {
     render() {
-        console.log('strings = ' + JSON.stringify(LVStrings));
+        StatusBar.setBarStyle("light-content", false);
         return (
             <AppTabNavigator />
         )

@@ -3,14 +3,15 @@
  */
 'use strict'
 
-import React, { Component, PropTypes } from 'react'
-import {View, TextInput, TouchableOpacity, Image,} from 'react-native'
+import React, { Component } from 'react'
+import {View, TextInput, TouchableOpacity, Image, ViewPropTypes} from 'react-native'
 import { Base, DefaultStyles, LightStyles, WhiteStyles } from './styles';
 
-import PLColors from '../../assets/MXColors';
+import LVColor from '../../styles/LVColor'
+import PropTypes from 'prop-types';
 
 
-class MXTextInputWithClear extends Component {
+class MXCrossTextInput extends Component {
 
   state: {
     text: ?string,
@@ -27,12 +28,12 @@ class MXTextInputWithClear extends Component {
   }
 
   static propTypes = {
-    placeHolder: PropTypes.string,
+    placeholder: PropTypes.string,
     rounded: PropTypes.bool,
     themeStyle: PropTypes.string,
-    style: View.propTypes.style,
+    style: ViewPropTypes.style,
     secureTextEntry: PropTypes.bool,
-    callbackParent: PropTypes.func.isRequired
+    onTextChanged: PropTypes.func
   };
 
   getTheme() {
@@ -53,7 +54,7 @@ class MXTextInputWithClear extends Component {
       text:newText,
       hasFocus: true
     });
-    this.props.callbackParent(newText);
+    this.props.onTextChanged && this.props.onTextChanged(newText);
   }
 
   render() {
@@ -74,9 +75,10 @@ class MXTextInputWithClear extends Component {
       <TextInput
         placeholder = {placeholder}
         underlineColorAndroid = {'transparent'}
-        placeholderTextColor = { PLColors.PL_TEXT_BLACK_LIGHT }
+        placeholderTextColor = { LVColor.text.placeHolder }
         defaultValue={ this.props.defaultValue}
         value={this.state.text}
+        tintColor={LVColor.primary}
         keyboardType = {'ascii-capable'}
         style={[
           Base.label,
@@ -90,7 +92,6 @@ class MXTextInputWithClear extends Component {
 
       {this.state.text !== "" && this.state.hasFocus && <TouchableOpacity
         style={Base.clearButton}
-        activeOpacity={0.8}
         onPress={() => {
           this.onChangeText("")
         }}
@@ -98,7 +99,9 @@ class MXTextInputWithClear extends Component {
         <Image
           source={require('../../assets/images/edit_clear.png')}
         />
+    
       </TouchableOpacity>
+
       }
     </View>
 
@@ -106,4 +109,4 @@ class MXTextInputWithClear extends Component {
   }
 }
 
-export default MXTextInputWithClear;
+export default MXCrossTextInput;

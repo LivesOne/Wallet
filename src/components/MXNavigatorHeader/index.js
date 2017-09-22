@@ -7,51 +7,51 @@ import React, { Component, PropTypes } from "react";
 
 import { View, StyleSheet, Image, PixelRatio, Text, TouchableOpacity, Platform } from "react-native";
 
-import PLColors from '../../assets/MXColors';
+import LVColor from '../../styles/LVColor'
 let LVStyleSheet = require('../../styles/LVStyleSheet');
 
 const defaultBackIcon = require("../../assets/images/back.png");
 
 export default class MXNavigatorHeader extends Component {
+
     static propTypes = {
         title: PropTypes.string.isRequired,
-        titleColor: PropTypes.string,
-        rightText: PropTypes.string,
-        rightTextColor: PropTypes.string,
-        backIcon: PropTypes.any,
-        leftText: PropTypes.string,
+        titleStyle: View.propTypes.style,
+        left: PropTypes.oneOfType([PropTypes.string, PropTypes.any]),
+        leftStyle: View.propTypes.style,
         onLeftPress: PropTypes.func,
+        right: PropTypes.oneOfType([PropTypes.string, PropTypes.any]),
+        rightStyle: View.propTypes.style,
+        onRightPress: PropTypes.func,
         style: View.propTypes.style,
-        onBackPress: PropTypes.func,
-        onRightPress: PropTypes.func
     };
 
     render() {
-        const { title, titleColor, rightText, rightTextColor, backIcon, style, onBackPress, onRightPress, leftText, onLeftPress } = this.props;
-
-        let hasLeftText = onLeftPress && leftText;
+        const { title, titleStyle, left, leftStyle, onLeftPress, style, right, onRightPress, rightStyle } = this.props;
+        let leftIsString = left && (typeof left) === 'string';
+        let rightIsString = right && (typeof right) === 'string';
         return (
             <View style={[styles.container, style]}>
-                {onBackPress
-                    ? <TouchableOpacity style={{ width: 100 }} onPress={onBackPress}>
-                          <Image source={backIcon ? backIcon : defaultBackIcon} style={{ marginLeft: 20 }} />
-                      </TouchableOpacity>
-                    : !hasLeftText ? <View style={{ width: 100 }}/> : null}
-
-              { leftText
-                ? <TouchableOpacity style={{ width: 100 }} onPress={onLeftPress}>
-                  <Text style={{ marginLeft: 20 }}>{leftText}</Text>
+                <TouchableOpacity 
+                    style={[styles.defaultLeftStyle, leftStyle]} 
+                    onPress={onLeftPress}>
+                    <View style={{ }}>
+                        { leftIsString && <Text style={{fontSize: 16, color: LVColor.white}}>{left}</Text> }
+                        { !leftIsString && <Image source={left || defaultBackIcon}/>}
+                    </View>
                 </TouchableOpacity>
-                : null}
 
-                <Text style={[styles.titleStyle, titleColor ? { color: titleColor } : null]}>
-                    {title}
+                <Text style={[styles.titleStyle, titleStyle]}>
+                    {title || 'header'}
                 </Text>
 
-                <TouchableOpacity style={{ width: 100 }} onPress={onRightPress}>
-                    <Text style={[styles.rightText, rightTextColor ? { color: rightTextColor } : null]}>
-                        {rightText}
-                    </Text>
+                <TouchableOpacity 
+                    style={[styles.defaultRightStyle, rightStyle]} 
+                    onPress={onRightPress}>
+                    {right && <View style={{ }}>
+                        { rightIsString && <Text style={{fontSize: 16, color: LVColor.white}}>{right}</Text> }
+                        { !rightIsString && <Image source={right}/>}
+                    </View>}
                 </TouchableOpacity>
             </View>
         );
@@ -62,38 +62,30 @@ const styles = LVStyleSheet.create({
     container: {
         paddingTop: Platform.OS === "ios" ? 20 : 0,
         width: "100%",
-        height: Platform.OS === "ios" ? 64 : PixelRatio.get() * 15,
+        height: Platform.OS === "ios" ? 70 : 50,
         flexDirection: "row",
-        justifyContent: "space-between",
-        backgroundColor: "transparent",
         alignItems: "center",
-        phone: {
-            height: Platform.OS === "ios" ? 64 : PixelRatio.get() * 15
-        },
-        pad: {
-            height: 50
-        }
-    },
-
-    backStyle: {
-        left: 20,
-        position: "absolute",
-        backgroundColor: "transparent"
+        justifyContent: 'space-between',
+        backgroundColor: LVColor.primary,
     },
 
     titleStyle: {
-        color: PLColors.PL_TEXT_BLACK_DARK,
-        fontSize: 18
+        alignSelf: 'center',
+        textAlign: 'center',
+        color: LVColor.white,
+        fontSize: 20
     },
 
-    rightText: {
-        marginRight: 20,
-        fontSize: 15,
-        textAlign: "right"
+    defaultLeftStyle: {
+        justifyContent: 'center',
+        height: 50,
+        alignItems: 'center',
+        width: 50,
     },
-
-    leftText: {
-      fontSize: 15,
-      textAlign: "left"
+    defaultRightStyle: {
+        height: 50,
+        width: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 });

@@ -133,6 +133,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-linear-gradient')
     compile project(':react-native-localization')
     compile project(':react-native-device-info')
     compile fileTree(dir: "libs", include: ["*.jar"])

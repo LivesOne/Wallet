@@ -9,20 +9,20 @@ import {
 export const getDeviceHeight = () => Dimensions.get('window').height;
 export const getDeviceWidth = () => Dimensions.get('window').width;
 
-export const checkValidEmail = (email) => {
+export const checkValidEmail = (email: string) => {
   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email.trim());
 };
 
-export const checkValidPassword = (password) => {
+export const checkValidPassword = (password: string) => {
   return password && password !== null && password.trim().length >= 8;
 };
 
-export const checkValidVerificationCode = (code) => {
+export const checkValidVerificationCode = (code: string) => {
   return code && code !== null && code.trim().length === 6;
 };
 
-export const checkEqualPwd = (pwd, rePwd) => {
+export const checkEqualPwd = (pwd: string, rePwd: string) => {
   return pwd && rePwd && pwd !== null && rePwd !== null && pwd.trim() === rePwd.trim();
 };
 
@@ -34,7 +34,7 @@ export const isNotEmptyString = (str: string) => {
   return (str !== null && str !== undefined && str !== '');
 }
 
-export const log = (msg) => {
+export const log = (msg: string) => {
   if (__DEV__ === true) {
     console.log("Pluto --> " + msg);
   }
