@@ -261,7 +261,6 @@ const styles = StyleSheet.create({
     },
     progress: {
         width: '100%',
-        marginTop: 3,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
