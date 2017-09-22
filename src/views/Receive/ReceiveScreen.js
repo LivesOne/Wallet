@@ -70,7 +70,9 @@ class ReceiveScreen extends Component {
                     themeStyle={"active"}
                 />
                 </View>
+                <View style={styles.share_container}>
                 <Image source={receive_share} style={styles.share}></Image>
+                </View>
 
                 {/* </View> */}
             </View>
@@ -155,9 +157,7 @@ const styles = StyleSheet.create({
         width:162,
     },
 
-    share:{
-        height:50,
-        width:50,
+    share_container: {
         flex:1,
         transform: [
         { translateY:-30,},
@@ -169,7 +169,11 @@ const styles = StyleSheet.create({
         shadowOpacity: 1,
         shadowRadius: 5,
         zIndex:3,
-        
+    },
+    share:{
+        height:50,
+        width:50,
+        flex:1,
     }
     
 });
