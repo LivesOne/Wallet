@@ -56,6 +56,7 @@ class ReceiveScreen extends Component {
                 <Image source={pic} style={styles.qrcode_pic}></Image>
 
                 <MXButton
+                    style={styles.button}
                     title={LVStrings.receive_copy}
                     onPress = {() => {
                     alert("button clicked");
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
         flex:1,
         flexDirection:'row',
         alignItems: "center",
-        
+        paddingBottom:20,
     },
 
     title:{
@@ -105,15 +106,22 @@ const styles = StyleSheet.create({
         textAlign:'center',
     },
 
+    button:{
+        marginBottom:15,
+    },
+
     name:{
         fontSize:18,
         color:LVColor.grey2,
         textAlign:'center',
+        paddingBottom:5,
+        
     },
 
     address:{
         fontSize:15,
         color:"#c3c8d3",
+        paddingBottom:30,
     },
 
     mainContainerBackground:{
@@ -127,7 +135,6 @@ const styles = StyleSheet.create({
         width:'90%',
         flexDirection:'column',
         alignItems: 'center',
-        justifyContent:'space-between',
         backgroundColor: LVColor.navigationBar,
         // backgroundColor:'black',
         elevation: 20,
@@ -155,6 +162,7 @@ const styles = StyleSheet.create({
     qrcode_pic:{
         height:162,
         width:162,
+        marginBottom:30,
     },
 
     share_container: {
