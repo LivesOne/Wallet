@@ -15,7 +15,8 @@ import LVStrings from '../../assets/localization';
 
 import MXButton from '../../components/MXButton';
 
-const receiveIcon = require("../../assets/images/tab_receive.png");
+const receive_share = require("../../assets/images/receive_share.png");
+const receive_change_purse = require("../../assets/images/receive_change_purse.png");
 
 class ReceiveScreen extends Component {
     static navigationOptions = {
@@ -30,13 +31,6 @@ class ReceiveScreen extends Component {
           };
 
         
-        
-        // return (
-        //     <View style={styles.container}>
-        //       <View style={styles.rec} />
-        //     </View>
-        //   );
-
         return (
             <View style={styles.container}>
                 <View style={styles.topContainer}>
@@ -44,7 +38,7 @@ class ReceiveScreen extends Component {
                     <Text style={styles.title}>
                         {LVStrings.receive_title}
                     </Text>
-                    <Image source={receiveIcon} style={styles.qrcode_icon}></Image>
+                    <Image source={receive_change_purse} style={styles.qrcode_icon}></Image>
                 </View>
                 {/* <View style={styles.mainContainerBackground}> */}
 
@@ -74,7 +68,7 @@ class ReceiveScreen extends Component {
                     themeStyle={"active"}
                 />
                 </View>
-                <Image source={receiveIcon} style={styles.share}></Image>
+                <Image source={receive_share} style={styles.share}></Image>
 
                 {/* </View> */}
             </View>
@@ -126,6 +120,7 @@ const styles = StyleSheet.create({
 
     mainContainer:{
         flex:6,
+        width:'90%',
         flexDirection:'column',
         alignItems: 'center',
         justifyContent:'space-between',
@@ -136,12 +131,13 @@ const styles = StyleSheet.create({
         shadowColor: 'black',
         shadowOpacity: 1,
         shadowRadius: 5,
-        padding:50,
-    },
+        padding:30,
+        zIndex:4,
+     },
 
     qrcode_icon: {
-        height:20,
-        width:5,
+        height:40,
+        width:40,
         flex:1,
     },
 
@@ -155,13 +151,16 @@ const styles = StyleSheet.create({
         width:50,
         flex:1,
         transform: [
-        { translateY:-30,}
+        { translateY:-30,},
+        // {'translate':[0,-30,1]
         ],
         elevation: 21,
         shadowOffset: {width: 0, height: 0},
         shadowColor: 'black',
         shadowOpacity: 1,
         shadowRadius: 5,
+        zIndex:3,
+        
     }
     
 });
