@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Assets/AssetsCreatePage.js
+ * File: src/views/Assets/PurseCreatePage.js
  * @flow
  */
 "use strict";
@@ -15,7 +15,7 @@ import MXNavigatorHeader from './../../components/MXNavigatorHeader';
 
 const assetsIcon = require("../../assets/images/create_wallet.png");
 
-export default class AssetsCreatePage extends Component {
+export default class PurseCreatePage extends Component {
     static navigationOptions = {
         header: null
     };

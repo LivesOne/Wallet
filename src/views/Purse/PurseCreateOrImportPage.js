@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Assets/AssetsFirstScreen.js
+ * File: src/views/Assets/PurseCreateOrImportPage.js
  * @flow
  */
 "use strict";
@@ -14,7 +14,7 @@ import * as LVStyleSheet from '../../styles/LVStyleSheet'
 
 const assetsIcon = require("../../assets/images/create_wallet.png");
 
-export default class AssetsFirstScreen extends Component {
+export default class PurseCreateOrImportPage extends Component {
     static navigationOptions = {
         header: null
     };
@@ -27,7 +27,7 @@ export default class AssetsFirstScreen extends Component {
                     rounded
                     title={LVStrings.create_wallet}
                     onPress = {() => {
-                        this.props.navigation.navigate("AssetsCreate")
+                        this.props.navigation.navigate("PurseCreate")
                     }}
                     themeStyle={"active"}
                     style={styles.createButton}

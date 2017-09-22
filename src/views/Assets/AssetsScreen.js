@@ -47,7 +47,7 @@ class AssetsScreen extends Component {
     }
 
     onPressSelectPurse() {
-        //this.props.navigation.navigate("AssetsFirst")
+        //this.props.navigation.navigate("PurseCreateOrImport")
         this.props.navigation.navigate("AssetsImport")
     }
 
