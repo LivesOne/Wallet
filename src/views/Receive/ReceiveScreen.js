@@ -42,7 +42,6 @@ class ReceiveScreen extends Component {
                     <Image source={receive_change_purse} style={styles.change_purse}></Image>
                     </View>
                 </View>
-                {/* <View style={styles.mainContainerBackground}> */}
 
                 <View style={styles.mainContainer}>
 
@@ -75,7 +74,6 @@ class ReceiveScreen extends Component {
                 <Image source={receive_share} style={styles.share}></Image>
                 </View>
 
-                {/* </View> */}
             </View>
         );
     }
