@@ -10,12 +10,12 @@ import { StyleSheet, Dimensions, View, Text, Image } from 'react-native';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
-import GradientPanel from '../Common/GradientPanel';
-import DetailTextCell from '../Common/DetailTextCell';
+import LVGradientPanel from '../Common/LVGradientPanel';
+import LVDetailTextCell from '../Common/LVDetailTextCell';
 import MXTouchableImage from '../../components/MXTouchableImage';
 
 import PurseInfoView from './PurseInfoView';
-import PurseBanlenceView from './PurseBanlenceView';
+import PurseBalanceView from './PurseBalanceView';
 
 const selectImg = require('../../assets/images/select_purse.png');
 
@@ -59,18 +59,18 @@ class AssetsScreen extends Component {
 
         return (
             <View style={styles.container}>
-                <GradientPanel style={styles.gradient}>
+                <LVGradientPanel style={styles.gradient}>
                     <View style={styles.nav}>
                         <View style={{ width: 27 }} />
                         <Text style={styles.navTitle}>{LVStrings.assets_title}</Text>
                         <MXTouchableImage style={{ width: 27 }} source={selectImg} onPress={this.onPressSelectPurse} />
                     </View>
                     <PurseInfoView style={styles.purseInfo} title={purseTitle} address={purseAddress} />
-                    <PurseBanlenceView style={styles.balance} lvt={lvt} eth={eth} extLvt={lvtRmb} extEth={ethRmb} />
-                </GradientPanel>
+                    <PurseBalanceView style={styles.balance} lvt={lvt} eth={eth} extLvt={lvtRmb} extEth={ethRmb} />
+                </LVGradientPanel>
 
                 <View style={styles.listPanel}>
-                    <DetailTextCell
+                    <LVDetailTextCell
                         text={LVStrings.recent_records}
                         detailText={LVStrings.view_all_records}
                         onPress={this.onPressShowAll}
