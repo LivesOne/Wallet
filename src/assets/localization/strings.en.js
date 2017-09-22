@@ -26,6 +26,7 @@ const localized_strings = {
     assets_title: 'My Assets',
     recent_records: 'Recent transaction records',
     view_all_records: 'View all',
+    create_wallet: 'Create wallet',
 };
 
 export default localized_strings;

@@ -26,6 +26,7 @@ const localized_strings = {
     assets_title: '我的资产',
     recent_records: '最近交易记录',
     view_all_records: '查看全部记录',
+    create_wallet: '创建钱包',
 };
 
 export default localized_strings;
