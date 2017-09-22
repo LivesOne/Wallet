@@ -12,8 +12,7 @@ import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import * as LVStyleSheet from '../../styles/LVStyleSheet';
-import GradientPanel from '../Common/GradientPanel';
-import DetailTextCell from '../Common/DetailTextCell';
+import LVGradientPanel from '../Common/LVGradientPanel';
 import MXTouchableImage from '../../components/MXTouchableImage';
 
 const assetsIcon = require("../../assets/images/create_wallet.png");
@@ -27,7 +26,7 @@ export default class PurseCreatePage extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <GradientPanel style={styles.gradient}>
+                <LVGradientPanel style={styles.gradient}>
                     <View style={styles.nav}>
                         <MXTouchableImage 
                             style={styles.navBack} 
@@ -39,7 +38,7 @@ export default class PurseCreatePage extends Component {
                         <Text style={styles.navTitle}>{LVStrings.create_wallet}</Text>
                         <View style={styles.navRightPlaceholder} />
                     </View>
-                </GradientPanel>
+                </LVGradientPanel>
                 <View style={styles.content}>
                     <View style={styles.textInputContainer}>
                         <TextInput
@@ -131,10 +130,7 @@ const styles = LVStyleSheet.create({
         color: "#667383",
         textAlign: "center",
     },
-<<<<<<< HEAD
     createButton: {
         marginTop: 35,
     },
-=======
->>>>>>> 7d460a950109c3dd9c380ea8dc40ab76640dfd2c
 });
