@@ -3474,6 +3474,12 @@ react-native-localization@^0.1.32:
   version "0.1.32"
   resolved "http://registry.npm.taobao.org/react-native-localization/download/react-native-localization-0.1.32.tgz#623bf3359abdd0f0afff50951dcf06cffda01b2a"
 
+react-native-progress@^3.4.0:
+  version "3.4.0"
+  resolved "http://registry.npm.taobao.org/react-native-progress/download/react-native-progress-3.4.0.tgz#c002e6efb2f0b82dd6889510e669c492da2718ac"
+  dependencies:
+    prop-types "^15.5.8"
+
 react-native-tab-view@^0.0.67:
   version "0.0.67"
   resolved "http://registry.npm.taobao.org/react-native-tab-view/download/react-native-tab-view-0.0.67.tgz#cdd146fe5e5d4baff6c89f2d5d0b15fa23db39d0"

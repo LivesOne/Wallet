@@ -20,6 +20,12 @@ const LVColor = {
     },
     // 分隔线
     separateLine: '#EEEFF2',
+    // Progress Bar
+    progressBar: {
+        fill: '#7dcd40',
+        unfill: '#eeeff2',
+        border: 'transparent',
+    },
     // 给文本使用
     text: {
         white: '#fff',
@@ -27,6 +33,7 @@ const LVColor = {
         grey2: '#677384',
         grey3: '#bec4d0',
         grey4: '#c3c8d3',
+        red: '#f25555',
         editTextContent: '#677384',
         placeHolder: '#bfc5d1'
     },

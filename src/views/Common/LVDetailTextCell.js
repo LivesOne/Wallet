@@ -8,9 +8,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, ViewPropTypes, View } from 'react-native';
 import PropTypes from 'prop-types';
-import MXDetailTextCell from '../../components/MXDetailTextCell';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
+import MXDetailTextCell from '../../components/MXDetailTextCell';
 
 const arrowImg = require('../../assets/images/show_detail_arrow.png');
 

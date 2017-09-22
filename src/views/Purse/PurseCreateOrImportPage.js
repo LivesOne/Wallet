@@ -12,7 +12,7 @@ import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import * as LVStyleSheet from '../../styles/LVStyleSheet'
 
-const assetsIcon = require("../../assets/images/create_wallet.png");
+const createImage = require("../../assets/images/create_wallet.png");
 
 export default class PurseCreateOrImportPage extends Component {
     static navigationOptions = {
@@ -22,7 +22,7 @@ export default class PurseCreateOrImportPage extends Component {
     render() {
         return (
             <View style = {styles.container}>
-                <Image source={assetsIcon} style = {styles.image}/>
+                <Image source={createImage} style = {styles.image}/>
                 <MXButton
                     rounded
                     title={LVStrings.create_wallet}
@@ -49,12 +49,11 @@ export default class PurseCreateOrImportPage extends Component {
 const styles = LVStyleSheet.create({
     container: {
         flex: 1, 
-        justifyContent: 'flex-start', 
+        justifyContent: 'center', 
         alignItems: 'center', 
         backgroundColor: LVColor.white,
     },
     image: {
-        marginTop: 110, 
         width: 220, 
         height: 220,
     },
