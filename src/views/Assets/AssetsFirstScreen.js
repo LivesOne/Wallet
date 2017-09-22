@@ -6,45 +6,62 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import { View, Image } from 'react-native';
 import MXButton from '../../components/MXButton';
+import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
+import * as LVStyleSheet from '../../styles/LVStyleSheet'
 
 const assetsIcon = require("../../assets/images/create_wallet.png");
 
-class AssetsFirstScreen extends Component {
+export default class AssetsFirstScreen extends Component {
     static navigationOptions = {
         header: null
     };
 
     render() {
         return (
-            <View style={{flex: 1, justifyContent: 'flex-start', alignItems: 'center', backgroundColor: "white"}} >
-                <Image
-                    source={assetsIcon}
-                    style={{marginTop: 110, width: 220, height: 220}}
-                />
+            <View style = {styles.container}>
+                <Image source={assetsIcon} style = {styles.image}/>
                 <MXButton
                     rounded
                     title={LVStrings.create_wallet}
                     onPress = {() => {
-                        this.props.navigation.navigate("CreateWallet")
+                        this.props.navigation.navigate("AssetsCreate")
                     }}
                     themeStyle={"active"}
-                    style={{marginTop: 80}}
+                    style={styles.createButton}
                 />
                 <MXButton
                     rounded                
                     title={LVStrings.assets_import_header}
                     onPress = {() => {
-                        alert(LVStrings.assets_import_header);
+                        this.props.navigation.navigate("AssetsImport")
                     }}
                     themeStyle={"active"}
-                    style={{marginTop: 25}}
+                    style={styles.importButton}
                 />
             </View>
         )
     }
 }
 
-export default AssetsFirstScreen;
+const styles = LVStyleSheet.create({
+    container: {
+        flex: 1, 
+        justifyContent: 'flex-start', 
+        alignItems: 'center', 
+        backgroundColor: LVColor.white,
+    },
+    image: {
+        marginTop: 110, 
+        width: 220, 
+        height: 220,
+    },
+    createButton: {
+        marginTop: 80,
+    },
+    importButton: {
+        marginTop: 25,
+    },
+});
