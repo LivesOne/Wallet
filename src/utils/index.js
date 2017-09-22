@@ -12,7 +12,6 @@ import {
   isEmptyString,
   isNotEmptyString,
   log,
-  alipayStatusCode2Desc,
 } from './MXUtils';
 
 const PLUtils = {
@@ -26,7 +25,6 @@ const PLUtils = {
   isEmptyString,
   isNotEmptyString,
   log,
-  alipayStatusCode2Desc
 }
 
 export default PLUtils;

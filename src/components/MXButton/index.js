@@ -3,22 +3,27 @@
  */
 'use strict'
 
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { Base, ActiveStyles, InActiveStyles, NormalStyles } from './styles'
 import { TouchableHighlight, View, ViewPropTypes, Image, Text } from 'react-native'
 import LVColor from '../../styles/LVColor'
+import PropTypes from 'prop-types';
 
 class MXButton extends Component {
+
+  state: {
+    pressStatus: boolean,
+  }
 
   static propTypes = {
     title: PropTypes.string.isRequired,
     rounded: PropTypes.bool,
     disabled: PropTypes.bool,
-    style: View.propTypes.style,
+    style: ViewPropTypes.style,
     onPress: PropTypes.func,
   };
 
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = { 
       pressStatus: false,
