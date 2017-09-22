@@ -2,10 +2,11 @@
 
 'use strict'
 
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { Text, View, TouchableOpacity, ViewPropTypes } from 'react-native';
 let LVStyleSheet = require('../../styles/LVStyleSheet');
 import LVColor from '../../styles/LVColor'
+import PropTypes from 'prop-types';
 
 export class MXSwitchTab extends Component {
 
@@ -25,8 +26,8 @@ export class MXSwitchTab extends Component {
         leftText: PropTypes.string,
         rightText: PropTypes.string,
         onTabSwitched: PropTypes.func,
-        style: View.propTypes.style,
-        textStyle: View.propTypes.style
+        style: ViewPropTypes.style,
+        textStyle: ViewPropTypes.style
     }
 
     _onLeftPressed = () => {

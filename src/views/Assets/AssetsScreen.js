@@ -46,7 +46,7 @@ class AssetsScreen extends Component {
         this.onPressSelectPurse = this.onPressSelectPurse.bind(this);
     }
 
-    onPressSelectPurse() {
+    onPressSelectPurse: ()=>void = ()=> {
         this.props.navigation.navigate("PurseCreateOrImport")
     }
 

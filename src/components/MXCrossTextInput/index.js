@@ -3,11 +3,12 @@
  */
 'use strict'
 
-import React, { Component, PropTypes } from 'react'
-import {View, TextInput, TouchableOpacity, Image,} from 'react-native'
+import React, { Component } from 'react'
+import {View, TextInput, TouchableOpacity, Image, ViewPropTypes} from 'react-native'
 import { Base, DefaultStyles, LightStyles, WhiteStyles } from './styles';
 
 import LVColor from '../../styles/LVColor'
+import PropTypes from 'prop-types';
 
 
 class MXCrossTextInput extends Component {
@@ -30,7 +31,7 @@ class MXCrossTextInput extends Component {
     placeholder: PropTypes.string,
     rounded: PropTypes.bool,
     themeStyle: PropTypes.string,
-    style: View.propTypes.style,
+    style: ViewPropTypes.style,
     secureTextEntry: PropTypes.bool,
     onTextChanged: PropTypes.func
   };
