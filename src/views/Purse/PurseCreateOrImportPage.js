@@ -36,7 +36,7 @@ export default class PurseCreateOrImportPage extends Component {
                     rounded                
                     title={LVStrings.assets_import_header}
                     onPress = {() => {
-                        this.props.navigation.navigate("AssetsImport")
+                        this.props.navigation.navigate("PurseImport")
                     }}
                     themeStyle={"active"}
                     style={styles.importButton}

@@ -9,13 +9,13 @@ import React from 'react';
 import { StackNavigator } from "react-navigation";
 
 import AssetsScreen from './AssetsScreen';
-import AssetsImportPage from './AssetsImportPage';
+import PurseImportPage from '../Purse/PurseImportPage';
 import PurseCreateOrImportPage from '../Purse/PurseCreateOrImportPage';
 import PurseCreatePage from '../Purse/PurseCreatePage';
 
 const AssetsNavigator = StackNavigator({
     Assets: { screen: AssetsScreen },
-    AssetsImport: { screen: AssetsImportPage },
+    PurseImport: { screen: PurseImportPage },
     PurseCreateOrImport: { screen: PurseCreateOrImportPage },
     PurseCreate: { screen: PurseCreatePage }
 });

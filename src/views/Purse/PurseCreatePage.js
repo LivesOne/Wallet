@@ -24,11 +24,9 @@ export default class PurseCreatePage extends Component {
         return (
             <View style = {styles.container}>
                 <MXNavigatorHeader
-                    style={ styles.header }
-                    titleColor={ LVColor.white }
                     title = {LVStrings.create_wallet}
-                    onBackPress = {() => {
-                    this.props.navigation.goBack();
+                    onLeftPress = {() => {
+                        this.props.navigation.goBack();
                     }}
                 />
             </View>
@@ -42,9 +40,5 @@ const styles = LVStyleSheet.create({
         justifyContent: 'flex-start', 
         alignItems: 'center',
         backgroundColor: LVColor.white,
-    },
-    header: {
-        backgroundColor: LVColor.primary,
-        height: 50,
     },
 });
