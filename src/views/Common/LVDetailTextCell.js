@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Common/DetailTextCell.js
+ * File: src/views/Common/LVDetailTextCell.js
  * @flow
  */
 'use strict';
@@ -14,7 +14,7 @@ import LVColor from '../../styles/LVColor';
 
 const arrowImg = require('../../assets/images/show_detail_arrow.png');
 
-export default class DetailTextCell extends Component {
+export default class LVDetailTextCell extends Component {
     static propTypes = {
         style: ViewPropTypes.style,
         text: PropTypes.string.isRequired,
