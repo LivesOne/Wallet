@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
+import { DateUtils } from '../../utils';
 import * as Progress from 'react-native-progress';
 
 /*
@@ -45,7 +46,7 @@ export const testRecores = [
         transfer_unit: 'LVT',
         transfer_amount: 70000,
         transfer_address: '379896a5474360a6dcedea906e5eb2975e50b702',
-        transfer_datetime: '2017-09-20 12:30',
+        transfer_datetime: '2017-09-21 12:30',
         transfer_completed: true
     },
     {
@@ -54,7 +55,7 @@ export const testRecores = [
         transfer_unit: 'LVT',
         transfer_amount: 3000,
         transfer_address: '517f64c8669b0dd375490f7f1ae9a36fb8cb2cf7',
-        transfer_datetime: '2017-09-19 09:21',
+        transfer_datetime: '2017-09-20 09:21',
         transfer_completed: true
     }
 ];
@@ -86,7 +87,21 @@ class LVTransferRecordItem extends React.PureComponent {
         const prefix = type === 'in' ? '+' : '-';
         const amountString = prefix + amount + ' ' + unit;
 
+        //const
+        const t = DateUtils.getTimePastFrom(datetime);
+        const timePast = t.years
+            ? t.years + ' ' + LVStrings.time_pass_years_ago
+            : t.months
+              ? t.months + ' ' + LVStrings.time_pass_months_ago
+              : t.days
+                ? t.days === 1 ? LVStrings.time_pass_yesterday : t.days + ' ' + LVStrings.time_pass_days_ago
+                : t.hours
+                  ? t.hours + ' ' + LVStrings.time_pass_hours_ago
+                  : t.minutes ? t.minutes + ' ' + LVStrings.time_pass_minutes_ago : LVStrings.time_pass_a_moment_ago;
+
         const progressRate = total_check_peers > 0 ? checked_peers / total_check_peers : 0;
+
+        console.log(datetime + ' === ' + JSON.stringify(DateUtils.getTimePastFrom(datetime)));
 
         return (
             <TouchableOpacity
@@ -110,7 +125,7 @@ class LVTransferRecordItem extends React.PureComponent {
                     </View>
                 </View>
 
-                <Text style={styles.timeText}>{datetime}</Text>
+                <Text style={styles.timeText}>{timePast}</Text>
 
                 {completed || (
                     <View style={styles.progress}>

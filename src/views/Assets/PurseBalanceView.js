@@ -10,6 +10,7 @@ import { StyleSheet, ViewPropTypes, View, Text, Image } from 'react-native';
 import PropTypes from 'prop-types';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
+import { StringUtils } from '../../utils';
 
 const lvtIcon = require('../../assets/images/lvt.png');
 const ethIcon = require('../../assets/images/eth.png');
@@ -51,8 +52,8 @@ const BalanceItemHeader = ({ icon, title }) => (
 );
 
 const BalanceValueView = ({ value, extValue, extUnit }) => {
-    const valueString = toThousands(value);
-    const extValString = toThousands(extValue);
+    const valueString = StringUtils.convertAmountToCurrencyString(value, ',');
+    const extValString = StringUtils.convertAmountToCurrencyString(extValue, ',');
     return (
         <View>
             <Text />
@@ -67,25 +68,6 @@ const BalanceValueView = ({ value, extValue, extUnit }) => {
         </View>
     );
 };
-
-function toThousands(n) {
-    const arr = (n + '').split('.');
-
-    let num = (arr[0] || 0).toString();
-    let result = '';
-
-    while (num.length > 3) {
-        result = ',' + num.slice(-3) + result;
-        num = num.slice(0, num.length - 3);
-    }
-    if (num) {
-        result = num + result;
-        if (arr.length === 2) {
-            result = result + '.' + arr[1];
-        }
-    }
-    return result;
-}
 
 const styles = StyleSheet.create({
     container: {

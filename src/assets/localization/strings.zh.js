@@ -9,15 +9,13 @@ const localized_strings = {
     assets: '资产',
     receive: '收款',
     profile: '我的',
-    transaction: '交易',
+    transfer: '转账',
 
     //receive
     receive_title:'我的收款码',
     receive_name:'钱包地址',
     receive_copy:'复制地址',
     receive_save:'保存二维码',
-
-    transfer: '转账',
 
     // Purse
     assets_import: '导入',
@@ -38,6 +36,17 @@ const localized_strings = {
 
     // Transfer
     transfer_waiting: '等待中',
+
+    // Profile
+
+    // Date Time
+    time_pass_a_moment_ago: '刚刚',
+    time_pass_minutes_ago: '分钟前',
+    time_pass_hours_ago: '小时前',
+    time_pass_days_ago: '天前',
+    time_pass_months_ago: '个月前',
+    time_pass_years_ago: '年前',
+    time_pass_yesterday: '昨天',
 };
 
 export default localized_strings;

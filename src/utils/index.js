@@ -14,6 +14,9 @@ import {
   log,
 } from './MXUtils';
 
+import * as StringUtils from './MXStringUtils';
+import * as DateUtils from './MXDateUtils';
+
 const PLUtils = {
   // Dimensions
   getDeviceHeight,
@@ -28,3 +31,5 @@ const PLUtils = {
 }
 
 export default PLUtils;
+
+export { StringUtils, DateUtils };

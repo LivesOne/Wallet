@@ -9,16 +9,13 @@ const localized_strings = {
     assets: 'Assets',
     receive: 'Receive',
     profile: 'Profile',
-    transaction: 'Transaction',
-
+    transfer: 'Transfer',
 
     //receive
     receive_title:'My Code',
     receive_name:'Cash Address',
     receive_copy:'Copy',
     receive_save:'Save',
-    
-    transfer: 'Transfer',
 
     // Purse
     assets_import: 'Import',
@@ -39,6 +36,17 @@ const localized_strings = {
 
     // Transfer
     transfer_waiting: 'Waiting',
+
+    // Profile
+
+    // Date Time
+    time_pass_a_moment_ago: 'a moment ago',
+    time_pass_minutes_ago: 'minutes ago',
+    time_pass_hours_ago: 'hours ago',
+    time_pass_days_ago: 'days ago',
+    time_pass_months_ago: 'months ago',
+    time_pass_years_ago: 'years ago',
+    time_pass_yesterday: 'yesterday',
 };
 
 export default localized_strings;
