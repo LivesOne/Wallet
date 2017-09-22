@@ -13,6 +13,7 @@ import LVStrings from '../../assets/localization';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import LVDetailTextCell from '../Common/LVDetailTextCell';
 import MXTouchableImage from '../../components/MXTouchableImage';
+import LVTransferRecordList, { testRecores } from '../Common/LVTransferRecordList';
 
 import PurseInfoView from './PurseInfoView';
 import PurseBalanceView from './PurseBalanceView';
@@ -30,7 +31,8 @@ class AssetsScreen extends Component {
         lvt: number,
         eth: number,
         lvtRmb: number,
-        ethRmb: number
+        ethRmb: number,
+        transferRecords: ?Array<Object>
     };
 
     constructor(props: any) {
@@ -41,21 +43,22 @@ class AssetsScreen extends Component {
             lvt: 2100000,
             eth: 26.035,
             lvtRmb: 20000,
-            ethRmb: 52000
+            ethRmb: 52000,
+            transferRecords: testRecores
         };
         this.onPressSelectPurse = this.onPressSelectPurse.bind(this);
     }
 
-    onPressSelectPurse: ()=>void = ()=> {
-        this.props.navigation.navigate("PurseCreateOrImport")
-    }
+    onPressSelectPurse: () => void = () => {
+        this.props.navigation.navigate('PurseCreateOrImport');
+    };
 
     onPressShowAll = () => {
         alert('show all records');
-    }
+    };
 
     render() {
-        const { purseTitle, purseAddress, lvt, eth, lvtRmb, ethRmb } = this.state;
+        const { purseTitle, purseAddress, lvt, eth, lvtRmb, ethRmb, transferRecords } = this.state;
 
         return (
             <View style={styles.container}>
@@ -69,14 +72,16 @@ class AssetsScreen extends Component {
                     <PurseBalanceView style={styles.balance} lvt={lvt} eth={eth} extLvt={lvtRmb} extEth={ethRmb} />
                 </LVGradientPanel>
 
-                <View style={styles.listPanel}>
-                    <LVDetailTextCell
-                        text={LVStrings.recent_records}
-                        detailText={LVStrings.view_all_records}
-                        onPress={this.onPressShowAll}
-                    />
-                    <View style={styles.listView} />
-                </View>
+                <LVDetailTextCell
+                    style={styles.recent}
+                    text={LVStrings.recent_records}
+                    detailText={LVStrings.view_all_records}
+                    onPress={this.onPressShowAll}
+                />
+
+                <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }} />
+
+                <LVTransferRecordList style={styles.list} records={transferRecords} />
             </View>
         );
     }
@@ -121,17 +126,15 @@ const styles = StyleSheet.create({
         height: 150,
         marginTop: 15
     },
-    listPanel: {
-        flex: 1,
+    recent: {
         width: '100%',
         alignItems: 'center',
         justifyContent: 'space-between',
         backgroundColor: LVColor.white
     },
-    listView: {
-        flex: 1,
+    list: {
         width: '100%',
-        backgroundColor: LVColor.background.grey1
+        backgroundColor: LVColor.white
     }
 });
 

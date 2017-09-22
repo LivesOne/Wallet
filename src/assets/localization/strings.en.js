@@ -11,7 +11,7 @@ const localized_strings = {
     profile: 'Profile',
     transfer: 'Transfer',
 
-    //AssetsImport
+    // Purse
     assets_import: 'Import',
     assets_import_header: 'Import wallet',
     assets_import_keyStore: 'Import by keystore',
@@ -22,11 +22,14 @@ const localized_strings = {
     assets_import_private_pwd_confirm_hint: 'Confirm password',
     assets_import_keystore_password_hint: 'Enter keystore password',
     
-    // Assets Screen
+    // Assets
     assets_title: 'My Assets',
     recent_records: 'Recent transaction records',
     view_all_records: 'View all',
     create_wallet: 'Create wallet',
+
+    // Transfer
+    transfer_waiting: 'Waiting',
 };
 
 export default localized_strings;
