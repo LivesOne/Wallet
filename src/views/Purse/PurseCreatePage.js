@@ -131,7 +131,10 @@ const styles = LVStyleSheet.create({
         color: "#667383",
         textAlign: "center",
     },
+<<<<<<< HEAD
     createButton: {
         marginTop: 35,
     },
+=======
+>>>>>>> 7d460a950109c3dd9c380ea8dc40ab76640dfd2c
 });

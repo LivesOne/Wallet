@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Transaction/TransactionScreen.js
+ * File: src/views/Transfer/TransferScreen.js
  * @flow
  */
 "use strict";
@@ -8,7 +8,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-class TransactionScreen extends Component {
+class TransferScreen extends Component {
     static navigationOptions = {
         header: null
     };
@@ -16,10 +16,10 @@ class TransactionScreen extends Component {
     render() {
         return (
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} >
-                <Text>Transaction Screen</Text>
+                <Text>Transfer Screen</Text>
             </View>
         )
     }
 }
 
-export default TransactionScreen;
+export default TransferScreen;

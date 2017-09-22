@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Common/GradientPanel.js
+ * File: src/views/Common/LVGradientPanel.js
  * @flow
  */
 'use strict';
@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
-export default class GradientPanel extends Component {
+export default class LVGradientPanel extends Component {
     render() {
         return (
             <LinearGradient

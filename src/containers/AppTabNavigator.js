@@ -14,7 +14,7 @@ import LVStrings from '../assets/localization';
 import AssetsNavigator from '../views/Assets/AssetsNavigator';
 import ReceiveNavigator from '../views/Receive/ReceiveNavigator';
 import ProfileNavigator from '../views/Profile/ProfileNavigator';
-import TransactionNavigator from '../views/Transaction/TransactionNavigator';
+import TransferNavigator from '../views/Transfer/TransferNavigator';
 
 const assetsIcon = require("../assets/images/tab_assets.png");
 const assetsFocusedIcon = require("../assets/images/tab_assets_h.png");
@@ -46,11 +46,11 @@ const AppTabNavigator = TabNavigator(
                 tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? receiveIcon : receiveFocusedIcon} />
             })
         },
-        Transaction: {
-            screen: TransactionNavigator,
-            path: "Transaction",
+        Transfer: {
+            screen: TransferNavigator,
+            path: "Transfer",
             navigationOptions: ({ navigation }) => ({
-                tabBarLabel: LVStrings.transaction,
+                tabBarLabel: LVStrings.transfer,
                 tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? transIcon : transFocusedIcon} />
             })
         },

@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Assets/PurseBanlenceView.js
+ * File: src/views/Assets/PurseBalanceView.js
  * @flow
  */
 'use strict';
@@ -14,7 +14,7 @@ import LVColor from '../../styles/LVColor';
 const lvtIcon = require('../../assets/images/lvt.png');
 const ethIcon = require('../../assets/images/eth.png');
 
-export default class PurseBanlenceView extends Component {
+export default class PurseBalanceView extends Component {
     static propTypes = {
         style: ViewPropTypes.style,
         lvt: PropTypes.number,
@@ -28,29 +28,29 @@ export default class PurseBanlenceView extends Component {
         return (
             <View style={[styles.container, this.props.style]}>
                 <View style={styles.rows}>
-                    <BanlenceItemHeader icon={lvtIcon} title="LVT" />
-                    <BanlenceValueView value={lvt} extValue={extLvt} extUnit="￥" />
+                    <BalanceItemHeader icon={lvtIcon} title="LVT" />
+                    <BalanceValueView value={lvt} extValue={extLvt} extUnit="￥" />
                 </View>
                 <View
                     style={{ width: '90%', height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }}
                 />
                 <View style={styles.rows}>
-                    <BanlenceItemHeader icon={ethIcon} title="ETH" />
-                    <BanlenceValueView value={eth} extValue={extEth} extUnit="￥" />
+                    <BalanceItemHeader icon={ethIcon} title="ETH" />
+                    <BalanceValueView value={eth} extValue={extEth} extUnit="￥" />
                 </View>
             </View>
         );
     }
 }
 
-const BanlenceItemHeader = ({ icon, title }) => (
+const BalanceItemHeader = ({ icon, title }) => (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Image style={{ marginRight: 10 }} source={icon} />
         <Text style={{ fontSize: LVSize.large, fontWeight: '400', color: LVColor.text.grey2 }}>{title}</Text>
     </View>
 );
 
-const BanlenceValueView = ({ value, extValue, extUnit }) => {
+const BalanceValueView = ({ value, extValue, extUnit }) => {
     const valueString = toThousands(value);
     const extValString = toThousands(extValue);
     return (
