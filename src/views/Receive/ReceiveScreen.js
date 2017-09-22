@@ -12,7 +12,7 @@ import { StyleSheet, View, Text,Image } from 'react-native';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 
-
+import MxImage from  './MxImage'
 import MXButton from '../../components/MXButton';
 
 const receive_share = require("../../assets/images/receive_share.png");
@@ -71,7 +71,13 @@ class ReceiveScreen extends Component {
                 />
                 </View>
                 <View style={styles.share_container}>
-                <Image source={receive_share} style={styles.share}></Image>
+                {/* <Image source={receive_share} style={styles.share}></Image> */}
+                <MxImage source={receive_share}
+                    onPress = { () => {
+                        alert("share clicked");
+                    }
+                    }
+                   ></MxImage>
                 </View>
 
             </View>
