@@ -12,12 +12,14 @@ import AssetsScreen from './AssetsScreen';
 import PurseImportPage from '../Purse/PurseImportPage';
 import PurseCreateOrImportPage from '../Purse/PurseCreateOrImportPage';
 import PurseCreatePage from '../Purse/PurseCreatePage';
+import PurseCreateSuccessPage from '../Purse/PurseCreateSuccessPage';
 
 const AssetsNavigator = StackNavigator({
     Assets: { screen: AssetsScreen },
     PurseImport: { screen: PurseImportPage },
     PurseCreateOrImport: { screen: PurseCreateOrImportPage },
-    PurseCreate: { screen: PurseCreatePage }
+    PurseCreate: { screen: PurseCreatePage },
+    PurseCreateSuccess: { screen: PurseCreateSuccessPage }
 });
 
 export default AssetsNavigator;

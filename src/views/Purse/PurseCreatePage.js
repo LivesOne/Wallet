@@ -15,7 +15,6 @@ import * as LVStyleSheet from '../../styles/LVStyleSheet';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import MXTouchableImage from '../../components/MXTouchableImage';
 
-const assetsIcon = require("../../assets/images/create_wallet.png");
 const backImg = require('../../assets/images/back.png');
 
 export default class PurseCreatePage extends Component {
@@ -59,7 +58,7 @@ export default class PurseCreatePage extends Component {
                         rounded                
                         title={"创建"}
                         onPress = {() => {
-                            //this.props.navigation.navigate("AssetsImport")
+                            this.props.navigation.navigate("PurseCreateSuccess")
                         }}
                         themeStyle={"active"}
                         style={styles.createButton}
