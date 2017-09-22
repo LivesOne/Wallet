@@ -6,7 +6,7 @@ import { View, StyleSheet, Animated } from 'react-native';
 import * as MXUtils from "../../utils/MXUtils";
 
 const SPRING_CONFIG = {tension: 2, friction: 5};
-const SLIDE_VIEW_WIDTH = 30;
+const SLIDE_VIEW_WIDTH = 20;
 
 export class MXSlideView extends Component {
 

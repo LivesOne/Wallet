@@ -65,22 +65,22 @@ export class MXSwitchTab extends Component {
         <View style={ styles.out }>
             <View style={styles.container}>
                 <TouchableOpacity
-                    style={[styles.tab, {backgroundColor: this.state.leftPressed ? LVColor.background.grey2 : 'white'}]}
+                    style={[styles.tab, {backgroundColor: 'white'}]}
                     onPress={ this._onLeftPressed.bind(this) }
                     onLayout = {this._calculateLeftCenterX}
-                    activeOpacity={0.8}
+                    activeOpacity={0.2}
                     >
-                    <Text style={[this.state.leftPressed ? styles.normalText : styles.normalText, this.props.textStyle]}>
+                    <Text style={[this.state.leftPressed ? styles.pressedText : styles.normalText, this.props.textStyle]}>
                         { this.props.leftText }
                     </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={[styles.tab, {backgroundColor: this.state.leftPressed ? 'white' : LVColor.background.grey2}]}
+                    style={[styles.tab, {backgroundColor: 'white'}]}
                     onPress={ this._onRightPressed.bind(this) }
-                    activeOpacity={this.state.leftPressed ? 1 : 0.8}
+                    activeOpacity={0.2}
                     >
-                    <Text style={[this.state.leftPressed ? styles.normalText : styles.normalText, this.props.textStyle]}>
+                    <Text style={[this.state.leftPressed ? styles.normalText : styles.pressedText, this.props.textStyle]}>
                     { this.props.rightText }
                     </Text>
                 </TouchableOpacity>
