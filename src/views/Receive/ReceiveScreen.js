@@ -34,11 +34,13 @@ class ReceiveScreen extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.topContainer}>
-                    <Text style={styles.qrcode_icon}></Text>
+                    <Text style={styles.change_purse_container}></Text>
                     <Text style={styles.title}>
                         {LVStrings.receive_title}
                     </Text>
-                    <Image source={receive_change_purse} style={styles.qrcode_icon}></Image>
+                    <View style={styles.change_purse_container}>
+                    <Image source={receive_change_purse} style={styles.change_purse}></Image>
+                    </View>
                 </View>
                 {/* <View style={styles.mainContainerBackground}> */}
 
@@ -135,10 +137,17 @@ const styles = StyleSheet.create({
         zIndex:4,
      },
 
-    qrcode_icon: {
-        height:40,
-        width:40,
+    change_purse_container: {
+        // backgroundColor:'red',
         flex:1,
+        alignItems: 'center',
+        
+    },
+    change_purse: {
+        height:30,
+        width:30,
+        resizeMode:'stretch',
+        // backgroundColor:'blue',
     },
 
     qrcode_pic:{
