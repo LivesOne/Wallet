@@ -6,7 +6,7 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text,Image } from 'react-native';
+import { StyleSheet,Share, View, Text,Image } from 'react-native';
 
 
 import LVColor from '../../styles/LVColor';
@@ -74,7 +74,17 @@ class ReceiveScreen extends Component {
                 {/* <Image source={receive_share} style={styles.share}></Image> */}
                 <MxImage source={receive_share}
                     onPress = { () => {
-                        alert("share clicked");
+                        Share.share({
+                            url: 'http://bam.tech',
+                            title: 'Share your code?'
+                          }, {
+                            // Android only:
+                            dialogTitle: 'Share your code',
+                            // iOS only:
+                            excludedActivityTypes: [
+                              'com.apple.UIKit.activity.PostToTwitter'
+                            ]
+                          })                       
                     }
                     }
                    ></MxImage>
