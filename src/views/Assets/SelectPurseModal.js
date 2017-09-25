@@ -165,7 +165,7 @@ class LVSelectPurseItem extends React.PureComponent {
             <TouchableOpacity style={itemStyles.container} activeOpacity={0.7} onPress={this._onPress.bind(this)} >
                 <View style={itemStyles.left}>
                     <Image source={selected ? purseSelected : purseUnselected} />
-                    <Text>{purseName}</Text>
+                    <Text style={itemStyles.text} >{purseName}</Text>
                 </View>
                 <Image style={itemStyles.selected} source={selected ? itemSelected : itemUnselected} />
             </TouchableOpacity>
@@ -191,6 +191,7 @@ const itemStyles = StyleSheet.create({
         marginRight: 13.5,
     },
     text: {
+        marginLeft: 5,
         fontSize: 14,
         color: LVColor.text.grey1,
     }
