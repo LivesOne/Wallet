@@ -55,7 +55,6 @@
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		AE3E382F76BE455591E1A43C /* libTcpSockets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 21EAEA210AD4432DBB010D93 /* libTcpSockets.a */; };
 		CC0F2921B5B74306A40D3990 /* libUdpSockets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE57DCA9D2EC4564AA2F68B9 /* libUdpSockets.a */; };
-		E9F4D35C526E4DC9AA4C955D /* libWorkers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF5E796D97F24B12915E6382 /* libWorkers.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -404,7 +403,6 @@
 		7B13E38CE0DC48F19A919406 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
-		BF5E796D97F24B12915E6382 /* libWorkers.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libWorkers.a; sourceTree = "<group>"; };
 		CAAA31B31ADD46229E6339DA /* libRNRandomBytes.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNRandomBytes.a; sourceTree = "<group>"; };
 		DE57DCA9D2EC4564AA2F68B9 /* libUdpSockets.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libUdpSockets.a; sourceTree = "<group>"; };
 		FA5E1A3EDEE64114B587BC09 /* libReactNativeLocalization.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libReactNativeLocalization.a; sourceTree = "<group>"; };
@@ -440,7 +438,6 @@
 				20F94A43E0CA43FFAD7948C0 /* libRNRandomBytes.a in Frameworks */,
 				AE3E382F76BE455591E1A43C /* libTcpSockets.a in Frameworks */,
 				CC0F2921B5B74306A40D3990 /* libUdpSockets.a in Frameworks */,
-				E9F4D35C526E4DC9AA4C955D /* libWorkers.a in Frameworks */,
 				4677C97DD58B4C51ACD443E2 /* libRNDeviceInfo.a in Frameworks */,
 				07C38D74F7824ABFACF6FD45 /* libBVLinearGradient.a in Frameworks */,
 				447D4C9740074D25B1A5314A /* libReactNativeLocalization.a in Frameworks */,
@@ -641,7 +638,6 @@
 				CAAA31B31ADD46229E6339DA /* libRNRandomBytes.a */,
 				21EAEA210AD4432DBB010D93 /* libTcpSockets.a */,
 				DE57DCA9D2EC4564AA2F68B9 /* libUdpSockets.a */,
-				BF5E796D97F24B12915E6382 /* libWorkers.a */,
 				43B5BBBE7C4A4CE9A47D79ED /* libRNDeviceInfo.a */,
 				7B13E38CE0DC48F19A919406 /* libBVLinearGradient.a */,
 				FA5E1A3EDEE64114B587BC09 /* libReactNativeLocalization.a */,
@@ -1401,7 +1397,6 @@
 					"$(SRCROOT)/../node_modules/react-native-randombytes",
 					"$(SRCROOT)/../node_modules/react-native-tcp/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-udp/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-workers/ios/Workers",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-localization",
@@ -1441,7 +1436,6 @@
 					"$(SRCROOT)/../node_modules/react-native-randombytes",
 					"$(SRCROOT)/../node_modules/react-native-tcp/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-udp/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-workers/ios/Workers",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-localization",
@@ -1482,7 +1476,6 @@
 					"$(SRCROOT)/../node_modules/react-native-randombytes",
 					"$(SRCROOT)/../node_modules/react-native-tcp/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-udp/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-workers/ios/Workers",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-localization",
@@ -1511,7 +1504,6 @@
 					"$(SRCROOT)/../node_modules/react-native-randombytes",
 					"$(SRCROOT)/../node_modules/react-native-tcp/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-udp/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-workers/ios/Workers",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-localization",
@@ -1546,7 +1538,6 @@
 					"$(SRCROOT)/../node_modules/react-native-randombytes",
 					"$(SRCROOT)/../node_modules/react-native-tcp/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-udp/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-workers/ios/Workers",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-localization",
@@ -1594,7 +1585,6 @@
 					"$(SRCROOT)/../node_modules/react-native-randombytes",
 					"$(SRCROOT)/../node_modules/react-native-tcp/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-udp/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-workers/ios/Workers",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-localization",
