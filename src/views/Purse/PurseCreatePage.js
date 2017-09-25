@@ -14,6 +14,7 @@ import LVStrings from '../../assets/localization';
 import * as LVStyleSheet from '../../styles/LVStyleSheet';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import MXTouchableImage from '../../components/MXTouchableImage';
+import MXCrossTextInput from './../../components/MXCrossTextInput';
 
 const backImg = require('../../assets/images/back.png');
 
@@ -40,17 +41,19 @@ export default class PurseCreatePage extends Component {
                 </LVGradientPanel>
                 <View style={styles.content}>
                     <View style={styles.textInputContainer}>
-                        <TextInput
+                        <MXCrossTextInput
                             placeholder={ "钱包名称" }
                             style={ styles.textInput }
                         />
-                        <TextInput
+                        <MXCrossTextInput
                             placeholder={ "设置钱包密码（6-12位字母数字组合）" }
                             style={ styles.textInput }
+                            secureTextEntry
                         />
-                        <TextInput
+                        <MXCrossTextInput
                             placeholder={ "重复输入密码" }
                             style={ styles.textInput }
+                            secureTextEntry
                         />
                     </View>
                     <Text style={styles.text}>该密码用来加密钱包地址，请尽量设置复杂密码完成加密。</Text>
@@ -78,13 +81,14 @@ const styles = LVStyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'flex-start',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: LVColor.white,
     },
     gradient: {
         width: '100%',
         height: 170,
         justifyContent: 'flex-start',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     nav: {
         width: '100%',
@@ -92,35 +96,41 @@ const styles = LVStyleSheet.create({
         paddingTop: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     navTitle: {
         fontSize: LVSize.large,
         textAlign: 'center',
         color: '#ffffff',
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
     },
     navBack: {
         paddingLeft: 12.5,
-        width: 36.5
+        width: 36.5,
     },
     navRightPlaceholder: {
         paddingRight: 12.5,
-        width: 36.5
+        width: 36.5,
     },
     content: {
         flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'center',
         top: -86,
+        width: Window.width,
     },
     textInputContainer: {
-        
+        alignItems: 'center',
+        shadowOffset: {width: 0, height: 3},
+        shadowColor: "#bfc5d1",
+        shadowOpacity: 0.2,
+        shadowRadius: 15,
+        borderRadius: 5,
+        width: Window.width - 25,
     },
     textInput: {
-        backgroundColor: "#f8f9fb",
         height: 60,
-        width: Window.width - 25,
+        width: Window.width - 65,
     },
     text: {
         marginTop: 15,
