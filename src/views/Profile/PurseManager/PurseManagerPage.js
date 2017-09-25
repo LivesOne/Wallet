@@ -21,7 +21,6 @@ const CellVariant = (props) => (
         <View style={{alignItems: 'center', flexDirection: 'row', width: '100%', paddingVertical: 10 }}>
             <Image source={props.source}></Image> 
             <Text
-                allowFontScaling
                 numberOfLines={1}
                 style={{ flex: 1, fontSize: 16, marginLeft: 10, color: '#677384'}}
             >{props.title}</Text>
@@ -31,7 +30,7 @@ const CellVariant = (props) => (
         highlightActiveOpacity={0.8}
         highlightUnderlayColor={'grey'}
         onPress={props.onPress}
-        contentContainerStyle = {{height: 65}}
+        contentContainerStyle = {{height: 55}}
     />
 );
 
@@ -88,7 +87,7 @@ const styles = StyleSheet.create({
     },
     purseInfo: {
         width: Window.width,
-        height: 125,
+        height: 115,
         paddingHorizontal: 12.5,
         backgroundColor: 'white'
     },
