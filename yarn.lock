@@ -3493,6 +3493,12 @@ react-native-tab-view@^0.0.67:
   dependencies:
     prop-types "^15.5.8"
 
+react-native-tableview-simple@^0.16.12:
+  version "0.16.12"
+  resolved "http://registry.npm.taobao.org/react-native-tableview-simple/download/react-native-tableview-simple-0.16.12.tgz#a0434b580837d37abd16fcb1c03f48bcb20fdf67"
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native@0.48.3:
   version "0.48.3"
   resolved "http://registry.npm.taobao.org/react-native/download/react-native-0.48.3.tgz#ec17a66929eb292512b14c091cf260b25e2fba18"
