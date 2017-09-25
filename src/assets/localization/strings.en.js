@@ -47,6 +47,23 @@ const localized_strings = {
     time_pass_months_ago: 'months ago',
     time_pass_years_ago: 'years ago',
     time_pass_yesterday: 'yesterday',
+
+    //Profile purse manager
+    profile_purse_title: 'Maxthon LivesToken',
+    profile_purse_modify_name: 'Modify purse name',
+    profile_purse_name: 'Purse name',
+    profile_purse_new_name: 'New purse name',
+    profile_purse_modify_password: 'Modify password',
+    profile_purse_cur_password: 'Current password',
+    profile_purse_new_password: 'New password',
+    profile_purse_password_confirm: 'Confirm password',
+    profile_purse_password_hint: 'Forgot password? reset it by importing private key.',
+    profile_purse_import_right_now: 'Import right now',
+    profile_purse_export: 'Export private key',
+    profile_purse_backup: 'Backup keystore',
+    profile_purse_delete_purse: 'Delete purse',
+    profile_purse_save: 'Save',
+
 };
 
 export default localized_strings;

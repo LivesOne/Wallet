@@ -22,12 +22,13 @@ export default class MXNavigatorHeader extends Component {
         onLeftPress: PropTypes.func,
         right: PropTypes.oneOfType([PropTypes.string, PropTypes.any]),
         rightStyle: View.propTypes.style,
+        rightTextColor: PropTypes.string,
         onRightPress: PropTypes.func,
         style: View.propTypes.style,
     };
 
     render() {
-        const { title, titleStyle, left, leftStyle, onLeftPress, style, right, onRightPress, rightStyle } = this.props;
+        const { title, titleStyle, left, leftStyle, onLeftPress, style, right, onRightPress, rightStyle, rightTextColor } = this.props;
         let leftIsString = left && (typeof left) === 'string';
         let rightIsString = right && (typeof right) === 'string';
         return (
@@ -49,7 +50,7 @@ export default class MXNavigatorHeader extends Component {
                     style={[styles.defaultRightStyle, rightStyle]} 
                     onPress={onRightPress}>
                     {right && <View style={{ }}>
-                        { rightIsString && <Text style={{fontSize: 16, color: LVColor.white}}>{right}</Text> }
+                        { rightIsString && <Text style={{fontSize: 16, color: rightTextColor || LVColor.white}}>{right}</Text> }
                         { !rightIsString && <Image source={right}/>}
                     </View>}
                 </TouchableOpacity>
