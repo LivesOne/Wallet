@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent'
     },
     purseInfo: {
-        width: Window.width - 25
+        width: Window.width - 25,
     },
     balance: {
         width: Window.width - 25,

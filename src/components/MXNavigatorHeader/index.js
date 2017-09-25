@@ -16,7 +16,7 @@ export default class MXNavigatorHeader extends Component {
 
     static propTypes = {
         title: PropTypes.string.isRequired,
-        titleStyle: View.propTypes.style,
+        titleStyle: Text.propTypes.style,
         left: PropTypes.oneOfType([PropTypes.string, PropTypes.any]),
         leftStyle: View.propTypes.style,
         onLeftPress: PropTypes.func,

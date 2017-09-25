@@ -16,7 +16,8 @@ class ProfleScreen extends Component {
     render() {
         return (
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} >
-                <Text>Profile Screen</Text>
+                <Text
+                    onPress = {()=>{ this.props.navigation.navigate('PurseManager') }}>Profile Screen</Text>
             </View>
         )
     }
