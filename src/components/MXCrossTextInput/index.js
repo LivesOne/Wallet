@@ -22,7 +22,7 @@ class MXCrossTextInput extends Component {
     super(props);
     this.state = {
       text: null,
-      hasFocus: false
+      hasFocus: false,
     };
     this.onChangeText = this.onChangeText.bind(this);
   }
@@ -33,8 +33,13 @@ class MXCrossTextInput extends Component {
     themeStyle: PropTypes.string,
     style: ViewPropTypes.style,
     secureTextEntry: PropTypes.bool,
-    onTextChanged: PropTypes.func
+    onTextChanged: PropTypes.func,
+    withUnderLine: PropTypes.bool,
   };
+
+  static defaultProps = {
+    withUnderLine: true,
+ };
 
   getTheme() {
     switch (this.props.themeStyle) {
@@ -60,7 +65,7 @@ class MXCrossTextInput extends Component {
   render() {
 
     const { rounded, style,
-       placeholder, secureTextEntry} = this.props;
+       placeholder, secureTextEntry, withUnderLine } = this.props;
 
     const theme = this.getTheme();
 
@@ -70,6 +75,7 @@ class MXCrossTextInput extends Component {
         style,
         theme.main,
         rounded ? Base.rounded : null,
+        !withUnderLine ? {borderBottomColor: 'transparent'} : null,
         ]
     }>
       <TextInput

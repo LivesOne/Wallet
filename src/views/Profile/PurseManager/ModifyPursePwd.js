@@ -62,6 +62,7 @@ export class ModifyPursePwd extends Component {
                     <Text style={styles.text}>  
                     { LVStrings.profile_purse_cur_password }</Text>
                     <MXCrossTextInput
+                        style={styles.textInput}
                         secureTextEntry={true}
                         placeholder= { LVStrings.profile_purse_cur_password }
                         onTextChanged={ this.onCurPwdChanged.bind(this) }
@@ -69,6 +70,7 @@ export class ModifyPursePwd extends Component {
                     <Text style={styles.text}>
                     { LVStrings.profile_purse_new_password }</Text>
                     <MXCrossTextInput
+                        style={styles.textInput}
                         secureTextEntry={true}
                         placeholder= { LVStrings.assets_import_private_password_hint }
                         onTextChanged={ this.onNewPwdChanged.bind(this) }
@@ -76,6 +78,7 @@ export class ModifyPursePwd extends Component {
                     <Text style={styles.text}>
                     { LVStrings.profile_purse_password_confirm }</Text>
                     <MXCrossTextInput
+                        style={styles.textInput}
                         secureTextEntry={true}
                         placeholder= { LVStrings.assets_import_private_pwd_confirm_hint }
                         onTextChanged={ this.onConfirmPwdChanged.bind(this) }
@@ -100,6 +103,9 @@ const styles = StyleSheet.create({
         marginBottom:5, 
         color: LVColor.primary, 
         fontSize: 16
+    },
+    textInput: {
+        width: '100%'
     }
 });
 export default ModifyPursePwd

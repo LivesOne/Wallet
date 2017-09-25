@@ -50,6 +50,7 @@ export class ModifyPurseName extends Component {
                         <Text style={styles.text}>
                         { LVStrings.profile_purse_name }</Text>
                         <MXCrossTextInput
+                            style={styles.textInput}
                             placeholder= { LVStrings.profile_purse_new_name }
                             onTextChanged={ this.onTextChanged.bind(this) }
                         />
@@ -64,7 +65,10 @@ const styles = StyleSheet.create({
         marginTop: 15, 
         marginBottom:5, 
         color: LVColor.primary, 
-        fontSize: 16
+        fontSize: 16,
+    },
+    textInput: {
+        width: '100%'
     }
 });
 
