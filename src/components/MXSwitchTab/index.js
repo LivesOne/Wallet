@@ -7,18 +7,23 @@ import { Text, View, TouchableOpacity, ViewPropTypes } from 'react-native';
 let LVStyleSheet = require('../../styles/LVStyleSheet');
 import LVColor from '../../styles/LVColor'
 import PropTypes from 'prop-types';
+import { MXSlideView } from './SlideView';
 
 export class MXSwitchTab extends Component {
 
 
     state: {
-        leftPressed: boolean
+        leftPressed: boolean,
+        scrollToLeftPos: number,
+        scrollToRightPos: number,
     }
 
     constructor() {
         super();
         this.state = {
             leftPressed: true,
+            scrollToLeftPos: 0,
+            scrollToRightPos:0,
         }
     }
 
@@ -32,45 +37,69 @@ export class MXSwitchTab extends Component {
 
     _onLeftPressed = () => {
         this.setState({leftPressed: true});
+        this.refs.slide.offset(this.state.scrollToLeftPos);
         this.props.onTabSwitched && this.props.onTabSwitched(true)
     }
 
     _onRightPressed = () => {
         this.setState({leftPressed: false});
+        this.refs.slide.offset(this.state.scrollToRightPos);
         this.props.onTabSwitched && this.props.onTabSwitched(false)
+    }
+
+    componentDidMount = () => {
+    }
+    
+    _calculateLeftCenterX = (event) => {
+        let layoutParms = event.nativeEvent.layout;
+        let scrollToLeftPos = 0;
+        let scrollToRightPos = layoutParms.x + layoutParms.width;
+        this.setState({
+            scrollToLeftPos: Math.trunc(scrollToLeftPos),
+            scrollToRightPos: Math.trunc(scrollToRightPos)
+        })
     }
 
     render() {
     return (
-        <View style={[styles.container, this.props.style]}>
-            <TouchableOpacity
-                style={[styles.tab, {backgroundColor: this.state.leftPressed ? LVColor.background.grey2 : 'white'}]}
-                onPress={ this._onLeftPressed.bind(this) }
-                activeOpacity={0.8}
-                >
-                <Text style={[this.state.leftPressed ? styles.pressedText : styles.normalText, this.props.textStyle]}>
-                    { this.props.leftText }
-                </Text>
-                {this.state.leftPressed && <View style={styles.underLine}/>}
-            </TouchableOpacity>
+        <View style={ styles.out }>
+            <View style={styles.container}>
+                <TouchableOpacity
+                    style={[styles.tab, {backgroundColor: 'white'}]}
+                    onPress={ this._onLeftPressed.bind(this) }
+                    onLayout = {this._calculateLeftCenterX}
+                    activeOpacity={0.2}
+                    >
+                    <Text style={[this.state.leftPressed ? styles.pressedText : styles.normalText, this.props.textStyle]}>
+                        { this.props.leftText }
+                    </Text>
+                </TouchableOpacity>
 
-            <TouchableOpacity
-                style={[styles.tab, {backgroundColor: this.state.leftPressed ? 'white' : LVColor.background.grey2}]}
-                onPress={ this._onRightPressed.bind(this) }
-                activeOpacity={this.state.leftPressed ? 1 : 0.8}
-                >
-                <Text style={[this.state.leftPressed ? styles.normalText : styles.pressedText, this.props.textStyle]}>
-                { this.props.rightText }
-                </Text>
-                {!this.state.leftPressed && <View style={styles.underLine}/>}
-            </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.tab, {backgroundColor: 'white'}]}
+                    onPress={ this._onRightPressed.bind(this) }
+                    activeOpacity={0.2}
+                    >
+                    <Text style={[this.state.leftPressed ? styles.normalText : styles.pressedText, this.props.textStyle]}>
+                    { this.props.rightText }
+                    </Text>
+                </TouchableOpacity>
+            </View>
+            <MXSlideView 
+                style={{flex: 1, top: -15}}
+                ref={ "slide" }/>
         </View>
     )
     }
 }
 
 const styles = LVStyleSheet.create({
+    out: {
+        height: 70, 
+        width: '100%',
+    },
     container: {
+        flex: 1000,
         backgroundColor: 'transparent',
         flexDirection: 'row',
         height: 70,

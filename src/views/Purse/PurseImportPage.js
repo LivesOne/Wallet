@@ -135,6 +135,8 @@ import { MXSwitchTab } from './../../components/MXSwitchTab';
     textInput: {
       backgroundColor: "#f8f9fb",
       height: 110,
+      marginTop: 20,
+      borderRadius: 3,
     },
 
   });

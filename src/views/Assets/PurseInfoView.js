@@ -16,18 +16,21 @@ export default class PurseInfoView extends Component {
     static propTypes = {
         style: ViewPropTypes.style,
         title: PropTypes.string,
-        address: PropTypes.string
+        titleStyle: Text.propTypes.style,
+        address: PropTypes.string,
+        addressStyle: Text.propTypes.style,
+        purseIcon: PropTypes.any,
     };
 
     render() {
         return (
             <View style={[styles.container, this.props.style]}>
-                <Image source={purseIcon} />
+                <Image source={this.props.purseIcon || purseIcon} />
                 <View style={{ flex: 1, marginLeft: 10 }}>
-                    <Text style={[styles.text, styles.purseTitle]} numberOfLines={1} ellipsizeMode="middle">
+                    <Text style={[styles.text, styles.purseTitle, this.props.titleStyle]} numberOfLines={1} ellipsizeMode="middle">
                         {this.props.title}
                     </Text>
-                    <Text style={[styles.text, styles.purseAddress]} numberOfLines={1} ellipsizeMode="middle">
+                    <Text style={[styles.text, styles.purseAddress, this.props.addressStyle]} numberOfLines={1} ellipsizeMode="middle">
                         {this.props.address}
                     </Text>
                 </View>

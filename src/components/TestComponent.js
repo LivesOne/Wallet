@@ -15,7 +15,7 @@ class TestComponent extends Component {
 
     render() {
         return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} >
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start'}} >
                 <MXNavigatorHeader
                     title = {"title"}
                     left = {'left'}
@@ -41,7 +41,8 @@ class TestComponent extends Component {
                     leftText= {'共生币'}
                     rightText={'right'}
                     onTabSwitched={(leftPressed)=>{
-                        alert(leftPressed ? "leftPressed" : "rightPressed")}}
+                        }
+                    }
                 />
             </View>
         )

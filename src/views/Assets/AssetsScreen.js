@@ -13,9 +13,11 @@ import LVStrings from '../../assets/localization';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import LVDetailTextCell from '../Common/LVDetailTextCell';
 import MXTouchableImage from '../../components/MXTouchableImage';
+import LVTransferRecordList, { testRecores } from '../Common/LVTransferRecordList';
 
 import PurseInfoView from './PurseInfoView';
 import PurseBalanceView from './PurseBalanceView';
+import SelectPurseModal from './SelectPurseModal';
 
 const selectImg = require('../../assets/images/select_purse.png');
 
@@ -25,37 +27,58 @@ class AssetsScreen extends Component {
     };
 
     state: {
-        purseTitle: string,
+        purseId: string,
+        purseName: string,
         purseAddress: string,
+        openSelectPurse: boolean,
         lvt: number,
         eth: number,
         lvtRmb: number,
-        ethRmb: number
+        ethRmb: number,
+        transferRecords: ?Array<Object>
     };
 
     constructor(props: any) {
         super(props);
         this.state = {
-            purseTitle: '傲游LivesToken',
+            purseId: '3',
+            purseName: '傲游LivesToken',
             purseAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
+            openSelectPurse: false,
             lvt: 2100000,
             eth: 26.035,
             lvtRmb: 20000,
-            ethRmb: 52000
+            ethRmb: 52000,
+            transferRecords: testRecores
         };
         this.onPressSelectPurse = this.onPressSelectPurse.bind(this);
+        this.onSelectPurseClosed = this.onSelectPurseClosed.bind(this);
+        this.onPurseSelected = this.onPurseSelected.bind(this);
     }
 
-    onPressSelectPurse: ()=>void = ()=> {
-        this.props.navigation.navigate("PurseCreateOrImport")
-    }
+    onPressSelectPurse = () => {
+        this.setState({ openSelectPurse: true });
+    };
+
+    onSelectPurseClosed = () => {
+        this.setState({ openSelectPurse: false });
+    };
+
+    onPurseSelected = (purseObj: Object) => {
+        this.setState({
+            purseId: purseObj.id,
+            purseName: purseObj.name,
+            purseAddress: purseObj.address,
+            openSelectPurse: false
+        });
+    };
 
     onPressShowAll = () => {
         alert('show all records');
-    }
+    };
 
     render() {
-        const { purseTitle, purseAddress, lvt, eth, lvtRmb, ethRmb } = this.state;
+        const { purseName, purseAddress, lvt, eth, lvtRmb, ethRmb, transferRecords } = this.state;
 
         return (
             <View style={styles.container}>
@@ -65,18 +88,27 @@ class AssetsScreen extends Component {
                         <Text style={styles.navTitle}>{LVStrings.assets_title}</Text>
                         <MXTouchableImage style={{ width: 27 }} source={selectImg} onPress={this.onPressSelectPurse} />
                     </View>
-                    <PurseInfoView style={styles.purseInfo} title={purseTitle} address={purseAddress} />
+                    <PurseInfoView style={styles.purseInfo} title={purseName} address={purseAddress} />
                     <PurseBalanceView style={styles.balance} lvt={lvt} eth={eth} extLvt={lvtRmb} extEth={ethRmb} />
                 </LVGradientPanel>
 
-                <View style={styles.listPanel}>
-                    <LVDetailTextCell
-                        text={LVStrings.recent_records}
-                        detailText={LVStrings.view_all_records}
-                        onPress={this.onPressShowAll}
-                    />
-                    <View style={styles.listView} />
-                </View>
+                <LVDetailTextCell
+                    style={styles.recent}
+                    text={LVStrings.recent_records}
+                    detailText={LVStrings.view_all_records}
+                    onPress={this.onPressShowAll}
+                />
+
+                <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }} />
+
+                <LVTransferRecordList style={styles.list} records={transferRecords} />
+
+                <SelectPurseModal
+                    isOpen={this.state.openSelectPurse}
+                    onClosed={this.onSelectPurseClosed}
+                    selectedPurseId={this.state.purseId}
+                    onSelected={this.onPurseSelected}
+                />
             </View>
         );
     }
@@ -114,24 +146,22 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent'
     },
     purseInfo: {
-        width: Window.width - 25
+        width: Window.width - 25,
     },
     balance: {
         width: Window.width - 25,
         height: 150,
         marginTop: 15
     },
-    listPanel: {
-        flex: 1,
+    recent: {
         width: '100%',
         alignItems: 'center',
         justifyContent: 'space-between',
         backgroundColor: LVColor.white
     },
-    listView: {
-        flex: 1,
+    list: {
         width: '100%',
-        backgroundColor: LVColor.background.grey1
+        backgroundColor: LVColor.white
     }
 });
 
