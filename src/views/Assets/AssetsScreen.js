@@ -17,6 +17,7 @@ import LVTransferRecordList, { testRecores } from '../Common/LVTransferRecordLis
 
 import PurseInfoView from './PurseInfoView';
 import PurseBalanceView from './PurseBalanceView';
+import SelectPurseModal from './SelectPurseModal';
 
 const selectImg = require('../../assets/images/select_purse.png');
 
@@ -26,8 +27,10 @@ class AssetsScreen extends Component {
     };
 
     state: {
-        purseTitle: string,
+        purseId: string,
+        purseName: string,
         purseAddress: string,
+        openSelectPurse: boolean,
         lvt: number,
         eth: number,
         lvtRmb: number,
@@ -38,8 +41,10 @@ class AssetsScreen extends Component {
     constructor(props: any) {
         super(props);
         this.state = {
-            purseTitle: '傲游LivesToken',
+            purseId: '3',
+            purseName: '傲游LivesToken',
             purseAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
+            openSelectPurse: false,
             lvt: 2100000,
             eth: 26.035,
             lvtRmb: 20000,
@@ -47,10 +52,25 @@ class AssetsScreen extends Component {
             transferRecords: testRecores
         };
         this.onPressSelectPurse = this.onPressSelectPurse.bind(this);
+        this.onSelectPurseClosed = this.onSelectPurseClosed.bind(this);
+        this.onPurseSelected = this.onPurseSelected.bind(this);
     }
 
-    onPressSelectPurse: () => void = () => {
-        this.props.navigation.navigate('PurseCreateOrImport');
+    onPressSelectPurse = () => {
+        this.setState({ openSelectPurse: true });
+    };
+
+    onSelectPurseClosed = () => {
+        this.setState({ openSelectPurse: false });
+    };
+
+    onPurseSelected = (purseObj: Object) => {
+        this.setState({
+            purseId: purseObj.id,
+            purseName: purseObj.name,
+            purseAddress: purseObj.address,
+            openSelectPurse: false
+        });
     };
 
     onPressShowAll = () => {
@@ -58,7 +78,7 @@ class AssetsScreen extends Component {
     };
 
     render() {
-        const { purseTitle, purseAddress, lvt, eth, lvtRmb, ethRmb, transferRecords } = this.state;
+        const { purseName, purseAddress, lvt, eth, lvtRmb, ethRmb, transferRecords } = this.state;
 
         return (
             <View style={styles.container}>
@@ -68,7 +88,7 @@ class AssetsScreen extends Component {
                         <Text style={styles.navTitle}>{LVStrings.assets_title}</Text>
                         <MXTouchableImage style={{ width: 27 }} source={selectImg} onPress={this.onPressSelectPurse} />
                     </View>
-                    <PurseInfoView style={styles.purseInfo} title={purseTitle} address={purseAddress} />
+                    <PurseInfoView style={styles.purseInfo} title={purseName} address={purseAddress} />
                     <PurseBalanceView style={styles.balance} lvt={lvt} eth={eth} extLvt={lvtRmb} extEth={ethRmb} />
                 </LVGradientPanel>
 
@@ -82,6 +102,13 @@ class AssetsScreen extends Component {
                 <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }} />
 
                 <LVTransferRecordList style={styles.list} records={transferRecords} />
+
+                <SelectPurseModal
+                    isOpen={this.state.openSelectPurse}
+                    onClosed={this.onSelectPurseClosed}
+                    selectedPurseId={this.state.purseId}
+                    onSelected={this.onPurseSelected}
+                />
             </View>
         );
     }
