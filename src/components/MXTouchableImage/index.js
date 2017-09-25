@@ -4,7 +4,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { ViewPropTypes, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, ViewPropTypes, Image, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 
 export default class MXTouchableImage extends Component {
@@ -16,10 +16,17 @@ export default class MXTouchableImage extends Component {
 
     render() {
         return (
-            <TouchableOpacity style={this.props.style} activeOpacity={0.8} onPress={this.props.onPress}>
+            <TouchableOpacity style={[styles.img, this.props.style]} activeOpacity={0.8} onPress={this.props.onPress}>
                 <Image source={this.props.source} />
                 {this.props.children}
             </TouchableOpacity>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    img: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
+});
