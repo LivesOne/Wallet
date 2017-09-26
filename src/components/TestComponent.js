@@ -28,11 +28,11 @@ class TestComponent extends Component {
                     onPress = {() => {
                     alert("button clicked");
                     }}
-                themeStyle={"active"}
+                    themeStyle={"active"}
                 />
                 
                 <MXCrossTextInput
-                    rounded
+                    withUnderLine = {true}
                     placeholder={"hello"}
                     onTextChanged = {(newText) => {alert(newText)}}
                 />
