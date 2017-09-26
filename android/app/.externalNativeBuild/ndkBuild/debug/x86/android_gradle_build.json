@@ -1,0 +1,122 @@
+{
+  "buildFiles": [
+    "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/Android.mk",
+    "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/Application.mk"
+  ],
+  "cleanCommands": [
+    "/Users/tlrkboy/Library/Android/android-ndk-r13b/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/Android.mk NDK_APPLICATION_MK\u003d/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/Application.mk APP_ABI\u003dx86 NDK_ALL_ABIS\u003dx86 NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003d/Users/tlrkboy/androidStudioProjects/Venus/android/app/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/Users/tlrkboy/androidStudioProjects/Venus/android/app/build/intermediates/ndkBuild/debug/lib clean"
+  ],
+  "libraries": {
+    "scrypt-debug-x86": {
+      "buildCommand": "/Users/tlrkboy/Library/Android/android-ndk-r13b/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/Android.mk NDK_APPLICATION_MK\u003d/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/Application.mk APP_ABI\u003dx86 NDK_ALL_ABIS\u003dx86 NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003d/Users/tlrkboy/androidStudioProjects/Venus/android/app/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/Users/tlrkboy/androidStudioProjects/Venus/android/app/build/intermediates/ndkBuild/debug/lib /Users/tlrkboy/androidStudioProjects/Venus/android/app/build/intermediates/ndkBuild/debug/obj/local/x86/libscrypt.a",
+      "toolchain": "toolchain-x86",
+      "abi": "x86",
+      "artifactName": "scrypt",
+      "files": [
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/b64.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/crypto-mcf.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/crypto-scrypt-saltgen.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/crypto_scrypt-check.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/crypto_scrypt-hash.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/crypto_scrypt-hexconvert.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/crypto_scrypt-nosse.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/main.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/sha256.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/slowequals.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        }
+      ],
+      "output": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/build/intermediates/ndkBuild/debug/obj/local/x86/libscrypt.a"
+    },
+    "scrypt_crypho-debug-x86": {
+      "buildCommand": "/Users/tlrkboy/Library/Android/android-ndk-r13b/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/Android.mk NDK_APPLICATION_MK\u003d/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/Application.mk APP_ABI\u003dx86 NDK_ALL_ABIS\u003dx86 NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003d/Users/tlrkboy/androidStudioProjects/Venus/android/app/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/Users/tlrkboy/androidStudioProjects/Venus/android/app/build/intermediates/ndkBuild/debug/lib /Users/tlrkboy/androidStudioProjects/Venus/android/app/build/intermediates/ndkBuild/debug/obj/local/x86/libscrypt_crypho.so",
+      "toolchain": "toolchain-x86",
+      "abi": "x86",
+      "artifactName": "scrypt_crypho",
+      "files": [
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/b64.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/crypto-mcf.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/crypto-scrypt-saltgen.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/crypto_scrypt-check.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/crypto_scrypt-hash.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/crypto_scrypt-hexconvert.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/crypto_scrypt-nosse.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/main.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/sha256.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/slowequals.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt/\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        },
+        {
+          "src": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/scrypt-jni.c",
+          "flags": "\"-gcc-toolchain\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/x86-4.9/prebuilt/darwin-x86_64\" \"-target\" \"i686-none-linux-android\" \"-ffunction-sections\" \"-funwind-tables\" \"-fstack-protector-strong\" \"-fPIC\" \"-Wno-invalid-command-line-argument\" \"-Wno-unused-command-line-argument\" \"-no-canonical-prefixes\" \"-g\" \"-O0\" \"-UNDEBUG\" \"-fno-limit-debug-info\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni/./libscrypt\" \"-I/Users/tlrkboy/androidStudioProjects/Venus/android/app/src/main/jni\" \"-DANDROID\" \"-Wa,--noexecstack\" \"-Wformat\" \"-Werror\u003dformat-security\" \"-mstackrealign\" \"-isystem\" \"/Users/tlrkboy/Library/Android/android-ndk-r13b/platforms/android-16/arch-x86/usr/include\""
+        }
+      ],
+      "output": "/Users/tlrkboy/androidStudioProjects/Venus/android/app/build/intermediates/ndkBuild/debug/obj/local/x86/libscrypt_crypho.so"
+    }
+  },
+  "toolchains": {
+    "toolchain-x86": {
+      "cCompilerExecutable": "/Users/tlrkboy/Library/Android/android-ndk-r13b/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang"
+    }
+  },
+  "cFileExtensions": [
+    "c"
+  ],
+  "cppFileExtensions": []
+}
