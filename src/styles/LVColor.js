@@ -29,6 +29,7 @@ const LVColor = {
     // 给文本使用
     text: {
         white: '#fff',
+        dot3: '#333333',
         grey1: '#667383',
         grey2: '#677384',
         grey3: '#bec4d0',

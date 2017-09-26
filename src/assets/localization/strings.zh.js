@@ -53,15 +53,6 @@ const localized_strings = {
     profile_setting: '系统信息',
     profile_about: '关于我们',
 
-    // Date Time
-    time_pass_a_moment_ago: '刚刚',
-    time_pass_minutes_ago: '分钟前',
-    time_pass_hours_ago: '小时前',
-    time_pass_days_ago: '天前',
-    time_pass_months_ago: '个月前',
-    time_pass_years_ago: '年前',
-    time_pass_yesterday: '昨天',
-
     //Profile purse manager
     profile_purse_title: '傲游LivesToken',
     profile_purse_modify_name: '修改钱包名称',
@@ -77,6 +68,23 @@ const localized_strings = {
     profile_purse_backup: '备份Keystore',
     profile_purse_delete_purse: '删除钱包',
     profile_purse_save: '保存',
+
+    // Date Time
+    time_pass_a_moment_ago: '刚刚',
+    time_pass_minutes_ago: '分钟前',
+    time_pass_hours_ago: '小时前',
+    time_pass_days_ago: '天前',
+    time_pass_months_ago: '个月前',
+    time_pass_years_ago: '年前',
+    time_pass_yesterday: '昨天',
+
+    // App Guide Message
+    guide_master_1: '安全可靠',
+    guide_detail_1: '所 有 密 码 隔 离 网 络',
+    guide_master_2: '流程简单',
+    guide_detail_2: '钱 包 导 入 直 接 使 用',
+    guide_master_3: '结构清晰',
+    guide_detail_3: '账 目 记 录 一 目 了 然',
 };
 
 export default localized_strings;

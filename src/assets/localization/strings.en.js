@@ -53,15 +53,6 @@ const localized_strings = {
     profile_setting: 'System info',
     profile_about: 'About',
 
-    // Date Time
-    time_pass_a_moment_ago: 'a moment ago',
-    time_pass_minutes_ago: 'minutes ago',
-    time_pass_hours_ago: 'hours ago',
-    time_pass_days_ago: 'days ago',
-    time_pass_months_ago: 'months ago',
-    time_pass_years_ago: 'years ago',
-    time_pass_yesterday: 'yesterday',
-
     //Profile purse manager
     profile_purse_title: 'Maxthon LivesToken',
     profile_purse_modify_name: 'Modify purse name',
@@ -78,6 +69,22 @@ const localized_strings = {
     profile_purse_delete_purse: 'Delete purse',
     profile_purse_save: 'Save',
 
+    // Date Time
+    time_pass_a_moment_ago: 'a moment ago',
+    time_pass_minutes_ago: 'minutes ago',
+    time_pass_hours_ago: 'hours ago',
+    time_pass_days_ago: 'days ago',
+    time_pass_months_ago: 'months ago',
+    time_pass_years_ago: 'years ago',
+    time_pass_yesterday: 'yesterday',
+
+    // App Guide Message
+    guide_master_1: 'Safe',
+    guide_detail_1: 'All passwords are isolated from the network',
+    guide_master_2: 'Simple',
+    guide_detail_2: 'Purse import direct use',
+    guide_master_3: 'Clear',
+    guide_detail_3: 'Transfers are clear',
 };
 
 export default localized_strings;

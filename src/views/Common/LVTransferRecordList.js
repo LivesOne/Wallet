@@ -101,8 +101,6 @@ class LVTransferRecordItem extends React.PureComponent {
 
         const progressRate = total_check_peers > 0 ? checked_peers / total_check_peers : 0;
 
-        console.log(datetime + ' === ' + JSON.stringify(DateUtils.getTimePastFrom(datetime)));
-
         return (
             <TouchableOpacity
                 style={[styles.record, completed ? styles.normalRecord : styles.uncompletedRecord]}

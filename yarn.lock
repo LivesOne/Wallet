@@ -3487,6 +3487,12 @@ react-native-progress@^3.4.0:
   dependencies:
     prop-types "^15.5.8"
 
+react-native-swiper@^1.5.12:
+  version "1.5.12"
+  resolved "http://registry.npm.taobao.org/react-native-swiper/download/react-native-swiper-1.5.12.tgz#fe040e19d936304013f1671dd83f7e25ee3c4d83"
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-tab-view@^0.0.67:
   version "0.0.67"
   resolved "http://registry.npm.taobao.org/react-native-tab-view/download/react-native-tab-view-0.0.67.tgz#cdd146fe5e5d4baff6c89f2d5d0b15fa23db39d0"
