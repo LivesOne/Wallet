@@ -1,7 +1,6 @@
 package com.venus;
 
 import com.facebook.react.ReactActivity;
-import co.apptailor.Worker.WorkerPackage;
 
 public class MainActivity extends ReactActivity {
 
