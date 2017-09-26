@@ -27,12 +27,20 @@ const localized_strings = {
     assets_import_private_password_hint: 'Enter 6 to 12 alphanumeric groups',
     assets_import_private_pwd_confirm_hint: 'Confirm password',
     assets_import_keystore_password_hint: 'Enter keystore password',
-    
+    assets_create_wallet: 'Create wallet',
+    assets_create_name: 'Wallet name',
+    assets_create_password: 'Set the wallet password (6-12 alphanumeric combination)',
+    assets_create_password_verify: 'Repeat the password',
+    assets_create_comment: 'This password is used to encrypt the wallet address, please try to set the complex password to complete the encryption.',
+    assets_create: 'Create',
+    assets_create_success: 'Create success!',
+    assets_create_success_comment: 'The platform does not store the user\'s password, the password can not be retrieved or reset, it is highly recommended that you make a backup before using your wallet!',
+    assets_backup_wallet: 'Backup wallet',
+
     // Assets
     assets_title: 'My Assets',
     recent_records: 'Recent transaction records',
     view_all_records: 'View all',
-    create_wallet: 'Create wallet',
 
     // Transfer
     transfer_waiting: 'Waiting',

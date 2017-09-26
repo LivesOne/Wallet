@@ -27,12 +27,20 @@ const localized_strings = {
     assets_import_private_password_hint: '输入6~12位字母数字组合',
     assets_import_private_pwd_confirm_hint: '重复输入你的密码',
     assets_import_keystore_password_hint: '请输入Keystore密码',
-    
+    assets_create_wallet: '创建钱包',
+    assets_create_name: '钱包名称',
+    assets_create_password: '设置钱包密码（6-12位字母数字组合）',
+    assets_create_password_verify: '重复输入密码',
+    assets_create_comment: '该密码用来加密钱包地址，请尽量设置复杂密码完成加密。',
+    assets_create: '创建',
+    assets_create_sucess: '创建成功！',
+    assets_create_success_comment: '平台不储存用户的私人密码，密码无法找回或重置，强烈建议您在使用钱包前做好钱包备份！',
+    assets_backup_wallet: '备份钱包',
+
     // Assets
     assets_title: '我的资产',
     recent_records: '最近交易记录',
     view_all_records: '查看全部记录',
-    create_wallet: '创建钱包',
 
     // Transfer
     transfer_waiting: '等待中',

@@ -24,17 +24,17 @@ export default class PurseCreateOrImportPage extends Component {
         return (
             <View style = {styles.container}>
                 <MXNavigatorHeader
-                    title = {LVStrings.create_wallet}
+                    title = {LVStrings.assets_create_wallet}
                     onLeftPress = {() => {
                         this.props.navigation.goBack();
                     }}
                 />
                 <Image source={createSuccessImage} style = {styles.image}/>
-                <Text style={styles.text}>创建成功！</Text>
-                <Text style={styles.detailText}>平台不储存用户的私人密码，密码无法找回或重置，强烈建议您在使用钱包前做好钱包备份！</Text>
+                <Text style={styles.text}>{LVStrings.assets_create_success}</Text>
+                <Text style={styles.detailText}>{LVStrings.assets_create_success_comment}</Text>
                 <MXButton
                     rounded                
-                    title={"备份钱包"}
+                    title={LVStrings.assets_backup_wallet}
                     onPress = {() => {
                         
                     }}

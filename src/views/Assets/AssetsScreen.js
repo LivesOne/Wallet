@@ -74,7 +74,8 @@ class AssetsScreen extends Component {
     };
 
     onPressShowAll = () => {
-        alert('show all records');
+        //alert('show all records');
+        this.props.navigation.navigate("PurseCreateOrImport");
     };
 
     render() {

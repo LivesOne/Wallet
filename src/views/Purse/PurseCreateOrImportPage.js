@@ -18,14 +18,14 @@ export default class PurseCreateOrImportPage extends Component {
     static navigationOptions = {
         header: null
     };
-
+    
     render() {
         return (
             <View style = {styles.container}>
                 <Image source={createImage} style = {styles.image}/>
                 <MXButton
                     rounded
-                    title={LVStrings.create_wallet}
+                    title={LVStrings.assets_create_wallet}
                     onPress = {() => {
                         this.props.navigation.navigate("PurseCreate")
                     }}

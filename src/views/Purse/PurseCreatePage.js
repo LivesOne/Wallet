@@ -35,31 +35,32 @@ export default class PurseCreatePage extends Component {
                                 this.props.navigation.goBack();
                             }}
                         />
-                        <Text style={styles.navTitle}>{LVStrings.create_wallet}</Text>
+                        <Text style={styles.navTitle}>{LVStrings.assets_create_wallet}</Text>
                         <View style={styles.navRightPlaceholder} />
                     </View>
                 </LVGradientPanel>
                 <View style={styles.content}>
                     <View style={styles.textInputContainer}>
                         <MXCrossTextInput
-                            placeholder={ "钱包名称" }
+                            placeholder={LVStrings.assets_create_wallet}
                             style={ styles.textInput }
                         />
                         <MXCrossTextInput
-                            placeholder={ "设置钱包密码（6-12位字母数字组合）" }
+                            placeholder={LVStrings.assets_create_password}
                             style={ styles.textInput }
                             secureTextEntry
                         />
                         <MXCrossTextInput
-                            placeholder={ "重复输入密码" }
+                            placeholder={LVStrings.assets_create_password_verify}
                             style={ styles.textInput }
                             secureTextEntry
+                            withUnderLine = {false}
                         />
                     </View>
-                    <Text style={styles.text}>该密码用来加密钱包地址，请尽量设置复杂密码完成加密。</Text>
+                    <Text style={styles.text}>{LVStrings.assets_create_comment}</Text>
                     <MXButton
                         rounded                
-                        title={"创建"}
+                        title={LVStrings.assets_create}
                         onPress = {() => {
                             this.props.navigation.navigate("PurseCreateSuccess")
                         }}
