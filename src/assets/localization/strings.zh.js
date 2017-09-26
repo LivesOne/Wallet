@@ -46,6 +46,12 @@ const localized_strings = {
     transfer_waiting: '等待中',
 
     // Profile
+    profile_purse_manager: '钱包管理',
+    profile_trading_record: '交易记录',
+    profile_contacts: '联系人',
+    profile_feedback: '问题反馈',
+    profile_setting: '系统信息',
+    profile_about: '关于我们',
 
     // Date Time
     time_pass_a_moment_ago: '刚刚',

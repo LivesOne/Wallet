@@ -43,7 +43,7 @@ export default class ProfleScreen extends Component {
         return (
             <View style={styles.container}>
                 <MXNavigatorHeader
-                    title = {'我的'}
+                    title = {LVStrings.profile}
                     style={{backgroundColor:'#f8f9fb'}}
                     titleStyle={{color:'#6d798a'}}
                 />
@@ -55,7 +55,7 @@ export default class ProfleScreen extends Component {
                         hideSeparator
                     >
                         <ProfileCell
-                            title="钱包管理"
+                            title={LVStrings.profile_purse_manager}
                             accessory="DisclosureIndicator"
                             onPress={() => this.props.navigation.navigate('PurseManager')}
                             disableImageResize
@@ -63,17 +63,17 @@ export default class ProfleScreen extends Component {
                         />
                         <Separator insetRight={15} tintColor="#eeeff2"/>
                         <ProfileCell
-                            title="交易记录"
+                            title={LVStrings.profile_trading_record}
                             accessory="DisclosureIndicator"
-                            onPress={() => alert("交易记录")}
+                            onPress={() => alert(LVStrings.profile_trading_record)}
                             disableImageResize
                             image={<Image source={TradingImage} style={styles.tableViewImage}/>}
                         />
                         <Separator insetRight={15} tintColor="#eeeff2"/>
                         <ProfileCell
-                            title="联系人"
+                            title={LVStrings.profile_contacts}
                             accessory="DisclosureIndicator"
-                            onPress={() => alert("联系人")}
+                            onPress={() => alert(LVStrings.profile_contacts)}
                             disableImageResize
                             image={<Image source={ContactsImage} style={styles.tableViewImage}/>}
                         />
@@ -86,25 +86,25 @@ export default class ProfleScreen extends Component {
                         hideSeparator
                     >
                         <ProfileCell
-                            title="问题反馈"
+                            title={LVStrings.profile_feedback}
                             accessory="DisclosureIndicator"
-                            onPress={() => alert("问题反馈")}
+                            onPress={() => alert(LVStrings.profile_feedback)}
                             disableImageResize
                             image={<Image source={FeedbackImage} style={styles.tableViewImage}/>}
                         />
                         <Separator insetRight={15} tintColor="#eeeff2"/>
                         <ProfileCell
-                            title="系统信息"
+                            title={LVStrings.profile_setting}
                             accessory="DisclosureIndicator"
-                            onPress={() => alert("系统信息")}
+                            onPress={() => alert(LVStrings.profile_setting)}
                             disableImageResize
                             image={<Image source={SettingImage} style={styles.tableViewImage}/>}
                         />
                         <Separator insetRight={15} tintColor="#eeeff2"/>
                         <ProfileCell
-                            title="关于我们"
+                            title={LVStrings.profile_about}
                             accessory="DisclosureIndicator"
-                            onPress={() => alert("关于我们")}
+                            onPress={() => alert(LVStrings.profile_about)}
                             disableImageResize
                             image={<Image source={AboutImage} style={styles.tableViewImage}/>}
                         />

@@ -46,6 +46,12 @@ const localized_strings = {
     transfer_waiting: 'Waiting',
 
     // Profile
+    profile_purse_manager: 'Wallet manager',
+    profile_trading_record: 'Trading record',
+    profile_contacts: 'Contacts',
+    profile_feedback: 'Feedback',
+    profile_setting: 'System info',
+    profile_about: 'About',
 
     // Date Time
     time_pass_a_moment_ago: 'a moment ago',
