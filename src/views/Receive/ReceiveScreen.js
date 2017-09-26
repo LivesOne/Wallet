@@ -66,6 +66,7 @@ class ReceiveScreen extends Component {
                 /> 
                 <MXButton
                     title={LVStrings.receive_save}
+                    style={styles.button_save}
                     onPress = {() => {
                     alert("button clicked");
                     }}
@@ -109,7 +110,6 @@ const styles = StyleSheet.create({
     contentContainer: {
         paddingVertical: 20,
         backgroundColor: LVColor.white,
-
     },
 
     topContainer:{
@@ -130,6 +130,9 @@ const styles = StyleSheet.create({
     button:{
         marginBottom:15,
     },
+    button_save:{
+        marginBottom:15,
+    },
 
     name:{
         fontSize:18,
@@ -142,6 +145,7 @@ const styles = StyleSheet.create({
     address:{
         fontSize:15,
         color:"#c3c8d3",
+        textAlign:'center',
         paddingBottom:30,
     },
 
