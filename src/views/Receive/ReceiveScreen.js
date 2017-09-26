@@ -6,7 +6,7 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { StyleSheet,Share, View, Text,Image } from 'react-native';
+import { StyleSheet,Share, View, Text,Image,ScrollView } from 'react-native';
 
 
 import LVColor from '../../styles/LVColor';
@@ -32,6 +32,8 @@ class ReceiveScreen extends Component {
 
         
         return (
+            <ScrollView contentContainerStyle={styles.contentContainer}>
+            
             <View style={styles.container}>
                 <View style={styles.topContainer}>
                     <Text style={styles.change_purse_container}></Text>
@@ -91,6 +93,7 @@ class ReceiveScreen extends Component {
                 </View>
 
             </View>
+            </ScrollView>
         );
     }
 }
@@ -99,11 +102,15 @@ class ReceiveScreen extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        width:'100%',
         justifyContent: "flex-start",
         alignItems: "center",
-        backgroundColor: LVColor.white,
     },
+    contentContainer: {
+        paddingVertical: 20,
+        backgroundColor: LVColor.white,
 
+    },
 
     topContainer:{
         flex:1,
