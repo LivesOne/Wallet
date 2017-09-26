@@ -43,7 +43,7 @@ export class PurseManagerPage extends Component {
         header: null
     };
 
-    static: {
+    state: {
         purseTitle: string,
         purseAddress: string,
     }
