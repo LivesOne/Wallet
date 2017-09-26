@@ -11,7 +11,7 @@ import MXButton from '../../components/MXButton';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import * as LVStyleSheet from '../../styles/LVStyleSheet'
-import MXNavigatorHeader from './../../components/MXNavigatorHeader';
+import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 
 const createSuccessImage = require("../../assets/images/create_wallet_success.png");
 

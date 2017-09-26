@@ -14,7 +14,7 @@ import LVStrings from '../../assets/localization';
 import * as LVStyleSheet from '../../styles/LVStyleSheet';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import MXTouchableImage from '../../components/MXTouchableImage';
-import MXCrossTextInput from './../../components/MXCrossTextInput';
+import MXCrossTextInput from '../../components/MXCrossTextInput';
 
 const backImg = require('../../assets/images/back.png');
 

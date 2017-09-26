@@ -15,8 +15,8 @@ import { ModifyPurseName } from './PurseManager/ModifyPurseName';
 import { ModifyPursePwd } from './PurseManager/ModifyPursePwd';
 
 const ProfileNavigator = StackNavigator({
-    PurseManager: { screen: PurseManagerPage },
     Profile: { screen: ProfileScreen },
+    PurseManager: { screen: PurseManagerPage },
     ExportPurse: { screen: ExportPurse },
     ModifyPurseName: { screen: ModifyPurseName },
     ModifyPursePwd: { screen: ModifyPursePwd },
