@@ -6,12 +6,13 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
-import { Cell, Section, TableView } from 'react-native-tableview-simple';
+import { StyleSheet, View, Text, Image, ScrollView } from 'react-native';
+import { Cell, Section, TableView, Separator } from 'react-native-tableview-simple';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
+import * as LVStyleSheet from '../../styles/LVStyleSheet';
 
 const PurseImage = require('../../assets/images/profile_purse.png');
 const TradingImage = require('../../assets/images/profile_trading.png');
@@ -20,6 +21,19 @@ const FeedbackImage = require('../../assets/images/profile_feedback.png');
 const SettingImage = require('../../assets/images/profile_setting.png');
 const AboutImage = require('../../assets/images/profile_about.png');
 
+const ProfileCell = (props) => (
+    <Cell
+        {...props}
+        cellContentView={
+            <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, height:60, marginLeft:-10}}>
+                <Text numberOfLines={1} style={{fontSize:15, color:"#667383"}}>
+                    {props.title}
+                </Text>
+            </View>
+        }
+    />
+  );
+
 export default class ProfleScreen extends Component {
     static navigationOptions = {
         header: null
@@ -27,55 +41,89 @@ export default class ProfleScreen extends Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.container}>
                 <MXNavigatorHeader
                     title = {'我的'}
-                    style={{backgroundColor:'#F8F9FB'}}
+                    style={{backgroundColor:'#f8f9fb'}}
                     titleStyle={{color:'#6d798a'}}
                 />
-                <TableView>
-                    <Section>
-                        <Cell
+                <ScrollView><TableView>
+                    <Section 
+                        sectionPaddingTop={0} 
+                        sectionPaddingBottom={0} 
+                        separatorTintColor={"transparent"}
+                        hideSeparator
+                    >
+                        <ProfileCell
                             title="钱包管理"
                             accessory="DisclosureIndicator"
                             onPress={() => this.props.navigation.navigate('PurseManager')}
-                            image={<Image source={PurseImage}/>}
+                            disableImageResize
+                            image={<Image source={PurseImage} style={styles.tableViewImage}/>}
                         />
-                        <Cell
+                        <Separator insetRight={15} tintColor="#eeeff2"/>
+                        <ProfileCell
                             title="交易记录"
                             accessory="DisclosureIndicator"
                             onPress={() => alert("交易记录")}
-                            image={<Image source={TradingImage}/>}
+                            disableImageResize
+                            image={<Image source={TradingImage} style={styles.tableViewImage}/>}
                         />
-                        <Cell
+                        <Separator insetRight={15} tintColor="#eeeff2"/>
+                        <ProfileCell
                             title="联系人"
                             accessory="DisclosureIndicator"
                             onPress={() => alert("联系人")}
-                            image={<Image source={ContactsImage}/>}
+                            disableImageResize
+                            image={<Image source={ContactsImage} style={styles.tableViewImage}/>}
                         />
                     </Section>
-                    <Section>
-                        <Cell
+                    <Section 
+                        sectionPaddingTop={9} 
+                        sectionPaddingBottom={0} 
+                        sectionTintColor="#f5f6fa" 
+                        separatorTintColor={"transparent"}
+                        hideSeparator
+                    >
+                        <ProfileCell
                             title="问题反馈"
                             accessory="DisclosureIndicator"
                             onPress={() => alert("问题反馈")}
-                            image={<Image source={FeedbackImage}/>}
+                            disableImageResize
+                            image={<Image source={FeedbackImage} style={styles.tableViewImage}/>}
                         />
-                        <Cell
+                        <Separator insetRight={15} tintColor="#eeeff2"/>
+                        <ProfileCell
                             title="系统信息"
                             accessory="DisclosureIndicator"
                             onPress={() => alert("系统信息")}
-                            image={<Image source={SettingImage}/>}
+                            disableImageResize
+                            image={<Image source={SettingImage} style={styles.tableViewImage}/>}
                         />
-                        <Cell
+                        <Separator insetRight={15} tintColor="#eeeff2"/>
+                        <ProfileCell
                             title="关于我们"
                             accessory="DisclosureIndicator"
                             onPress={() => alert("关于我们")}
-                            image={<Image source={AboutImage}/>}
+                            disableImageResize
+                            image={<Image source={AboutImage} style={styles.tableViewImage}/>}
                         />
+                        <Separator insetRight={15} tintColor="#eeeff2"/>
                     </Section>
-                </TableView>
+                </TableView></ScrollView>
             </View>
         )
     }
 }
+
+const styles = LVStyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: LVColor.white,
+    },
+    tableViewImage: {
+        marginLeft: -2.5,
+        width: 26,
+        height: 26,
+    },
+});
