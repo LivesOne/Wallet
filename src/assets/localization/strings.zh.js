@@ -68,6 +68,9 @@ const localized_strings = {
     profile_purse_backup: '备份Keystore',
     profile_purse_delete_purse: '删除钱包',
     profile_purse_save: '保存',
+    profile_purse_my_private_key: '我的私钥',
+    profile_purse_export_warnning: '警告，私钥未经加密，导出存在风险，建议使用Keystore备份',
+    prifile_purse_export_copy_key: '复制私钥',
 
     // Date Time
     time_pass_a_moment_ago: '刚刚',

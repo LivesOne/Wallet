@@ -68,6 +68,9 @@ const localized_strings = {
     profile_purse_backup: 'Backup keystore',
     profile_purse_delete_purse: 'Delete purse',
     profile_purse_save: 'Save',
+    profile_purse_my_private_key: 'My private key',
+    profile_purse_export_warnning: 'Warnning, the unencrypted private key can be risky when exported, it is recommended to use keystore to backup',
+    prifile_purse_export_copy_key: 'Copy private key',
 
     // Date Time
     time_pass_a_moment_ago: 'a moment ago',

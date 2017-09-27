@@ -9,6 +9,7 @@ import LVSize from '../../../styles/LVFontSize';
 import { Cell, Section, TableView, Separator } from 'react-native-tableview-simple';
 import MXButton from './../../../components/MXButton';
 import LVStrings from '../../../assets/localization';
+import { PurseExportModal } from './PurseExportModal';
 
 const IconPurseModifyName = require('../../../assets/images/purse_modify_name.png');
 const IconPurseModifyPwd = require('../../../assets/images/purse_modify_pwd.png');
@@ -46,19 +47,35 @@ export class PurseManagerPage extends Component {
     state: {
         purseTitle: string,
         purseAddress: string,
+        showExportModal: boolean,
+        privateKey: string,
     }
 
     constructor() {
         super();
         this.state = {
             purseTitle: '2,100,000 LVT',
-            purseAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7'
+            purseAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
+            privateKey: '7badjaxamad89asdfa2eajkfjak08923h8ass0d9g9xx9ad8a78asd90a',
+            showExportModal: false,
         }
+    }
+
+    showExportModal() {
+        this.setState({ showExportModal: true })
+    }
+
+    onExportModalClosed() {
+        this.setState({ showExportModal: false })
     }
 
     render() {
         return (
             <View style={ styles.container }>
+                <PurseExportModal
+                    isOpen= {this.state.showExportModal}
+                    privateKey= { this.state.privateKey }
+                    onClosed = {this.onExportModalClosed.bind(this)}/>
                 <MXNavigatorHeader
                     left={ IconBack }
                     style={{backgroundColor:'#F8F9FB'}}
@@ -88,7 +105,7 @@ export class PurseManagerPage extends Component {
                         onPress = {()=>{this.props.navigation.navigate('ModifyPursePwd')}}/>
                         <Separator insetRight={15} tintColor="#eeeff2"/>
                         <CellVariant title= { LVStrings.profile_purse_export } source={ IconPurseExportPK }
-                        onPress = {()=>{this.props.navigation.navigate('ExportPurse')}}/>
+                        onPress = { this.showExportModal.bind(this) }/>
                         <Separator insetRight={15} tintColor="#eeeff2"/>
                     </Section>
                 </TableView>
