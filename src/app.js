@@ -7,16 +7,52 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, StatusBar } from 'react-native';
-import AppTabNavigator from './containers/AppTabNavigator';
 import LVStrings from './assets/localization';
-import TestComponent from './components/TestComponent';
+import AppGuideScreen from './views/AppLaunch/AppGuideScreen';
+import AppTabNavigator from './containers/AppTabNavigator';
 
 class VenusApp extends Component {
-    render() {
+
+    state: {
+        showGuide: boolean,
+    };
+
+    constructor() {
+        super();
+        this.state = {
+            showGuide: false,
+        };
+        this.handleAppGuideCallback = this.handleAppGuideCallback.bind(this);
+    }
+
+    componentWillMount() {
         StatusBar.setBarStyle("light-content", false);
-        return (
-            <AppTabNavigator />
-        )
+    }
+
+    componentDidMount() {
+        console.log('===> app component did mount');
+    }
+
+    componentWillUnmount() {
+
+    }
+
+    handleAppGuideCallback = () => {
+        this.setState({showGuide: false});
+    }
+
+    render() {
+        const { showGuide } = this.state;
+
+        if (showGuide) {
+            return (
+                <AppGuideScreen callback={this.handleAppGuideCallback} />
+            )
+        } else {
+            return (
+                <AppTabNavigator />
+            )
+        }
     }
 }
 

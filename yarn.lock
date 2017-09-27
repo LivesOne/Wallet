@@ -3498,6 +3498,11 @@ react-native-qrcode@^0.2.6:
     create-react-class "^15.6.0"
     prop-types "^15.5.10"
     qr.js "0.0.0"
+react-native-swiper@^1.5.12:
+  version "1.5.12"
+  resolved "http://registry.npm.taobao.org/react-native-swiper/download/react-native-swiper-1.5.12.tgz#fe040e19d936304013f1671dd83f7e25ee3c4d83"
+  dependencies:
+    prop-types "^15.5.10"
 
 react-native-tab-view@^0.0.67:
   version "0.0.67"
