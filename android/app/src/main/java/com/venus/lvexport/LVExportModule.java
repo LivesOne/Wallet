@@ -28,14 +28,14 @@ public class LVExportModule extends ReactContextBaseJavaModule {
         promise.resolve("ok");
     }
 
+//    @ReactMethod
+//    public void libscrypt(final String password, final String saltHexStr,
+//                          final int n, final int r, final int p, final int dkLen, final Promise promise) throws Exception {
+//        String res = CryptoUtils.scrypt(password, saltHexStr, n, r, p, dkLen);
+//        promise.resolve(res);
+//    }
     @ReactMethod
-    public void libscrypt(final String password, final String saltHexStr,
-                          final int n, final int r, final int p, final int dkLen, final Promise promise) throws Exception {
-        String res = CryptoUtils.scrypt(password, saltHexStr, n, r, p, dkLen);
-        promise.resolve(res);
-    }
-    @ReactMethod
-    public void libscryptWithCallback(String password, String saltHexStr, int n, int r, int p, int dkLen, Callback callback) throws Exception {
+    public void libscrypt(String password, String saltHexStr, int n, int r, int p, int dkLen, Callback callback) throws Exception {
         String res = CryptoUtils.scrypt(password, saltHexStr, n, r, p, dkLen);
         callback.invoke(res);
     }
