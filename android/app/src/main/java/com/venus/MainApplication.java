@@ -14,6 +14,8 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.venus.lvexport.MyReactPackage;
+import com.venus.utils.LocalIOWorker;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +31,8 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
+          new MyReactPackage(),
+            new MainReactPackage(),
             new UdpSocketsModule(),
             new TcpSocketsModule(),
             new RandomBytesPackage(),
@@ -51,5 +54,12 @@ public class MainApplication extends Application implements ReactApplication {
       super.onCreate();
       SoLoader.init(this, /* native exopackage */ false);
       SoLoader.loadLibrary("scrypt_crypho");
+      LocalIOWorker.getInstance().start();
   }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        LocalIOWorker.getInstance().stop();
+    }
 }
