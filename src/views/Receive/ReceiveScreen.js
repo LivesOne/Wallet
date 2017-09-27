@@ -15,6 +15,8 @@ import LVStrings from '../../assets/localization';
 import MxImage from  './MxImage'
 import MXButton from '../../components/MXButton';
 
+import QRCode from 'react-native-qrcode';
+
 const receive_share = require("../../assets/images/receive_share.png");
 const receive_change_purse = require("../../assets/images/receive_change_purse.png");
 
@@ -22,15 +24,12 @@ class ReceiveScreen extends Component {
     static navigationOptions = {
         header: null
     };
-
+    state = {
+        text: 'http://facebook.github.io/react-native/',
+    };
 
     
     render() {
-        let pic = {
-            uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
-          };
-
-        
         return (
             <ScrollView contentContainerStyle={styles.contentContainer}>
             
@@ -54,7 +53,12 @@ class ReceiveScreen extends Component {
                     abcdefhigjklmopqrst
                 </Text>
 
-                <Image source={pic} style={styles.qrcode_pic}></Image>
+                <QRCode
+                style={styles.qrcode_pic}
+                value={this.state.text}
+                size={162}
+                bgColor='purple'
+                fgColor='white'/>
 
                 <MXButton
                     style={styles.button}
@@ -128,6 +132,7 @@ const styles = StyleSheet.create({
     },
 
     button:{
+        marginTop:30,
         marginBottom:15,
     },
     button_save:{
@@ -187,7 +192,6 @@ const styles = StyleSheet.create({
     qrcode_pic:{
         height:162,
         width:162,
-        marginBottom:30,
     },
 
     share_container: {

@@ -14,6 +14,7 @@
     "react-native-localization": "^0.1.32",
     "react-native-modalbox": "^1.4.2",
     "react-native-progress": "^3.4.0",
+    "react-native-qrcode": "^0.2.6",
     "react-native-tableview-simple": "^0.16.12",
     "react-navigation": "^1.0.0-beta.11"
   },
