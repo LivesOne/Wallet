@@ -6,7 +6,7 @@ import { Text, View, StyleSheet, Dimensions, Image } from 'react-native';
 import MXNavigatorHeader from './../../../components/MXNavigatorHeader';
 import PurseInfoView from '../../Assets/PurseInfoView';
 import LVSize from '../../../styles/LVFontSize';
-import { Cell, Section, TableView } from 'react-native-tableview-simple';
+import { Cell, Section, TableView, Separator } from 'react-native-tableview-simple';
 import MXButton from './../../../components/MXButton';
 import LVStrings from '../../../assets/localization';
 
@@ -74,13 +74,22 @@ export class PurseManagerPage extends Component {
                     purseIcon={ IconPurse }
                      />
                 <TableView>
-                    <Section>
+                    <Section
+                        sectionPaddingTop={9} 
+                        sectionPaddingBottom={0} 
+                        sectionTintColor="#f5f6fa" 
+                        separatorTintColor={"transparent"}
+                        hideSeparator
+                        >
                         <CellVariant title= { LVStrings.profile_purse_modify_name } source={ IconPurseModifyName } 
                         onPress = {()=>{this.props.navigation.navigate('ModifyPurseName')}}/>
+                        <Separator insetRight={15} tintColor="#eeeff2"/>
                         <CellVariant title= { LVStrings.profile_purse_modify_password } source={ IconPurseModifyPwd }
                         onPress = {()=>{this.props.navigation.navigate('ModifyPursePwd')}}/>
+                        <Separator insetRight={15} tintColor="#eeeff2"/>
                         <CellVariant title= { LVStrings.profile_purse_export } source={ IconPurseExportPK }
                         onPress = {()=>{this.props.navigation.navigate('ExportPurse')}}/>
+                        <Separator insetRight={15} tintColor="#eeeff2"/>
                     </Section>
                 </TableView>
                 <View style={{width: '100%', flex: 1, justifyContent:'flex-end', alignItems:'center', backgroundColor: 'white'}}>
