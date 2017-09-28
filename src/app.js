@@ -37,6 +37,7 @@ class VenusApp extends Component {
         }).catch(err => {
             this.setState({showGuide: false});
         })
+        LVConfiguration.setAppHasBeenLaunched();
     }
 
     componentWillUnmount() {
