@@ -25,7 +25,9 @@ class ReceiveScreen extends Component {
         header: null
     };
     state = {
+        purseAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
         text: 'http://facebook.github.io/react-native/',
+        
     };
 
     
@@ -50,7 +52,8 @@ class ReceiveScreen extends Component {
                     {LVStrings.receive_name}
                 </Text>
                 <Text style={styles.address}>
-                    abcdefhigjklmopqrst
+                    {this.state.purseAddress}
+                   
                 </Text>
 
                 <QRCode
