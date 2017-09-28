@@ -6,14 +6,16 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text,Image } from 'react-native';
+import { StyleSheet,Share, View, Text,Image,ScrollView } from 'react-native';
 
 
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 
-
+import MxImage from  './MxImage'
 import MXButton from '../../components/MXButton';
+
+import QRCode from 'react-native-qrcode';
 
 const receive_share = require("../../assets/images/receive_share.png");
 const receive_change_purse = require("../../assets/images/receive_change_purse.png");
@@ -22,16 +24,15 @@ class ReceiveScreen extends Component {
     static navigationOptions = {
         header: null
     };
-
+    state = {
+        text: 'http://facebook.github.io/react-native/',
+    };
 
     
     render() {
-        let pic = {
-            uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
-          };
-
-        
         return (
+            <ScrollView contentContainerStyle={styles.contentContainer}>
+            
             <View style={styles.container}>
                 <View style={styles.topContainer}>
                     <Text style={styles.change_purse_container}></Text>
@@ -52,7 +53,12 @@ class ReceiveScreen extends Component {
                     abcdefhigjklmopqrst
                 </Text>
 
-                <Image source={pic} style={styles.qrcode_pic}></Image>
+                <QRCode
+                style={styles.qrcode_pic}
+                value={this.state.text}
+                size={162}
+                bgColor='purple'
+                fgColor='white'/>
 
                 <MXButton
                     style={styles.button}
@@ -64,6 +70,7 @@ class ReceiveScreen extends Component {
                 /> 
                 <MXButton
                     title={LVStrings.receive_save}
+                    style={styles.button_save}
                     onPress = {() => {
                     alert("button clicked");
                     }}
@@ -71,10 +78,27 @@ class ReceiveScreen extends Component {
                 />
                 </View>
                 <View style={styles.share_container}>
-                <Image source={receive_share} style={styles.share}></Image>
+                {/* <Image source={receive_share} style={styles.share}></Image> */}
+                <MxImage source={receive_share}
+                    onPress = { () => {
+                        Share.share({
+                            url: 'http://bam.tech',
+                            title: 'Share your code?'
+                          }, {
+                            // Android only:
+                            dialogTitle: 'Share your code',
+                            // iOS only:
+                            excludedActivityTypes: [
+                              'com.apple.UIKit.activity.PostToTwitter'
+                            ]
+                          })                       
+                    }
+                    }
+                   ></MxImage>
                 </View>
 
             </View>
+            </ScrollView>
         );
     }
 }
@@ -83,11 +107,14 @@ class ReceiveScreen extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        width:'100%',
         justifyContent: "flex-start",
         alignItems: "center",
+    },
+    contentContainer: {
+        paddingVertical: 20,
         backgroundColor: LVColor.white,
     },
-
 
     topContainer:{
         flex:1,
@@ -105,6 +132,10 @@ const styles = StyleSheet.create({
     },
 
     button:{
+        marginTop:30,
+        marginBottom:15,
+    },
+    button_save:{
         marginBottom:15,
     },
 
@@ -119,6 +150,7 @@ const styles = StyleSheet.create({
     address:{
         fontSize:15,
         color:"#c3c8d3",
+        textAlign:'center',
         paddingBottom:30,
     },
 
@@ -160,7 +192,6 @@ const styles = StyleSheet.create({
     qrcode_pic:{
         height:162,
         width:162,
-        marginBottom:30,
     },
 
     share_container: {
