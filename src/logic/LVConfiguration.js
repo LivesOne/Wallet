@@ -5,11 +5,29 @@
  */
 'use strict';
 
-import { AsyncStorage } from 'react-native';
+import LVPersistent from './LVPersistent';
 
-const LV_IsAppFirstLaunch = '@Venus:IsAppFirstLaunch';
-const LV_ShouldShowGuides = '@Venus:ShouldShowGuides';
+const LV_Key_HasAppEverLaunched = '@Venus:HasAppEverLaunched';
+const LV_Key_HasAppGuidesEverDisplayed = '@Venus:HasAppGuidesEverDisplayed';
 
-async function isAppFirstLaunch(params) {
-    
+class LVConfiguration {
+    constructor() {}
+
+    static async hasAppEverLaunched() {
+        return await LVPersistent.getBoolean(LV_Key_HasAppEverLaunched);
+    }
+
+    static async setAppHasBeenLaunched() {
+        await LVPersistent.setBoolean(LV_Key_HasAppEverLaunched, true);
+    }
+
+    static async hasAppGuidesEverDisplayed() {
+        return await LVPersistent.getBoolean(LV_Key_HasAppEverLaunched);
+    }
+
+    static async setAppGuidesHasBeenDisplayed() {
+        await LVPersistent.setBoolean(LV_Key_HasAppEverLaunched, true);
+    }
 }
+
+export default LVConfiguration;

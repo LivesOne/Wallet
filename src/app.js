@@ -8,6 +8,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import LVStrings from './assets/localization';
+import LVConfiguration from './logic/LVConfiguration';
 import AppGuideScreen from './views/AppLaunch/AppGuideScreen';
 import AppTabNavigator from './containers/AppTabNavigator';
 
@@ -30,7 +31,12 @@ class VenusApp extends Component {
     }
 
     componentDidMount() {
-        console.log('===> app component did mount');
+        LVConfiguration.hasAppGuidesEverDisplayed().then((everDisplayed) => {
+            this.setState({showGuide: !everDisplayed});
+            if (!everDisplayed) LVConfiguration.setAppGuidesHasBeenDisplayed();
+        }).catch(err => {
+            this.setState({showGuide: false});
+        })
     }
 
     componentWillUnmount() {
