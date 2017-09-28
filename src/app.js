@@ -10,6 +10,7 @@ import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import LVStrings from './assets/localization';
 import AppGuideScreen from './views/AppLaunch/AppGuideScreen';
 import AppTabNavigator from './containers/AppTabNavigator';
+import { StateMachine } from './share/StateMachine';
 
 class VenusApp extends Component {
 
@@ -51,6 +52,7 @@ class VenusApp extends Component {
         } else {
             return (
                 <AppTabNavigator />
+                //<StateMachine />
             )
         }
     }
