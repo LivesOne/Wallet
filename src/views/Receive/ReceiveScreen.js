@@ -176,7 +176,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 1,
         shadowRadius: 5,
         padding:30,
-        zIndex:4,
      },
 
     change_purse_container: {
@@ -208,7 +207,6 @@ const styles = StyleSheet.create({
         shadowColor: 'black',
         shadowOpacity: 1,
         shadowRadius: 5,
-        zIndex:3,
     },
     share:{
         height:50,
