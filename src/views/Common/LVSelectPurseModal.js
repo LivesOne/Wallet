@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Assets/SelectPurseModal.js
+ * File: src/views/Assets/LVSelectPurseModal.js
  * @flow
  */
 'use strict';
@@ -27,7 +27,7 @@ const testData = [
     { id: '6', name: '收款测试钱包', address: '601c28cd84bdc0155cff6e0a2bb54be4192b7253' }
 ];
 
-export default class SelectPurseModal extends Component {
+export default class LVSelectPurseModal extends Component {
     static propTypes = {
         isOpen: PropTypes.bool,
         onClosed: PropTypes.func,
