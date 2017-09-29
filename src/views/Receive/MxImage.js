@@ -2,7 +2,7 @@
 'use strict'
 
 import React,{Component} from 'react'
-import {TouchableHighlight,View,ViewPropTypes,Image,Text,StyleSheet } from 'react-native'
+import {TouchableOpacity,View,ViewPropTypes,Image,Text,StyleSheet } from 'react-native'
 import LVColor from '../../styles/LVColor'
 import PropTypes from 'prop-types';
 
@@ -44,7 +44,7 @@ class MxImage extends Component {
         const theme = this.getTheme(disabled);
 
         return (
-            <TouchableHighlight
+            <TouchableOpacity
                activeOpacity={1}
                disabled = { disabled}
                underlayColor = { LVColor.primary }
@@ -72,7 +72,7 @@ class MxImage extends Component {
                onPress={onPress}
                >
                <Image source={this.props.source}></Image>
-               </TouchableHighlight>
+               </TouchableOpacity>
         );
     }
 };
