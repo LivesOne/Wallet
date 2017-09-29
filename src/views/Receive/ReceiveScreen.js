@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
     contentContainer: {
         paddingVertical: 20,
         backgroundColor: LVColor.white,
+        height:'100%',
     },
 
     topContainer:{
