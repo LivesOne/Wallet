@@ -88,6 +88,7 @@ const localized_strings = {
     guide_detail_2: '钱 包 导 入 直 接 使 用',
     guide_master_3: '结构清晰',
     guide_detail_3: '账 目 记 录 一 目 了 然',
+    guide_button_title: '立即体验',
 };
 
 export default localized_strings;

@@ -88,6 +88,7 @@ const localized_strings = {
     guide_detail_2: 'Purse import direct use',
     guide_master_3: 'Clear',
     guide_detail_3: 'Transfers are clear',
+    guide_button_title: 'Enter',
 };
 
 export default localized_strings;
