@@ -33,7 +33,7 @@ class ReceiveScreen extends Component {
     
     render() {
         return (
-            <ScrollView contentContainerStyle={styles.contentContainer}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.contentContainer}>
             
             <View style={styles.container}>
                 <View style={styles.topContainer}>
@@ -51,7 +51,7 @@ class ReceiveScreen extends Component {
                 <Text style={styles.name} >
                     {LVStrings.receive_name}
                 </Text>
-                <Text style={styles.address}>
+                <Text numberOfLines={1} style={styles.address}>
                     {this.state.purseAddress}
                    
                 </Text>
@@ -60,8 +60,8 @@ class ReceiveScreen extends Component {
                 style={styles.qrcode_pic}
                 value={this.state.text}
                 size={162}
-                bgColor='purple'
-                fgColor='white'/>
+                bgColor='white'
+                fgColor='black'/>
 
                 <MXButton
                     style={styles.button}
@@ -113,10 +113,15 @@ const styles = StyleSheet.create({
         width:'100%',
         justifyContent: "flex-start",
         alignItems: "center",
+        // backgroundColor:'red',
+        marginTop:20,
+        
+        
     },
     contentContainer: {
         paddingVertical: 20,
         backgroundColor: LVColor.white,
+        height:'100%',
     },
 
     topContainer:{
@@ -173,10 +178,9 @@ const styles = StyleSheet.create({
         elevation: 20,
         shadowOffset: {width: 0, height: 0},
         shadowColor: 'black',
-        shadowOpacity: 1,
-        shadowRadius: 5,
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
         padding:30,
-        zIndex:4,
      },
 
     change_purse_container: {
@@ -204,11 +208,7 @@ const styles = StyleSheet.create({
         // {'translate':[0,-30,1]
         ],
         elevation: 21,
-        shadowOffset: {width: 0, height: 0},
-        shadowColor: 'black',
-        shadowOpacity: 1,
-        shadowRadius: 5,
-        zIndex:3,
+        
     },
     share:{
         height:50,

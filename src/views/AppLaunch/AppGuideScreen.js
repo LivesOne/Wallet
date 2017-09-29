@@ -59,7 +59,7 @@ export default class AppGuideScreen extends Component {
                             <Text style={styles.detailText}>{LVStrings.guide_detail_3}</Text>
                             <MXButton
                                 style={styles.button}
-                                title="立即体验"
+                                title={LVStrings.guide_button_title}
                                 rounded
                                 onPress={this.onPressButton.bind(this)}
                             />

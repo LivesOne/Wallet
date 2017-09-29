@@ -12,12 +12,12 @@ import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import LVDetailTextCell from '../Common/LVDetailTextCell';
+import LVSelectPurseModal from '../Common/LVSelectPurseModal';
 import MXTouchableImage from '../../components/MXTouchableImage';
 import LVTransferRecordList, { testRecores } from '../Common/LVTransferRecordList';
 
 import PurseInfoView from './PurseInfoView';
 import PurseBalanceView from './PurseBalanceView';
-import SelectPurseModal from './SelectPurseModal';
 
 const selectImg = require('../../assets/images/select_purse.png');
 
@@ -104,7 +104,7 @@ class AssetsScreen extends Component {
 
                 <LVTransferRecordList style={styles.list} records={transferRecords} />
 
-                <SelectPurseModal
+                <LVSelectPurseModal
                     isOpen={this.state.openSelectPurse}
                     onClosed={this.onSelectPurseClosed}
                     selectedPurseId={this.state.purseId}
