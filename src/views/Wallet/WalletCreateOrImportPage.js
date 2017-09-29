@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Assets/PurseCreateOrImportPage.js
+ * File: src/views/Assets/WalletCreateOrImportPage.js
  * @flow
  */
 "use strict";
@@ -14,7 +14,7 @@ import * as LVStyleSheet from '../../styles/LVStyleSheet'
 
 const createImage = require("../../assets/images/create_wallet.png");
 
-export default class PurseCreateOrImportPage extends Component {
+export default class WalletCreateOrImportPage extends Component {
     static navigationOptions = {
         header: null
     };
@@ -25,18 +25,18 @@ export default class PurseCreateOrImportPage extends Component {
                 <Image source={createImage} style = {styles.image}/>
                 <MXButton
                     rounded
-                    title={LVStrings.assets_create_wallet}
+                    title={LVStrings.wallet_create_wallet}
                     onPress = {() => {
-                        this.props.navigation.navigate("PurseCreate")
+                        this.props.navigation.navigate("WalletCreate")
                     }}
                     themeStyle={"active"}
                     style={styles.createButton}
                 />
                 <MXButton
                     rounded                
-                    title={LVStrings.assets_import_header}
+                    title={LVStrings.wallet_import_header}
                     onPress = {() => {
-                        this.props.navigation.navigate("PurseImport")
+                        this.props.navigation.navigate("WalletImport")
                     }}
                     themeStyle={"active"}
                     style={styles.importButton}

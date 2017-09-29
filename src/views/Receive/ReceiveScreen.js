@@ -18,14 +18,14 @@ import MXButton from '../../components/MXButton';
 import QRCode from 'react-native-qrcode';
 
 const receive_share = require("../../assets/images/receive_share.png");
-const receive_change_purse = require("../../assets/images/receive_change_purse.png");
+const receive_change_wallet = require("../../assets/images/receive_change_wallet.png");
 
 class ReceiveScreen extends Component {
     static navigationOptions = {
         header: null
     };
     state = {
-        purseAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
+        walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
         text: 'http://facebook.github.io/react-native/',
         
     };
@@ -37,12 +37,12 @@ class ReceiveScreen extends Component {
             
             <View style={styles.container}>
                 <View style={styles.topContainer}>
-                    <Text style={styles.change_purse_container}></Text>
+                    <Text style={styles.change_wallet_container}></Text>
                     <Text style={styles.title}>
                         {LVStrings.receive_title}
                     </Text>
-                    <View style={styles.change_purse_container}>
-                    <Image source={receive_change_purse} style={styles.change_purse}></Image>
+                    <View style={styles.change_wallet_container}>
+                    <Image source={receive_change_wallet} style={styles.change_wallet}></Image>
                     </View>
                 </View>
 
@@ -52,7 +52,7 @@ class ReceiveScreen extends Component {
                     {LVStrings.receive_name}
                 </Text>
                 <Text numberOfLines={1} style={styles.address}>
-                    {this.state.purseAddress}
+                    {this.state.walletAddress}
                    
                 </Text>
 
@@ -183,13 +183,13 @@ const styles = StyleSheet.create({
         padding:30,
      },
 
-    change_purse_container: {
+    change_wallet_container: {
         // backgroundColor:'red',
         flex:1,
         alignItems: 'center',
         
     },
-    change_purse: {
+    change_wallet: {
         height:30,
         width:30,
         resizeMode:'stretch',

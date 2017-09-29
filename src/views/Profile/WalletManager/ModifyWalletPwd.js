@@ -9,7 +9,7 @@ import LVStrings from '../../../assets/localization';
 import LVColor from '../../../styles/LVColor'
 import MXCrossTextInput from './../../../components/MXCrossTextInput';
 
-export class ModifyPursePwd extends Component {
+export class ModifyWalletPwd extends Component {
 
     static navigationOptions = {
         header: null
@@ -52,42 +52,42 @@ export class ModifyPursePwd extends Component {
                 <MXNavigatorHeader
                     left={ IconBack }
                     style={{backgroundColor:'#F8F9FB'}}
-                    title={ LVStrings.profile_purse_modify_password }
+                    title={ LVStrings.profile_wallet_modify_password }
                     titleStyle={{color:'#6d798a'}}
                     onLeftPress={ () => {this.props.navigation.goBack() }}
-                    right = { LVStrings.profile_purse_save }
+                    right = { LVStrings.profile_wallet_save }
                     rightTextColor = { LVColor.primary }
                     onRightPress={ this.onSavePressed.bind(this) }/>
                 <View style= {{ paddingHorizontal:12.5}}>
                     <Text style={styles.text}>  
-                    { LVStrings.profile_purse_cur_password }</Text>
+                    { LVStrings.profile_wallet_cur_password }</Text>
                     <MXCrossTextInput
                         style={styles.textInput}
                         secureTextEntry={true}
-                        placeholder= { LVStrings.profile_purse_cur_password }
+                        placeholder= { LVStrings.profile_wallet_cur_password }
                         onTextChanged={ this.onCurPwdChanged.bind(this) }
                     />
                     <Text style={styles.text}>
-                    { LVStrings.profile_purse_new_password }</Text>
+                    { LVStrings.profile_wallet_new_password }</Text>
                     <MXCrossTextInput
                         style={styles.textInput}
                         secureTextEntry={true}
-                        placeholder= { LVStrings.assets_import_private_password_hint }
+                        placeholder= { LVStrings.wallet_import_private_password_hint }
                         onTextChanged={ this.onNewPwdChanged.bind(this) }
                     />
                     <Text style={styles.text}>
-                    { LVStrings.profile_purse_password_confirm }</Text>
+                    { LVStrings.profile_wallet_password_confirm }</Text>
                     <MXCrossTextInput
                         style={styles.textInput}
                         secureTextEntry={true}
-                        placeholder= { LVStrings.assets_import_private_pwd_confirm_hint }
+                        placeholder= { LVStrings.wallet_import_private_pwd_confirm_hint }
                         onTextChanged={ this.onConfirmPwdChanged.bind(this) }
                     />
                     <View style={{ marginTop: 25, flexDirection: 'row'}}>
-                        <Text style={{color: LVColor.text.editTextContent}}>{ LVStrings.profile_purse_password_hint }
+                        <Text style={{color: LVColor.text.editTextContent}}>{ LVStrings.profile_wallet_password_hint }
                             <Text style={{marginLeft: 10, color: '#1f7fff'}}
                                 onPress={()=>{alert('press')}}>
-                                { LVStrings.profile_purse_import_right_now }
+                                { LVStrings.profile_wallet_import_right_now }
                             </Text>
                         </Text>
                     </View>
@@ -108,4 +108,4 @@ const styles = StyleSheet.create({
         width: '100%'
     }
 });
-export default ModifyPursePwd
+export default ModifyWalletPwd

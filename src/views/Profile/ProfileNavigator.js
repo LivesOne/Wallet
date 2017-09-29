@@ -9,15 +9,15 @@ import React from 'react';
 import { StackNavigator } from "react-navigation";
 
 import ProfileScreen from './ProfileScreen';
-import { PurseManagerPage } from './PurseManager/PurseManagerPage';
-import { ModifyPurseName } from './PurseManager/ModifyPurseName';
-import { ModifyPursePwd } from './PurseManager/ModifyPursePwd';
+import { WalletManagerPage } from './WalletManager/WalletManagerPage';
+import { ModifyWalletName } from './WalletManager/ModifyWalletName';
+import { ModifyWalletPwd } from './WalletManager/ModifyWalletPwd';
 
 const ProfileNavigator = StackNavigator({
     Profile: { screen: ProfileScreen },
-    PurseManager: { screen: PurseManagerPage },
-    ModifyPurseName: { screen: ModifyPurseName },
-    ModifyPursePwd: { screen: ModifyPursePwd },
+    WalletManager: { screen: WalletManagerPage },
+    ModifyWalletName: { screen: ModifyWalletName },
+    ModifyWalletPwd: { screen: ModifyWalletPwd },
 });
 
 export default ProfileNavigator;

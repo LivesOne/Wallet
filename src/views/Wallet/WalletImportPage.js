@@ -40,7 +40,7 @@ import { MXSwitchTab } from './../../components/MXSwitchTab';
       return (
         <View style = {styles.container}>
           <MXNavigatorHeader
-            title = {LVStrings.assets_import_header}
+            title = {LVStrings.wallet_import_header}
             onLeftPress = {() => {
               this.props.navigation.goBack();
             }}
@@ -50,8 +50,8 @@ import { MXSwitchTab } from './../../components/MXSwitchTab';
             }
             />
             <MXSwitchTab
-              leftText={ LVStrings.assets_import_keyStore }
-              rightText={ LVStrings.assets_import_private_key }
+              leftText={ LVStrings.wallet_import_keyStore }
+              rightText={ LVStrings.wallet_import_private_key }
               onTabSwitched={this._onHeaderPressed.bind(this)}
             />
             {this.state.leftPressed && this._renderKeystore()}
@@ -66,18 +66,18 @@ import { MXSwitchTab } from './../../components/MXSwitchTab';
           <TextInput
             textAlignVertical={'top'}
             multiline= {true}
-            placeholder={ LVStrings.assets_import_keystore_hint }
+            placeholder={ LVStrings.wallet_import_keystore_hint }
             underlineColorAndroid = {'transparent'}
             style={ styles.textInput }
           />
           <MXCrossTextInput
             style={{marginTop: 15, marginBottom: 35}}
-            placeholder={LVStrings.assets_import_keystore_password_hint}
+            placeholder={LVStrings.wallet_import_keystore_password_hint}
           />
           <MXButton
             rounded
             style={{alignSelf: 'center'}}
-            title={LVStrings.assets_import}
+            title={LVStrings.wallet_import}
             onTextChanged={ ()=> {alert("hello")} }
           />
         </View>
@@ -90,22 +90,22 @@ import { MXSwitchTab } from './../../components/MXSwitchTab';
           <TextInput
             textAlignVertical={'top'}
             multiline= {true}
-            placeholder={ LVStrings.assets_import_plain_private_key_hint }
+            placeholder={ LVStrings.wallet_import_plain_private_key_hint }
             underlineColorAndroid = {'transparent'}
             style={ styles.textInput }
           />
           <MXCrossTextInput
             style={{marginTop: 15, marginBottom: 10}}
-            placeholder={LVStrings.assets_import_private_password_hint}
+            placeholder={LVStrings.wallet_import_private_password_hint}
           />
           <MXCrossTextInput
             style={{marginTop: 15, marginBottom: 35}}
-            placeholder={LVStrings.assets_import_private_pwd_confirm_hint}
+            placeholder={LVStrings.wallet_import_private_pwd_confirm_hint}
           />
           <MXButton
             rounded
             style={{alignSelf: 'center'}}
-            title={LVStrings.assets_import}
+            title={LVStrings.wallet_import}
             onTextChanged={ ()=> {alert("hello")} }
           />
         </View>

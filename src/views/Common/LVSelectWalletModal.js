@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Common/LVSelectPurseModal.js
+ * File: src/views/Common/LVSelectWalletModal.js
  * @flow
  */
 'use strict';
@@ -15,8 +15,8 @@ import MXTouchableImage from '../../components/MXTouchableImage';
 const closeIcon = require('../../assets/images/close_modal.png');
 const itemSelected = require('../../assets/images/list_item_selected.png');
 const itemUnselected = require('../../assets/images/list_item_unselected.png');
-const purseSelected = require('../../assets/images/purse_selected.png');
-const purseUnselected = require('../../assets/images/purse_unselected.png');
+const walletSelected = require('../../assets/images/wallet_selected.png');
+const walletUnselected = require('../../assets/images/wallet_unselected.png');
 
 const testData = [
     { id: '1', name: 'Gavin的钱包', address: '2426c3d0a70efa0de3b6526625d113057953563b' },
@@ -27,16 +27,16 @@ const testData = [
     { id: '6', name: '收款测试钱包', address: '601c28cd84bdc0155cff6e0a2bb54be4192b7253' }
 ];
 
-export default class LVSelectPurseModal extends Component {
+export default class LVSelectWalletModal extends Component {
     static propTypes = {
         isOpen: PropTypes.bool,
         onClosed: PropTypes.func,
-        selectedPurseId: PropTypes.string,
+        selectedWalletId: PropTypes.string,
         onSelected: PropTypes.func,
     };
 
     state: {
-        selectedPurseId: string,
+        selectedWalletId: string,
         selected: Map<string, boolean>,
         data: ?Array<Object>
     };
@@ -44,12 +44,12 @@ export default class LVSelectPurseModal extends Component {
     constructor(props: any) {
         super(props);
         this.state = {
-            selectedPurseId: props.selectedPurseId,
+            selectedWalletId: props.selectedWalletId,
             selected: (new Map(): Map<string, boolean>),
             data: testData
         };
-        if (props.selectedPurseId) {
-            this.state.selected.set(props.selectedPurseId, true);
+        if (props.selectedWalletId) {
+            this.state.selected.set(props.selectedWalletId, true);
         }
         this.onClosed = this.onClosed.bind(this);
         this.onPressCloseButton = this.onPressCloseButton.bind(this);
@@ -74,8 +74,8 @@ export default class LVSelectPurseModal extends Component {
             return { selected };
         });
         if (id && this.state.data && this.props.onSelected) {
-            const purseObject = this.state.data.find((value, index, arr) => { return value.id === id });
-            this.props.onSelected(purseObject);
+            const walletObject = this.state.data.find((value, index, arr) => { return value.id === id });
+            this.props.onSelected(walletObject);
         }
     };
 
@@ -91,9 +91,9 @@ export default class LVSelectPurseModal extends Component {
     );
 
     _renderItem = ({ item }) => (
-        <LVSelectPurseItem
+        <LVSelectWalletItem
             id={item.id}
-            purseName={item.name}
+            walletName={item.name}
             selected={!!this.state.selected.get(item.id)}
             onPressItem={this._onPressItem}
         />
@@ -146,11 +146,11 @@ const styles = StyleSheet.create({
     }
 });
 
-class LVSelectPurseItem extends React.PureComponent {
+class LVSelectWalletItem extends React.PureComponent {
     static propTypes = {
         id: PropTypes.string.isRequired,
         selected: PropTypes.bool.isRequired,
-        purseName: PropTypes.string.isRequired,
+        walletName: PropTypes.string.isRequired,
         onPressItem: PropTypes.func
     };
 
@@ -159,13 +159,13 @@ class LVSelectPurseItem extends React.PureComponent {
     };
 
     render() {
-        const { selected, purseName } = this.props;
+        const { selected, walletName } = this.props;
 
         return (
             <TouchableOpacity style={itemStyles.container} activeOpacity={0.7} onPress={this._onPress.bind(this)} >
                 <View style={itemStyles.left}>
-                    <Image source={selected ? purseSelected : purseUnselected} />
-                    <Text style={itemStyles.text} >{purseName}</Text>
+                    <Image source={selected ? walletSelected : walletUnselected} />
+                    <Text style={itemStyles.text} >{walletName}</Text>
                 </View>
                 <Image style={itemStyles.selected} source={selected ? itemSelected : itemUnselected} />
             </TouchableOpacity>

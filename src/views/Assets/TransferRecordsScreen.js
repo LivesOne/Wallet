@@ -31,7 +31,7 @@ class TransferRecordsScreen extends Component {
     };
 
     state: {
-        purseId: string,
+        walletId: string,
         transferRecords: ?Array<Object>
     };
 
@@ -39,13 +39,13 @@ class TransferRecordsScreen extends Component {
         return (
             <View />
         );
-        // const { purseName, purseAddress, lvt, eth, lvtRmb, ethRmb, transferRecords } = this.state;
+        // const { walletName, walletAddress, lvt, eth, lvtRmb, ethRmb, transferRecords } = this.state;
 
         // return (
         //     <View style={styles.container}>
         //         <LVGradientPanel style={styles.gradient}>
-        //             <PurseInfoView style={styles.purseInfo} title={purseName} address={purseAddress} />
-        //             <PurseBalanceView style={styles.balance} lvt={lvt} eth={eth} extLvt={lvtRmb} extEth={ethRmb} />
+        //             <WalletInfoView style={styles.walletInfo} title={walletName} address={walletAddress} />
+        //             <WalletBalanceView style={styles.balance} lvt={lvt} eth={eth} extLvt={lvtRmb} extEth={ethRmb} />
         //         </LVGradientPanel>
 
         //         <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }} />

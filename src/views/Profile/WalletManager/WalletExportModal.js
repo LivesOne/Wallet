@@ -10,7 +10,7 @@ import LVColor from './../../../styles/LVColor';
 import * as MXUtils from './../../../utils/MXUtils';
 import LVStrings from './../../../assets/localization';
 
-export class PurseExportModal extends Component {
+export class WalletExportModal extends Component {
     static propTypes = {
         isOpen: PropTypes.bool,
         onClosed: PropTypes.func,
@@ -41,17 +41,17 @@ export class PurseExportModal extends Component {
                 onClosed={this.onClosed}
                 >
                 <View style={styles.container}>
-                    <Text style={styles.title}> {LVStrings.profile_purse_my_private_key} </Text>
+                    <Text style={styles.title}> {LVStrings.profile_wallet_my_private_key} </Text>
                     <TextInput  
                         textAlignVertical={'top'}             
                         underlineColorAndroid = {'transparent'}
                         multiline= {true} 
                         style={ styles.textInput }>{ this.props.privateKey }</TextInput>
-                    <Text style={{fontSize: 15, color: LVColor.text.red, marginTop: 15,  fontWeight: '100',}}> {LVStrings.profile_purse_export_warnning} </Text>
+                    <Text style={{fontSize: 15, color: LVColor.text.red, marginTop: 15,  fontWeight: '100',}}> {LVStrings.profile_wallet_export_warnning} </Text>
                     <MXButton
                         rounded
                         style={ styles.btn }
-                        title={ LVStrings.prifile_purse_export_copy_key }>
+                        title={ LVStrings.prifile_wallet_export_copy_key }>
                     </MXButton>
                 </View>
             </Modal>
@@ -102,4 +102,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default PurseExportModal
+export default WalletExportModal

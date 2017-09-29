@@ -41,7 +41,7 @@
     "react-native-tableview-simple": "^0.16.12",
     "react-native-tcp": "^3.3.0",
     "react-native-udp": "^2.1.0",
-    "react-navigation": "^1.0.0-beta.11",
+    "react-navigation": "^1.0.0-beta.13",
     "readable-stream": "^1.0.33",
     "scryptsy": "^2.0.0",
     "secp256k1": "^3.3.0",
