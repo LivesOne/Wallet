@@ -88,6 +88,20 @@ const localized_strings = {
     guide_detail_2: '钱 包 导 入 直 接 使 用',
     guide_master_3: '结构清晰',
     guide_detail_3: '账 目 记 录 一 目 了 然',
+
+    // Transfer
+    transfer_title: '傲游LivesToken-转账',
+    transfer_purse_balance: '余额',
+    transfer_payee_address: '收款人地址',
+    transfer_amount: '转账金额',
+    transfer_remarks: '备注',
+    transfer_miner_tips: '矿工费用',
+    transfer_slow: '慢',
+    transfer_fast: '快',
+    transfer_current_eth: '当前钱包ETH',
+    transfer_hint: '执行交易将扣除您当前钱包中的ETH。该交易可执行，交易成功后，将扣除矿工费用。',
+    transfer_payment_details: '支付详情',
+    transfer_address_in: '转入地址',
 };
 
 export default localized_strings;

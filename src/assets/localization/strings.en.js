@@ -88,6 +88,20 @@ const localized_strings = {
     guide_detail_2: 'Purse import direct use',
     guide_master_3: 'Clear',
     guide_detail_3: 'Transfers are clear',
+
+      // Transfer
+      transfer_title: 'Maxthon LivesToken-Transfer',
+      transfer_purse_balance: 'Balance',
+      transfer_payee_address: 'Payee address',
+      transfer_amount: 'Transfer amount',
+      transfer_remarks: 'Remarks',
+      transfer_miner_tips: 'Miner tips',
+      transfer_slow: 'Slow',
+      transfer_fast: 'Fast',
+      transfer_current_eth: 'Current wallet ETH',
+      transfer_hint: 'The transaction will be deducted from your current wallet ETH. The transaction is executable，and will deduct the cost of miners after success.',
+      transfer_payment_details: 'Payment details',
+      transfer_address_in: 'Transfer-in address',
 };
 
 export default localized_strings;
