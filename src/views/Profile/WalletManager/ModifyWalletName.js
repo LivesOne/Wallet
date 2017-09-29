@@ -9,7 +9,7 @@ import LVStrings from '../../../assets/localization';
 import LVColor from '../../../styles/LVColor'
 import MXCrossTextInput from './../../../components/MXCrossTextInput';
 
-export class ModifyPurseName extends Component {
+export class ModifyWalletName extends Component {
 
     static navigationOptions = {
         header: null
@@ -40,18 +40,18 @@ export class ModifyPurseName extends Component {
                 <MXNavigatorHeader
                     left={ IconBack }
                     style={{backgroundColor:'#F8F9FB'}}
-                    title={ LVStrings.profile_purse_modify_name }
+                    title={ LVStrings.profile_wallet_modify_name }
                     titleStyle={{color:'#6d798a'}}
                     onLeftPress={ () => {this.props.navigation.goBack() }}
-                    right = { LVStrings.profile_purse_save }
+                    right = { LVStrings.profile_wallet_save }
                     rightTextColor = { LVColor.primary }
                     onRightPress={this.onSavePressed.bind(this)}/>
                     <View style= {{ paddingHorizontal:12.5}}>
                         <Text style={styles.text}>
-                        { LVStrings.profile_purse_name }</Text>
+                        { LVStrings.profile_wallet_name }</Text>
                         <MXCrossTextInput
                             style={styles.textInput}
-                            placeholder= { LVStrings.profile_purse_new_name }
+                            placeholder= { LVStrings.profile_wallet_new_name }
                             onTextChanged={ this.onTextChanged.bind(this) }
                         />
                     </View>
@@ -72,4 +72,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ModifyPurseName
+export default ModifyWalletName

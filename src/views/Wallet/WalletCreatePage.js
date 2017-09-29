@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Assets/PurseCreatePage.js
+ * File: src/views/Assets/WalletCreatePage.js
  * @flow
  */
 "use strict";
@@ -18,7 +18,7 @@ import MXCrossTextInput from '../../components/MXCrossTextInput';
 
 const backImg = require('../../assets/images/back.png');
 
-export default class PurseCreatePage extends Component {
+export default class WalletCreatePage extends Component {
     static navigationOptions = {
         header: null
     };
@@ -35,34 +35,34 @@ export default class PurseCreatePage extends Component {
                                 this.props.navigation.goBack();
                             }}
                         />
-                        <Text style={styles.navTitle}>{LVStrings.assets_create_wallet}</Text>
+                        <Text style={styles.navTitle}>{LVStrings.wallet_create_wallet}</Text>
                         <View style={styles.navRightPlaceholder} />
                     </View>
                 </LVGradientPanel>
                 <View style={styles.content}>
                     <View style={styles.textInputContainer}>
                         <MXCrossTextInput
-                            placeholder={LVStrings.assets_create_wallet}
+                            placeholder={LVStrings.wallet_create_wallet}
                             style={ styles.textInput }
                         />
                         <MXCrossTextInput
-                            placeholder={LVStrings.assets_create_password}
+                            placeholder={LVStrings.wallet_create_password}
                             style={ styles.textInput }
                             secureTextEntry
                         />
                         <MXCrossTextInput
-                            placeholder={LVStrings.assets_create_password_verify}
+                            placeholder={LVStrings.wallet_create_password_verify}
                             style={ styles.textInput }
                             secureTextEntry
                             withUnderLine = {false}
                         />
                     </View>
-                    <Text style={styles.text}>{LVStrings.assets_create_comment}</Text>
+                    <Text style={styles.text}>{LVStrings.wallet_create_comment}</Text>
                     <MXButton
                         rounded                
-                        title={LVStrings.assets_create}
+                        title={LVStrings.wallet_create}
                         onPress = {() => {
-                            this.props.navigation.navigate("PurseCreateSuccess")
+                            this.props.navigation.navigate("WalletCreateSuccess")
                         }}
                         themeStyle={"active"}
                         style={styles.createButton}

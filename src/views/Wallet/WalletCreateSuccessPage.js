@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Assets/PurseCreateSuccessPage.js
+ * File: src/views/Assets/WalletCreateSuccessPage.js
  * @flow
  */
 "use strict";
@@ -15,7 +15,7 @@ import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 
 const createSuccessImage = require("../../assets/images/create_wallet_success.png");
 
-export default class PurseCreateOrImportPage extends Component {
+export default class WalletCreateOrImportPage extends Component {
     static navigationOptions = {
         header: null
     };
@@ -24,17 +24,17 @@ export default class PurseCreateOrImportPage extends Component {
         return (
             <View style = {styles.container}>
                 <MXNavigatorHeader
-                    title = {LVStrings.assets_create_wallet}
+                    title = {LVStrings.wallet_create_wallet}
                     onLeftPress = {() => {
                         this.props.navigation.goBack();
                     }}
                 />
                 <Image source={createSuccessImage} style = {styles.image}/>
-                <Text style={styles.text}>{LVStrings.assets_create_success}</Text>
-                <Text style={styles.detailText}>{LVStrings.assets_create_success_comment}</Text>
+                <Text style={styles.text}>{LVStrings.wallet_create_success}</Text>
+                <Text style={styles.detailText}>{LVStrings.wallet_create_success_comment}</Text>
                 <MXButton
                     rounded                
-                    title={LVStrings.assets_backup_wallet}
+                    title={LVStrings.wallet_backup}
                     onPress = {() => {
                         
                     }}

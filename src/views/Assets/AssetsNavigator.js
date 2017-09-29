@@ -9,17 +9,19 @@ import React from 'react';
 import { StackNavigator } from "react-navigation";
 
 import AssetsScreen from './AssetsScreen';
-import PurseImportPage from '../Purse/PurseImportPage';
-import PurseCreateOrImportPage from '../Purse/PurseCreateOrImportPage';
-import PurseCreatePage from '../Purse/PurseCreatePage';
-import PurseCreateSuccessPage from '../Purse/PurseCreateSuccessPage';
+import TransferRecordsScreen from './TransferRecordsScreen';
+import WalletImportPage from '../Wallet/WalletImportPage';
+import WalletCreateOrImportPage from '../Wallet/WalletCreateOrImportPage';
+import WalletCreatePage from '../Wallet/WalletCreatePage';
+import WalletCreateSuccessPage from '../Wallet/WalletCreateSuccessPage';
 
 const AssetsNavigator = StackNavigator({
     Assets: { screen: AssetsScreen },
-    PurseImport: { screen: PurseImportPage },
-    PurseCreateOrImport: { screen: PurseCreateOrImportPage },
-    PurseCreate: { screen: PurseCreatePage },
-    PurseCreateSuccess: { screen: PurseCreateSuccessPage }
+    TransferRecords: { screen: TransferRecordsScreen },
+    WalletImport: { screen: WalletImportPage },
+    WalletCreateOrImport: { screen: WalletCreateOrImportPage },
+    WalletCreate: { screen: WalletCreatePage },
+    WalletCreateSuccess: { screen: WalletCreateSuccessPage }
 });
 
 export default AssetsNavigator;

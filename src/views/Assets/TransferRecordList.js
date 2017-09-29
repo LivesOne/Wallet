@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Common/LVTransferRecordList.js
+ * File: src/views/Assets/TransferRecordList.js
  * @flow
  */
 'use strict';
@@ -166,7 +166,7 @@ const LVSchedule = ({ value, total }) => {
     );
 };
 
-class LVTransferRecordList extends React.PureComponent {
+class TransferRecordList extends React.PureComponent {
     static propTypes = {
         records: PropTypes.arrayOf(PropTypes.object)
     };
@@ -280,4 +280,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default LVTransferRecordList;
+export default TransferRecordList;

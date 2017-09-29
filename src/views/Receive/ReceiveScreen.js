@@ -18,29 +18,31 @@ import MXButton from '../../components/MXButton';
 import QRCode from 'react-native-qrcode';
 
 const receive_share = require("../../assets/images/receive_share.png");
-const receive_change_purse = require("../../assets/images/receive_change_purse.png");
+const receive_change_wallet = require("../../assets/images/receive_change_wallet.png");
 
 class ReceiveScreen extends Component {
     static navigationOptions = {
         header: null
     };
     state = {
+        walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
         text: 'http://facebook.github.io/react-native/',
+        
     };
 
     
     render() {
         return (
-            <ScrollView contentContainerStyle={styles.contentContainer}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.contentContainer}>
             
             <View style={styles.container}>
                 <View style={styles.topContainer}>
-                    <Text style={styles.change_purse_container}></Text>
+                    <Text style={styles.change_wallet_container}></Text>
                     <Text style={styles.title}>
                         {LVStrings.receive_title}
                     </Text>
-                    <View style={styles.change_purse_container}>
-                    <Image source={receive_change_purse} style={styles.change_purse}></Image>
+                    <View style={styles.change_wallet_container}>
+                    <Image source={receive_change_wallet} style={styles.change_wallet}></Image>
                     </View>
                 </View>
 
@@ -49,16 +51,17 @@ class ReceiveScreen extends Component {
                 <Text style={styles.name} >
                     {LVStrings.receive_name}
                 </Text>
-                <Text style={styles.address}>
-                    abcdefhigjklmopqrst
+                <Text numberOfLines={1} style={styles.address}>
+                    {this.state.walletAddress}
+                   
                 </Text>
 
                 <QRCode
                 style={styles.qrcode_pic}
                 value={this.state.text}
                 size={162}
-                bgColor='purple'
-                fgColor='white'/>
+                bgColor='white'
+                fgColor='black'/>
 
                 <MXButton
                     style={styles.button}
@@ -110,10 +113,15 @@ const styles = StyleSheet.create({
         width:'100%',
         justifyContent: "flex-start",
         alignItems: "center",
+        // backgroundColor:'red',
+        marginTop:20,
+        
+        
     },
     contentContainer: {
         paddingVertical: 20,
         backgroundColor: LVColor.white,
+        height:'100%',
     },
 
     topContainer:{
@@ -170,19 +178,18 @@ const styles = StyleSheet.create({
         elevation: 20,
         shadowOffset: {width: 0, height: 0},
         shadowColor: 'black',
-        shadowOpacity: 1,
-        shadowRadius: 5,
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
         padding:30,
-        zIndex:4,
      },
 
-    change_purse_container: {
+    change_wallet_container: {
         // backgroundColor:'red',
         flex:1,
         alignItems: 'center',
         
     },
-    change_purse: {
+    change_wallet: {
         height:30,
         width:30,
         resizeMode:'stretch',
@@ -201,11 +208,7 @@ const styles = StyleSheet.create({
         // {'translate':[0,-30,1]
         ],
         elevation: 21,
-        shadowOffset: {width: 0, height: 0},
-        shadowColor: 'black',
-        shadowOpacity: 1,
-        shadowRadius: 5,
-        zIndex:3,
+        
     },
     share:{
         height:50,

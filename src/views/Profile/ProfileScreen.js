@@ -14,7 +14,7 @@ import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import * as LVStyleSheet from '../../styles/LVStyleSheet';
 
-const PurseImage = require('../../assets/images/profile_purse.png');
+const WalletImage = require('../../assets/images/profile_wallet.png');
 const TradingImage = require('../../assets/images/profile_trading.png');
 const ContactsImage = require('../../assets/images/profile_contacts.png');
 const FeedbackImage = require('../../assets/images/profile_feedback.png');
@@ -55,11 +55,11 @@ export default class ProfleScreen extends Component {
                         hideSeparator
                     >
                         <ProfileCell
-                            title={LVStrings.profile_purse_manager}
+                            title={LVStrings.profile_wallet_manager}
                             accessory="DisclosureIndicator"
-                            onPress={() => this.props.navigation.navigate('PurseManager')}
+                            onPress={() => this.props.navigation.navigate('WalletManager')}
                             disableImageResize
-                            image={<Image source={PurseImage} style={styles.tableViewImage}/>}
+                            image={<Image source={WalletImage} style={styles.tableViewImage}/>}
                         />
                         <Separator insetRight={15} tintColor="#eeeff2"/>
                         <ProfileCell

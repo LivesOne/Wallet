@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Assets/PurseBalanceView.js
+ * File: src/views/Assets/WalletBalanceView.js
  * @flow
  */
 'use strict';
@@ -15,7 +15,7 @@ import { StringUtils } from '../../utils';
 const lvtIcon = require('../../assets/images/lvt.png');
 const ethIcon = require('../../assets/images/eth.png');
 
-export default class PurseBalanceView extends Component {
+export default class WalletBalanceView extends Component {
     static propTypes = {
         style: ViewPropTypes.style,
         lvt: PropTypes.number,

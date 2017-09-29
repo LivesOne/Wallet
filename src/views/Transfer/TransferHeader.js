@@ -9,7 +9,7 @@ import LVSize from '../../styles/LVFontSize';
 import LVStrings from '../../assets/localization';
 import MXTouchableImage from '../../components/MXTouchableImage';
 import * as MXUtils from "../../utils/MXUtils";
-const selectImg = require('../../assets/images/select_purse.png');
+const selectImg = require('../../assets/images/select_wallet.png');
 
 export class TransferHeader extends Component {
 

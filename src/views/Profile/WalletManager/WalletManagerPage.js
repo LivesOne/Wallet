@@ -4,18 +4,18 @@
 import React, { Component } from 'react'
 import { Text, View, StyleSheet, Dimensions, Image } from 'react-native';
 import MXNavigatorHeader from './../../../components/MXNavigatorHeader';
-import PurseInfoView from '../../Assets/PurseInfoView';
+import WalletInfoView from '../../Assets/WalletInfoView';
 import LVSize from '../../../styles/LVFontSize';
 import { Cell, Section, TableView, Separator } from 'react-native-tableview-simple';
 import MXButton from './../../../components/MXButton';
 import LVStrings from '../../../assets/localization';
-import { PurseExportModal } from './PurseExportModal';
+import { WalletExportModal } from './WalletExportModal';
 
-const IconPurseModifyName = require('../../../assets/images/purse_modify_name.png');
-const IconPurseModifyPwd = require('../../../assets/images/purse_modify_pwd.png');
-const IconPurseExportPK = require('../../../assets/images/purse_export_pk.png');
+const IconWalletModifyName = require('../../../assets/images/wallet_modify_name.png');
+const IconWalletModifyPwd = require('../../../assets/images/wallet_modify_pwd.png');
+const IconWalletExportPK = require('../../../assets/images/wallet_export_pk.png');
 const IconShowDetailArrow = require('../../../assets/images/show_detail_arrow.png');
-const IconPurse = require('../../../assets/images/purse_grey.png');
+const IconWallet = require('../../../assets/images/wallet_grey.png');
 const IconBack = require('../../../assets/images/back_grey.png');
 
 const CellVariant = (props) => (
@@ -38,15 +38,15 @@ const CellVariant = (props) => (
     />
 );
 
-export class PurseManagerPage extends Component {
+export class WalletManagerPage extends Component {
 
     static navigationOptions = {
         header: null
     };
 
     state: {
-        purseTitle: string,
-        purseAddress: string,
+        walletTitle: string,
+        walletAddress: string,
         showExportModal: boolean,
         privateKey: string,
     }
@@ -54,8 +54,8 @@ export class PurseManagerPage extends Component {
     constructor() {
         super();
         this.state = {
-            purseTitle: '2,100,000 LVT',
-            purseAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
+            walletTitle: '2,100,000 LVT',
+            walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
             privateKey: '7badjaxamad89asdfa2eajkfjak08923h8ass0d9g9xx9ad8a78asd90a',
             showExportModal: false,
         }
@@ -72,23 +72,23 @@ export class PurseManagerPage extends Component {
     render() {
         return (
             <View style={ styles.container }>
-                <PurseExportModal
+                <WalletExportModal
                     isOpen= {this.state.showExportModal}
                     privateKey= { this.state.privateKey }
                     onClosed = {this.onExportModalClosed.bind(this)}/>
                 <MXNavigatorHeader
                     left={ IconBack }
                     style={{backgroundColor:'#F8F9FB'}}
-                    title={ LVStrings.profile_purse_title }
+                    title={ LVStrings.profile_wallet_title }
                     titleStyle={{color:'#6d798a'}}
                     onLeftPress={ () => {this.props.navigation.goBack() }}
                     />
-                <PurseInfoView 
-                    style={styles.purseInfo} title={ this.state.purseTitle } 
-                    address={ this.state.purseAddress }
-                    titleStyle={styles.purseTitle}
-                    addressStyle={styles.purseAddress}
-                    purseIcon={ IconPurse }
+                <WalletInfoView 
+                    style={styles.walletInfo} title={ this.state.walletTitle } 
+                    address={ this.state.walletAddress }
+                    titleStyle={styles.walletTitle}
+                    addressStyle={styles.walletAddress}
+                    walletIcon={ IconWallet }
                      />
                 <TableView>
                     <Section
@@ -98,20 +98,20 @@ export class PurseManagerPage extends Component {
                         separatorTintColor={"transparent"}
                         hideSeparator
                         >
-                        <CellVariant title= { LVStrings.profile_purse_modify_name } source={ IconPurseModifyName } 
-                        onPress = {()=>{this.props.navigation.navigate('ModifyPurseName')}}/>
+                        <CellVariant title= { LVStrings.profile_wallet_modify_name } source={ IconWalletModifyName } 
+                        onPress = {()=>{this.props.navigation.navigate('ModifyWalletName')}}/>
                         <Separator insetRight={15} tintColor="#eeeff2"/>
-                        <CellVariant title= { LVStrings.profile_purse_modify_password } source={ IconPurseModifyPwd }
-                        onPress = {()=>{this.props.navigation.navigate('ModifyPursePwd')}}/>
+                        <CellVariant title= { LVStrings.profile_wallet_modify_password } source={ IconWalletModifyPwd }
+                        onPress = {()=>{this.props.navigation.navigate('ModifyWalletPwd')}}/>
                         <Separator insetRight={15} tintColor="#eeeff2"/>
-                        <CellVariant title= { LVStrings.profile_purse_export } source={ IconPurseExportPK }
+                        <CellVariant title= { LVStrings.profile_wallet_export } source={ IconWalletExportPK }
                         onPress = { this.showExportModal.bind(this) }/>
                         <Separator insetRight={15} tintColor="#eeeff2"/>
                     </Section>
                 </TableView>
                 <View style={{width: '100%', flex: 1, justifyContent:'flex-end', alignItems:'center', backgroundColor: 'white'}}>
-                    <MXButton style={{marginBottom: 15}} title={ LVStrings.profile_purse_backup } rounded></MXButton>
-                    <MXButton style={{marginBottom: 25}}title={ LVStrings.profile_purse_delete_purse } rounded></MXButton>
+                    <MXButton style={{marginBottom: 15}} title={ LVStrings.profile_wallet_backup } rounded></MXButton>
+                    <MXButton style={{marginBottom: 25}}title={ LVStrings.profile_wallet_delete_wallet } rounded></MXButton>
                 </View>
                 
             </View>
@@ -130,13 +130,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#F8F9FB'
     },
-    purseInfo: {
+    walletInfo: {
         width: Window.width,
         height: 115,
         paddingHorizontal: 12.5,
         backgroundColor: 'white'
     },
-    purseTitle: {
+    walletTitle: {
         marginTop: 2.5,
         marginBottom: 2.5,
         color: '#6d798a',
@@ -144,11 +144,11 @@ const styles = StyleSheet.create({
         fontSize: LVSize.large,
         fontWeight: '500'
     },
-    purseAddress: {
+    walletAddress: {
         color: '#bec4d0',
         width: 170,
         fontSize: LVSize.xsmall
     }
 });
 
-export default PurseManagerPage
+export default WalletManagerPage
