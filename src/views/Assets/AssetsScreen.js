@@ -14,10 +14,10 @@ import LVGradientPanel from '../Common/LVGradientPanel';
 import LVDetailTextCell from '../Common/LVDetailTextCell';
 import LVSelectPurseModal from '../Common/LVSelectPurseModal';
 import MXTouchableImage from '../../components/MXTouchableImage';
-import LVTransferRecordList, { testRecores } from '../Common/LVTransferRecordList';
 
 import PurseInfoView from './PurseInfoView';
 import PurseBalanceView from './PurseBalanceView';
+import TransferRecordList, { testRecores } from './TransferRecordList';
 
 const selectImg = require('../../assets/images/select_purse.png');
 
@@ -102,7 +102,7 @@ class AssetsScreen extends Component {
 
                 <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }} />
 
-                <LVTransferRecordList style={styles.list} records={transferRecords} />
+                <TransferRecordList style={styles.list} records={transferRecords} />
 
                 <LVSelectPurseModal
                     isOpen={this.state.openSelectPurse}

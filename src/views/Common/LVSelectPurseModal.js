@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Assets/LVSelectPurseModal.js
+ * File: src/views/Common/LVSelectPurseModal.js
  * @flow
  */
 'use strict';

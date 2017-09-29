@@ -33,10 +33,14 @@ class VenusApp extends Component {
     componentDidMount() {
         LVConfiguration.hasAppGuidesEverDisplayed().then((everDisplayed) => {
             this.setState({showGuide: !everDisplayed});
-            if (!everDisplayed) LVConfiguration.setAppGuidesHasBeenDisplayed();
         }).catch(err => {
             this.setState({showGuide: false});
         })
+
+        this.appDidFinishLaunching();
+    }
+
+    appDidFinishLaunching() {
         LVConfiguration.setAppHasBeenLaunched();
     }
 
@@ -46,6 +50,7 @@ class VenusApp extends Component {
 
     handleAppGuideCallback = () => {
         this.setState({showGuide: false});
+        LVConfiguration.setAppGuidesHasBeenDisplayed();
     }
 
     render() {
