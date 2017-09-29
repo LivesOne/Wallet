@@ -19,7 +19,6 @@ export class TransferMinerTipsSetter extends Component {
     state: {
         value: number,
         sliderWidth: number,
-        sliderOffset: number,
     }
 
     constructor() {

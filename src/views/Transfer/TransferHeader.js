@@ -8,7 +8,7 @@ import LVColor from '../../styles/LVColor'
 import LVSize from '../../styles/LVFontSize';
 import LVStrings from '../../assets/localization';
 import MXTouchableImage from '../../components/MXTouchableImage';
-
+import * as MXUtils from "../../utils/MXUtils";
 const selectImg = require('../../assets/images/select_purse.png');
 
 export class TransferHeader extends Component {
@@ -17,12 +17,6 @@ export class TransferHeader extends Component {
         balance: PropTypes.number,
         onPressSelectPurse: PropTypes.func,
     };
-
-    format(n: number) {
-        return n.toFixed(0).replace(/./g, function(c, i, a) {
-            return i && c !== "." && ((a.length - i) % 3 === 0) ? ',' + c : c;
-        });
-    }
 
     onPressSelectPurse = () => {
         if (this.props.onPressSelectPurse) {
@@ -50,7 +44,7 @@ export class TransferHeader extends Component {
                     </View>
                 <View style= {styles.columnContainer}>
                     <Text style= {[styles.textCommon]}>{ LVStrings.transfer_purse_balance }</Text>
-                    <Text style= {[styles.textCommon, {fontSize: 36}]}>{ this.format(balance)}</Text>
+                    <Text style= {[styles.textCommon, {fontSize: 36}]}>{ MXUtils.formatCurrency(balance)}</Text>
                     <Text style= {[styles.textCommon]}>{ this.toRenminbi() }</Text>
                 </View>
             </View>
