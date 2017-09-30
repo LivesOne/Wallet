@@ -11,6 +11,10 @@ const localized_strings = {
     profile: '我的',
     transfer: '转账',
 
+    // Common
+    common_confirm: '确定',
+    common_cancel: '取消',
+
     //receive
     receive_title:'我的收款码',
     receive_name:'钱包地址',
@@ -43,6 +47,9 @@ const localized_strings = {
     view_all_records: '查看全部记录',
 
     // Transfer
+    transfer_records: '交易记录',
+    transfer_date_filter_title: '时间',
+    transfer_date_filter_sep: '至',
     transfer_waiting: '等待中',
 
     // Profile

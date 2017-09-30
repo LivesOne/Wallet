@@ -11,6 +11,10 @@ const localized_strings = {
     profile: 'Profile',
     transfer: 'Transfer',
 
+    // Common
+    common_confirm: 'Confirm',
+    common_cancel: 'Cancel',
+
     //receive
     receive_title:'My Code',
     receive_name:'Cash Address',
@@ -43,6 +47,9 @@ const localized_strings = {
     view_all_records: 'View all',
 
     // Transfer
+    transfer_records: 'Transfer Records',
+    transfer_date_filter_title: 'Date',
+    transfer_date_filter_sep: 'to',
     transfer_waiting: 'Waiting',
 
     // Profile
