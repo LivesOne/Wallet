@@ -32,7 +32,7 @@ class ReceiveTip extends Component {
     
     render() {
         return (
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.contentContainer}>
+            <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor:LVColor.white }} contentContainerStyle={styles.contentContainer}>
             
             <View style={styles.container}>
 
@@ -87,6 +87,7 @@ class ReceiveTip extends Component {
 
 
 const styles = StyleSheet.create({
+    
     container: {
         flex: 1,
         width:'100%',

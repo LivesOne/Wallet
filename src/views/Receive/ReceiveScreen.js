@@ -33,7 +33,7 @@ class ReceiveScreen extends Component {
     
     render() {
         return (
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.contentContainer}>
+            <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor:LVColor.white }}  contentContainerStyle={styles.contentContainer}>
             
             <View style={styles.container}>
                 <View style={styles.topContainer}>
