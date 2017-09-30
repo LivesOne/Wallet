@@ -55,10 +55,12 @@ class TransferRecordsScreen extends Component {
 
     onStartDateChange = (date: string) => {
         this.setState({ startDate: date });
+        LVConfiguration.setLastTransferRecordsFilterStartDate(date);
     };
 
     onEndDateChange = (date: string) => {
         this.setState({ endDate: date });
+        LVConfiguration.setLastTransferRecordsFilterEndDate(date);
     };
 
     render() {
