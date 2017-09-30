@@ -18,9 +18,8 @@ import MXButton from '../../components/MXButton';
 import QRCode from 'react-native-qrcode';
 
 const receive_share = require("../../assets/images/receive_share.png");
-const receive_change_purse = require("../../assets/images/receive_change_purse.png");
 
-class ReceiveScreen extends Component {
+class ReceiveTip extends Component {
     static navigationOptions = {
         header: null
     };
@@ -36,19 +35,6 @@ class ReceiveScreen extends Component {
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.contentContainer}>
             
             <View style={styles.container}>
-                <View style={styles.topContainer}>
-                    <Text style={styles.change_purse_container}></Text>
-                    <Text style={styles.title}>
-                        {LVStrings.receive_title}
-                    </Text>
-                    <View style={styles.change_purse_container}>
-                    <MxImage 
-                        source={receive_change_purse}  
-                        style={styles.change_purse}
-                        onPress={() => this.props.navigation.navigate('ReceiveTip')}
-                        ></MxImage>
-                    </View>
-                </View>
 
                 <View style={styles.mainContainer}>
 
@@ -57,7 +43,6 @@ class ReceiveScreen extends Component {
                 </Text>
                 <Text numberOfLines={1} style={styles.address}>
                     {this.state.purseAddress}
-                   
                 </Text>
 
                 <QRCode
@@ -67,22 +52,12 @@ class ReceiveScreen extends Component {
                 bgColor='white'
                 fgColor='black'/>
 
-                <MXButton
-                    style={styles.button}
-                    title={LVStrings.receive_copy}
-                    onPress = {() => {
-                    alert("button clicked");
-                    }}
-                    themeStyle={"active"}
-                /> 
-                <MXButton
-                    title={LVStrings.receive_save}
-                    style={styles.button_save}
-                    onPress = {() => {
-                    alert("button clicked");
-                    }}
-                    themeStyle={"active"}
-                />
+                <Text 
+                   style = {styles.eth_tip}
+                >
+                    您的钱包ETH不足,无法完成转账,请转账ETH至此钱包.
+                </Text>
+                
                 </View>
                 <View style={styles.share_container}>
                 {/* <Image source={receive_share} style={styles.share}></Image> */}
@@ -117,6 +92,7 @@ const styles = StyleSheet.create({
         width:'100%',
         justifyContent: "flex-start",
         alignItems: "center",
+        paddingTop: 40,
         // backgroundColor:'red',
         
         
@@ -172,7 +148,7 @@ const styles = StyleSheet.create({
     },
 
     mainContainer:{
-        flex:6,
+        flex:2,
         width:'90%',
         flexDirection:'column',
         alignItems: 'center',
@@ -199,6 +175,10 @@ const styles = StyleSheet.create({
         // backgroundColor:'blue',
     },
 
+    eth_tip: {
+        paddingTop:60,
+        width:'90%',
+    },
     qrcode_pic:{
         height:162,
         width:162,
@@ -222,4 +202,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default ReceiveScreen;
+export default ReceiveTip;
