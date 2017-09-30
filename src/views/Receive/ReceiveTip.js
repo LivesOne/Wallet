@@ -18,14 +18,13 @@ import MXButton from '../../components/MXButton';
 import QRCode from 'react-native-qrcode';
 
 const receive_share = require("../../assets/images/receive_share.png");
-const receive_change_wallet = require("../../assets/images/receive_change_wallet.png");
 
-class ReceiveScreen extends Component {
+class ReceiveTip extends Component {
     static navigationOptions = {
         header: null
     };
     state = {
-        walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
+        purseAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
         text: 'http://facebook.github.io/react-native/',
         
     };
@@ -33,22 +32,9 @@ class ReceiveScreen extends Component {
     
     render() {
         return (
-            <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor:LVColor.white }}  contentContainerStyle={styles.contentContainer}>
+            <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor:LVColor.white }} contentContainerStyle={styles.contentContainer}>
             
             <View style={styles.container}>
-                <View style={styles.topContainer}>
-                    <Text style={styles.change_wallet_container}></Text>
-                    <Text style={styles.title}>
-                        {LVStrings.receive_title}
-                    </Text>
-                    <View style={styles.change_wallet_container}>
-                    <MxImage 
-                        source={receive_change_wallet}  
-                        style={styles.change_wallet}
-                        onPress={() => this.props.navigation.navigate('ReceiveTip')}
-                        ></MxImage>
-                    </View>
-                </View>
 
                 <View style={styles.mainContainer}>
 
@@ -56,8 +42,7 @@ class ReceiveScreen extends Component {
                     {LVStrings.receive_name}
                 </Text>
                 <Text numberOfLines={1} style={styles.address}>
-                    {this.state.walletAddress}
-                   
+                    {this.state.purseAddress}
                 </Text>
 
                 <QRCode
@@ -67,22 +52,12 @@ class ReceiveScreen extends Component {
                 bgColor='white'
                 fgColor='black'/>
 
-                <MXButton
-                    style={styles.button}
-                    title={LVStrings.receive_copy}
-                    onPress = {() => {
-                    alert("button clicked");
-                    }}
-                    themeStyle={"active"}
-                /> 
-                <MXButton
-                    title={LVStrings.receive_save}
-                    style={styles.button_save}
-                    onPress = {() => {
-                    alert("button clicked");
-                    }}
-                    themeStyle={"active"}
-                />
+                <Text 
+                   style = {styles.eth_tip}
+                >
+                    您的钱包ETH不足,无法完成转账,请转账ETH至此钱包.
+                </Text>
+                
                 </View>
                 <View style={styles.share_container}>
                 {/* <Image source={receive_share} style={styles.share}></Image> */}
@@ -112,11 +87,13 @@ class ReceiveScreen extends Component {
 
 
 const styles = StyleSheet.create({
+    
     container: {
         flex: 1,
         width:'100%',
         justifyContent: "flex-start",
         alignItems: "center",
+        paddingTop: 40,
         // backgroundColor:'red',
         
         
@@ -172,7 +149,7 @@ const styles = StyleSheet.create({
     },
 
     mainContainer:{
-        flex:6,
+        flex:2,
         width:'90%',
         flexDirection:'column',
         alignItems: 'center',
@@ -186,19 +163,23 @@ const styles = StyleSheet.create({
         padding:30,
      },
 
-    change_wallet_container: {
+    change_purse_container: {
         // backgroundColor:'red',
         flex:1,
         alignItems: 'center',
         
     },
-    change_wallet: {
+    change_purse: {
         height:30,
         width:30,
         // resizeMode:'stretch',
         // backgroundColor:'blue',
     },
 
+    eth_tip: {
+        paddingTop:60,
+        width:'90%',
+    },
     qrcode_pic:{
         height:162,
         width:162,
@@ -222,4 +203,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default ReceiveScreen;
+export default ReceiveTip;
