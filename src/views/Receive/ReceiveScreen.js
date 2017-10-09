@@ -14,6 +14,7 @@ import LVStrings from '../../assets/localization';
 
 import MxImage from  './MxImage'
 import MXButton from '../../components/MXButton';
+import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 
 import QRCode from 'react-native-qrcode';
 
@@ -24,13 +25,46 @@ class ReceiveScreen extends Component {
     static navigationOptions = {
         header: null
     };
-    state = {
-        walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
+    state:{
+        // walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
         text: 'http://facebook.github.io/react-native/',
+        walletId: string,
+        walletName: string,
+        walletAddress: string,
+        openSelectWallet: boolean,
         
     };
 
-    
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            walletId: '3',
+            walletName: '傲游LivesToken',
+            walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
+            openSelectWallet: false,
+        };
+        this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
+        this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
+        this.onWalletSelected = this.onWalletSelected.bind(this);
+    }
+
+    onPressSelectWallet = () => {
+        this.setState({ openSelectWallet: true });
+    };
+
+    onSelectWalletClosed = () => {
+        this.setState({ openSelectWallet: false });
+    };
+
+    onWalletSelected = (walletObj: Object) => {
+        this.setState({
+            walletId: walletObj.id,
+            walletName: walletObj.name,
+            walletAddress: walletObj.address,
+            openSelectWallet: false
+        });
+    };
+
     render() {
         return (
             <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor:LVColor.white }}  contentContainerStyle={styles.contentContainer}>
@@ -45,7 +79,7 @@ class ReceiveScreen extends Component {
                     <MxImage 
                         source={receive_change_wallet}  
                         style={styles.change_wallet}
-                        onPress={() => this.props.navigation.navigate('ReceiveTip')}
+                         onPress={this.onPressSelectWallet}
                         ></MxImage>
                     </View>
                 </View>
@@ -103,6 +137,13 @@ class ReceiveScreen extends Component {
                     }
                    ></MxImage>
                 </View>
+
+                <LVSelectWalletModal
+                    isOpen={this.state.openSelectWallet}
+                    onClosed={this.onSelectWalletClosed}
+                    selectedWalletId={this.state.walletId}
+                    onSelected={this.onWalletSelected}
+                />
 
             </View>
             </ScrollView>
