@@ -17,7 +17,6 @@ import MXButton from '../../components/MXButton';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 
 import QRCode from 'react-native-qrcode';
-
 const receive_share = require("../../assets/images/receive_share.png");
 const receive_change_wallet = require("../../assets/images/receive_change_wallet.png");
 

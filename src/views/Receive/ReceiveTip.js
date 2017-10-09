@@ -16,7 +16,8 @@ import MxImage from  './MxImage'
 import MXButton from '../../components/MXButton';
 
 import QRCode from 'react-native-qrcode';
-
+import MXNavigatorHeader from '../../components/MXNavigatorHeader';
+const IconBack = require('../../assets/images/back_grey.png');
 const receive_share = require("../../assets/images/receive_share.png");
 
 class ReceiveTip extends Component {
@@ -33,9 +34,15 @@ class ReceiveTip extends Component {
     render() {
         return (
             <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor:LVColor.white }} contentContainerStyle={styles.contentContainer}>
-            
+            <MXNavigatorHeader
+                    left={ IconBack }
+                    style={{backgroundColor:'#F8F9FB'}}
+                    title={ ' ' }
+                    titleStyle={{color:'#6d798a'}}
+                    onLeftPress={ () => {this.props.navigation.goBack() }}
+                    />
             <View style={styles.container}>
-
+            
                 <View style={styles.mainContainer}>
 
                 <Text style={styles.name} >
