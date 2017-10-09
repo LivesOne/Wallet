@@ -6,7 +6,7 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { StyleSheet,Share, View, Text,Image,ScrollView } from 'react-native';
+import { StyleSheet,Share, View, Text,Image,ScrollView ,Clipboard} from 'react-native';
 
 
 import LVColor from '../../styles/LVColor';
@@ -20,6 +20,10 @@ import QRCode from 'react-native-qrcode';
 
 const receive_share = require("../../assets/images/receive_share.png");
 const receive_change_wallet = require("../../assets/images/receive_change_wallet.png");
+
+// var PasteBoard = require('react-native-pasteboard');
+
+
 
 class ReceiveScreen extends Component {
     static navigationOptions = {
@@ -105,7 +109,8 @@ class ReceiveScreen extends Component {
                     style={styles.button}
                     title={LVStrings.receive_copy}
                     onPress = {() => {
-                    alert("button clicked");
+                        Clipboard.setString(this.state.walletAddress);
+                        alert("copy your address to clipboard");
                     }}
                     themeStyle={"active"}
                 /> 
