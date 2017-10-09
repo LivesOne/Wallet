@@ -60,6 +60,8 @@ export const testRecores = [
     }
 ];
 
+const hideProgressBar = true;
+
 const inImg = require('../../assets/images/transfer_in.png');
 const outImg = require('../../assets/images/transfer_out.png');
 
@@ -103,7 +105,7 @@ class LVTransferRecordItem extends React.PureComponent {
 
         return (
             <TouchableOpacity
-                style={[styles.record, completed ? styles.normalRecord : styles.uncompletedRecord]}
+                style={[styles.record, (hideProgressBar || completed) ? styles.normalRecord : styles.uncompletedRecord]}
                 activeOpacity={0.7}
                 onPress={this._onPress}
             >
@@ -125,7 +127,7 @@ class LVTransferRecordItem extends React.PureComponent {
 
                 <Text style={styles.timeText}>{timePast}</Text>
 
-                {completed || (
+                {hideProgressBar || completed || (
                     <View style={styles.progress}>
                         <Progress.Bar
                             style={{ marginLeft: 30, width: '75%' }}
