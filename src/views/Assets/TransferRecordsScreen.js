@@ -71,7 +71,7 @@ class TransferRecordsScreen extends Component {
             <View style={styles.container}>
                 <LVGradientPanel style={styles.gradient}>
                     <MXNavigatorHeader
-                        title={LVStrings.transfer_records}
+                        title={LVStrings.transaction_records}
                         style={styles.nav}
                         titleStyle={styles.navTitle}
                         onLeftPress={() => {
@@ -83,13 +83,13 @@ class TransferRecordsScreen extends Component {
 
                 <View style={styles.datePanel}>
                     <View style={styles.dateLeft}>
-                        <Text style={styles.text}>{LVStrings.transfer_date_filter_title}</Text>
+                        <Text style={styles.text}>{LVStrings.transaction_records_time}</Text>
                         <View style={{ marginLeft: 15, height: 20, width: 1, backgroundColor: '#ccc' }} />
                     </View>
 
                     <View style={styles.dateRight}>
                         <LVDataPicker date={startDate} onDateChange={this.onStartDateChange} />
-                        <Text style={[styles.text, {marginLeft: 15, marginRight: 15}]}>{LVStrings.transfer_date_filter_sep}</Text>
+                        <Text style={[styles.text, {marginLeft: 15, marginRight: 15}]}>{LVStrings.transaction_records_to}</Text>
                         <LVDataPicker date={endDate} onDateChange={this.onEndDateChange} />
                     </View>
                 </View>

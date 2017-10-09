@@ -120,7 +120,7 @@ class LVTransferRecordItem extends React.PureComponent {
                         {completed ? (
                             <Text style={styles.amountText}>{amountString}</Text>
                         ) : (
-                            <Text style={styles.statusText}>{LVStrings.transfer_waiting}</Text>
+                            <Text style={styles.statusText}>{LVStrings.transaction_waiting}</Text>
                         )}
                     </View>
                 </View>
