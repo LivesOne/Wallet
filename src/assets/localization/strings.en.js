@@ -51,7 +51,8 @@ const localized_strings = {
     transfer_date_filter_title: 'Date',
     transfer_date_filter_sep: 'to',
     transfer_waiting: 'Waiting',
-
+    transfer_fail_tip: 'The transfer failed due to insufficient amount of ETH in your wallet. Please transfer ETH to your wallet first.',
+    
     // Profile
     profile_wallet_manager: 'Wallet manager',
     profile_trading_record: 'Trading record',

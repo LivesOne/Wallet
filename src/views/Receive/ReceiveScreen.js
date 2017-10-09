@@ -119,6 +119,7 @@ class ReceiveScreen extends Component {
                     style={styles.button_save}
                     onPress = {() => {
                     alert("button clicked");
+                    this.props.navigation.navigate("ReceiveTip")
                     }}
                     themeStyle={"active"}
                 />

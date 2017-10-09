@@ -41,7 +41,7 @@ class ReceiveTip extends Component {
                 <Text style={styles.name} >
                     {LVStrings.receive_name}
                 </Text>
-                <Text numberOfLines={1} style={styles.address}>
+                <Text ellipsizeMode="middle" numberOfLines={1} style={styles.address}>
                     {this.state.purseAddress}
                 </Text>
 
@@ -55,7 +55,7 @@ class ReceiveTip extends Component {
                 <Text 
                    style = {styles.eth_tip}
                 >
-                    您的钱包ETH不足,无法完成转账,请转账ETH至此钱包.
+                    {LVStrings.transfer_fail_tip} 
                 </Text>
                 
                 </View>
