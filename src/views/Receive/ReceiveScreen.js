@@ -27,7 +27,7 @@ class ReceiveScreen extends Component {
     };
     state:{
         // walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
-        text: 'http://facebook.github.io/react-native/',
+        // text: 'http://facebook.github.io/react-native/',
         walletId: string,
         walletName: string,
         walletAddress: string,
@@ -96,7 +96,7 @@ class ReceiveScreen extends Component {
 
                 <QRCode
                 style={styles.qrcode_pic}
-                value={this.state.text}
+                value={this.state.walletAddress}
                 size={162}
                 bgColor='white'
                 fgColor='black'/>
