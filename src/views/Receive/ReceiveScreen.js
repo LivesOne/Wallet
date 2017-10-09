@@ -93,7 +93,7 @@ class ReceiveScreen extends Component {
                 <Text style={styles.name} >
                     {LVStrings.receive_name}
                 </Text>
-                <Text numberOfLines={1} style={styles.address}>
+                <Text ellipsizeMode="middle" numberOfLines={1} style={styles.address}>
                     {this.state.walletAddress}
                    
                 </Text>
