@@ -16,10 +16,10 @@ const localized_strings = {
     common_cancel: 'Cancel',
 
     //receive
-    receive_title:'My Code',
-    receive_name:'Cash Address',
-    receive_copy:'Copy',
-    receive_save:'Save',
+    receive_title:'My payment QR code',
+    receive_name:'Wallet address',
+    receive_copy:'Copy the address',
+    receive_save:'Save the QR code',
 
     // Wallet
     wallet_import: 'Import',
