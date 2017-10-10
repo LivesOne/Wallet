@@ -43,8 +43,8 @@ const localized_strings = {
 
     // Assets
     assets_title: 'My assets',
-    recent_records: 'Recent transaction records',
-    view_all_records: 'All transaction records',
+    recent_records: 'Recent records',
+    view_all_records: 'All records',
 
     // Transaction record
     transaction_records: 'Transaction record',
@@ -52,7 +52,19 @@ const localized_strings = {
     transaction_records_time: 'Date',
     transaction_records_to: 'to',
     transaction_waiting: 'Please wait',
-    transaction_fail_tip: 'The transfer failed due to insufficient amount of ETH in your wallet. Please transfer ETH to your wallet first.',
+    transaction_details: 'Transaction details',
+    transaction_payer: 'Paye',
+    transaction_receiver: 'Receiver',
+    transaction_minner_fee: 'Miner fee',
+    transaction_remarks: 'Remarks',
+    transaction_na: 'N/A',
+    transaction_block: 'Blocks',
+    transaction_number: 'Transaction number',
+    transaction_time: 'Transaction time',
+    transaction_failure_message: 'No one packs the transaction so it was failed. Miner fee will be returned to the original wallet.',
+    
+    // Transfer 转账
+    transfer_eth_insufficient: '您的钱包ETH不足，无法完成转账，请转账ETH至此钱包', 
     
     // Profile
     profile_wallet_manager: 'Wallet manager',

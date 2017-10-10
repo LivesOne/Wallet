@@ -52,7 +52,20 @@ const localized_strings = {
     transaction_records_time: '时间',
     transaction_records_to: '至',
     transaction_waiting: '等待中',
-    transaction_fail_tip: '您的钱包ETH不足，无法完成转账，请转账ETH至此钱包',
+    transaction_details: '交易详情',
+    transaction_payer: '发款方',
+    transaction_receiver: '收款方',
+    transaction_minner_fee: '矿工费用',
+    transaction_remarks: '备注',
+    transaction_na: '无',
+    transaction_block: '区块',
+    transaction_number: '交易号',
+    transaction_time: '交易时间',
+    transaction_failure_message: '该交易无人打包，已失败。矿工费退回原钱包。',
+
+    // Transfer 转账
+    transfer_eth_insufficient: '您的钱包ETH不足，无法完成转账，请转账ETH至此钱包', 
+
     // Profile
     profile_wallet_manager: '钱包管理',
     profile_trading_record: '交易记录',
