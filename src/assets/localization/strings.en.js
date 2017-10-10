@@ -14,6 +14,7 @@ const localized_strings = {
     // Common
     common_confirm: 'Confirm',
     common_cancel: 'Cancel',
+    common_close: 'Close',
 
     //receive
     receive_title:'My payment QR code',
@@ -102,7 +103,22 @@ const localized_strings = {
     time_pass_years_ago: 'years ago',
     time_pass_yesterday: 'yesterday',
 
+    // Transfer
+    transfer_title: 'Maxthon LivesToken-Transfer',
+    transfer_purse_balance: 'Balance',
+    transfer_payee_address: 'Payee address',
+    transfer_amount: 'Transfer amount',
+    transfer_remarks: 'Remarks',
+    transfer_miner_tips: 'Miner tips',
+    transfer_slow: 'Slow',
+    transfer_fast: 'Fast',
+    transfer_current_eth: 'Current wallet ETH',
+    transfer_hint: 'The transaction will be deducted from your current wallet ETH. The transaction is executable，and will deduct the cost of miners after success.',
+    transfer_payment_details: 'Payment details',
+    transfer_address_in: 'Transfer-in address',
+    
     // App Guide Message
+    guide_button_title: 'Enter',
     guide_master_1: 'Safe and Reliable',
     guide_detail_1: 'All your passwords are isolated from the Internet',
     guide_master_2: 'Simple Process',
@@ -110,6 +126,9 @@ const localized_strings = {
     guide_master_3: 'Clear Structure',
     guide_detail_3: 'Know your accounting records at a glance',
     guide_button_title: 'Enter',
+
+    // qr scan
+    qrScan_title: 'Scan',
 };
 
 export default localized_strings;

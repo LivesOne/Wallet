@@ -11,6 +11,7 @@ import {
   checkEqualPwd,
   isEmptyString,
   isNotEmptyString,
+  formatCurrency,
   log,
 } from './MXUtils';
 

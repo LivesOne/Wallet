@@ -3,6 +3,7 @@ package com.venus;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.eguma.barcodescanner.BarcodeScannerPackage;
 import com.peel.react.RNOSModule;
 import com.tradle.react.UdpSocketsModule;
 import com.peel.react.TcpSocketsModule;
@@ -33,6 +34,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MyReactPackage(),
             new MainReactPackage(),
+            new BarcodeScannerPackage(),
             new UdpSocketsModule(),
             new TcpSocketsModule(),
             new RandomBytesPackage(),

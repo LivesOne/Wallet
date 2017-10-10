@@ -4,7 +4,7 @@
 'use strict'
 
 import React, { Component } from 'react'
-import {View, TextInput, TouchableOpacity, Image, ViewPropTypes} from 'react-native'
+import { View, TextInput, TouchableOpacity, Image, ViewPropTypes, Keyboard } from 'react-native';
 import { Base, DefaultStyles, LightStyles, WhiteStyles } from './styles';
 
 import LVColor from '../../styles/LVColor'
@@ -35,6 +35,7 @@ class MXCrossTextInput extends Component {
     secureTextEntry: PropTypes.bool,
     onTextChanged: PropTypes.func,
     withUnderLine: PropTypes.bool,
+    KeyboardType: PropTypes.string,
   };
 
   static defaultProps = {
@@ -65,7 +66,7 @@ class MXCrossTextInput extends Component {
   render() {
 
     const { rounded, style,
-       placeholder, secureTextEntry, withUnderLine } = this.props;
+       placeholder, secureTextEntry, withUnderLine, keyboardType } = this.props;
 
     const theme = this.getTheme();
 
@@ -85,7 +86,7 @@ class MXCrossTextInput extends Component {
         defaultValue={ this.props.defaultValue}
         value={this.state.text}
         tintColor={LVColor.primary}
-        keyboardType = {'ascii-capable'}
+        keyboardType = { keyboardType }
         style={[
           Base.label,
           theme.label,

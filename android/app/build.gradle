@@ -140,6 +140,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-barcodescanner')
     compile project(':react-native-udp')
     compile project(':react-native-tcp')
     compile project(':react-native-randombytes')
