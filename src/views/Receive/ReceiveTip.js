@@ -26,9 +26,13 @@ class ReceiveTip extends Component {
     };
     state = {
         purseAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
-        text: 'http://facebook.github.io/react-native/',
         
     };
+
+    constructor(props) {
+        super();
+        // purseAddress= props.purseAddress !=null ? props.purseAddress  :'0x2A609SF354346FDHFHFGHGFJE6ASD119cB8';
+    }
 
     
     render() {
@@ -54,7 +58,7 @@ class ReceiveTip extends Component {
 
                 <QRCode
                 style={styles.qrcode_pic}
-                value={this.state.text}
+                value={this.state.purseAddress}
                 size={162}
                 bgColor='white'
                 fgColor='black'/>
