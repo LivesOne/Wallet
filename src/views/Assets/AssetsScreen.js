@@ -75,7 +75,10 @@ class AssetsScreen extends Component {
 
     onPressShowAll = () => {
         //alert('show all records');
-        this.props.navigation.navigate("WalletCreateOrImport");
+        this.props.navigation.navigate('TransferRecords', {
+            walletName: this.state.walletName,
+            walletAddress: this.state.walletAddress
+        });
     };
 
     render() {
@@ -147,7 +150,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent'
     },
     walletInfo: {
-        width: Window.width - 25,
+        width: Window.width - 25
     },
     balance: {
         width: Window.width - 25,

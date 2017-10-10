@@ -41,6 +41,7 @@ const LVColor = {
     // 背景色
     background: {
         white: '#fff',
+        datePanel: '#f4f5f9',
         grey1: '#ddd',
         grey2: '#eee',
         grey3: '#f7f7f7'

@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, ViewPropTypes, View, Image, Text, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, ViewPropTypes, Dimensions, View, Image, Text, FlatList, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
@@ -60,6 +60,10 @@ export const testRecores = [
     }
 ];
 
+const hideProgressBar = true;
+
+const windowHeight = Dimensions.get('window').height;
+
 const inImg = require('../../assets/images/transfer_in.png');
 const outImg = require('../../assets/images/transfer_out.png');
 
@@ -103,7 +107,7 @@ class LVTransferRecordItem extends React.PureComponent {
 
         return (
             <TouchableOpacity
-                style={[styles.record, completed ? styles.normalRecord : styles.uncompletedRecord]}
+                style={[styles.record, hideProgressBar || completed ? styles.normalRecord : styles.uncompletedRecord]}
                 activeOpacity={0.7}
                 onPress={this._onPress}
             >
@@ -118,27 +122,28 @@ class LVTransferRecordItem extends React.PureComponent {
                         {completed ? (
                             <Text style={styles.amountText}>{amountString}</Text>
                         ) : (
-                            <Text style={styles.statusText}>{LVStrings.transfer_waiting}</Text>
+                            <Text style={styles.statusText}>{LVStrings.transaction_waiting}</Text>
                         )}
                     </View>
                 </View>
 
                 <Text style={styles.timeText}>{timePast}</Text>
 
-                {completed || (
-                    <View style={styles.progress}>
-                        <Progress.Bar
-                            style={{ marginLeft: 30, width: '75%' }}
-                            progress={progressRate}
-                            height={4}
-                            width={null}
-                            color={LVColor.progressBar.fill}
-                            unfilledColor={LVColor.progressBar.unfill}
-                            borderWidth={0}
-                        />
-                        <LVSchedule value={checked_peers} total={total_check_peers} />
-                    </View>
-                )}
+                {hideProgressBar ||
+                    completed || (
+                        <View style={styles.progress}>
+                            <Progress.Bar
+                                style={{ marginLeft: 30, width: '75%' }}
+                                progress={progressRate}
+                                height={4}
+                                width={null}
+                                color={LVColor.progressBar.fill}
+                                unfilledColor={LVColor.progressBar.unfill}
+                                borderWidth={0}
+                            />
+                            <LVSchedule value={checked_peers} total={total_check_peers} />
+                        </View>
+                    )}
             </TouchableOpacity>
         );
     }
@@ -210,15 +215,41 @@ class TransferRecordList extends React.PureComponent {
         />
     );
 
+    _renderEmptyView() {
+        const img = require('../../assets/images/no_transactions.png');
+        let imgTop, imgSize, textTop, fontSize;
+        if (windowHeight <= 500.0) {
+            (imgTop = 4), (imgSize = 44), (textTop = 0), (fontSize = LVSize.small);
+        } else if (windowHeight <= 600.0) {
+            (imgTop = 36), (imgSize = 60), (textTop = 5), (fontSize = LVSize.default);
+        } else {
+            (imgTop = 64), (imgSize = 60), (textTop = 10), (fontSize = LVSize.default);
+        }
+
+        return (
+            <View style={{ flex: 1, alignItems: 'center' }}>
+                <Image style={{ marginTop: imgTop, width: imgSize, height: imgSize }} resizeMode="contain" source={img} />
+                <Text style={{ marginTop: textTop, fontSize: fontSize, color: LVColor.text.grey1 }}>
+                    {LVStrings.transaction_records_no_data}
+                </Text>
+            </View>
+        );
+    }
+
     render() {
+        const { records, style } = this.props;
+
         return (
             <FlatList
-                style={this.props.style}
-                data={this.props.records}
+                style={style}
+                data={records}
                 extraData={this.state}
                 keyExtractor={this._keyExtractor}
                 renderItem={this._renderItem}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
                 ItemSeparatorComponent={this._itemSeparator}
+                ListEmptyComponent={this._renderEmptyView.bind(this)}
             />
         );
     }

@@ -11,6 +11,10 @@ const localized_strings = {
     profile: 'Profile',
     transfer: 'Transfer',
 
+    // Common
+    common_confirm: 'Confirm',
+    common_cancel: 'Cancel',
+
     //receive
     receive_title:'My Code',
     receive_name:'Cash Address',
@@ -38,12 +42,16 @@ const localized_strings = {
     wallet_backup: 'Backup wallet',
 
     // Assets
-    assets_title: 'My Assets',
+    assets_title: 'My assets',
     recent_records: 'Recent transaction records',
-    view_all_records: 'View all',
+    view_all_records: 'All transaction records',
 
-    // Transfer
-    transfer_waiting: 'Waiting',
+    // Transaction record
+    transaction_records: 'Transaction record',
+    transaction_records_no_data: 'No transactions',
+    transaction_records_time: 'Date',
+    transaction_records_to: 'to',
+    transaction_waiting: 'Please wait',
 
     // Profile
     profile_wallet_manager: 'Wallet manager',
@@ -81,29 +89,29 @@ const localized_strings = {
     time_pass_years_ago: 'years ago',
     time_pass_yesterday: 'yesterday',
 
-    // App Guide Message
-    guide_master_1: 'Safe',
-    guide_detail_1: 'All passwords are isolated from the network',
-    guide_master_2: 'Simple',
-    guide_detail_2: 'Wallet import direct use',
-    guide_master_3: 'Clear',
-    guide_detail_3: 'Transfers are clear',
-
-      // Transfer
-      transfer_title: 'Maxthon LivesToken-Transfer',
-      transfer_purse_balance: 'Balance',
-      transfer_payee_address: 'Payee address',
-      transfer_amount: 'Transfer amount',
-      transfer_remarks: 'Remarks',
-      transfer_miner_tips: 'Miner tips',
-      transfer_slow: 'Slow',
-      transfer_fast: 'Fast',
-      transfer_current_eth: 'Current wallet ETH',
-      transfer_hint: 'The transaction will be deducted from your current wallet ETH. The transaction is executable，and will deduct the cost of miners after success.',
-      transfer_payment_details: 'Payment details',
-      transfer_address_in: 'Transfer-in address',
+    // Transfer
+    transfer_title: 'Maxthon LivesToken-Transfer',
+    transfer_purse_balance: 'Balance',
+    transfer_payee_address: 'Payee address',
+    transfer_amount: 'Transfer amount',
+    transfer_remarks: 'Remarks',
+    transfer_miner_tips: 'Miner tips',
+    transfer_slow: 'Slow',
+    transfer_fast: 'Fast',
+    transfer_current_eth: 'Current wallet ETH',
+    transfer_hint: 'The transaction will be deducted from your current wallet ETH. The transaction is executable，and will deduct the cost of miners after success.',
+    transfer_payment_details: 'Payment details',
+    transfer_address_in: 'Transfer-in address',
     
-      guide_button_title: 'Enter',
+    // App Guide Message
+    guide_button_title: 'Enter',
+    guide_master_1: 'Safe and Reliable',
+    guide_detail_1: 'All your passwords are isolated from the Internet',
+    guide_master_2: 'Simple Process',
+    guide_detail_2: 'You can import other wallet and use it directly',
+    guide_master_3: 'Clear Structure',
+    guide_detail_3: 'Know your accounting records at a glance',
+    guide_button_title: 'Enter',
 };
 
 export default localized_strings;

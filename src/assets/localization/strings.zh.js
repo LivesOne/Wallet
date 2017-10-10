@@ -11,6 +11,10 @@ const localized_strings = {
     profile: '我的',
     transfer: '转账',
 
+    // Common
+    common_confirm: '确定',
+    common_cancel: '取消',
+
     //receive
     receive_title:'我的收款码',
     receive_name:'钱包地址',
@@ -42,8 +46,12 @@ const localized_strings = {
     recent_records: '最近交易记录',
     view_all_records: '查看全部记录',
 
-    // Transfer
-    transfer_waiting: '等待中',
+    // Transaction record
+    transaction_records: '交易记录',
+    transaction_records_no_data: '暂无交易',
+    transaction_records_time: '时间',
+    transaction_records_to: '至',
+    transaction_waiting: '等待中',
 
     // Profile
     profile_wallet_manager: '钱包管理',
