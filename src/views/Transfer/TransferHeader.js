@@ -2,7 +2,7 @@
 'use strict'
 
 import React, { Component } from 'react'
-import { Text, View, Image, StyleSheet, Dimensions } from 'react-native';
+import { Text, View, Image, StyleSheet, Dimensions, Platform } from 'react-native';
 import PropTypes from 'prop-types';
 import LVColor from '../../styles/LVColor'
 import LVSize from '../../styles/LVFontSize';
@@ -38,9 +38,9 @@ export class TransferHeader extends Component {
         return (
             <View style = {[styles.container, this.props.style]}>
                 <View style={styles.nav}>
-                        <View style={{ width: 27 }} />
+                        <View style={{ width: 50 }} />
                         <Text style={styles.navTitle}>{ LVStrings.transfer_title }</Text>
-                        <MXTouchableImage style={{ width: 27 }} source={selectImg} onPress={this.onPressSelectPurse.bind(this)} />
+                        <MXTouchableImage style={{ width: 50 }} source={selectImg} onPress={this.onPressSelectPurse.bind(this)} />
                     </View>
                 <View style= {styles.columnContainer}>
                     <Text style= {[styles.textCommon]}>{ LVStrings.transfer_purse_balance }</Text>
@@ -59,16 +59,16 @@ const Window = {
 
 const styles = StyleSheet.create({
     container: {
-        height: '28%',
+        height: '25%',
         backgroundColor: LVColor.primary
     },
     nav: {
-        width: Window.width - 25,
+        width: Window.width,
         height: 64,
-        paddingTop: 20,
+        paddingTop: Platform.OS === 'ios' ? 22 : 0,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     navTitle: {
         fontSize: LVSize.large,

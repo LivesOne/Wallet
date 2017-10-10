@@ -52,9 +52,10 @@ class TransferScreen extends Component {
     render() {
         return (
             <ScrollView 
+                keyboardShouldPersistTaps={'always'}
                 showsVerticalScrollIndicator = {false}
                 contentContainerStyle={ styles.container }>
-                <TransferDetailModal
+                {this.state.showModal && <TransferDetailModal
                     isOpen= {this.state.showModal}
                     address= {this.state.addressIn}
                     amount= {MXUtils.formatCurrency(this.state.amount) + ' LVT'}
@@ -62,7 +63,7 @@ class TransferScreen extends Component {
                     remarks= {this.state.remarks}
                     onClosed = {this.onModalClosed.bind(this)}
                     onTransferConfirmed = {()=>{alert('transfering...')}}
-                />
+                />}
                 <View  style={ styles.container }>
                     <TransferHeader
                         balance={2100000}
@@ -75,7 +76,8 @@ class TransferScreen extends Component {
                         <MXCrossTextInput 
                             style= {styles.textInput} 
                             placeholder={LVStrings.transfer_amount}
-                            onTextChanged={(newText) => {this.setState({amount: newText})}}/>
+                            keyboardType = {'numeric'}
+                            onTextChanged={(newText) => {this.setState({amount: (newText * 1) | 0})}}/>
                         <MXCrossTextInput 
                             style= {styles.textInput} 
                             placeholder={LVStrings.transfer_remarks}
