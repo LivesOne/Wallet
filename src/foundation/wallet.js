@@ -24,7 +24,7 @@ module.exports = {
     /**
      * Create key store.
      * @param  {string} password
-     * @param  {?string} privateKey
+     * @param  {?string} privateKey. this param is optional.
      * @param  {?Function} callback this callback returns the created keystore object to the caller.
      * @description keystore object example.
      * 

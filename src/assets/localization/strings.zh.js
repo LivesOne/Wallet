@@ -76,6 +76,7 @@ const localized_strings = {
     profile_about: '关于我们',
 
     //Profile wallet manager
+    profile_wallet_management: '钱包管理',
     profile_wallet_title: '傲游LivesToken',
     profile_wallet_modify_name: '修改钱包名称',
     profile_wallet_name: '钱包名称',

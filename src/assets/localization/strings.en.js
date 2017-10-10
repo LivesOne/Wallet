@@ -76,6 +76,7 @@ const localized_strings = {
     profile_about: 'About',
 
     //Profile wallet manager
+    profile_wallet_management: 'Wallet Management',
     profile_wallet_title: 'Maxthon LivesToken',
     profile_wallet_modify_name: 'Modify wallet name',
     profile_wallet_name: 'Wallet name',

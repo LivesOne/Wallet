@@ -11,6 +11,7 @@ import LVStrings from './assets/localization';
 import LVConfiguration from './logic/LVConfiguration';
 import AppGuideScreen from './views/AppLaunch/AppGuideScreen';
 import AppTabNavigator from './containers/AppTabNavigator';
+import LVWalletManager from './logic/LVWalletManager';
 
 class VenusApp extends Component {
 
@@ -38,6 +39,9 @@ class VenusApp extends Component {
         })
 
         this.appDidFinishLaunching();
+
+        //init wallets from local disk storage.
+        LVWalletManager.loadLocalWallets();
     }
 
     appDidFinishLaunching() {
