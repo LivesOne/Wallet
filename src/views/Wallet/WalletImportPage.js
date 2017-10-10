@@ -14,6 +14,7 @@ import LVStrings from './../../assets/localization';
 import MXCrossTextInput from './../../components/MXCrossTextInput';
 import MXButton from './../../components/MXButton';
 import { MXSwitchTab } from './../../components/MXSwitchTab';
+import { LVQrScanModal } from '../Common/LVQrScanModal';
 
  export default class AssetsImportPage extends Component {
 
@@ -22,13 +23,15 @@ import { MXSwitchTab } from './../../components/MXSwitchTab';
     };
 
     state: {
-      leftPressed: boolean
+      leftPressed: boolean,
+      showModal: boolean,
     }
 
     constructor() {
       super();
       this.state = {
-        leftPressed: true
+        leftPressed: true,
+        showModal: false,
       }
     }
 
@@ -36,9 +39,21 @@ import { MXSwitchTab } from './../../components/MXSwitchTab';
       this.setState({ leftPressed: leftPressed })
     }
 
+    onModalClosed() {
+      this.setState({ showModal: false })
+    }
+
+    onBarcodeReceived(event: any) {
+      alert("type = " + event.type + " data = " + event.data)
+    }
+
     render() {
       return (
         <View style = {styles.container}>
+          <LVQrScanModal
+              barcodeReceived={this.onBarcodeReceived}
+              isOpen= {this.state.showModal}
+              onClosed = {this.onModalClosed.bind(this)}/>
           <MXNavigatorHeader
             title = {LVStrings.wallet_import_header}
             onLeftPress = {() => {
@@ -46,7 +61,7 @@ import { MXSwitchTab } from './../../components/MXSwitchTab';
             }}
             right={ require("../../assets/images/qrScan.png") }
             onRightPress = {
-              () => { this.props.navigation.navigate("QrScan");}
+              () => { this.setState({showModal: true}) }
             }
             />
             <MXSwitchTab

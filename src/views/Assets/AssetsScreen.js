@@ -57,8 +57,8 @@ class AssetsScreen extends Component {
     }
 
     onPressSelectWallet = () => {
-        //this.setState({ openSelectWallet: true });
-        this.props.navigation.navigate('WalletImport');
+        this.setState({ openSelectWallet: true });
+        //this.props.navigation.navigate('WalletImport');
     };
 
     onSelectWalletClosed = () => {

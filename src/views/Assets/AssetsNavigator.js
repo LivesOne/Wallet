@@ -14,7 +14,6 @@ import WalletImportPage from '../Wallet/WalletImportPage';
 import WalletCreateOrImportPage from '../Wallet/WalletCreateOrImportPage';
 import WalletCreatePage from '../Wallet/WalletCreatePage';
 import WalletCreateSuccessPage from '../Wallet/WalletCreateSuccessPage';
-import LVQrScanPage from '../Common/LVQrScanPage';
 
 const AssetsNavigator = StackNavigator({
     Assets: { screen: AssetsScreen },
@@ -23,7 +22,6 @@ const AssetsNavigator = StackNavigator({
     WalletCreateOrImport: { screen: WalletCreateOrImportPage },
     WalletCreate: { screen: WalletCreatePage },
     WalletCreateSuccess: { screen: WalletCreateSuccessPage },
-    QrScan: { screen: LVQrScanPage },
 });
 
 export default AssetsNavigator;
