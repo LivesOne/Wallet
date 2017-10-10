@@ -4176,6 +4176,10 @@ react-devtools-core@^2.5.0:
     shell-quote "^1.6.1"
     ws "^2.0.3"
 
+react-native-barcodescanner@^3.1.1:
+  version "3.1.1"
+  resolved "http://registry.npm.taobao.org/react-native-barcodescanner/download/react-native-barcodescanner-3.1.1.tgz#99cdc4e89caac8ac6d5fd844fb6b72b9c4485928"
+
 react-native-crypto@^2.0.3:
   version "2.1.1"
   resolved "http://registry.npm.taobao.org/react-native-crypto/download/react-native-crypto-2.1.1.tgz#4b06271a0f6ec0b90389b5b567b738b57ca66a1e"
@@ -4271,6 +4275,12 @@ react-native-randombytes@^3.0.0:
   dependencies:
     buffer "^4.9.1"
     sjcl "^1.0.3"
+
+react-native-slider@^0.11.0:
+  version "0.11.0"
+  resolved "http://registry.npm.taobao.org/react-native-slider/download/react-native-slider-0.11.0.tgz#b68a0bc43c8422b24cd57947cc5ac2bcdb58fadc"
+  dependencies:
+    prop-types "^15.5.6"
 
 react-native-swiper@^1.5.12:
   version "1.5.12"
