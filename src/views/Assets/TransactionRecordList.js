@@ -60,8 +60,6 @@ export const testRecores = [
     }
 ];
 
-const hideProgressBar = true;
-
 const windowHeight = Dimensions.get('window').height;
 
 const inImg = require('../../assets/images/transfer_in.png');
@@ -107,7 +105,7 @@ class LVTransactionRecordItem extends React.PureComponent {
 
         return (
             <TouchableOpacity
-                style={[styles.record, hideProgressBar || completed ? styles.normalRecord : styles.uncompletedRecord]}
+                style={[styles.record]}
                 activeOpacity={0.7}
                 onPress={this._onPress}
             >
@@ -128,50 +126,12 @@ class LVTransactionRecordItem extends React.PureComponent {
                 </View>
 
                 <Text style={styles.timeText}>{timePast}</Text>
-
-                {hideProgressBar ||
-                    completed || (
-                        <View style={styles.progress}>
-                            <Progress.Bar
-                                style={{ marginLeft: 30, width: '75%' }}
-                                progress={progressRate}
-                                height={4}
-                                width={null}
-                                color={LVColor.progressBar.fill}
-                                unfilledColor={LVColor.progressBar.unfill}
-                                borderWidth={0}
-                            />
-                            <LVSchedule value={checked_peers} total={total_check_peers} />
-                        </View>
-                    )}
             </TouchableOpacity>
         );
     }
 }
 
-const LVSchedule = ({ value, total }) => {
-    const sstyles = StyleSheet.create({
-        normal: {
-            fontSize: 12,
-            color: LVColor.text.grey3
-        },
-        active: {
-            color: LVColor.text.grey1
-        }
-    });
-
-    return (
-        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={sstyles.normal}>(</Text>
-            <Text style={[sstyles.normal, sstyles.active]}>{value}</Text>
-            <Text style={sstyles.normal}>/</Text>
-            <Text style={sstyles.normal}>{total}</Text>
-            <Text style={sstyles.normal}>)</Text>
-        </View>
-    );
-};
-
-class TransactionRecordList extends React.PureComponent {
+export default class TransactionRecordList extends React.PureComponent {
     static propTypes = {
         records: PropTypes.arrayOf(PropTypes.object)
     };
@@ -260,13 +220,8 @@ const styles = StyleSheet.create({
         marginLeft: 12.5,
         marginRight: 12.5,
         justifyContent: 'center',
-        alignItems: 'flex-start'
-    },
-    normalRecord: {
+        alignItems: 'flex-start',
         height: 60
-    },
-    uncompletedRecord: {
-        height: 70
     },
     info: {
         width: '100%',
@@ -310,5 +265,3 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     }
 });
-
-export default TransactionRecordList;
