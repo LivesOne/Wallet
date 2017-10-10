@@ -52,7 +52,7 @@ const localized_strings = {
     transaction_records_time: '时间',
     transaction_records_to: '至',
     transaction_waiting: '等待中',
-
+    transaction_fail_tip: '您的钱包ETH不足，无法完成转账，请转账ETH至此钱包',
     // Profile
     profile_wallet_manager: '钱包管理',
     profile_trading_record: '交易记录',

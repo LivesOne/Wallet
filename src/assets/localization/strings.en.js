@@ -16,10 +16,10 @@ const localized_strings = {
     common_cancel: 'Cancel',
 
     //receive
-    receive_title:'My Code',
-    receive_name:'Cash Address',
-    receive_copy:'Copy',
-    receive_save:'Save',
+    receive_title:'My payment QR code',
+    receive_name:'Wallet address',
+    receive_copy:'Copy the address',
+    receive_save:'Save the QR code',
 
     // Wallet
     wallet_import: 'Import',
@@ -52,7 +52,8 @@ const localized_strings = {
     transaction_records_time: 'Date',
     transaction_records_to: 'to',
     transaction_waiting: 'Please wait',
-
+    transaction_fail_tip: 'The transfer failed due to insufficient amount of ETH in your wallet. Please transfer ETH to your wallet first.',
+    
     // Profile
     profile_wallet_manager: 'Wallet manager',
     profile_trading_record: 'Trading record',

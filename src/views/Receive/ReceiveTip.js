@@ -6,7 +6,7 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { StyleSheet,Share, View, Text,Image,ScrollView ,Clipboard} from 'react-native';
+import { StyleSheet,Share, View, Text,Image,ScrollView } from 'react-native';
 
 
 import LVColor from '../../styles/LVColor';
@@ -14,114 +14,61 @@ import LVStrings from '../../assets/localization';
 
 import MxImage from  './MxImage'
 import MXButton from '../../components/MXButton';
-import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 
 import QRCode from 'react-native-qrcode';
+import MXNavigatorHeader from '../../components/MXNavigatorHeader';
+const IconBack = require('../../assets/images/back_grey.png');
 const receive_share = require("../../assets/images/receive_share.png");
-const receive_change_wallet = require("../../assets/images/receive_change_wallet.png");
 
-// var PasteBoard = require('react-native-pasteboard');
-
-
-
-class ReceiveScreen extends Component {
+class ReceiveTip extends Component {
     static navigationOptions = {
         header: null
     };
-    state:{
-        // walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
-        // text: 'http://facebook.github.io/react-native/',
-        walletId: string,
-        walletName: string,
-        walletAddress: string,
-        openSelectWallet: boolean,
+    state = {
+        purseAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
         
     };
 
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            walletId: '3',
-            walletName: '傲游LivesToken',
-            walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
-            openSelectWallet: false,
-        };
-        this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
-        this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
-        this.onWalletSelected = this.onWalletSelected.bind(this);
+    constructor(props) {
+        super();
+        // purseAddress= props.purseAddress !=null ? props.purseAddress  :'0x2A609SF354346FDHFHFGHGFJE6ASD119cB8';
     }
 
-    onPressSelectWallet = () => {
-        this.setState({ openSelectWallet: true });
-    };
-
-    onSelectWalletClosed = () => {
-        this.setState({ openSelectWallet: false });
-    };
-
-    onWalletSelected = (walletObj: Object) => {
-        this.setState({
-            walletId: walletObj.id,
-            walletName: walletObj.name,
-            walletAddress: walletObj.address,
-            openSelectWallet: false
-        });
-    };
-
+    
     render() {
         return (
-            <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor:LVColor.white }}  contentContainerStyle={styles.contentContainer}>
-            
+            <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor:LVColor.white }} contentContainerStyle={styles.contentContainer}>
+            <MXNavigatorHeader
+                    left={ IconBack }
+                    style={{backgroundColor:'#F8F9FB'}}
+                    title={ ' ' }
+                    titleStyle={{color:'#6d798a'}}
+                    onLeftPress={ () => {this.props.navigation.goBack() }}
+                    />
             <View style={styles.container}>
-                <View style={styles.topContainer}>
-                    <Text style={styles.change_wallet_container}></Text>
-                    <Text style={styles.title}>
-                        {LVStrings.receive_title}
-                    </Text>
-                    <View style={styles.change_wallet_container}>
-                    <MxImage 
-                        source={receive_change_wallet}  
-                        style={styles.change_wallet}
-                         onPress={this.onPressSelectWallet}
-                        ></MxImage>
-                    </View>
-                </View>
-
+            
                 <View style={styles.mainContainer}>
 
                 <Text style={styles.name} >
                     {LVStrings.receive_name}
                 </Text>
                 <Text ellipsizeMode="middle" numberOfLines={1} style={styles.address}>
-                    {this.state.walletAddress}
-                   
+                    {this.state.purseAddress}
                 </Text>
 
                 <QRCode
                 style={styles.qrcode_pic}
-                value={this.state.walletAddress}
+                value={this.state.purseAddress}
                 size={162}
                 bgColor='white'
                 fgColor='black'/>
 
-                <MXButton
-                    style={styles.button}
-                    title={LVStrings.receive_copy}
-                    onPress = {() => {
-                        Clipboard.setString(this.state.walletAddress);
-                        alert("copy your address to clipboard");
-                    }}
-                    themeStyle={"active"}
-                /> 
-                <MXButton
-                    title={LVStrings.receive_save}
-                    style={styles.button_save}
-                    onPress = {() => {
-                    alert("button clicked");
-                    this.props.navigation.navigate("ReceiveTip")
-                    }}
-                    themeStyle={"active"}
-                />
+                <Text 
+                   style = {styles.eth_tip}
+                >
+                    {LVStrings.transaction_fail_tip} 
+                </Text>
+                
                 </View>
                 <View style={styles.share_container}>
                 {/* <Image source={receive_share} style={styles.share}></Image> */}
@@ -143,13 +90,6 @@ class ReceiveScreen extends Component {
                    ></MxImage>
                 </View>
 
-                <LVSelectWalletModal
-                    isOpen={this.state.openSelectWallet}
-                    onClosed={this.onSelectWalletClosed}
-                    selectedWalletId={this.state.walletId}
-                    onSelected={this.onWalletSelected}
-                />
-
             </View>
             </ScrollView>
         );
@@ -158,11 +98,13 @@ class ReceiveScreen extends Component {
 
 
 const styles = StyleSheet.create({
+    
     container: {
         flex: 1,
         width:'100%',
         justifyContent: "flex-start",
         alignItems: "center",
+        paddingTop: 40,
         // backgroundColor:'red',
         
         
@@ -218,7 +160,7 @@ const styles = StyleSheet.create({
     },
 
     mainContainer:{
-        flex:6,
+        flex:2,
         width:'90%',
         flexDirection:'column',
         alignItems: 'center',
@@ -232,19 +174,23 @@ const styles = StyleSheet.create({
         padding:30,
      },
 
-    change_wallet_container: {
+    change_purse_container: {
         // backgroundColor:'red',
         flex:1,
         alignItems: 'center',
         
     },
-    change_wallet: {
+    change_purse: {
         height:30,
         width:30,
         // resizeMode:'stretch',
         // backgroundColor:'blue',
     },
 
+    eth_tip: {
+        paddingTop:60,
+        width:'90%',
+    },
     qrcode_pic:{
         height:162,
         width:162,
@@ -268,4 +214,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default ReceiveScreen;
+export default ReceiveTip;
