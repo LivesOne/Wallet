@@ -46,7 +46,7 @@ import { MXSwitchTab } from './../../components/MXSwitchTab';
             }}
             right={ require("../../assets/images/qrScan.png") }
             onRightPress = {
-              () => { alert('click Qr')}
+              () => { this.props.navigation.navigate("QrScan");}
             }
             />
             <MXSwitchTab

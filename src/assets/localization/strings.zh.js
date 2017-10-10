@@ -14,6 +14,7 @@ const localized_strings = {
     // Common
     common_confirm: '确定',
     common_cancel: '取消',
+    common_close: '关闭',
 
     //receive
     receive_title:'我的收款码',
@@ -96,6 +97,7 @@ const localized_strings = {
     guide_detail_2: '钱 包 导 入 直 接 使 用',
     guide_master_3: '结构清晰',
     guide_detail_3: '账 目 记 录 一 目 了 然',
+    guide_button_title: '立即体验',
 
     // Transfer
     transfer_title: '傲游LivesToken-转账',
@@ -111,7 +113,8 @@ const localized_strings = {
     transfer_payment_details: '支付详情',
     transfer_address_in: '转入地址',
     
-    guide_button_title: '立即体验',
+    // qr scan
+    qrScan_title: '扫一扫',
 };
 
 export default localized_strings;

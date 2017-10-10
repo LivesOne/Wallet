@@ -14,6 +14,7 @@ const localized_strings = {
     // Common
     common_confirm: 'Confirm',
     common_cancel: 'Cancel',
+    common_close: 'Close',
 
     //receive
     receive_title:'My Code',
@@ -112,6 +113,9 @@ const localized_strings = {
     guide_master_3: 'Clear Structure',
     guide_detail_3: 'Know your accounting records at a glance',
     guide_button_title: 'Enter',
+
+    // qr scan
+    qrScan_title: 'Scan',
 };
 
 export default localized_strings;
