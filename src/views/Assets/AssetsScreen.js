@@ -74,10 +74,16 @@ class AssetsScreen extends Component {
     };
 
     onPressShowAll = () => {
-        //alert('show all records');
         this.props.navigation.navigate('TransactionRecords', {
             walletName: this.state.walletName,
             walletAddress: this.state.walletAddress
+        });
+    };
+
+    onPressRecord = (record: Object) => {
+        this.props.navigation.navigate('TransactionDetails', {
+            walletAddress: this.state.walletAddress,
+            transactionRecord: record
         });
     };
 
@@ -105,7 +111,7 @@ class AssetsScreen extends Component {
 
                 <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }} />
 
-                <TransactionRecordList style={styles.list} records={transferRecords} />
+                <TransactionRecordList style={styles.list} records={transferRecords} onPressItem={this.onPressRecord} />
 
                 <LVSelectWalletModal
                     isOpen={this.state.openSelectWallet}

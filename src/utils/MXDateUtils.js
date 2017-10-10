@@ -20,7 +20,7 @@ export function getDateTimeDiff(startTime: string, endTime: string): Object {
 * result is an Object:
 * {years, months, days, hours, minutes, seconds}
 */
-export function getTimePastFrom(time: string): Object {
+export function getTimePastFromNow(time: string): Object {
     const startTime = time.replace(/\-/g, '/');
 
     const sTime = new Date(startTime);

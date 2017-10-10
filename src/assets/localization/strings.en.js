@@ -58,8 +58,8 @@ const localized_strings = {
     transaction_minner_fee: 'Miner fee',
     transaction_remarks: 'Remarks',
     transaction_na: 'N/A',
-    transaction_block: 'Blocks',
-    transaction_number: 'Transaction number',
+    transaction_block_number: 'Blocks',
+    transaction_hash: 'Transaction number',
     transaction_time: 'Transaction time',
     transaction_failure_message: 'No one packs the transaction so it was failed. Miner fee will be returned to the original wallet.',
     
