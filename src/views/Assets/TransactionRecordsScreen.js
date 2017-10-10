@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Assets/TransferRecordsScreen.js
+ * File: src/views/Assets/TransactionRecordsScreen.js
  * @flow
  */
 'use strict';
@@ -18,9 +18,9 @@ import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVConfiguration from '../../logic/LVConfiguration';
 
 import WalletInfoView from './WalletInfoView';
-import TransferRecordList, { testRecores } from './TransferRecordList';
+import TransactionRecordList, { testRecores } from './TransactionRecordList';
 
-class TransferRecordsScreen extends Component {
+class TransactionRecordsScreen extends Component {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
@@ -48,19 +48,19 @@ class TransferRecordsScreen extends Component {
     }
 
     initFilterDate = async () => {
-        const startDate = await LVConfiguration.lastTransferRecordsFilterStartDate();
-        const endDate = await LVConfiguration.lastTransferRecordsFilterEndDate();
+        const startDate = await LVConfiguration.lastTransactionRecordsFilterStartDate();
+        const endDate = await LVConfiguration.lastTransactionRecordsFilterEndDate();
         this.setState({ startDate: startDate, endDate: endDate });
     };
 
     onStartDateChange = (date: string) => {
         this.setState({ startDate: date });
-        LVConfiguration.setLastTransferRecordsFilterStartDate(date);
+        LVConfiguration.setLastTransactionRecordsFilterStartDate(date);
     };
 
     onEndDateChange = (date: string) => {
         this.setState({ endDate: date });
-        LVConfiguration.setLastTransferRecordsFilterEndDate(date);
+        LVConfiguration.setLastTransactionRecordsFilterEndDate(date);
     };
 
     render() {
@@ -94,7 +94,7 @@ class TransferRecordsScreen extends Component {
                     </View>
                 </View>
 
-                <TransferRecordList style={styles.list} records={transferRecords} />
+                <TransactionRecordList style={styles.list} records={transferRecords} />
             </View>
         );
     }
@@ -190,4 +190,4 @@ const datePickerStyles = StyleSheet.create({
     }
 });
 
-export default TransferRecordsScreen;
+export default TransactionRecordsScreen;

@@ -11,8 +11,8 @@ import Moment from 'moment';
 const LV_Key_HasAppEverLaunched = '@Venus:HasAppEverLaunched';
 const LV_Key_HasAppGuidesEverDisplayed = '@Venus:HasAppGuidesEverDisplayed';
 
-const LV_Key_LastTransferRecordsFilterStartDate = '@Venus:LastTransferRecordsFilterStartDate';
-const LV_Key_LastTransferRecordsFilterEndDate = '@Venus:LastTransferRecordsFilterEndDate';
+const LV_Key_LastTransactionRecordsFilterStartDate = '@Venus:LastTransactionRecordsFilterStartDate';
+const LV_Key_LastTransactionRecordsFilterEndDate = '@Venus:LastTransactionRecordsFilterEndDate';
 
 class LVConfiguration {
     constructor() {}
@@ -37,8 +37,8 @@ class LVConfiguration {
 
     // 交易记录过滤时间
 
-    static async lastTransferRecordsFilterStartDate() {
-        const value = await LVPersistent.getString(LV_Key_LastTransferRecordsFilterStartDate);
+    static async lastTransactionRecordsFilterStartDate() {
+        const value = await LVPersistent.getString(LV_Key_LastTransactionRecordsFilterStartDate);
 
         if (!value) {
             return Moment().format('YYYY-MM-DD');
@@ -47,12 +47,12 @@ class LVConfiguration {
         }
     }
 
-    static async setLastTransferRecordsFilterStartDate(date: string) {
-        await LVPersistent.setString(LV_Key_LastTransferRecordsFilterStartDate, date);
+    static async setLastTransactionRecordsFilterStartDate(date: string) {
+        await LVPersistent.setString(LV_Key_LastTransactionRecordsFilterStartDate, date);
     }
 
-    static async lastTransferRecordsFilterEndDate() {
-        const value = await LVPersistent.getString(LV_Key_LastTransferRecordsFilterEndDate);
+    static async lastTransactionRecordsFilterEndDate() {
+        const value = await LVPersistent.getString(LV_Key_LastTransactionRecordsFilterEndDate);
         
         if (!value) {
             return Moment().format('YYYY-MM-DD');
@@ -61,8 +61,8 @@ class LVConfiguration {
         }
     }
 
-    static async setLastTransferRecordsFilterEndDate(date: string) {
-        await LVPersistent.setString(LV_Key_LastTransferRecordsFilterEndDate, date);
+    static async setLastTransactionRecordsFilterEndDate(date: string) {
+        await LVPersistent.setString(LV_Key_LastTransactionRecordsFilterEndDate, date);
     }
 }
 

@@ -102,7 +102,7 @@ export default () => (
 
             if (preScreen !== curScreen) {
                 // set statusBarStyle to light in native
-                if (curScreen === 'Assets' || curScreen === 'TransferRecords') {
+                if (curScreen === 'Assets' || curScreen === 'TransactionRecords') {
                     StatusBar.setBarStyle('light-content', true);
                 } else {
                     StatusBar.setBarStyle('default', true);

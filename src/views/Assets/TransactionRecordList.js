@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Assets/TransferRecordList.js
+ * File: src/views/Assets/TransactionRecordList.js
  * @flow
  */
 'use strict';
@@ -67,7 +67,7 @@ const windowHeight = Dimensions.get('window').height;
 const inImg = require('../../assets/images/transfer_in.png');
 const outImg = require('../../assets/images/transfer_out.png');
 
-class LVTransferRecordItem extends React.PureComponent {
+class LVTransactionRecordItem extends React.PureComponent {
     static propTypes = {
         type: PropTypes.string.isRequired,
         unit: PropTypes.string.isRequired,
@@ -171,7 +171,7 @@ const LVSchedule = ({ value, total }) => {
     );
 };
 
-class TransferRecordList extends React.PureComponent {
+class TransactionRecordList extends React.PureComponent {
     static propTypes = {
         records: PropTypes.arrayOf(PropTypes.object)
     };
@@ -200,7 +200,7 @@ class TransferRecordList extends React.PureComponent {
     );
 
     _renderItem = ({ item }) => (
-        <LVTransferRecordItem
+        <LVTransactionRecordItem
             id={item.id}
             type={item.transfer_type}
             unit={item.transfer_unit}
@@ -311,4 +311,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default TransferRecordList;
+export default TransactionRecordList;

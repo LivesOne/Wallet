@@ -17,7 +17,7 @@ import MXTouchableImage from '../../components/MXTouchableImage';
 
 import WalletInfoView from './WalletInfoView';
 import WalletBalanceView from './WalletBalanceView';
-import TransferRecordList, { testRecores } from './TransferRecordList';
+import TransactionRecordList, { testRecores } from './TransactionRecordList';
 
 const selectImg = require('../../assets/images/select_wallet.png');
 
@@ -75,7 +75,7 @@ class AssetsScreen extends Component {
 
     onPressShowAll = () => {
         //alert('show all records');
-        this.props.navigation.navigate('TransferRecords', {
+        this.props.navigation.navigate('TransactionRecords', {
             walletName: this.state.walletName,
             walletAddress: this.state.walletAddress
         });
@@ -105,7 +105,7 @@ class AssetsScreen extends Component {
 
                 <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }} />
 
-                <TransferRecordList style={styles.list} records={transferRecords} />
+                <TransactionRecordList style={styles.list} records={transferRecords} />
 
                 <LVSelectWalletModal
                     isOpen={this.state.openSelectWallet}
