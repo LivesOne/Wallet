@@ -23,7 +23,7 @@ const AssetsNavigator = StackNavigator({
     WalletImport: { screen: WalletImportPage },
     WalletCreateOrImport: { screen: WalletCreateOrImportPage },
     WalletCreate: { screen: WalletCreatePage },
-    WalletCreateSuccess: { screen: WalletCreateSuccessPage }
+    WalletCreateSuccess: { screen: WalletCreateSuccessPage },
 });
 
 export default AssetsNavigator;

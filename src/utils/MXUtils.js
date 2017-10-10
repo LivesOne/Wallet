@@ -46,6 +46,12 @@ export function getRandomInt(min : number, max : number) {
   return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 
+export function formatCurrency(n: number) {
+  return n.toFixed(0).replace(/./g, function(c, i, a) {
+      return i && c !== "." && ((a.length - i) % 3 === 0) ? ',' + c : c;
+  });
+}
+
 export const makeCancelable = (promise : Promise<any>) => {
   let hasCanceled_ = false;
 
