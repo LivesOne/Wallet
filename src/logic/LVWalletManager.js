@@ -18,6 +18,7 @@ class WalletManager {
         this.wallets = [];
         this.selectedIndex = 0;
     }
+
     /**
      * load wallets from disk storage.
      */
@@ -30,6 +31,10 @@ class WalletManager {
         }
     }
     
+    getWallets() : Array<Object> {
+        return this.wallets;
+    }
+
     /**
      * set the selected wallet with address
      * @param  {string} address
@@ -161,6 +166,7 @@ class WalletManager {
 
         return wallet;
     }
+
     /**
      * import wallet with private key.
      * @param  {string} name

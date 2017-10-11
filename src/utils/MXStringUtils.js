@@ -23,3 +23,23 @@ export function convertAmountToCurrencyString(amount: number, thousandsSeparator
     }
     return result;
 }
+
+/**
+ * convert string of address to specific format like '0x1D3..123'
+ * @param  {string} address
+ * @param  {number=3} headNum
+ * @param  {number=3} tailNum
+ * @returns string
+ */
+export function converAddressToDisplayableText(address: string, headNum: number = 3, tailNum: number = 3) : string {
+    if(headNum + tailNum + 3 >= address.length
+        || headNum === 0 
+        || headNum + 3 >= address.length
+        || tailNum === 0) {
+        return address;
+    }
+
+    const head = address.substr(0,headNum);
+    const tail = address.substr(address.length - tailNum - 1, tailNum);
+    return ['0x',head,'...',tail].join('').toUpperCase();
+}

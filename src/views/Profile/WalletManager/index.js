@@ -12,6 +12,7 @@ import MXNavigatorHeader from './../../../components/MXNavigatorHeader';
 import LVStrings from '../../../assets/localization';
 import LVColor from '../../../styles/LVColor';
 import LVGradientPanel from '../../../views/Common/LVGradientPanel';
+import { converAddressToDisplayableText } from '../../../utils/MXStringUtils';
 const IconBack = require('../../../assets/images/back_grey.png');
 const WalletIcon = require('../../../assets/images/wallet_grey.png');
 const ShowDetailsIcon = require('../../../assets/images/show_detail_arrow.png');
@@ -78,7 +79,7 @@ export class WalletManagerScreen extends Component {
                                             <View style={styles.cellRightTopPanelStyle}>
                                                 <View style={styles.cellRightTopDetailsPanelStyle}>
                                                     <Text style={styles.cellWalletNameTextStyle}>傲游LivesToken</Text>
-                                                    <Text style={styles.cellWalletAddressTextStyle}>0x2A33432l42lhlhjde2342</Text>
+                                                    <Text style={styles.cellWalletAddressTextStyle}>{converAddressToDisplayableText('2A33432l42lhlhjde2342')}</Text>
                                                 </View>
                                                 <Image source={ShowDetailsIcon} style={styles.cellRightTopShowDetailsIconStyle}/>
                                             </View>
