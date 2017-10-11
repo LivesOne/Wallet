@@ -39,7 +39,8 @@ export function converAddressToDisplayableText(address: string, headNum: number 
         return address;
     }
 
-    const head = address.substr(0,headNum);
-    const tail = address.substr(address.length - tailNum - 1, tailNum);
-    return ['0x',head,'...',tail].join('').toUpperCase();
+    const upaddr = address.toUpperCase();
+    const head = upaddr.substr(0,headNum);
+    const tail = upaddr.substr(upaddr.length - tailNum - 1, tailNum);
+    return ['0x',head,'...',tail].join('');
 }

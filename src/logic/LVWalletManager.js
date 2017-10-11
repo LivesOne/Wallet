@@ -114,7 +114,8 @@ class WalletManager {
                     name: name,
                     keystore: keystore,
                     address: keystore.address,
-                    balance: 0
+                    lvt: 0,
+                    eth: 0
                 };
                 resolve(walletInfo);
             });
@@ -180,7 +181,8 @@ class WalletManager {
                     name: name,
                     keystore: keystore,
                     address: keystore.address,
-                    balance: 0
+                    lvt: 0,
+                    eth: 0
                 };
                 resolve(walletInfo);
             });
@@ -201,7 +203,8 @@ class WalletManager {
                     name: name,
                     keystore: calcedKeystore,
                     address: calcedKeystore.address,
-                    balance: 0
+                    lvt: 0,
+                    eth: 0
                 };
                 resolve(walletInfo);
             })

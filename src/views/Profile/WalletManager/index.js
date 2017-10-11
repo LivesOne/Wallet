@@ -13,6 +13,7 @@ import LVStrings from '../../../assets/localization';
 import LVColor from '../../../styles/LVColor';
 import LVGradientPanel from '../../../views/Common/LVGradientPanel';
 import { converAddressToDisplayableText } from '../../../utils/MXStringUtils';
+import LVWalletManager from '../../../logic/LVWalletManager';
 const IconBack = require('../../../assets/images/back_grey.png');
 const WalletIcon = require('../../../assets/images/wallet_grey.png');
 const ShowDetailsIcon = require('../../../assets/images/show_detail_arrow.png');
@@ -62,8 +63,8 @@ export class WalletManagerScreen extends Component {
                 <View style={styles.listContainerStyle}>
                     <FlatList
                         showsVerticalScrollIndicator={false}
-                        data={data}
-                        keyExtractor={(item,index)=> item.id}
+                        data={LVWalletManager.getWallets()}
+                        keyExtractor={(item,index)=> item.address}
                         renderItem={({item, separators}) => 
                              <TouchableHighlight style={styles.cellContentViewContainer}
                                 onPressIn={separators.highlight}
@@ -78,15 +79,15 @@ export class WalletManagerScreen extends Component {
                                         <View style={styles.cellRightInnnerContainerStyle}>
                                             <View style={styles.cellRightTopPanelStyle}>
                                                 <View style={styles.cellRightTopDetailsPanelStyle}>
-                                                    <Text style={styles.cellWalletNameTextStyle}>傲游LivesToken</Text>
-                                                    <Text style={styles.cellWalletAddressTextStyle}>{converAddressToDisplayableText('2A33432l42lhlhjde2342')}</Text>
+                                                    <Text style={styles.cellWalletNameTextStyle}>{item.name}</Text>
+                                                    <Text style={styles.cellWalletAddressTextStyle}>{converAddressToDisplayableText(item.address,9,9)}</Text>
                                                 </View>
                                                 <Image source={ShowDetailsIcon} style={styles.cellRightTopShowDetailsIconStyle}/>
                                             </View>
                                             <View style={styles.cellRightSeparatorStyle}/>
                                             <View style={styles.cellRightBottomPanelStyle}>
                                                 <View style={styles.cellRightBottomContainerStyle}>
-                                                    <Text style={styles.cellRightBottomNumberStyle}>{item.balance}</Text>
+                                                    <Text style={styles.cellRightBottomNumberStyle}>{item.lvt}</Text>
                                                     <Text style={styles.cellRightBottomCoinTypeStyle}>LVT</Text>
                                                 </View>
                                             </View>
