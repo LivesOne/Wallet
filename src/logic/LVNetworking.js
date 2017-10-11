@@ -9,7 +9,10 @@ const HOST = 'http://office.metellica.cn:51515';
 
 const API = {
     GET_BALANCE: HOST + '/wallet/balance',
-    GET_TRANSACTION_HISTORY: HOST + '/wallet/history'
+    GET_TRANSACTION_HISTORY: HOST + '/wallet/history',
+    GET_TRANSACTION_DETAIL: HOST + '/wallet/tx',
+    GET_TRANSACTION_PARAM: HOST + '/wallet/param',
+    POST_SIGNED_TRANSACTION: HOST + '/wallet/tx',
 };
 
 const ErrorCodeMap: Map<number, string> = new Map([
@@ -41,7 +44,33 @@ class LVFetch {
                     }
                 })
                 .then(json => {
-                    if (json && json.code !== undefined && json.result !== undefined) {
+                    if (json && json.code !== undefined) {
+                        if (json.code === 0) {
+                            resolve(json.result);
+                        } else {
+                            reject(new Error(this.convertErrorCode(json.code)));
+                        }
+                    } else {
+                        reject(new Error('Network Error'));
+                    }
+                })
+                .catch(error => {
+                    reject(error);
+                });
+            setTimeout(() => {
+                reject(new Error('Request Timeout'));
+            }, LVFetch.timeout);
+        });
+    }
+
+    static POST(url: string, param: Object) {
+        return new Promise(async (resolve, reject) => {
+            fetch(url, { method: 'POST', headers: {
+                'Content-Type': 'application/json'
+              }, body: JSON.stringify(param) })
+                .then(response=>response.json())
+                .then(json => {
+                    if (json && json.code !== undefined) {
                         if (json.code === 0) {
                             resolve(json.result);
                         } else {
@@ -64,8 +93,24 @@ class LVFetch {
 class LVNetworking {
     constructor() {}
 
-    static async fetchBanlance(address: string, type: string = 'eth') {
+    static async fetchBalance(address: string, type: string = 'eth') {
         return await LVFetch.GET(API.GET_BALANCE + '/' + address + '?type=' + type);
+    }
+
+    static async fetchTransactionHistory(address: string) {
+        return await LVFetch.GET(API.GET_TRANSACTION_HISTORY + '/' + address);
+    }
+
+    static async fetchTransactionDetail(transactionHash: string) {
+        return await LVFetch.GET(API.GET_TRANSACTION_DETAIL + '/' + transactionHash);
+    }
+    
+    static async fetchTransactionParam(address: string) {
+        return await LVFetch.GET(API.GET_TRANSACTION_PARAM + '/' + address);
+    }
+
+    static async transaction(txData: string) {
+        return await LVFetch.POST(API.POST_SIGNED_TRANSACTION, {tx: txData});
     }
 }
 

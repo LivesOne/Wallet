@@ -65,9 +65,9 @@ class AssetsScreen extends Component {
 
     refetchWalletDatas = async () => {
         try {
-            const lvt = await LVNetworking.fetchBanlance('b09a753b35c031147e8c373f5df875032d1ac039', 'lvt');
+            const lvt = await LVNetworking.fetchBalance('b09a753b35c031147e8c373f5df875032d1ac039', 'lvt');
             //this.setState({lvt: parseFloat(lvt)});
-            const eth = await LVNetworking.fetchBanlance('b09a753b35c031147e8c373f5df875032d1ac039', 'eth');
+            const eth = await LVNetworking.fetchBalance('b09a753b35c031147e8c373f5df875032d1ac039', 'eth');
             //this.setState({eth: parseFloat(eth)});
         } catch (error) {
             console.log('error in refetchWalletDatas : ' + error);
