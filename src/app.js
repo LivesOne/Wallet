@@ -12,6 +12,7 @@ import LVConfiguration from './logic/LVConfiguration';
 import AppGuideScreen from './views/AppLaunch/AppGuideScreen';
 import AppTabNavigator from './containers/AppTabNavigator';
 import LVWalletManager from './logic/LVWalletManager';
+import TestComponent from './components/TestComponent';
 
 class VenusApp extends Component {
 
@@ -66,7 +67,7 @@ class VenusApp extends Component {
             )
         } else {
             return (
-                <AppTabNavigator />
+                <TestComponent />
             )
         }
     }
