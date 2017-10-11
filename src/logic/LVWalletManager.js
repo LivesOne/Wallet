@@ -6,6 +6,7 @@
  */
 
 import LVPersistent from './LVPersistent';
+import LVConfiguration from './LVConfiguration';
 
 const foundation = require('../foundation/wallet.js');
 const WalletsKey :string = '@Venus:WalletsInfo';
@@ -18,6 +19,7 @@ class WalletManager {
         this.wallets = [];
         this.selectedIndex = 0;
     }
+
     /**
      * load wallets from disk storage.
      */
@@ -30,6 +32,10 @@ class WalletManager {
         }
     }
     
+    getWallets() : Array<Object> {
+        return this.wallets;
+    }
+
     /**
      * set the selected wallet with address
      * @param  {string} address
@@ -109,7 +115,8 @@ class WalletManager {
                     name: name,
                     keystore: keystore,
                     address: keystore.address,
-                    balance: 0
+                    lvt: 0,
+                    eth: 0
                 };
                 resolve(walletInfo);
             });
@@ -150,7 +157,6 @@ class WalletManager {
         this.wallets.splice(walletIndex,1);
         //make sure the selected index is in valid range.
         this.selectedIndex = Math.max(0,Math.min(this.wallets.length - 1, this.selectedIndex));
-        this.saveToDisk();
         return true;
     }
 
@@ -161,6 +167,7 @@ class WalletManager {
 
         return wallet;
     }
+
     /**
      * import wallet with private key.
      * @param  {string} name
@@ -174,7 +181,8 @@ class WalletManager {
                     name: name,
                     keystore: keystore,
                     address: keystore.address,
-                    balance: 0
+                    lvt: 0,
+                    eth: 0
                 };
                 resolve(walletInfo);
             });
@@ -195,7 +203,8 @@ class WalletManager {
                     name: name,
                     keystore: calcedKeystore,
                     address: calcedKeystore.address,
-                    balance: 0
+                    lvt: 0,
+                    eth: 0
                 };
                 resolve(walletInfo);
             })
@@ -208,6 +217,7 @@ class WalletManager {
             selectedIndex: this.selectedIndex
         };
 
+        LVConfiguration.setAnyWalletAvailable(this.wallets.length > 0);
         LVPersistent.setObject(WalletsKey, walletInfo);
     }
 }

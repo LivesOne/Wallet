@@ -7,7 +7,6 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, Dimensions, View, Text, Easing } from 'react-native';
-import PopupDialog, { DialogTitle, FadeAnimation } from 'react-native-popup-dialog';
 import Modal from 'react-native-modalbox';
 import PropTypes from 'prop-types';
 import LVColor from '../../styles/LVColor';
