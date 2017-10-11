@@ -19,7 +19,8 @@ import { LVQrScanModal } from '../Common/LVQrScanModal';
  export default class AssetsImportPage extends Component {
 
     static navigationOptions = {
-        header: null
+        header: null,
+        tabBarVisible: false
     };
 
     state: {

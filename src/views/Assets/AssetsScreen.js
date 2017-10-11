@@ -14,6 +14,7 @@ import LVGradientPanel from '../Common/LVGradientPanel';
 import LVDetailTextCell from '../Common/LVDetailTextCell';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 import MXTouchableImage from '../../components/MXTouchableImage';
+import LVNetworking from '../../logic/LVNetworking';
 
 import WalletInfoView from './WalletInfoView';
 import WalletBalanceView from './WalletBalanceView';
@@ -56,6 +57,23 @@ class AssetsScreen extends Component {
         this.onWalletSelected = this.onWalletSelected.bind(this);
     }
 
+    componentWillMount() {}
+
+    componentDidMount() {
+        this.refetchWalletDatas();
+    }
+
+    refetchWalletDatas = async () => {
+        try {
+            const lvt = await LVNetworking.fetchBalance('b09a753b35c031147e8c373f5df875032d1ac039', 'lvt');
+            //this.setState({lvt: parseFloat(lvt)});
+            const eth = await LVNetworking.fetchBalance('b09a753b35c031147e8c373f5df875032d1ac039', 'eth');
+            //this.setState({eth: parseFloat(eth)});
+        } catch (error) {
+            console.log('error in refetchWalletDatas : ' + error);
+        }
+    }
+
     onPressSelectWallet = () => {
         this.setState({ openSelectWallet: true });
         //this.props.navigation.navigate('WalletImport');
@@ -75,10 +93,16 @@ class AssetsScreen extends Component {
     };
 
     onPressShowAll = () => {
-        //alert('show all records');
         this.props.navigation.navigate('TransactionRecords', {
             walletName: this.state.walletName,
             walletAddress: this.state.walletAddress
+        });
+    };
+
+    onPressRecord = (record: Object) => {
+        this.props.navigation.navigate('TransactionDetails', {
+            walletAddress: this.state.walletAddress,
+            transactionRecord: record
         });
     };
 
@@ -106,7 +130,7 @@ class AssetsScreen extends Component {
 
                 <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }} />
 
-                <TransactionRecordList style={styles.list} records={transferRecords} />
+                <TransactionRecordList style={styles.list} records={transferRecords} onPressItem={this.onPressRecord} />
 
                 <LVSelectWalletModal
                     isOpen={this.state.openSelectWallet}

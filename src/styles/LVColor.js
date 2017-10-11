@@ -34,7 +34,7 @@ const LVColor = {
         grey2: '#677384',
         grey3: '#bec4d0',
         grey4: '#c3c8d3',
-        red: '#f25555',
+        red: '#f25656',
         editTextContent: '#677384',
         placeHolder: '#bfc5d1'
     },

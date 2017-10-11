@@ -7,6 +7,7 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, ViewPropTypes, Dimensions, View, Image, Text, FlatList, TouchableOpacity } from 'react-native';
+import { Cell, Separator } from 'react-native-tableview-simple';
 import PropTypes from 'prop-types';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
@@ -65,6 +66,83 @@ const windowHeight = Dimensions.get('window').height;
 const inImg = require('../../assets/images/transfer_in.png');
 const outImg = require('../../assets/images/transfer_out.png');
 
+export default class TransactionRecordList extends React.PureComponent {
+    static propTypes = {
+        records: PropTypes.arrayOf(PropTypes.object),
+        onPressItem: PropTypes.func
+    };
+
+    state = { selected: (new Map(): Map<string, boolean>) };
+
+    _keyExtractor = (item, index) => item.id;
+
+    _onPressItem = (item: Object) => {
+        this.setState(state => {
+            const selected = new Map(state.selected);
+            selected.set(item.id, !selected.get(item.id)); // toggle
+            return { selected };
+        });
+
+        if (this.props.onPressItem) {
+            this.props.onPressItem(item);
+        }
+    };
+
+    _renderItem = ({ item }) => (
+        <LVTransactionRecordItem
+            id={item.id}
+            type={item.transfer_type}
+            unit={item.transfer_unit}
+            amount={item.transfer_amount}
+            address={item.transfer_address}
+            datetime={item.transfer_datetime}
+            completed={item.transfer_completed}
+            checked_peers={item.transfer_checked_peers}
+            total_check_peers={item.transfer_total_check_peers}
+            selected={!!this.state.selected.get(item.id)}
+            onPressItem={() => {
+                this._onPressItem(item);
+            }}
+        />
+    );
+
+    render() {
+        const { records, style } = this.props;
+
+        return (
+            <FlatList
+                style={style}
+                data={records}
+                extraData={this.state}
+                keyExtractor={this._keyExtractor}
+                renderItem={this._renderItem}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                ItemSeparatorComponent={() => <Separator insetRight={15} tintColor={LVColor.separateLine} />}
+                ListEmptyComponent={() => <LVEmptyListComponent />}
+            />
+        );
+    }
+}
+
+const LVEmptyListComponent = () => {
+    const img = require('../../assets/images/no_transactions.png');
+    const wh = Dimensions.get('window').height;
+    const top = wh < 500 ? 4 : 64;
+    const size = wh < 500 ? 44 : 60;
+    const sep = wh < 500 ? 0 : 10;
+    const font = wh < 500 ? LVSize.small : LVSize.default;
+
+    return (
+        <View style={{ flex: 1, alignItems: 'center' }}>
+            <Image style={{ marginTop: top, width: size, height: size }} resizeMode="contain" source={img} />
+            <Text style={{ marginTop: sep, fontSize: font, color: LVColor.text.grey1 }}>
+                {LVStrings.transaction_records_no_data}
+            </Text>
+        </View>
+    );
+};
+
 class LVTransactionRecordItem extends React.PureComponent {
     static propTypes = {
         type: PropTypes.string.isRequired,
@@ -78,10 +156,6 @@ class LVTransactionRecordItem extends React.PureComponent {
         onPressItem: PropTypes.func
     };
 
-    _onPress = () => {
-        this.props.onPressItem(this.props.id);
-    };
-
     render() {
         const { type, unit, amount, address, datetime, completed, checked_peers, total_check_peers } = this.props;
         const typeImage = type === 'in' ? inImg : outImg;
@@ -90,7 +164,7 @@ class LVTransactionRecordItem extends React.PureComponent {
         const amountString = prefix + amount + ' ' + unit;
 
         //const
-        const t = DateUtils.getTimePastFrom(datetime);
+        const t = DateUtils.getTimePastFromNow(datetime);
         const timePast = t.years
             ? t.years + ' ' + LVStrings.time_pass_years_ago
             : t.months
@@ -104,11 +178,7 @@ class LVTransactionRecordItem extends React.PureComponent {
         const progressRate = total_check_peers > 0 ? checked_peers / total_check_peers : 0;
 
         return (
-            <TouchableOpacity
-                style={[styles.record]}
-                activeOpacity={0.7}
-                onPress={this._onPress}
-            >
+            <TouchableOpacity style={[styles.record]} activeOpacity={0.7} onPress={this.props.onPressItem}>
                 <View style={styles.info}>
                     <View style={styles.infoInner}>
                         <Image source={typeImage} />
@@ -127,90 +197,6 @@ class LVTransactionRecordItem extends React.PureComponent {
 
                 <Text style={styles.timeText}>{timePast}</Text>
             </TouchableOpacity>
-        );
-    }
-}
-
-export default class TransactionRecordList extends React.PureComponent {
-    static propTypes = {
-        records: PropTypes.arrayOf(PropTypes.object)
-    };
-
-    state = { selected: (new Map(): Map<string, boolean>) };
-
-    _keyExtractor = (item, index) => item.id;
-
-    _onPressItem = (id: string) => {
-        this.setState(state => {
-            const selected = new Map(state.selected);
-            selected.set(id, !selected.get(id)); // toggle
-            return { selected };
-        });
-    };
-
-    _itemSeparator = () => (
-        <View
-            style={{
-                alignSelf: 'center',
-                width: '90%',
-                height: StyleSheet.hairlineWidth,
-                backgroundColor: LVColor.separateLine
-            }}
-        />
-    );
-
-    _renderItem = ({ item }) => (
-        <LVTransactionRecordItem
-            id={item.id}
-            type={item.transfer_type}
-            unit={item.transfer_unit}
-            amount={item.transfer_amount}
-            address={item.transfer_address}
-            datetime={item.transfer_datetime}
-            completed={item.transfer_completed}
-            checked_peers={item.transfer_checked_peers}
-            total_check_peers={item.transfer_total_check_peers}
-            selected={!!this.state.selected.get(item.id)}
-            onPressItem={this._onPressItem}
-        />
-    );
-
-    _renderEmptyView() {
-        const img = require('../../assets/images/no_transactions.png');
-        let imgTop, imgSize, textTop, fontSize;
-        if (windowHeight <= 500.0) {
-            (imgTop = 4), (imgSize = 44), (textTop = 0), (fontSize = LVSize.small);
-        } else if (windowHeight <= 600.0) {
-            (imgTop = 36), (imgSize = 60), (textTop = 5), (fontSize = LVSize.default);
-        } else {
-            (imgTop = 64), (imgSize = 60), (textTop = 10), (fontSize = LVSize.default);
-        }
-
-        return (
-            <View style={{ flex: 1, alignItems: 'center' }}>
-                <Image style={{ marginTop: imgTop, width: imgSize, height: imgSize }} resizeMode="contain" source={img} />
-                <Text style={{ marginTop: textTop, fontSize: fontSize, color: LVColor.text.grey1 }}>
-                    {LVStrings.transaction_records_no_data}
-                </Text>
-            </View>
-        );
-    }
-
-    render() {
-        const { records, style } = this.props;
-
-        return (
-            <FlatList
-                style={style}
-                data={records}
-                extraData={this.state}
-                keyExtractor={this._keyExtractor}
-                renderItem={this._renderItem}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                ItemSeparatorComponent={this._itemSeparator}
-                ListEmptyComponent={this._renderEmptyView.bind(this)}
-            />
         );
     }
 }

@@ -59,8 +59,8 @@ const localized_strings = {
     transaction_minner_fee: '矿工费用',
     transaction_remarks: '备注',
     transaction_na: '无',
-    transaction_block: '区块',
-    transaction_number: '交易号',
+    transaction_block_number: '区块',
+    transaction_hash: '交易号',
     transaction_time: '交易时间',
     transaction_failure_message: '该交易无人打包，已失败。矿工费退回原钱包。',
 
@@ -76,6 +76,7 @@ const localized_strings = {
     profile_about: '关于我们',
 
     //Profile wallet manager
+    profile_wallet_management: '钱包管理',
     profile_wallet_title: '傲游LivesToken',
     profile_wallet_modify_name: '修改钱包名称',
     profile_wallet_name: '钱包名称',
