@@ -14,6 +14,7 @@ import LVGradientPanel from '../Common/LVGradientPanel';
 import LVDetailTextCell from '../Common/LVDetailTextCell';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 import MXTouchableImage from '../../components/MXTouchableImage';
+import LVNetworking from '../../logic/LVNetworking';
 
 import WalletInfoView from './WalletInfoView';
 import WalletBalanceView from './WalletBalanceView';
@@ -54,6 +55,23 @@ class AssetsScreen extends Component {
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
         this.onWalletSelected = this.onWalletSelected.bind(this);
+    }
+
+    componentWillMount() {}
+
+    componentDidMount() {
+        this.refetchWalletDatas();
+    }
+
+    refetchWalletDatas = async () => {
+        try {
+            const lvt = await LVNetworking.fetchBalance('b09a753b35c031147e8c373f5df875032d1ac039', 'lvt');
+            //this.setState({lvt: parseFloat(lvt)});
+            const eth = await LVNetworking.fetchBalance('b09a753b35c031147e8c373f5df875032d1ac039', 'eth');
+            //this.setState({eth: parseFloat(eth)});
+        } catch (error) {
+            console.log('error in refetchWalletDatas : ' + error);
+        }
     }
 
     onPressSelectWallet = () => {
