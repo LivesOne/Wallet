@@ -10,6 +10,7 @@ import MXButton from './MXButton';
 import MXNavigatorHeader from './MXNavigatorHeader';
 import MXCrossTextInput from './MXCrossTextInput';
 import { MXSwitchTab } from './MXSwitchTab';
+import { ImageTextInput } from '../views/Transfer/ImageTextInput';
 
 class TestComponent extends Component {
 
@@ -48,6 +49,14 @@ class TestComponent extends Component {
                         }
                     }
                 />
+                <ImageTextInput
+                    placeholder={'请输入文字'}
+                    onTextChanged={(s) => {alert(s)}}
+                    onAddClicked={()=>{alert('add clicked')}}
+                    onScanClicked={()=>{alert('scan clicked')}}
+                >
+
+                </ImageTextInput>
             </View>
         )
     }

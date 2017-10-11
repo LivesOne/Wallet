@@ -18,6 +18,7 @@ import { TransferMinerTipsSetter } from './TransferMinerTipsSetter';
 import MXButton from './../../components/MXButton';
 import * as MXUtils from '../../utils/MXUtils'
 import { TransferDetailModal } from './TransferDetailModal';
+import { ImageTextInput } from './ImageTextInput';
 
 class TransferScreen extends Component {
     static navigationOptions = {
@@ -69,9 +70,11 @@ class TransferScreen extends Component {
                         balance={2100000}
                     ></TransferHeader>
                     <View style= { styles.headerBelow }>
-                        <MXCrossTextInput 
+                        <ImageTextInput 
                             style= {styles.textInput} 
                             placeholder={LVStrings.transfer_payee_address}
+                            onAddClicked={() => {alert('add contracts')}}
+                            onScanClicked={() => {alert('scan clicked')}}
                             onTextChanged={(newText) => {this.setState({addressIn: newText})}}/>
                         <MXCrossTextInput 
                             style= {styles.textInput} 
