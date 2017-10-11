@@ -44,7 +44,7 @@ export default class LVPersistent {
         return value ? Number(value) : 0;
     }
 
-    static async setObject(key: string, value: Object) {
+    static async setObject(key: string, value: any) {
         await LVPersistent.setString(key, JSON.stringify(value));
     }
 
