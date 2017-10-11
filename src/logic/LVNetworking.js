@@ -9,21 +9,44 @@ const HOST = 'http://office.metellica.cn:51515';
 
 const API = {
     GET_BALANCE: HOST + '/wallet/balance',
-    GET_TRANSACTION_HISTORY: HOST + '/wallet/history',
-}
+    GET_TRANSACTION_HISTORY: HOST + '/wallet/history'
+};
+
+const ErrorCodeMap: Map<number, string> = new Map([
+    [1, 'Request parameter error'],
+    [2, 'Server internal error'],
+]);
 
 class LVFetch {
     constructor() {}
 
-    static timeout = 30;
+    static timeout = 30000;
 
-    static GET(url: string, params: Object = {}) {
+    static convertErrorCode(code: number) {
+        if (ErrorCodeMap.has(code)) {
+            return ErrorCodeMap.get(code);
+        } else {
+            return 'Network Error';
+        }
+    }
+
+    static GET(url: string) {
         return new Promise(async (resolve, reject) => {
-            fetch(url, { method: 'GET', body: params })
-                .then(response => response.json())
-                .then(async responseData => {
-                    if (responseData) {
-                        resolve(responseData);
+            fetch(url, { method: 'GET' })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        reject(new Error('Network Error'));
+                    }
+                })
+                .then(json => {
+                    if (json && json.code !== undefined && json.result !== undefined) {
+                        if (json.code === 0) {
+                            resolve(json.result);
+                        } else {
+                            reject(new Error(this.convertErrorCode(json.code)));
+                        }
                     } else {
                         reject(new Error('Network Error'));
                     }
@@ -42,8 +65,7 @@ class LVNetworking {
     constructor() {}
 
     static async fetchBanlance(address: string, type: string = 'eth') {
-        const url = API.GET_BALANCE + '/' + address + '?type=' + type;  
-        return await LVFetch.GET(url);
+        return await LVFetch.GET(API.GET_BALANCE + '/' + address + '?type=' + type);
     }
 }
 
