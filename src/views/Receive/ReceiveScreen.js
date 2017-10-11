@@ -84,8 +84,8 @@ class ReceiveScreen extends Component {
             walletName: '傲游LivesToken',
             walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
             openSelectWallet: false,
-            walletIsBlank:false,
-            // walletIsBlank:true,
+            // walletIsBlank:false,
+            walletIsBlank:true,
         };
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
