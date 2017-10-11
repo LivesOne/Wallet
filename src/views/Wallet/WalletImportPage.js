@@ -15,6 +15,7 @@ import MXCrossTextInput from './../../components/MXCrossTextInput';
 import MXButton from './../../components/MXButton';
 import { MXSwitchTab } from './../../components/MXSwitchTab';
 import { LVQrScanModal } from '../Common/LVQrScanModal';
+import { QrScanner } from '../Common/QrScanner';
 
  export default class AssetsImportPage extends Component {
 
@@ -50,7 +51,7 @@ import { LVQrScanModal } from '../Common/LVQrScanModal';
     render() {
       return (
         <View style = {styles.container}>
-          <LVQrScanModal
+          <QrScanner
               barcodeReceived={this.onBarcodeReceived}
               isOpen= {this.state.showModal}
               onClosed = {this.onModalClosed.bind(this)}/>
