@@ -6,6 +6,7 @@
  */
 
 import LVPersistent from './LVPersistent';
+import LVConfiguration from './LVConfiguration';
 
 const foundation = require('../foundation/wallet.js');
 const WalletsKey :string = '@Venus:WalletsInfo';
@@ -156,7 +157,6 @@ class WalletManager {
         this.wallets.splice(walletIndex,1);
         //make sure the selected index is in valid range.
         this.selectedIndex = Math.max(0,Math.min(this.wallets.length - 1, this.selectedIndex));
-        this.saveToDisk();
         return true;
     }
 
@@ -217,6 +217,7 @@ class WalletManager {
             selectedIndex: this.selectedIndex
         };
 
+        LVConfiguration.setAnyWalletAvailable(this.wallets.length > 0);
         LVPersistent.setObject(WalletsKey, walletInfo);
     }
 }
