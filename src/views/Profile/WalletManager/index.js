@@ -18,14 +18,6 @@ const IconBack = require('../../../assets/images/back_grey.png');
 const WalletIcon = require('../../../assets/images/wallet_grey.png');
 const ShowDetailsIcon = require('../../../assets/images/show_detail_arrow.png');
 
-const data = [
-    { id: 1, title: '1', balance: '14,900' },
-    { id: 2, title: '2', balance: '2,100,000'},
-    { id: 3, title: '3', balance: '900' },
-    { id: 4, title: '4', balance: '1900' },
-    { id: 5, title: '5', balance: '21,900' },
-  ];
-
 export class WalletManagerScreen extends Component {
     static navigationOptions = {
         header: null,
