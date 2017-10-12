@@ -14,6 +14,7 @@ import { ImageTextInput } from '../views/Transfer/ImageTextInput';
 import LVWalletManager from '../logic/LVWalletManager';
 import LVNetworking from '../logic/LVNetworking';
 import TransferLogic from '../views/Transfer/TransferLogic';
+import { isAddress } from '../utils/MXStringUtils';
 
 const eth_local = require('../foundation/ethlocal.js');
 const wallet = require('../foundation/wallet.js');
@@ -38,7 +39,7 @@ class TestComponent extends Component {
                 <MXButton
                     title={"hello"}
                     onPress = {() => {
-                        this.testWalletApi();
+                        this.testIsAddress();
                     }}
                     themeStyle={"active"}
                 />
@@ -117,7 +118,7 @@ class TestComponent extends Component {
             "balance": 0
           };
 
-        const result = await LVNetworking.fetchBalance(wallet.address);
+        const result = await LVNetworking.fetchBalance(wallet.address, 'lvt');
         this.log('balance = ' + JSON.stringify(result));
 
         const result1 = await LVNetworking.fetchTransactionHistory(wallet.address);
@@ -129,16 +130,28 @@ class TestComponent extends Component {
         const result3 = await LVNetworking.fetchTransactionDetail('0x635f86096df7dfa624f2f2eba6ffb79a67f7550704cb618b61045ac5a364633b');
         this.log('detail =' + JSON.stringify(result3));
         
-        await this.testTransaction(wallet);
+        //await this.testTransaction(wallet);
     }
 
     async testTransaction(wallet: Object) {
-        try {   
-            const result4 = await TransferLogic.transaction('niceToMeetYou', '0x9224A9f81Ac30F0E3B568553bf9a7372EE49548C', '0', wallet);
-            this.log(JSON.stringify(result4));
+        const valueArray = ['1'];
+        try {
+            for(var i =0; i < valueArray.length; i++) {
+                const result4 = await TransferLogic.transaction('niceToMeetYou', '0x9224A9f81Ac30F0E3B568553bf9a7372EE49548C', valueArray[i], wallet);
+                this.log(JSON.stringify(result4));
+            }   
         } catch(e) {
             this.log(e.message);
         }
+    }
+
+    testIsAddress() {
+        const test1='0x9224A9f81Ac30F0E3B568553bf9a7372EE49548C';
+        const test2='0x635f86096df7dfa624f2f2eba6ffb79a67f7550704cb618b61045ac5a364633b';
+        const test3='askdjfka';
+        this.log(''+ (isAddress(test1) ? 'true' : 'fasle'));
+        this.log(isAddress(test2));
+        this.log(isAddress(test3));
     }
 
     log(msg:any) {
