@@ -7,7 +7,7 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, ViewPropTypes, Dimensions, View, Image, Text, FlatList, TouchableOpacity } from 'react-native';
-import { Cell, Separator } from 'react-native-tableview-simple';
+import { Separator } from 'react-native-tableview-simple';
 import PropTypes from 'prop-types';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
