@@ -162,10 +162,11 @@ class ReceiveScreen extends Component {
                     onPress = { () => {
                         Share.share({
                             url: 'http://bam.tech',
-                            title: 'Share your code?'
+                            title: 'Share your code?',
+                            message:'http://m.sohu.com',
                           }, {
                             // Android only:
-                            dialogTitle: 'Share your code',
+                            dialogTitle: 'Share your code for title',
                             // iOS only:
                             excludedActivityTypes: [
                               'com.apple.UIKit.activity.PostToTwitter'
