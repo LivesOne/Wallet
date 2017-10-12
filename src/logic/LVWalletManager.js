@@ -193,11 +193,10 @@ class WalletManager {
      * import wallet with keystore string.
      * @param  {string} name
      * @param  {string} password
-     * @param  {string} keystoreStr
+     * @param  {Object} keystore
      */
-    async importWalletWithKeystore(name: string, password: string, keystoreStr: string) {
+    async importWalletWithKeystore(name: string, password: string, keystore: Object) {
         const promise = new Promise(function(resolve, reject){
-            const keystore = JSON.parse(keystoreStr);
             foundation.importWithKeyStoreObject(password, keystore, function(calcedKeystore) {
                 const walletInfo = {
                     name: name,
@@ -209,6 +208,7 @@ class WalletManager {
                 resolve(walletInfo);
             })
         });
+        return promise;
     }
 
     saveToDisk() {

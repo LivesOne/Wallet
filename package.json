@@ -21,6 +21,7 @@
     "ethereumjs-util": "^5.1.2",
     "events": "^1.1.1",
     "https-browserify": "0.0.1",
+    "jsonschema": "^1.2.0",
     "keccak": "^1.3.0",
     "moment": "^2.18.1",
     "path-browserify": "0.0.0",
