@@ -230,7 +230,9 @@ const styles = StyleSheet.create({
         flex:1,
         flexDirection:'row',
         alignItems: "center",
+        paddingTop:10,
         paddingBottom:20,
+        justifyContent:'center',
     },
 
     title:{
