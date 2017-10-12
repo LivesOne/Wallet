@@ -56,6 +56,7 @@ class LVDialog extends Component {
                 backButtonClose={true}
                 backdropOpacity={0.5}
                 animationDuration={300}
+                backdropPressToClose={false}
                 easing={Easing.elastic(0.75)}
             >
                 <View style={styles.dialog}>

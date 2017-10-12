@@ -33,7 +33,7 @@ class WalletManager {
     }
     
     getWallets() : Array<Object> {
-        return this.wallets;
+        return this.wallets.reverse();
     }
 
     /**

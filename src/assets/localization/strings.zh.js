@@ -9,12 +9,15 @@ const localized_strings = {
     assets: '资产',
     receive: '收款',
     profile: '我的',
+    alert_hint: '提示',
     transfer: '转账',
 
     // Common
     common_confirm: '确定',
     common_cancel: '取消',
     common_close: '关闭',
+    alert_warning: '警告',
+    alert_ok: '确定',
 
     //receive
     receive_title:'我的收款码',
@@ -33,12 +36,18 @@ const localized_strings = {
     wallet_import_private_pwd_confirm_hint: '重复输入你的密码',
     wallet_import_keystore_password_hint: '请输入Keystore密码',
     wallet_create_wallet: '创建钱包',
+    wallet_creating_wallet: '创建钱包中...',
     wallet_create_name: '钱包名称',
     wallet_create_password: '设置钱包密码（6-12位字母数字组合）',
     wallet_create_password_verify: '重复输入密码',
     wallet_create_comment: '该密码用来加密钱包地址，请尽量设置复杂密码完成加密。',
     wallet_create: '创建',
     wallet_create_sucess: '创建成功！',
+    wallet_create_name_required: '请输入钱包名称',
+    wallet_create_password_required: '请输入密码',
+    wallet_create_confimpassword_required: '请输入确认密码',
+    wallet_create_password_mismatch: '密码与确认密码不匹配',
+    wallet_create_name_unavailable: '钱包名字不可用',
     wallet_create_success_comment: '平台不储存用户的私人密码，密码无法找回或重置，强烈建议您在使用钱包前做好钱包备份！',
     wallet_backup: '备份钱包',
 
