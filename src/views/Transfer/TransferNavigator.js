@@ -11,7 +11,7 @@ import { StackNavigator } from "react-navigation";
 import TransferScreen from './TransferScreen';
 
 const TransferNavigator = StackNavigator({
-    Transaction: { screen: TransferScreen }
+    Transfer: { screen: TransferScreen }
 });
 
 export default TransferNavigator;
