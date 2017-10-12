@@ -9,6 +9,7 @@ import LVSize from '../../styles/LVFontSize';
 import LVStrings from '../../assets/localization';
 import MXTouchableImage from '../../components/MXTouchableImage';
 import * as MXUtils from "../../utils/MXUtils";
+import LVGradientPanel from '../Common/LVGradientPanel';
 const selectImg = require('../../assets/images/select_wallet.png');
 
 export class TransferHeader extends Component {
@@ -36,7 +37,7 @@ export class TransferHeader extends Component {
     render() {
         const { balance } = this.props;
         return (
-            <View style = {[styles.container, this.props.style]}>
+            <LVGradientPanel style = {[styles.container, this.props.style]}>
                 <View style={styles.nav}>
                         <View style={{ width: 50 }} />
                         <Text style={styles.navTitle}>{ LVStrings.transfer_title }</Text>
@@ -47,7 +48,7 @@ export class TransferHeader extends Component {
                     <Text style= {[styles.textCommon, {fontSize: 36}]}>{ MXUtils.formatCurrency(balance)}</Text>
                     <Text style= {[styles.textCommon]}>{ this.toRenminbi() }</Text>
                 </View>
-            </View>
+            </LVGradientPanel>
         )
     }
 }
@@ -60,7 +61,6 @@ const Window = {
 const styles = StyleSheet.create({
     container: {
         height: '25%',
-        backgroundColor: LVColor.primary
     },
     nav: {
         width: Window.width,
