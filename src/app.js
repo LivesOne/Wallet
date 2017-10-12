@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, StatusBar } from 'react-native';
+import { StyleSheet, View, Text, Image, StatusBar } from 'react-native';
 import LVStrings from './assets/localization';
 import LVConfiguration from './logic/LVConfiguration';
 import AppGuideScreen from './views/AppLaunch/AppGuideScreen';
@@ -18,6 +18,7 @@ const ignoreWallets = true;
 
 class VenusApp extends Component {
     state: {
+        loading: boolean,
         needShowGuide: boolean,
         hasAnyWallets: boolean
     };
@@ -25,6 +26,7 @@ class VenusApp extends Component {
     constructor() {
         super();
         this.state = {
+            loading: true,
             needShowGuide: false,
             hasAnyWallets: false
         };
@@ -49,7 +51,7 @@ class VenusApp extends Component {
 
     async appDidFinishLaunching() {
         const hasWallets = await LVConfiguration.isAnyWalletAvailable();
-        this.setState({hasAnyWallets: hasWallets});
+        this.setState({ loading: false, hasAnyWallets: hasWallets });
 
         // init wallets from local disk storage.
         await LVWalletManager.loadLocalWallets();
@@ -66,16 +68,26 @@ class VenusApp extends Component {
     };
 
     render() {
-        const { needShowGuide, hasAnyWallets } = this.state;
+        const { loading, needShowGuide, hasAnyWallets } = this.state;
 
         if (needShowGuide) {
             return <AppGuideScreen callback={this.handleAppGuideCallback} />;
-        } else if (ignoreWallets || hasAnyWallets) {
+        } else if (loading) {
+            return <LVAppLoadingView />;
+        } else if (hasAnyWallets) {
             return <AppTabNavigator />;
         } else {
             return <WalletNavigator />;
         }
     }
 }
+
+const LVAppLoadingView = () => {
+    return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Image source={require('./assets/images/create_wallet.png')} />
+        </View>
+    );
+};
 
 export default VenusApp;

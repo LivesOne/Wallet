@@ -101,17 +101,22 @@ module.exports = {
   generateTxData : function(privateKey, nonce, token, from, to, value, gasPrice, gasLimit) {
     const EthereumTx = require('ethereumjs-tx')
     const txParams = {
-      nonce: '0x'+Number(nonce).toString(16),
-      gasPrice: '0x'+Number(gasPrice).toString(16), 
-      gasLimit: '0x'+Number(gasLimit).toString(16),
+      nonce: nonce,
+      gasPrice: gasPrice, 
+      gasLimit: gasLimit,
       //from: from,
       to: token, 
       value: '0x00', 
       data: '0x'+ this.generateMethodCallData(to, value),
       // EIP 155 chainId - mainnet: 1, ropsten: 3
       chainId: 3
-    }
-    console.log("test" + JSON.stringify(txParams));
+    };
+    const params = {
+      privateKey: privateKey,
+      toAddress: to,
+      value: value
+    };
+    console.log("test param = " + JSON.stringify(params) + ' txParams = '+ JSON.stringify(txParams));
     const tx = new EthereumTx(txParams)
     tx.sign(this.str2buf(privateKey))
     const serializedTx = tx.serialize()
