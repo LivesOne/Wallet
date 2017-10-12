@@ -14,8 +14,6 @@ import AppTabNavigator from './containers/AppTabNavigator';
 import WalletNavigator from './views/Wallet/WalletNavigator';
 import LVWalletManager from './logic/LVWalletManager';
 
-const ignoreWallets = true;
-
 class VenusApp extends Component {
     state: {
         loading: boolean,
@@ -50,14 +48,14 @@ class VenusApp extends Component {
     }
 
     async appDidFinishLaunching() {
-        const hasWallets = await LVConfiguration.isAnyWalletAvailable();
-        this.setState({ loading: false, hasAnyWallets: hasWallets });
-
         // init wallets from local disk storage.
         await LVWalletManager.loadLocalWallets();
 
         // App has been launched
         await LVConfiguration.setAppHasBeenLaunched();
+
+        const hasWallets = await LVConfiguration.isAnyWalletAvailable();
+        this.setState({ loading: false, hasAnyWallets: hasWallets });
     }
 
     componentWillUnmount() {}
