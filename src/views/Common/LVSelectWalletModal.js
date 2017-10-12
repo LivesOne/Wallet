@@ -7,10 +7,12 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, Easing, FlatList, TouchableOpacity } from 'react-native';
+import { Separator } from 'react-native-tableview-simple';
 import PropTypes from 'prop-types';
 import Modal from 'react-native-modalbox';
 import LVColor from '../../styles/LVColor';
 import MXTouchableImage from '../../components/MXTouchableImage';
+import LVWalletManager from '../../logic/LVWalletManager';
 
 const closeIcon = require('../../assets/images/close_modal.png');
 const itemSelected = require('../../assets/images/list_item_selected.png');
@@ -79,17 +81,6 @@ export default class LVSelectWalletModal extends Component {
         }
     };
 
-    _itemSeparator = () => (
-        <View
-            style={{
-                alignSelf: 'center',
-                width: '90%',
-                height: StyleSheet.hairlineWidth,
-                backgroundColor: LVColor.separateLine
-            }}
-        />
-    );
-
     _renderItem = ({ item }) => (
         <LVSelectWalletItem
             id={item.id}
@@ -120,7 +111,7 @@ export default class LVSelectWalletModal extends Component {
                         extraData={this.state}
                         keyExtractor={this._keyExtractor}
                         renderItem={this._renderItem}
-                        ItemSeparatorComponent={this._itemSeparator}
+                        ItemSeparatorComponent={() => <Separator insetRight={15} tintColor={LVColor.separateLine} />}
                     />
                     <MXTouchableImage style={styles.button} source={closeIcon} onPress={this.onPressCloseButton} />
                 </View>
