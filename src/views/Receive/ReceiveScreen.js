@@ -8,7 +8,7 @@
 import React, { Component } from 'react';
 import { StyleSheet,Share, View, Text,Image,ScrollView ,Clipboard} from 'react-native';
 
-
+import PropTypes from 'prop-types';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 
@@ -19,15 +19,53 @@ import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 import QRCode from 'react-native-qrcode';
 const receive_share = require("../../assets/images/receive_share.png");
 const receive_change_wallet = require("../../assets/images/receive_change_wallet.png");
+const receive_wallet_blank = require("../../assets/images/wallet_blank.png");
 
 // var PasteBoard = require('react-native-pasteboard');
 
+class ReceiveHeader extends Component {
 
+    onPressButton = () => {
+        if (this.props.callback) {
+            this.props.callback();
+        }
+    };
+
+    static propTypes = {
+        callback: PropTypes.func
+    };
+
+
+    constructor(props:any) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <View style={styles.topContainer}>
+            <Text style={styles.change_wallet_container}></Text>
+            <Text style={styles.title}>
+                {LVStrings.receive_title}
+            </Text>
+            <View style={styles.change_wallet_container}>
+            <MxImage 
+                source={receive_change_wallet}  
+                style={styles.change_wallet}
+                onPress={this.onPressButton.bind(this)}               
+            ></MxImage>
+            </View>
+        </View>
+
+        );
+    }
+}
 
 class ReceiveScreen extends Component {
     static navigationOptions = {
         header: null
     };
+
+    
     state:{
         // walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
         // text: 'http://facebook.github.io/react-native/',
@@ -35,6 +73,7 @@ class ReceiveScreen extends Component {
         walletName: string,
         walletAddress: string,
         openSelectWallet: boolean,
+        walletIsBlank:boolean,
         
     };
 
@@ -45,6 +84,8 @@ class ReceiveScreen extends Component {
             walletName: '傲游LivesToken',
             walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
             openSelectWallet: false,
+            // walletIsBlank:false,
+            walletIsBlank:true,
         };
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
@@ -69,23 +110,15 @@ class ReceiveScreen extends Component {
     };
 
     render() {
-        return (
+
+        const { walletIsBlank } = this.state;
+        if(walletIsBlank) {
+
+         return (
             <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor:LVColor.white }}  contentContainerStyle={styles.contentContainer}>
             
             <View style={styles.container}>
-                <View style={styles.topContainer}>
-                    <Text style={styles.change_wallet_container}></Text>
-                    <Text style={styles.title}>
-                        {LVStrings.receive_title}
-                    </Text>
-                    <View style={styles.change_wallet_container}>
-                    <MxImage 
-                        source={receive_change_wallet}  
-                        style={styles.change_wallet}
-                         onPress={this.onPressSelectWallet}
-                        ></MxImage>
-                    </View>
-                </View>
+                <ReceiveHeader callback={this.onPressSelectWallet}/>
 
                 <View style={styles.mainContainer}>
 
@@ -129,10 +162,11 @@ class ReceiveScreen extends Component {
                     onPress = { () => {
                         Share.share({
                             url: 'http://bam.tech',
-                            title: 'Share your code?'
+                            title: 'Share your code?',
+                            message:'http://m.sohu.com',
                           }, {
                             // Android only:
-                            dialogTitle: 'Share your code',
+                            dialogTitle: 'Share your code for title',
                             // iOS only:
                             excludedActivityTypes: [
                               'com.apple.UIKit.activity.PostToTwitter'
@@ -153,6 +187,25 @@ class ReceiveScreen extends Component {
             </View>
             </ScrollView>
         );
+    }else {
+        return (
+            <View style={styles.container}>
+                <ReceiveHeader callback={this.onPressSelectWallet}/>
+                <View style={styles.mainContainer2}>
+                <Image source={receive_wallet_blank}/>
+                <Text >
+                   {LVStrings.receive_empty }
+                </Text>
+                </View>
+                <LVSelectWalletModal
+                    isOpen={this.state.openSelectWallet}
+                    onClosed={this.onSelectWalletClosed}
+                    selectedWalletId={this.state.walletId}
+                    onSelected={this.onWalletSelected}
+                />
+            </View>
+        )
+    }
     }
 }
 
@@ -230,6 +283,14 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 3,
         padding:30,
+     },
+
+     mainContainer2:{
+         flex:6,
+         flexDirection:'column',
+         alignItems: 'center', 
+        //  backgroundColor:'red',
+         justifyContent:'center',
      },
 
     change_wallet_container: {

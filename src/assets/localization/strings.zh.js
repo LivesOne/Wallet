@@ -21,7 +21,8 @@ const localized_strings = {
     receive_name:'钱包地址',
     receive_copy:'复制地址',
     receive_save:'保存二维码',
-
+    receive_empty:'您还未添加钱包',
+    
     // Wallet
     wallet_import: '导入',
     wallet_import_header: '导入钱包',
