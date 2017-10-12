@@ -60,12 +60,14 @@ class LVDialog extends Component {
                 easing={Easing.elastic(0.75)}
             >
                 <View style={styles.dialog}>
-                    <Text style={styles.title}>{this.props.title}</Text>
-                    {message ? <Text style={{ color: '#697485', fontSize: 14, lineHeight: 20 }}>{message}</Text> : null}
+                    <View style={styles.dialogTopPanel}>
+                        <Text style={styles.title}>{this.props.title}</Text>
+                        {message ? <Text style={{ color: '#697485', fontSize: 14, lineHeight: 20 }}>{message}</Text> : null}
+                    </View>
                     {this.props.children}
                     {buttonTitle ? (
                         <MXButton
-                            style={{ marginTop: 30 }}
+                            style={styles.button}
                             rounded={true}
                             title={buttonTitle}
                             onPress={this.onPressButton.bind(this)}
@@ -95,13 +97,25 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
     titleText: {
-        
+        marginBottom: 25,
+        fontSize: 14,
+        color: '#697485'
     },
     dialog: {
-        justifyContent: 'flex-start',
-        alignItems: 'center',
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
         paddingLeft: 25,
         paddingRight: 25
+    },
+    dialogTopPanel: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'center'
+    },
+    button: {
+        marginBottom: 40
     }
 });
 
