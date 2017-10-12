@@ -13,6 +13,7 @@ import { MXSwitchTab } from './MXSwitchTab';
 import { ImageTextInput } from '../views/Transfer/ImageTextInput';
 import LVWalletManager from '../logic/LVWalletManager';
 import LVNetworking from '../logic/LVNetworking';
+import TransferLogic from '../views/Transfer/TransferLogic';
 
 const eth_local = require('../foundation/ethlocal.js');
 const wallet = require('../foundation/wallet.js');
@@ -21,7 +22,7 @@ class TestComponent extends Component {
 
     componentDidMount() {
        //this.testNative();
-       this.testWalletApi();
+       //this.testWalletApi();
     }
 
     render() {
@@ -37,7 +38,7 @@ class TestComponent extends Component {
                 <MXButton
                     title={"hello"}
                     onPress = {() => {
-                    alert("button clicked");
+                        this.testWalletApi();
                     }}
                     themeStyle={"active"}
                 />
@@ -89,60 +90,55 @@ class TestComponent extends Component {
     //     balance: 0
     // };
     async testWalletApi() {
-        const wallet = await LVWalletManager.createWallet("HelloMaxthon", "niceToMeetYou");
-        this.log(JSON.stringify(wallet));
+        const wallet = {
+            "name": "HelloMaxthon",
+            "keystore": {
+              "address": "ddfe1e560cabe7c06b0ec25f71c198e2a676d592",
+              "crypto": {
+                "cipher": "aes-128-ctr",
+                "ciphertext": "de0a1065c8afae18fc1003124ed5f0f8b991846678e9a8093694c8b5ea6a2d4d",
+                "cipherparams": {
+                  "iv": "74174ca6ded73e0985f500c45c23ca06"
+                },
+                "mac": "62f993f4d679aa762648a080f5bf29e10dbb371ca5a12d8f2d8aae97ffe6c1d1",
+                "kdf": "scrypt",
+                "kdfparams": {
+                  "dklen": 32,
+                  "n": 262144,
+                  "r": 8,
+                  "p": 1,
+                  "salt": "e7d129f5df099754701e3c010249140035fd26ecca712d0235556db800112976"
+                }
+              },
+              "id": "71ecff67-9a2f-4b9b-b092-9f7944031556",
+              "version": 3
+            },
+            "address": "ddfe1e560cabe7c06b0ec25f71c198e2a676d592",
+            "balance": 0
+          };
 
-
-        // const wallet = {"version":3,"id":"7b2cf509-2568-48a4-9c7e-7d65a05d748f","address":"b09a753b35c031147e8c373f5df875032d1ac039","Crypto":{"ciphertext":"4279bf9f995535a40fd8be6d717bd95d811223e4bcc43609a3ca9e0f1803c015","cipherparams":{"iv":"d582fe5b6fdf1423ebba57c32d7e89a4"},"cipher":"aes-128-ctr","kdf":"scrypt","kdfparams":{"dklen":32,"salt":"6853d0ab4604c348aaeb9a2099f19b0676217534df2d08bc0461d2e50192f6ba","n":1024,"r":8,"p":1},"mac":"dee8797f58e9580b9c95bd76889802683d8ab957c8e7e551c9e736a168d1dd8d"}};
-        //test get balance
         const result = await LVNetworking.fetchBalance(wallet.address);
-        this.log(JSON.stringify(result));
+        this.log('balance = ' + JSON.stringify(result));
 
-        //test get transaction history
         const result1 = await LVNetworking.fetchTransactionHistory(wallet.address);
-        this.log(JSON.stringify(result1));
+        this.log('history =' + JSON.stringify(result1));
 
-        // test get transaction params
         const result2 = await LVNetworking.fetchTransactionParam(wallet.address);
-        this.log(JSON.stringify(result2));
+        this.log('Param =' + JSON.stringify(result2));
 
-        // //{"nonce":0,"gasPrice":"21000000000","gasLimit":220000}
-        const privateKey = await this.getPrivateKey('niceToMeetYou', wallet.keystore);
-        this.log("privateKey=" + privateKey);
-        const nonce = result2.nonce;
-        const gasPrice = result2.gasPrice;
-        const gasLimit = result2.gasLimit;
-        const token = '0xe6d97f5cb9e9C5c45025e67224fbA0a5f5A3751b';
-        const from = ''; //
-        const to = token; //
-        const value = ''; //
+        const result3 = await LVNetworking.fetchTransactionDetail('0x635f86096df7dfa624f2f2eba6ffb79a67f7550704cb618b61045ac5a364633b');
+        this.log('detail =' + JSON.stringify(result3));
+        
+        await this.testTransaction(wallet);
+    }
 
-        let txData = await eth_local.generateTxData(privateKey, nonce, token, from, to, value, gasPrice, gasLimit);
-        // this.log('tx=' + txData);
-
-
-
-
-        // test get transaction details
-        // const result3 = await LVWalletApi.getTransactionDetails(wallet.keystore);
-        // this.log(JSON.stringify(result3));
-
-        // test post transaction
+    async testTransaction(wallet: Object) {
         try {   
-        const result4 = await LVNetworking.transaction(txData);
-        this.log(JSON.stringify(result4));
+            const result4 = await TransferLogic.transaction('niceToMeetYou', '0x9224A9f81Ac30F0E3B568553bf9a7372EE49548C', '0', wallet);
+            this.log(JSON.stringify(result4));
         } catch(e) {
             this.log(e.message);
         }
-    }
-
-    async getPrivateKey(password : string, keystore: Object) : Promise<?string> {
-        const promise = new Promise(function(resolve, reject){
-            wallet.exportPrivateKey(password, keystore, (p) => {
-                resolve(p);
-            });
-        });
-        return promise;
     }
 
     log(msg:any) {

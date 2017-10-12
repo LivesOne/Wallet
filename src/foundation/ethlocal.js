@@ -106,7 +106,7 @@ module.exports = {
       gasLimit: '0x'+Number(gasLimit).toString(16),
       //from: from,
       to: token, 
-      value: '0x1000000000000000000', 
+      value: '0x00', 
       data: '0x'+ this.generateMethodCallData(to, value),
       // EIP 155 chainId - mainnet: 1, ropsten: 3
       chainId: 3
