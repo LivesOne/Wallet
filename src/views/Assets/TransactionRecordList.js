@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
-import { DateUtils } from '../../utils';
+import { DateUtils, StringUtils } from '../../utils';
 import * as Progress from 'react-native-progress';
 
 /*
@@ -183,7 +183,7 @@ class LVTransactionRecordItem extends React.PureComponent {
                     <View style={styles.infoInner}>
                         <Image source={typeImage} />
                         <Text style={styles.addressText} numberOfLines={1} ellipsizeMode="middle">
-                            {address.toUpperCase()}
+                            {StringUtils.converAddressToDisplayableText(address)}
                         </Text>
                     </View>
                     <View style={styles.infoInner}>
@@ -222,7 +222,6 @@ const styles = StyleSheet.create({
     },
     addressText: {
         marginLeft: 10,
-        width: 110,
         color: LVColor.text.grey1,
         fontSize: 15,
         textAlign: 'left'
