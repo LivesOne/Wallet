@@ -7,11 +7,11 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Easing } from 'react-native';
-import LVWalletSuccessNavigator from './LVWalletSuccessNavigator';
+import LVWalletCreationNavigator from './LVWalletCreationNavigator';
 import Modal from 'react-native-modalbox';
 import PropTypes from 'prop-types';
 
-export default class LVWalletSuccessModalPage extends Component {
+export default class LVWalletCreationModalPage extends Component {
     static propTypes = {
         dismissCallback: PropTypes.func
     };
@@ -40,7 +40,7 @@ export default class LVWalletSuccessModalPage extends Component {
             backdropPressToClose={false}
             easing={Easing.elastic(0.75)}
         >
-            <LVWalletSuccessNavigator screenProps={{dismiss: ()=> {
+            <LVWalletCreationNavigator screenProps={{dismiss: ()=> {
                     this.dismiss();
                     if(dismissCallback) {
                         dismissCallback();

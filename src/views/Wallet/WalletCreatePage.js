@@ -17,7 +17,6 @@ import MXTouchableImage from '../../components/MXTouchableImage';
 import MXCrossTextInput from '../../components/MXCrossTextInput';
 import LVWalletManager from '../../logic/LVWalletManager';
 import LVLoadingToast from '../Common/LVLoadingToast';
-import LVWalletSuccessModalPage from './LVWalletSuccessModalPage';
 import LVDialog from '../Common/LVDialog';
 const backImg = require('../../assets/images/back.png');
 
@@ -92,7 +91,7 @@ export default class WalletCreatePage extends Component {
             LVWalletManager.addWallet(wallet);
             LVWalletManager.saveToDisk();
             this.refs.toast.dismiss();
-            setTimeout(()=>this.refs.successPage.show(),300);
+            setTimeout(()=>this.props.navigation.navigate('SuccessPage'),300);
         },500);
     }
 
@@ -105,7 +104,11 @@ export default class WalletCreatePage extends Component {
                             style={styles.navBack} 
                             source={backImg}
                             onPress={() => {
-                                this.props.navigation.goBack();
+                                if(this.props.screenProps.dismiss) {
+                                    this.props.screenProps.dismiss();
+                                } else {
+                                    this.props.navigation.goBack();
+                                }
                             }}
                         />
                         <Text style={styles.navTitle}>{LVStrings.wallet_create_wallet}</Text>
@@ -146,7 +149,6 @@ export default class WalletCreatePage extends Component {
                 </View>
                 <LVLoadingToast ref={'toast'} title={LVStrings.wallet_creating_wallet}/>
                 <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
-                <LVWalletSuccessModalPage ref={'successPage'} dismissCallback={()=> this.props.navigation.goBack()}/>
             </View>
         )
     }
