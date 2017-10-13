@@ -95,12 +95,14 @@ const styles = StyleSheet.create({
     },
     mainText: {
         fontSize: 26,
+        textAlign: 'center',
         color: LVColor.text.dot3
     },
     detailText: {
         marginTop: 5,
         marginBottom: 15,
         fontSize: 18,
+        textAlign: 'center',
         color: LVColor.text.dot3
     },
     button: {
