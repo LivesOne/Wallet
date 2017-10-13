@@ -12,6 +12,8 @@ const foundation = require('../foundation/wallet.js');
 const WalletsKey :string = '@Venus:WalletsInfo';
 
 class WalletManager {
+    //don't use this property directly, use getWallets() method instead as this method
+    //will return a new array that contains same elements.
     wallets: Array<Object>;
     selectedIndex: number;
 
@@ -33,7 +35,7 @@ class WalletManager {
     }
     
     getWallets() : Array<Object> {
-        return this.wallets.reverse();
+        return [].concat(this.wallets).reverse();
     }
 
     /**

@@ -27,6 +27,10 @@ export class WalletManagerScreen extends Component {
         tabBarVisible: false
     };
 
+    state: {
+        wallets: Array<Object>
+    }
+
     onCreateWalletPressed : Function;
     onImportWalletPressed : Function;
 
@@ -35,6 +39,15 @@ export class WalletManagerScreen extends Component {
 
         this.onCreateWalletPressed = this.onCreateWalletPressed.bind(this);
         this.onImportWalletPressed = this.onImportWalletPressed.bind(this);
+        this.state = {
+            wallets: []
+        };
+    }
+
+    componentDidMount() {
+        this.setState({
+            wallets: LVWalletManager.getWallets()
+        });
     }
 
     onCreateWalletPressed() {
@@ -46,6 +59,7 @@ export class WalletManagerScreen extends Component {
     }
 
     render() {
+        const { wallets } = this.state;
         return (
             <View style={styles.container}>
                 <MXNavigatorHeader
@@ -58,7 +72,8 @@ export class WalletManagerScreen extends Component {
                 <View style={styles.listContainerStyle}>
                     <FlatList
                         showsVerticalScrollIndicator={false}
-                        data={LVWalletManager.getWallets()}
+                        data={wallets}
+                        extraData={this.state}
                         keyExtractor={(item,index)=> item.address}
                         renderItem={({item, separators}) => 
                              <TouchableHighlight style={styles.cellContentViewContainer}
@@ -111,11 +126,19 @@ export class WalletManagerScreen extends Component {
                 <LVFullScreenModalView ref={'creationPage'}>
                     <LVWalletCreationNavigator screenProps={{dismiss: ()=> {
                         this.refs.creationPage.dismiss()
+                        this.setState({
+                            wallets: LVWalletManager.getWallets()
+                        });
                     } 
                 }}/>
                 </LVFullScreenModalView>
                 <LVFullScreenModalView ref={'importPage'}>
-                    <WalletImportPage dismissCallback={()=> this.refs.importPage.dismiss()}/>
+                    <WalletImportPage dismissCallback={()=> {
+                        this.refs.importPage.dismiss();
+                        this.setState({
+                            wallets: LVWalletManager.getWallets()
+                        });
+                    }}/>
                 </LVFullScreenModalView>
             </View>
         );
