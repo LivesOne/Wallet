@@ -1,21 +1,16 @@
+
 /*
  * Project: Venus
- * File: src/views/Wallet/LVWalletSuccessModalPage.js
+ * File: src/views/Common/LVFullScreenModalView.js
  * Author: Charles Liu
  * @flow
  */
-
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Easing } from 'react-native';
-import LVWalletCreationNavigator from './LVWalletCreationNavigator';
 import Modal from 'react-native-modalbox';
 import PropTypes from 'prop-types';
 
-export default class LVWalletCreationModalPage extends Component {
-    static propTypes = {
-        dismissCallback: PropTypes.func
-    };
-
+export default class LVFullScreenModalView extends Component {
     show() {
         this.refs.dialog.open();
     }
@@ -24,8 +19,7 @@ export default class LVWalletCreationModalPage extends Component {
         this.refs.dialog.close();
     }
 
-    render() {
-        const { dismissCallback } = this.props;        
+    render() {     
         return (
             <Modal
             ref={'dialog'}
@@ -40,13 +34,7 @@ export default class LVWalletCreationModalPage extends Component {
             backdropPressToClose={false}
             easing={Easing.elastic(0.75)}
         >
-            <LVWalletCreationNavigator screenProps={{dismiss: ()=> {
-                    this.dismiss();
-                    if(dismissCallback) {
-                        dismissCallback();
-                    }
-                } 
-            }}/>
+            {this.props.children}
         </Modal>
         );
     }
