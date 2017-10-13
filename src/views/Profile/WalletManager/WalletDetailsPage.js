@@ -14,6 +14,7 @@ import LVWalletManager from '../../../logic/LVWalletManager';
 import LVNotification from '../../../logic/LVNotification';
 import LVNotificationCenter from '../../../logic/LVNotificationCenter';
 import {convertAmountToCurrencyString} from '../../../utils/MXStringUtils';
+import LVDialog, { LVConfirmDialog } from '../../Common/LVDialog';
 
 const IconWalletModifyName = require('../../../assets/images/wallet_modify_name.png');
 const IconWalletModifyPwd = require('../../../assets/images/wallet_modify_pwd.png');
