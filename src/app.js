@@ -11,7 +11,7 @@ import LVStrings from './assets/localization';
 import LVConfiguration from './logic/LVConfiguration';
 import AppGuideScreen from './views/AppLaunch/AppGuideScreen';
 import AppTabNavigator from './containers/AppTabNavigator';
-import WalletNavigator from './views/Wallet/WalletNavigator';
+import WalletCreateOrImportPage from './views/Wallet/WalletCreateOrImportPage';
 import LVWalletManager from './logic/LVWalletManager';
 import LVNotification from './logic/LVNotification';
 import LVNotificationCenter from './logic/LVNotificationCenter';
@@ -31,12 +31,13 @@ class VenusApp extends Component {
             hasAnyWallets: false
         };
         this.handleAppGuideCallback = this.handleAppGuideCallback.bind(this);
-        this.handleWalletImportSuccess = this.handleWalletImportSuccess.bind(this);
+        this.handleWalletImportOrCreateSuccess = this.handleWalletImportOrCreateSuccess.bind(this);
     }
 
     componentWillMount() {
         StatusBar.setBarStyle('light-content', false);
-        LVNotificationCenter.addObserver(this, LVNotification.walletImported, this.handleWalletImportSuccess);
+        LVNotificationCenter.addObserver(this, LVNotification.walletImported, this.handleWalletImportOrCreateSuccess);
+        LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletImportOrCreateSuccess);
     }
 
     componentDidMount() {
@@ -71,7 +72,7 @@ class VenusApp extends Component {
         LVConfiguration.setAppGuidesHasBeenDisplayed();
     };
 
-    handleWalletImportSuccess = async () => {
+    handleWalletImportOrCreateSuccess = async () => {
         const hasWallets = await LVConfiguration.isAnyWalletAvailable();
         this.setState({ hasAnyWallets: hasWallets });
     }
@@ -86,7 +87,7 @@ class VenusApp extends Component {
         } else if (hasAnyWallets) {
             return <AppTabNavigator />;
         } else {
-            return <WalletNavigator />;
+            return <WalletCreateOrImportPage />;
         }
     }
 }

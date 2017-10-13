@@ -13,8 +13,10 @@ import LVStrings from '../../assets/localization';
 import * as LVStyleSheet from '../../styles/LVStyleSheet'
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 const createSuccessImage = require("../../assets/images/create_wallet_success.png");
+import LVNotificationCenter from '../../logic/LVNotificationCenter';
+import LVNotification from '../../logic/LVNotification';
 
-export default class WalletCreateOrImportPage extends Component {
+export default class WalletCreateSuccessPage extends Component {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
@@ -26,6 +28,7 @@ export default class WalletCreateOrImportPage extends Component {
                 <MXNavigatorHeader
                     title = {LVStrings.wallet_create_wallet}
                     onLeftPress = {() => {
+                        LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged)
                         if(this.props.screenProps.dismiss) {
                             this.props.screenProps.dismiss();
                         } else {
