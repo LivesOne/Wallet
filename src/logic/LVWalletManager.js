@@ -11,6 +11,16 @@ import LVConfiguration from './LVConfiguration';
 const foundation = require('../foundation/wallet.js');
 const WalletsKey :string = '@Venus:WalletsInfo';
 
+function createNewKeystore(name: string, keystore: Object){
+    return {
+        name: name,
+        keystore: keystore,
+        address: keystore.address,
+        lvt: 0,
+        eth: 0
+    };
+}
+
 class WalletManager {
     //don't use this property directly, use getWallets() method instead as this method
     //will return a new array that contains same elements.
@@ -113,13 +123,7 @@ class WalletManager {
     async createWallet(name : string, password : string) : Promise<Object> {
         const promise = new Promise(function(resolve, reject){
             foundation.createKeyStore(password, null, function(keystore){
-                const walletInfo = {
-                    name: name,
-                    keystore: keystore,
-                    address: keystore.address,
-                    lvt: 0,
-                    eth: 0
-                };
+                const walletInfo = createNewKeystore(name,keystore);
                 resolve(walletInfo);
             });
         });
@@ -179,13 +183,7 @@ class WalletManager {
     async importWalletWithPrivatekey(name: string, password : string, privateKey : string) {
         const promise = new Promise(function(resolve, reject){
             foundation.importWithPrivateKey(password, privateKey, function(keystore){
-                const walletInfo = {
-                    name: name,
-                    keystore: keystore,
-                    address: keystore.address,
-                    lvt: 0,
-                    eth: 0
-                };
+                const walletInfo = createNewKeystore(name, keystore);
                 resolve(walletInfo);
             });
         });
@@ -200,17 +198,25 @@ class WalletManager {
     async importWalletWithKeystore(name: string, password: string, keystore: Object) {
         const promise = new Promise(function(resolve, reject){
             foundation.importWithKeyStoreObject(password, keystore, function(calcedKeystore) {
-                const walletInfo = {
-                    name: name,
-                    keystore: calcedKeystore,
-                    address: calcedKeystore.address,
-                    lvt: 0,
-                    eth: 0
-                };
+                const walletInfo = createNewKeystore(name, calcedKeystore)
                 resolve(walletInfo);
             })
         });
         return promise;
+    }
+    /**
+     * Modify wallet's password
+     * @param  {Object} wallet
+     * @param  {string} oldPassword
+     * @param  {string} newPassword
+     */
+    async modifyPassword(wallet : Object, oldPassword : string, newPassword: string) {
+        const promise = new Promise(function(resolve, reject) {
+            foundation.modifyPassword(oldPassword, wallet.keystore, newPassword, function(calcedKeystore){
+                const walletInfo = createNewKeystore(wallet.name, calcedKeystore)
+                resolve(walletInfo);
+            });
+        });
     }
 
     saveToDisk() {

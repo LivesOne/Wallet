@@ -65,6 +65,20 @@ module.exports = {
         eth_local.dump(password, keyObj.privateKey, keyObj.salt, keyObj.iv, this.defaultOptions, callback);
     },
     
+    modifyPassword: function(oldPassword: string, keyStoreObject: Object, newPassword: string, callback: Function) {
+        if(!callback) {
+            throw 'callback is required';
+        } 
+
+        const self = this;
+        
+        eth_local.recover(oldPassword, keyStoreObject, function(privateKeyBuffer) {
+            const privateKey = privateKeyBuffer.toString('hex');
+
+            self.createKeyStore(newPassword, privateKey, callback);
+        });
+    },
+
     /**
      * import keystore with keystore object.
      * @param  {string} password
