@@ -13,6 +13,8 @@ import AppGuideScreen from './views/AppLaunch/AppGuideScreen';
 import AppTabNavigator from './containers/AppTabNavigator';
 import WalletNavigator from './views/Wallet/WalletNavigator';
 import LVWalletManager from './logic/LVWalletManager';
+import LVNotification from './logic/LVNotification';
+import LVNotificationCenter from './logic/LVNotificationCenter';
 
 class VenusApp extends Component {
     state: {
@@ -29,10 +31,12 @@ class VenusApp extends Component {
             hasAnyWallets: false
         };
         this.handleAppGuideCallback = this.handleAppGuideCallback.bind(this);
+        this.handleWalletImportSuccess = this.handleWalletImportSuccess.bind(this);
     }
 
     componentWillMount() {
         StatusBar.setBarStyle('light-content', false);
+        LVNotificationCenter.addObserver(this, LVNotification.importWalletSuccessFromLaunch, this.handleWalletImportSuccess);
     }
 
     componentDidMount() {
@@ -58,12 +62,19 @@ class VenusApp extends Component {
         this.setState({ loading: false, hasAnyWallets: hasWallets });
     }
 
-    componentWillUnmount() {}
+    componentWillUnmount() {
+        LVNotificationCenter.removeObservers(this);
+    }
 
     handleAppGuideCallback = () => {
         this.setState({ needShowGuide: false });
         LVConfiguration.setAppGuidesHasBeenDisplayed();
     };
+
+    handleWalletImportSuccess = async () => {
+        const hasWallets = await LVConfiguration.isAnyWalletAvailable();
+        this.setState({ hasAnyWallets: hasWallets });
+    }
 
     render() {
         const { loading, needShowGuide, hasAnyWallets } = this.state;
