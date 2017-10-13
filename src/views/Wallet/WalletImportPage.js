@@ -117,7 +117,7 @@ const foundation = require('../../foundation/wallet.js');
         this.refs.toast.dismiss();
         this.setState({alertMessage: LVStrings.wallet_import_success });
         this.refs.alert.show();
-        setTimeout(()=>{LVNotificationCenter.postNotification(LVNotification.importWalletSuccessFromLaunch)},500);
+        setTimeout(()=>{LVNotificationCenter.postNotification(LVNotification.walletImported)},500);
       } catch(e) {
         this.refs.toast.dismiss();
         this.setState({alertMessage: LVStrings.wallet_import_fail });
@@ -158,7 +158,7 @@ const foundation = require('../../foundation/wallet.js');
           this.refs.toast.dismiss();
           this.setState({alertMessage: LVStrings.wallet_import_success });
           this.refs.alert.show();
-          setTimeout(()=>{LVNotificationCenter.postNotification(LVNotification.importWalletSuccessFromLaunch)},500);
+          setTimeout(()=>{LVNotificationCenter.postNotification(LVNotification.walletImported)},500);
         } catch(e) {
           this.refs.toast.dismiss();
           this.setState({alertMessage: LVStrings.wallet_import_fail });
