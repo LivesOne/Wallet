@@ -15,10 +15,14 @@ import LVDetailTextCell from '../Common/LVDetailTextCell';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 import MXTouchableImage from '../../components/MXTouchableImage';
 import LVNetworking from '../../logic/LVNetworking';
+import LVWalletManager from '../../logic/LVWalletManager';
+import LVNotification from '../../logic/LVNotification';
+import LVNotificationCenter from '../../logic/LVNotificationCenter';
+import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVTransactionRecordManager';
 
 import WalletInfoView from './WalletInfoView';
 import WalletBalanceView from './WalletBalanceView';
-import TransactionRecordList, { testRecores } from './TransactionRecordList';
+import TransactionRecordList from './TransactionRecordList';
 
 const selectImg = require('../../assets/images/select_wallet.png');
 
@@ -28,86 +32,90 @@ class AssetsScreen extends Component {
     };
 
     state: {
-        walletId: string,
-        walletName: string,
-        walletAddress: string,
+        wallet: ?Object,
+        transactionList: ?Array<LVTransactionRecord>,
         openSelectWallet: boolean,
-        lvt: number,
-        eth: number,
-        lvtRmb: number,
-        ethRmb: number,
-        transferRecords: ?Array<Object>
     };
 
     constructor(props: any) {
         super(props);
+        const wallet = LVWalletManager.getSelectedWallet();
         this.state = {
-            walletId: '3',
-            walletName: '傲游LivesToken',
-            walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
+            wallet: wallet,
+            transactionList: null,
             openSelectWallet: false,
-            lvt: 2100000,
-            eth: 26.035,
-            lvtRmb: 20000,
-            ethRmb: 52000,
-            transferRecords: testRecores
         };
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
-        this.onWalletSelected = this.onWalletSelected.bind(this);
+        this.handleWalletChange = this.handleWalletChange.bind(this);
     }
 
-    componentWillMount() {}
+    componentWillMount() {
+
+    }
 
     componentDidMount() {
-        this.refetchWalletDatas();
+        LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
+        this.refreshWalletDatas();
+        this.refreshTransactionList();
     }
 
-    refetchWalletDatas = async () => {
-        try {
-            const lvt = await LVNetworking.fetchBalance('b09a753b35c031147e8c373f5df875032d1ac039', 'lvt');
-            //this.setState({lvt: parseFloat(lvt)});
-            const eth = await LVNetworking.fetchBalance('b09a753b35c031147e8c373f5df875032d1ac039', 'eth');
-            //this.setState({eth: parseFloat(eth)});
-        } catch (error) {
-            console.log('error in refetchWalletDatas : ' + error);
+    componentWillUnmount() {
+        LVNotificationCenter.removeObservers(this);
+    }
+
+    refreshWalletDatas = async () => {
+        const wallet = LVWalletManager.getSelectedWallet();
+        if (wallet) {
+            try {
+                const lvt = await LVNetworking.fetchBalance(wallet.address, 'lvt');
+                const eth = await LVNetworking.fetchBalance(wallet.address, 'eth');
+
+                wallet.lvt = lvt ? parseFloat(lvt) : 0;
+                wallet.eth = eth ? parseFloat(eth) : 0;
+                this.setState({wallet: wallet});
+
+                LVNotificationCenter.postNotification(LVNotification.balanceChanged);
+                LVWalletManager.saveToDisk();
+            } catch (error) {
+                console.log('error in refresh wallet datas : ' + error);
+            }
         }
+    }
+
+    refreshTransactionList = async () => {
+        await LVTransactionRecordManager.refreshTransactionRecords();
+        this.setState({transactionList: LVTransactionRecordManager.transactionRecords});
+    }
+
+    handleWalletChange = async () => {
+        await this.refreshWalletDatas();
+        await this.refreshTransactionList();
     }
 
     onPressSelectWallet = () => {
         this.setState({ openSelectWallet: true });
-        //this.props.navigation.navigate('WalletImport');
     };
 
     onSelectWalletClosed = () => {
         this.setState({ openSelectWallet: false });
     };
 
-    onWalletSelected = (walletObj: Object) => {
-        this.setState({
-            walletId: walletObj.id,
-            walletName: walletObj.name,
-            walletAddress: walletObj.address,
-            openSelectWallet: false
-        });
-    };
-
     onPressShowAll = () => {
-        this.props.navigation.navigate('TransactionRecords', {
-            walletName: this.state.walletName,
-            walletAddress: this.state.walletAddress
-        });
+        if (this.state.wallet) {
+            this.props.navigation.navigate('TransactionRecords', {walletName: this.state.wallet.name, walletAddress: this.state.wallet.address});
+        }
     };
 
     onPressRecord = (record: Object) => {
         this.props.navigation.navigate('TransactionDetails', {
-            walletAddress: this.state.walletAddress,
             transactionRecord: record
         });
     };
 
     render() {
-        const { walletName, walletAddress, lvt, eth, lvtRmb, ethRmb, transferRecords } = this.state;
+        const { transactionList } = this.state;
+        const wallet = this.state.wallet || {};
 
         return (
             <View style={styles.container}>
@@ -117,8 +125,8 @@ class AssetsScreen extends Component {
                         <Text style={styles.navTitle}>{LVStrings.assets_title}</Text>
                         <MXTouchableImage style={{ width: 27 }} source={selectImg} onPress={this.onPressSelectWallet} />
                     </View>
-                    <WalletInfoView style={styles.walletInfo} title={walletName} address={walletAddress} />
-                    <WalletBalanceView style={styles.balance} lvt={lvt} eth={eth} extLvt={lvtRmb} extEth={ethRmb} />
+                    <WalletInfoView style={styles.walletInfo} title={wallet.name} address={wallet.address} />
+                    <WalletBalanceView style={styles.balance} lvt={wallet.lvt} eth={wallet.eth} extLvt={0} extEth={0} />
                 </LVGradientPanel>
 
                 <LVDetailTextCell
@@ -130,13 +138,11 @@ class AssetsScreen extends Component {
 
                 <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }} />
 
-                <TransactionRecordList style={styles.list} records={transferRecords} onPressItem={this.onPressRecord} />
+                <TransactionRecordList style={styles.list} records={transactionList} onPressItem={this.onPressRecord} />
 
                 <LVSelectWalletModal
                     isOpen={this.state.openSelectWallet}
                     onClosed={this.onSelectWalletClosed}
-                    selectedWalletId={this.state.walletId}
-                    onSelected={this.onWalletSelected}
                 />
             </View>
         );

@@ -16,9 +16,10 @@ import LVStrings from '../../assets/localization';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVConfiguration from '../../logic/LVConfiguration';
+import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVTransactionRecordManager';
 
 import WalletInfoView from './WalletInfoView';
-import TransactionRecordList, { testRecores } from './TransactionRecordList';
+import TransactionRecordList from './TransactionRecordList';
 
 class TransactionRecordsScreen extends Component {
     static navigationOptions = {
@@ -29,7 +30,7 @@ class TransactionRecordsScreen extends Component {
     state: {
         startDate: string,
         endDate: string,
-        transferRecords: ?Array<Object>
+        transactionList: ?Array<LVTransactionRecord>,
     };
 
     constructor(props: any) {
@@ -37,7 +38,7 @@ class TransactionRecordsScreen extends Component {
         this.state = {
             startDate: '',
             endDate: '',
-            transferRecords: testRecores
+            transactionList: LVTransactionRecordManager.transactionRecords
         };
         this.onStartDateChange = this.onStartDateChange.bind(this);
         this.onEndDateChange = this.onEndDateChange.bind(this);
@@ -73,7 +74,7 @@ class TransactionRecordsScreen extends Component {
 
     render() {
         const { walletName, walletAddress } = this.props.navigation.state.params;
-        const { startDate, endDate, transferRecords } = this.state;
+        const { startDate, endDate, transactionList } = this.state;
 
         return (
             <View style={styles.container}>
@@ -104,7 +105,7 @@ class TransactionRecordsScreen extends Component {
                     </View>
                 </View>
 
-                <TransactionRecordList style={styles.list} records={transferRecords} onPressItem={this.onPressRecord} />
+                <TransactionRecordList style={styles.list} records={transactionList} onPressItem={this.onPressRecord} />
             </View>
         );
     }

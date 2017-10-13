@@ -1537,6 +1537,10 @@ cryptiles@2.x.x:
   dependencies:
     boom "2.x.x"
 
+crypto-js@^3.1.9-1:
+  version "3.1.9-1"
+  resolved "http://registry.npm.taobao.org/crypto-js/download/crypto-js-3.1.9-1.tgz#fda19e761fc077e01ffbfdc6e9fdfc59e8806cd8"
+
 csrf@~3.0.0:
   version "3.0.6"
   resolved "http://registry.npm.taobao.org/csrf/download/csrf-3.0.6.tgz#b61120ddceeafc91e76ed5313bb5c0b2667b710a"
@@ -3088,6 +3092,10 @@ jsonify@~0.0.0:
   version "0.0.0"
   resolved "http://registry.npm.taobao.org/jsonify/download/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
 
+jsonschema@^1.2.0:
+  version "1.2.0"
+  resolved "http://registry.npm.taobao.org/jsonschema/download/jsonschema-1.2.0.tgz#d6ebaf70798db7b3a20c544f6c9ef9319b077de2"
+
 jsprim@^1.2.2:
   version "1.4.1"
   resolved "http://registry.npm.taobao.org/jsprim/download/jsprim-1.4.1.tgz#313e66bc1e5cc06e438bc1b7499c2e5c56acb6a2"
@@ -4180,7 +4188,13 @@ react-native-barcodescanner@^3.1.1:
   version "3.1.1"
   resolved "http://registry.npm.taobao.org/react-native-barcodescanner/download/react-native-barcodescanner-3.1.1.tgz#99cdc4e89caac8ac6d5fd844fb6b72b9c4485928"
 
-react-native-crypto@^2.0.3:
+react-native-camera@^0.10.0:
+  version "0.10.0"
+  resolved "http://registry.npm.taobao.org/react-native-camera/download/react-native-camera-0.10.0.tgz#5d973c9a8aab95f68aede395ba310eae0c3cecdd"
+  dependencies:
+    prop-types "^15.5.10"
+
+react-native-crypto@^2.1.1:
   version "2.1.1"
   resolved "http://registry.npm.taobao.org/react-native-crypto/download/react-native-crypto-2.1.1.tgz#4b06271a0f6ec0b90389b5b567b738b57ca66a1e"
   dependencies:
@@ -4260,6 +4274,12 @@ react-native-progress@^3.4.0:
   resolved "http://registry.npm.taobao.org/react-native-progress/download/react-native-progress-3.4.0.tgz#c002e6efb2f0b82dd6889510e669c492da2718ac"
   dependencies:
     prop-types "^15.5.8"
+
+react-native-qrcode-scanner@0.0.22:
+  version "0.0.22"
+  resolved "http://registry.npm.taobao.org/react-native-qrcode-scanner/download/react-native-qrcode-scanner-0.0.22.tgz#b045d6ba6413bd379008e6e5aff047e6fbaa95ae"
+  dependencies:
+    prop-types "^15.5.10"
 
 react-native-qrcode@^0.2.6:
   version "0.2.6"
@@ -4682,7 +4702,7 @@ rlp@^2.0.0:
   version "2.0.0"
   resolved "http://registry.npm.taobao.org/rlp/download/rlp-2.0.0.tgz#9db384ff4b89a8f61563d92395d8625b18f3afb0"
 
-"rn-nodeify@github:mvayngrib/rn-nodeify":
+rn-nodeify@mvayngrib/rn-nodeify:
   version "8.2.0"
   resolved "https://codeload.github.com/mvayngrib/rn-nodeify/tar.gz/02225a2d23791f46e3394200d219f571b688daa2"
   dependencies:

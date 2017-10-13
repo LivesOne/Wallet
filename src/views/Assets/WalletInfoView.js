@@ -9,6 +9,7 @@ import React, { Component } from 'react';
 import { StyleSheet, ViewPropTypes, View, Text, Image } from 'react-native';
 import PropTypes from 'prop-types';
 import LVSize from '../../styles/LVFontSize';
+import { StringUtils } from '../../utils';
 
 const walletIcon = require('../../assets/images/assets_wallet.png');
 
@@ -31,7 +32,7 @@ export default class WalletInfoView extends Component {
                         {this.props.title}
                     </Text>
                     <Text style={[styles.text, styles.walletAddress, this.props.addressStyle]} numberOfLines={1} ellipsizeMode="middle">
-                        {this.props.address}
+                        {StringUtils.converAddressToDisplayableText(this.props.address, 9, 9)}
                     </Text>
                 </View>
             </View>
@@ -57,7 +58,6 @@ const styles = StyleSheet.create({
         fontWeight: '500'
     },
     walletAddress: {
-        width: 170,
         fontSize: LVSize.xsmall
     }
 });

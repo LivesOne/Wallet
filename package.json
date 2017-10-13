@@ -12,6 +12,7 @@
     "browserify-zlib": "^0.1.4",
     "console-browserify": "^1.1.0",
     "constants-browserify": "^1.0.0",
+    "crypto-js": "^3.1.9-1",
     "dns.js": "^1.0.1",
     "domain-browser": "^1.1.7",
     "elliptic": "^6.3.3",
@@ -20,6 +21,7 @@
     "ethereumjs-util": "^5.1.2",
     "events": "^1.1.1",
     "https-browserify": "0.0.1",
+    "jsonschema": "^1.2.0",
     "keccak": "^1.3.0",
     "moment": "^2.18.1",
     "path-browserify": "0.0.0",
@@ -28,7 +30,8 @@
     "react": "16.0.0-alpha.12",
     "react-native": "0.48.3",
     "react-native-barcodescanner": "^3.1.1",
-    "react-native-crypto": "^2.0.3",
+    "react-native-camera": "^0.10.0",
+    "react-native-crypto": "^2.1.1",
     "react-native-datepicker": "^1.6.0",
     "react-native-device-info": "^0.11.0",
     "react-native-http": "github:tradle/react-native-http#834492d",
@@ -39,6 +42,7 @@
     "react-native-os": "^1.1.0",
     "react-native-progress": "^3.4.0",
     "react-native-qrcode": "^0.2.6",
+    "react-native-qrcode-scanner": "0.0.22",
     "react-native-randombytes": "^3.0.0",
     "react-native-slider": "^0.11.0",
     "react-native-swiper": "^1.5.12",
@@ -64,7 +68,7 @@
     "babel-preset-react-native": "4.0.0",
     "jest": "21.1.0",
     "react-test-renderer": "16.0.0-alpha.12",
-    "rn-nodeify": "github:mvayngrib/rn-nodeify"
+    "rn-nodeify": "mvayngrib/rn-nodeify"
   },
   "jest": {
     "preset": "react-native"

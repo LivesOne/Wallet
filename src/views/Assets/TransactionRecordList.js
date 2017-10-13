@@ -7,59 +7,13 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, ViewPropTypes, Dimensions, View, Image, Text, FlatList, TouchableOpacity } from 'react-native';
-import { Cell, Separator } from 'react-native-tableview-simple';
+import { Separator } from 'react-native-tableview-simple';
 import PropTypes from 'prop-types';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
-import { DateUtils } from '../../utils';
+import { DateUtils, StringUtils } from '../../utils';
 import * as Progress from 'react-native-progress';
-
-/*
-transferRecord: {
-    id: string,                     // id of the record
-    transfer_type: string,          // type of this transfer record, 'in' or 'out'    
-    transfer_unit: string,          // 'LVT' or 'ETH'
-    transfer_amount: number,
-    transfer_address: string,
-    transfer_datetime: string,
-    transfer_completed: bool,
-    transfer_checked_peers: number,
-    transfer_total_check_peers: number,
-}
-*/
-
-export const testRecores = [
-    {
-        id: 1,
-        transfer_type: 'in',
-        transfer_unit: 'LVT',
-        transfer_amount: 50000,
-        transfer_address: 'edc107416fc0be8c9de8751e02da21ca198fb25d',
-        transfer_datetime: '2017-09-22 15:30',
-        transfer_completed: false,
-        transfer_checked_peers: 4,
-        transfer_total_check_peers: 10
-    },
-    {
-        id: 2,
-        transfer_type: 'in',
-        transfer_unit: 'LVT',
-        transfer_amount: 70000,
-        transfer_address: '379896a5474360a6dcedea906e5eb2975e50b702',
-        transfer_datetime: '2017-09-21 12:30',
-        transfer_completed: true
-    },
-    {
-        id: 3,
-        transfer_type: 'out',
-        transfer_unit: 'LVT',
-        transfer_amount: 3000,
-        transfer_address: '517f64c8669b0dd375490f7f1ae9a36fb8cb2cf7',
-        transfer_datetime: '2017-09-20 09:21',
-        transfer_completed: true
-    }
-];
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -74,12 +28,12 @@ export default class TransactionRecordList extends React.PureComponent {
 
     state = { selected: (new Map(): Map<string, boolean>) };
 
-    _keyExtractor = (item, index) => item.id;
+    _keyExtractor = (item, index) => index.toString();
 
     _onPressItem = (item: Object) => {
         this.setState(state => {
             const selected = new Map(state.selected);
-            selected.set(item.id, !selected.get(item.id)); // toggle
+            selected.set(item.hash, !selected.get(item.hash)); // toggle
             return { selected };
         });
 
@@ -90,16 +44,11 @@ export default class TransactionRecordList extends React.PureComponent {
 
     _renderItem = ({ item }) => (
         <LVTransactionRecordItem
-            id={item.id}
-            type={item.transfer_type}
-            unit={item.transfer_unit}
-            amount={item.transfer_amount}
-            address={item.transfer_address}
-            datetime={item.transfer_datetime}
-            completed={item.transfer_completed}
-            checked_peers={item.transfer_checked_peers}
-            total_check_peers={item.transfer_total_check_peers}
-            selected={!!this.state.selected.get(item.id)}
+            type={item.type}
+            amount={item.amount}
+            address={item.type == 'in' ? item.payer : item.receiver}
+            datetime={item.datetime}
+            selected={!!this.state.selected.get(item.hash)}
             onPressItem={() => {
                 this._onPressItem(item);
             }}
@@ -146,22 +95,19 @@ const LVEmptyListComponent = () => {
 class LVTransactionRecordItem extends React.PureComponent {
     static propTypes = {
         type: PropTypes.string.isRequired,
-        unit: PropTypes.string.isRequired,
         amount: PropTypes.number.isRequired,
         address: PropTypes.string.isRequired,
         datetime: PropTypes.string,
-        completed: PropTypes.bool,
-        checked_peers: PropTypes.number,
-        total_check_peers: PropTypes.number,
         onPressItem: PropTypes.func
     };
 
     render() {
-        const { type, unit, amount, address, datetime, completed, checked_peers, total_check_peers } = this.props;
+        const { type, amount, address, datetime } = this.props;
         const typeImage = type === 'in' ? inImg : outImg;
 
+        const completed = true;
         const prefix = type === 'in' ? '+' : '-';
-        const amountString = prefix + amount + ' ' + unit;
+        const amountString = prefix + amount + ' LVT';
 
         //const
         const t = DateUtils.getTimePastFromNow(datetime);
@@ -175,15 +121,13 @@ class LVTransactionRecordItem extends React.PureComponent {
                   ? t.hours + ' ' + LVStrings.time_pass_hours_ago
                   : t.minutes ? t.minutes + ' ' + LVStrings.time_pass_minutes_ago : LVStrings.time_pass_a_moment_ago;
 
-        const progressRate = total_check_peers > 0 ? checked_peers / total_check_peers : 0;
-
         return (
             <TouchableOpacity style={[styles.record]} activeOpacity={0.7} onPress={this.props.onPressItem}>
                 <View style={styles.info}>
                     <View style={styles.infoInner}>
                         <Image source={typeImage} />
                         <Text style={styles.addressText} numberOfLines={1} ellipsizeMode="middle">
-                            {address.toUpperCase()}
+                            {StringUtils.converAddressToDisplayableText(address)}
                         </Text>
                     </View>
                     <View style={styles.infoInner}>
@@ -222,7 +166,6 @@ const styles = StyleSheet.create({
     },
     addressText: {
         marginLeft: 10,
-        width: 110,
         color: LVColor.text.grey1,
         fontSize: 15,
         textAlign: 'left'

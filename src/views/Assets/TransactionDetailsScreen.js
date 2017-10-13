@@ -13,6 +13,7 @@ import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
+import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVTransactionRecordManager';
 import LVUtils, { StringUtils } from '../../utils';
 
 const failureImg = require('../../assets/images/transaction_failure.png');
@@ -26,17 +27,13 @@ export default class TransactionDetailsScreen extends Component {
     };
 
     render() {
-        const { walletAddress, transactionRecord } = this.props.navigation.state.params;
-        const { transfer_type, transfer_amount, transfer_address, transfer_remarks } = transactionRecord;
+        const { transactionRecord } = this.props.navigation.state.params;
+        const { block, hash, type, amount, payer, receiver, minnerFee, datetime } = transactionRecord;
 
         const is_failed = false;
-        const symble = transfer_type === 'in' ? '+' : '-';
-        const amountString = symble + StringUtils.convertAmountToCurrencyString(transfer_amount, ',');
-
-        const payerAddress = symble === '-' ? walletAddress : transfer_address;
-        const receiverAddress = symble === '+' ? walletAddress : transfer_address;
+        const symble = type === 'in' ? '+' : '-';
+        const amountString = symble + StringUtils.convertAmountToCurrencyString(amount, ',');
         const remarks = transactionRecord.remarks || LVStrings.transaction_na;
-        const trans_datetime = transactionRecord.transfer_datetime;
 
         const typeImg = is_failed ? failureImg : symble === '+' ? receiptImg : transferImg;
 
@@ -58,17 +55,17 @@ export default class TransactionDetailsScreen extends Component {
                     </View>
                     <View style={styles.details}>
                         <View style={{ width: '100%', paddingLeft: 15, paddingRight: 15 }}>
-                            <LVSubTitleCell title={LVStrings.transaction_payer} value={payerAddress} />
-                            <LVSubTitleCell title={LVStrings.transaction_receiver} value={receiverAddress} />
-                            <LVSubTitleCell title={LVStrings.transaction_minner_fee} value={0.33342 + 'ETC'} />
+                            <LVSubTitleCell title={LVStrings.transaction_payer} value={payer.substr(2)} />
+                            <LVSubTitleCell title={LVStrings.transaction_receiver} value={receiver.substr(2)} />
+                            <LVSubTitleCell title={LVStrings.transaction_minner_fee} value={minnerFee + ' ETH'} />
                             <LVSubTitleCell title={LVStrings.transaction_remarks} value={remarks} />
                             {!is_failed || <Text style={styles.failureText}>{LVStrings.transaction_failure_message}</Text>}
                         </View>
                         {is_failed || (
                             <View style={{ width: '100%', paddingLeft: 15, paddingRight: 15, marginBottom: 10 }}>
-                                <LVRightDetailCell title={LVStrings.transaction_block_number} value={'2353346'} />
-                                <LVRightDetailCell title={LVStrings.transaction_hash} value={'AF3WFSF...234DSG'} />
-                                <LVRightDetailCell title={LVStrings.transaction_time} value={trans_datetime} />
+                                <LVRightDetailCell title={LVStrings.transaction_block_number} value={block} />
+                                <LVRightDetailCell title={LVStrings.transaction_hash} value={StringUtils.converAddressToDisplayableText(hash, 7, 7)} />
+                                <LVRightDetailCell title={LVStrings.transaction_time} value={datetime} />
                             </View>
                         )}
                     </View>
@@ -82,7 +79,7 @@ const LVSubTitleCell = ({ title, value }) => (
     <View style={{ height: 69, justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <View style={{ height: 8 }} />
         <Text style={{ fontSize: 14, textAlign: 'left', color: LVColor.primary }}>{title}</Text>
-        <Text style={{ fontSize: 14, textAlign: 'left', color: LVColor.text.grey1 }}>{value}</Text>
+        <Text style={{ fontSize: 13, textAlign: 'left', color: LVColor.text.grey1 }}>{value}</Text>
         <View style={{ width: '100%', height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }} />
     </View>
 );

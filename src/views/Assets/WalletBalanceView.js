@@ -52,8 +52,8 @@ const BalanceItemHeader = ({ icon, title }) => (
 );
 
 const BalanceValueView = ({ value, extValue, extUnit }) => {
-    const valueString = StringUtils.convertAmountToCurrencyString(value, ',');
-    const extValString = StringUtils.convertAmountToCurrencyString(extValue, ',');
+    const valueString = StringUtils.convertAmountToCurrencyString(value, ',', 3);
+    const extValString = StringUtils.convertAmountToCurrencyString(extValue, ',', 3);
     return (
         <View>
             <Text />

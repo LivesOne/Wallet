@@ -61,6 +61,7 @@ const Window = {
 const styles = StyleSheet.create({
     container: {
         height: '25%',
+        backgroundColor: 'transparent'
     },
     nav: {
         width: Window.width,

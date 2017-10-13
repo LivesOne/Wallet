@@ -13,24 +13,23 @@ import LVStrings from '../../../assets/localization';
 import LVColor from '../../../styles/LVColor';
 import LVGradientPanel from '../../../views/Common/LVGradientPanel';
 import { converAddressToDisplayableText } from '../../../utils/MXStringUtils';
+import LVFullScreenModalView from '../../Common/LVFullScreenModalView';
+import LVWalletCreationNavigator from '../../Wallet/LVWalletCreationNavigator';
+import WalletImportPage from '../../Wallet/WalletImportPage';
 import LVWalletManager from '../../../logic/LVWalletManager';
 const IconBack = require('../../../assets/images/back_grey.png');
 const WalletIcon = require('../../../assets/images/wallet_grey.png');
 const ShowDetailsIcon = require('../../../assets/images/show_detail_arrow.png');
-
-const data = [
-    { id: 1, title: '1', balance: '14,900' },
-    { id: 2, title: '2', balance: '2,100,000'},
-    { id: 3, title: '3', balance: '900' },
-    { id: 4, title: '4', balance: '1900' },
-    { id: 5, title: '5', balance: '21,900' },
-  ];
 
 export class WalletManagerScreen extends Component {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
     };
+
+    state: {
+        wallets: Array<Object>
+    }
 
     onCreateWalletPressed : Function;
     onImportWalletPressed : Function;
@@ -40,17 +39,27 @@ export class WalletManagerScreen extends Component {
 
         this.onCreateWalletPressed = this.onCreateWalletPressed.bind(this);
         this.onImportWalletPressed = this.onImportWalletPressed.bind(this);
+        this.state = {
+            wallets: []
+        };
+    }
+
+    componentDidMount() {
+        this.setState({
+            wallets: LVWalletManager.getWallets()
+        });
     }
 
     onCreateWalletPressed() {
-        this.props.navigation.navigate('WalletCreatePage');
+        this.refs.creationPage.show();
     }
 
     onImportWalletPressed() {
-        this.props.navigation.navigate('WalletImportPage');
+        this.refs.importPage.show();
     }
 
     render() {
+        const { wallets } = this.state;
         return (
             <View style={styles.container}>
                 <MXNavigatorHeader
@@ -63,14 +72,15 @@ export class WalletManagerScreen extends Component {
                 <View style={styles.listContainerStyle}>
                     <FlatList
                         showsVerticalScrollIndicator={false}
-                        data={LVWalletManager.getWallets()}
+                        data={wallets}
+                        extraData={this.state}
                         keyExtractor={(item,index)=> item.address}
                         renderItem={({item, separators}) => 
                              <TouchableHighlight style={styles.cellContentViewContainer}
                                 onPressIn={separators.highlight}
                                 onPressOut={separators.unhighlight}
                                 underlayColor={LVColor.white}
-                                onPress={()=> this.props.navigation.navigate('WalletManagerPage')}>
+                                onPress={()=> this.props.navigation.navigate('WalletManagerPage', {wallet:item})}>
                                 <View style={styles.cellContentStyle}>
                                     <View style={styles.cellLeftContentStyle}>
                                         <Image source={WalletIcon} resizeMode={Image.resizeMode.contain} style={styles.cellLeftImageStyle}/>
@@ -113,6 +123,23 @@ export class WalletManagerScreen extends Component {
                         </TouchableHighlight>
                     </View>
                 </LVGradientPanel>
+                <LVFullScreenModalView ref={'creationPage'}>
+                    <LVWalletCreationNavigator screenProps={{dismiss: ()=> {
+                        this.refs.creationPage.dismiss()
+                        this.setState({
+                            wallets: LVWalletManager.getWallets()
+                        });
+                    } 
+                }}/>
+                </LVFullScreenModalView>
+                <LVFullScreenModalView ref={'importPage'}>
+                    <WalletImportPage dismissCallback={()=> {
+                        this.refs.importPage.dismiss();
+                        this.setState({
+                            wallets: LVWalletManager.getWallets()
+                        });
+                    }}/>
+                </LVFullScreenModalView>
             </View>
         );
     }
