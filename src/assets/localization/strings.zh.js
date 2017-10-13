@@ -148,6 +148,7 @@ const localized_strings = {
     
     // qr scan
     qrScan_title: '扫一扫',
+    qrScan_hint: '将钱包二维码放入方框内扫描',
 };
 
 export default localized_strings;

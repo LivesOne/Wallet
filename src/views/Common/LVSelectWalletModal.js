@@ -30,15 +30,14 @@ export default class LVSelectWalletModal extends Component {
     };
 
     state: {
-        selectedId: number,
-        data: ?Array<Object>
+        selectedAddress: string
     };
 
     constructor(props: any) {
         super(props);
+        const wallet = LVWalletManager.getSelectedWallet();
         this.state = {
-            selectedId: LVWalletManager.selectedIndex,
-            data: LVWalletManager.wallets.map((w, i) => ({ id: i, name: w.name }))
+            selectedAddress: wallet ? wallet.address : ''
         };
 
         this.onClosed = this.onClosed.bind(this);
@@ -55,12 +54,12 @@ export default class LVSelectWalletModal extends Component {
         }
     };
 
-    _keyExtractor = (item, index) => item.id;
+    _keyExtractor = (item, index) => item.address;
 
-    _onPressItem = (id: number) => {
-        this.setState({ selectedId: id });
-        
-        LVWalletManager.selectedIndex = id;
+    _onPressItem = (address: string) => {
+        this.setState({ selectedAddress: address });
+
+        LVWalletManager.setSelectedWallet(address);
         LVNotificationCenter.postNotification(LVNotification.walletChanged);
 
         this.refs.modal.close();
@@ -68,14 +67,18 @@ export default class LVSelectWalletModal extends Component {
 
     _renderItem = ({ item }) => (
         <LVSelectWalletItem
-            id={item.id}
-            walletName={item.name}
-            selected={item.id === this.state.selectedId}
+            name={item.name}
+            address={item.address}
+            selected={item.address === this.state.selectedAddress}
             onPressItem={this._onPressItem}
         />
     );
 
     render() {
+        const dataSource = LVWalletManager.wallets
+            .map((w, i) => ({ id: i, name: w.name, address: w.address }))
+            .sort((a, b) => b.id - a.id);
+            
         return (
             <Modal
                 ref={'modal'}
@@ -92,7 +95,7 @@ export default class LVSelectWalletModal extends Component {
                 <View style={styles.content}>
                     <FlatList
                         style={styles.list}
-                        data={this.state.data}
+                        data={dataSource}
                         extraData={this.state}
                         keyExtractor={this._keyExtractor}
                         renderItem={this._renderItem.bind(this)}
@@ -124,24 +127,24 @@ const styles = StyleSheet.create({
 
 class LVSelectWalletItem extends React.PureComponent {
     static propTypes = {
-        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        address: PropTypes.string.isRequired,
         selected: PropTypes.bool.isRequired,
-        walletName: PropTypes.string.isRequired,
         onPressItem: PropTypes.func
     };
 
     _onPress = () => {
-        this.props.onPressItem(this.props.id);
+        this.props.onPressItem(this.props.address);
     };
 
     render() {
-        const { selected, walletName } = this.props;
+        const { selected, name } = this.props;
 
         return (
             <TouchableOpacity style={itemStyles.container} activeOpacity={0.7} onPress={this._onPress.bind(this)}>
                 <View style={itemStyles.left}>
                     <Image source={selected ? walletSelected : walletUnselected} />
-                    <Text style={itemStyles.text}>{walletName}</Text>
+                    <Text style={itemStyles.text}>{name}</Text>
                 </View>
                 <Image style={itemStyles.selected} source={selected ? itemSelected : itemUnselected} />
             </TouchableOpacity>
