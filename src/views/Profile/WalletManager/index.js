@@ -13,6 +13,7 @@ import LVStrings from '../../../assets/localization';
 import LVColor from '../../../styles/LVColor';
 import LVGradientPanel from '../../../views/Common/LVGradientPanel';
 import { converAddressToDisplayableText } from '../../../utils/MXStringUtils';
+import LVWalletCreationModalPage from '../../Wallet/LVWalletCreationModalPage';
 import LVWalletManager from '../../../logic/LVWalletManager';
 const IconBack = require('../../../assets/images/back_grey.png');
 const WalletIcon = require('../../../assets/images/wallet_grey.png');
@@ -35,7 +36,7 @@ export class WalletManagerScreen extends Component {
     }
 
     onCreateWalletPressed() {
-        this.props.navigation.navigate('WalletCreatePage');
+        this.refs.creationPage.show();
     }
 
     onImportWalletPressed() {
@@ -105,6 +106,7 @@ export class WalletManagerScreen extends Component {
                         </TouchableHighlight>
                     </View>
                 </LVGradientPanel>
+                <LVWalletCreationModalPage ref={'creationPage'} dismissCallback={()=> this.refs.creationPage.dismiss()}/>
             </View>
         );
     }
