@@ -21,9 +21,13 @@ import LVDialog from '../Common/LVDialog';
 import WalletUtils from './WalletUtils';
 import LVNotification from '../../logic/LVNotification';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
+import PropTypes from 'prop-types';
 const foundation = require('../../foundation/wallet.js');
 
  export default class AssetsImportPage extends Component {
+    static propTypes = {
+      dismissCallback: PropTypes.func
+    };
 
     static navigationOptions = {
         header: null,
@@ -178,7 +182,11 @@ const foundation = require('../../foundation/wallet.js');
           <MXNavigatorHeader
             title = {LVStrings.wallet_import_header}
             onLeftPress = {() => {
-              this.props.navigation.goBack();
+                if(this.props.dismissCallback) {
+                    this.props.dismissCallback();
+                } else if(this.props.navigation){
+                    this.props.navigation.goBack();
+                }
             }}
             right={ require("../../assets/images/qrScan.png") }
             onRightPress = {
