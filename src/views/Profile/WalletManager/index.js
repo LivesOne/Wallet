@@ -17,7 +17,7 @@ import LVFullScreenModalView from '../../Common/LVFullScreenModalView';
 import LVWalletCreationNavigator from '../../Wallet/LVWalletCreationNavigator';
 import WalletImportPage from '../../Wallet/WalletImportPage';
 import LVWalletManager from '../../../logic/LVWalletManager';
-const IconBack = require('../../../assets/images/back_grey.png');
+import {greyNavigationBackIcon} from '../../../assets/LVIcons';
 const WalletIcon = require('../../../assets/images/wallet_grey.png');
 const ShowDetailsIcon = require('../../../assets/images/show_detail_arrow.png');
 
@@ -63,7 +63,7 @@ export class WalletManagerScreen extends Component {
         return (
             <View style={styles.container}>
                 <MXNavigatorHeader
-                left={ IconBack }
+                left={ greyNavigationBackIcon }
                 style={styles.nav}
                 title={ LVStrings.profile_wallet_management }
                 titleStyle={styles.navTitle}
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F8F9FB'
     },
     nav: {
-        backgroundColor : '#F8F9FB'
+        backgroundColor : LVColor.profileNavBack
     },
     navTitle: {
         color : '#6d798a'
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
         color: '#BFC5D1'
     },
     cellRightSeparatorStyle: {
-        height: 1,
+        height: StyleSheet.hairlineWidth,
         marginRight: 10,
         backgroundColor: LVColor.separateLine
     },

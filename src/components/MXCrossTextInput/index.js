@@ -36,10 +36,12 @@ class MXCrossTextInput extends Component {
     onTextChanged: PropTypes.func,
     withUnderLine: PropTypes.bool,
     KeyboardType: PropTypes.string,
+    withClearButton: PropTypes.bool
   };
 
   static defaultProps = {
     withUnderLine: true,
+    withClearButton: true
  };
 
   getTheme() {
@@ -97,7 +99,7 @@ class MXCrossTextInput extends Component {
         onEndEditing={() => this.setState({hasFocus : false})}
       />
 
-      {this.state.text !== "" && this.state.hasFocus && <TouchableOpacity
+      {this.props.withClearButton && this.state.text !== "" && this.state.hasFocus && <TouchableOpacity
         style={Base.clearButton}
         onPress={() => {
           this.onChangeText("")

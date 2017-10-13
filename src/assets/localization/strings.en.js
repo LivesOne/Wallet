@@ -18,6 +18,7 @@ const localized_strings = {
     alert_warning: 'Warning',
     alert_hint: 'hint',
     alert_ok: 'Ok',
+    common_done: 'Done',
 
     //receive
     receive_title:'My payment QR code',
@@ -149,6 +150,15 @@ const localized_strings = {
     // qr scan
     qrScan_title: 'Scan',
     qrScan_hint: 'Place the wallet qrCode into the box to scan',
+
+    //contacts
+    contact_list_nav_title: 'Contacts',
+    contact_add_nav_title: '添加联系人',
+    contact_add_place_holder_nickname: 'nick name',
+    contact_add_place_holder_address: 'address',
+    contact_add_place_holder_cellphone: 'cellphone number',
+    contact_add_place_holder_email: 'email',
+    contact_add_place_holder_remarks: 'remarks',
 };
 
 export default localized_strings;
