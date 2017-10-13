@@ -212,9 +212,13 @@ class WalletManager {
      */
     async modifyPassword(wallet : Object, oldPassword : string, newPassword: string) {
         const promise = new Promise(function(resolve, reject) {
-            foundation.modifyPassword(oldPassword, wallet.keystore, newPassword, function(calcedKeystore){
-                const walletInfo = createNewKeystore(wallet.name, calcedKeystore)
-                resolve(walletInfo);
+            foundation.modifyPassword(oldPassword, wallet.keystore, newPassword, function(calcedKeystore){;
+                wallet.keystore = calcedKeystore;
+                if(wallet.address !== calcedKeystore.address) {
+                    reject({error: 'internal error, keystore addresses are different.'});
+                } else {
+                    resolve(wallet);
+                }
             });
         });
     }
