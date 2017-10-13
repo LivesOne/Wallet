@@ -87,6 +87,24 @@ export class WalletDetailsPage extends Component {
         this.setState({ showExportModal: false })
     }
 
+    onPressWalletBackupButton() {
+        this.refs.walletBackupConfirm.show();
+    }
+
+    onWalletBackupConfirm() {
+
+    }
+
+    onPressWalletDeleteButton() {
+        this.refs.walletDeleteConfirm.show();
+    }
+
+    onWalletDeleteConfirm = async () => {
+        LVWalletManager.deleteWallet(this.state.walletAddress);
+        await LVWalletManager.saveToDisk();
+        LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
+    }
+
     render() {     
         return (
             <View style={ styles.container }>
@@ -131,16 +149,14 @@ export class WalletDetailsPage extends Component {
                 <View style={{width: '100%', flex: 1, justifyContent:'flex-end', alignItems:'center', backgroundColor: 'white'}}>
                     <MXButton style={{marginBottom: 15}} 
                             title={ LVStrings.profile_wallet_backup } 
-                            rounded/>
+                            rounded onPress={this.onPressWalletBackupButton.bind(this)}/>
                     <MXButton style={{marginBottom: 25}} 
                             title={ LVStrings.profile_wallet_delete_wallet } 
                             rounded
-                            onPress={ async ()=> {
-                                LVWalletManager.deleteWallet(this.state.walletAddress);
-                                await LVWalletManager.saveToDisk();
-                                LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
-                            }}/>
+                            onPress={this.onPressWalletDeleteButton.bind(this)} />
                 </View>
+                <LVConfirmDialog ref={'walletBackupConfirm'} title='请输入密码' message='输入密码' onConfirm={this.onWalletBackupConfirm} />
+                <LVConfirmDialog ref={'walletDeleteConfirm'} title='删除' message='确认删除吗？' onConfirm={this.onWalletDeleteConfirm} />
                 
             </View>
         )

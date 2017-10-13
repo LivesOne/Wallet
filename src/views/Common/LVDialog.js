@@ -47,7 +47,7 @@ export default class LVDialog extends Component {
         const buttonTitle = this.props.buttonTitle;
 
         const modalWidth = { width: this.props.width || '90%' };
-        const modalHeight = { height: this.props.height || (buttonTitle ? 170 : 150) };
+        const modalHeight = { height: this.props.height || (buttonTitle ? 120 : 100 + message ? 50 : 0) };
 
         return (
             <Modal
