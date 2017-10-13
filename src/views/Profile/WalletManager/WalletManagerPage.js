@@ -10,6 +10,9 @@ import { Cell, Section, TableView, Separator } from 'react-native-tableview-simp
 import MXButton from './../../../components/MXButton';
 import LVStrings from '../../../assets/localization';
 import { WalletExportModal } from './WalletExportModal';
+import LVWalletManager from '../../../logic/LVWalletManager';
+import LVNotification from '../../../logic/LVNotification';
+import LVNotificationCenter from '../../../logic/LVNotificationCenter';
 
 const IconWalletModifyName = require('../../../assets/images/wallet_modify_name.png');
 const IconWalletModifyPwd = require('../../../assets/images/wallet_modify_pwd.png');
@@ -71,6 +74,9 @@ export class WalletManagerPage extends Component {
     }
 
     render() {
+        const { params } = this.props.navigation.state;
+        const wallet = params.wallet;
+        
         return (
             <View style={ styles.container }>
                 <WalletExportModal
@@ -111,8 +117,17 @@ export class WalletManagerPage extends Component {
                     </Section>
                 </TableView>
                 <View style={{width: '100%', flex: 1, justifyContent:'flex-end', alignItems:'center', backgroundColor: 'white'}}>
-                    <MXButton style={{marginBottom: 15}} title={ LVStrings.profile_wallet_backup } rounded></MXButton>
-                    <MXButton style={{marginBottom: 25}}title={ LVStrings.profile_wallet_delete_wallet } rounded></MXButton>
+                    <MXButton style={{marginBottom: 15}} 
+                            title={ LVStrings.profile_wallet_backup } 
+                            rounded/>
+                    <MXButton style={{marginBottom: 25}} 
+                            title={ LVStrings.profile_wallet_delete_wallet } 
+                            rounded
+                            onPress={ async ()=> {
+                                LVWalletManager.deleteWallet(wallet.address);
+                                await LVWalletManager.saveToDisk();
+                                LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
+                            }}/>
                 </View>
                 
             </View>

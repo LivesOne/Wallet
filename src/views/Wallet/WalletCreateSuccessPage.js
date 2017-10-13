@@ -28,7 +28,7 @@ export default class WalletCreateSuccessPage extends Component {
                 <MXNavigatorHeader
                     title = {LVStrings.wallet_create_wallet}
                     onLeftPress = {() => {
-                        LVNotificationCenter.postNotification(LVNotification.walletsChanged)
+                        LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged)
                         if(this.props.screenProps.dismiss) {
                             this.props.screenProps.dismiss();
                         } else {

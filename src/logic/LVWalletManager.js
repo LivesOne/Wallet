@@ -158,7 +158,9 @@ class WalletManager {
         const walletIndex = this.wallets.findIndex((w)=>{
             return w.address === address;
         });
-
+        if(walletIndex === -1) {
+            return false;
+        }
         //remove wallet from memory.
         this.wallets.splice(walletIndex,1);
         //make sure the selected index is in valid range.
@@ -223,14 +225,14 @@ class WalletManager {
         });
     }
 
-    saveToDisk() {
+    async saveToDisk() {
         const walletInfo = {
             wallets: this.wallets,
             selectedIndex: this.selectedIndex
         };
 
-        LVConfiguration.setAnyWalletAvailable(this.wallets.length > 0);
-        LVPersistent.setObject(WalletsKey, walletInfo);
+        await LVConfiguration.setAnyWalletAvailable(this.wallets.length > 0);
+        await LVPersistent.setObject(WalletsKey, walletInfo);
     }
 }
 
