@@ -15,52 +15,6 @@ import LVStrings from '../../assets/localization';
 import { DateUtils, StringUtils } from '../../utils';
 import * as Progress from 'react-native-progress';
 
-/*
-transferRecord: {
-    id: string,                     // id of the record
-    transfer_type: string,          // type of this transfer record, 'in' or 'out'    
-    transfer_unit: string,          // 'LVT' or 'ETH'
-    transfer_amount: number,
-    transfer_address: string,
-    transfer_datetime: string,
-    transfer_completed: bool,
-    transfer_checked_peers: number,
-    transfer_total_check_peers: number,
-}
-*/
-
-export const testRecores = [
-    {
-        id: 1,
-        transfer_type: 'in',
-        transfer_unit: 'LVT',
-        transfer_amount: 50000,
-        transfer_address: 'edc107416fc0be8c9de8751e02da21ca198fb25d',
-        transfer_datetime: '2017-09-22 15:30',
-        transfer_completed: false,
-        transfer_checked_peers: 4,
-        transfer_total_check_peers: 10
-    },
-    {
-        id: 2,
-        transfer_type: 'in',
-        transfer_unit: 'LVT',
-        transfer_amount: 70000,
-        transfer_address: '379896a5474360a6dcedea906e5eb2975e50b702',
-        transfer_datetime: '2017-09-21 12:30',
-        transfer_completed: true
-    },
-    {
-        id: 3,
-        transfer_type: 'out',
-        transfer_unit: 'LVT',
-        transfer_amount: 3000,
-        transfer_address: '517f64c8669b0dd375490f7f1ae9a36fb8cb2cf7',
-        transfer_datetime: '2017-09-20 09:21',
-        transfer_completed: true
-    }
-];
-
 const windowHeight = Dimensions.get('window').height;
 
 const inImg = require('../../assets/images/transfer_in.png');

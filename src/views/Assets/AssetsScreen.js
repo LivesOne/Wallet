@@ -102,7 +102,9 @@ class AssetsScreen extends Component {
     };
 
     onPressShowAll = () => {
-        this.props.navigation.navigate('TransactionRecords');
+        if (this.state.wallet) {
+            this.props.navigation.navigate('TransactionRecords', {walletName: this.state.wallet.name, walletAddress: this.state.wallet.address});
+        }
     };
 
     onPressRecord = (record: Object) => {
