@@ -24,6 +24,7 @@ const localized_strings = {
     receive_name:'Wallet address',
     receive_copy:'Copy the address',
     receive_save:'Save the QR code',
+    receive_empty:'You haven’t add a wallet yet',
 
     // Wallet
     wallet_import: 'Import',
@@ -35,6 +36,14 @@ const localized_strings = {
     wallet_import_private_password_hint: 'Enter 6 to 12 alphanumeric groups',
     wallet_import_private_pwd_confirm_hint: 'Confirm password',
     wallet_import_keystore_password_hint: 'Enter keystore password',
+    wallet_importing_wallet: 'Importing wallet...',
+    wallet_import_private_key_error: 'Private key format error',
+    wallet_import_keystore_error: 'Keystore format error',
+    wallet_import_keystore_or_pwd_empty: 'Keysotre or password can\'t be empty',
+    wallet_import_private_key_required: 'Private key is required',
+    wallet_import_success: 'Import success!',
+    wallet_import_fail: 'Import failed',
+
     wallet_create_wallet: 'Create wallet',
     wallet_creating_wallet: 'Creating wallet...',
     wallet_create_name: 'Wallet name',

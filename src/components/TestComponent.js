@@ -15,6 +15,7 @@ import LVWalletManager from '../logic/LVWalletManager';
 import LVNetworking from '../logic/LVNetworking';
 import TransferLogic from '../views/Transfer/TransferLogic';
 import { isAddress } from '../utils/MXStringUtils';
+import WalletUtils from '../views/Wallet/WalletUtils';
 
 const eth_local = require('../foundation/ethlocal.js');
 const wallet = require('../foundation/wallet.js');
@@ -39,7 +40,7 @@ class TestComponent extends Component {
                 <MXButton
                     title={"hello"}
                     onPress = {() => {
-                        this.testIsAddress();
+                        this.testWalletValidator();
                     }}
                     themeStyle={"active"}
                 />
@@ -143,6 +144,39 @@ class TestComponent extends Component {
         } catch(e) {
             this.log(e.message);
         }
+    }
+
+    testWalletValidator() {
+        let fakeObj = 
+        {
+            "name": "HelloMaxthon",
+            "keystore": {
+              "address": "ddfe1e560cabe7c06b0ec25f71c198e2a676d592",
+              "crypto": {
+                "cipher": "aes-128-ctr",
+                "ciphertext": "de0a1065c8afae18fc1003124ed5f0f8b991846678e9a8093694c8b5ea6a2d4d",
+                "cipherparams": {
+                  "iv": "74174ca6ded73e0985f500c45c23ca06"
+                },
+                "mac": "62f993f4d679aa762648a080f5bf29e10dbb371ca5a12d8f2d8aae97ffe6c1d1",
+                "kdf": "scrypt",
+                "kdfparams": {
+                  "dklen": 32,
+                  "n": 262144,
+                  "r": 8,
+                  "p": 1,
+                  "salt": "e7d129f5df099754701e3c010249140035fd26ecca712d0235556db800112976"
+                }
+              },
+              "id": "71ecff67-9a2f-4b9b-b092-9f7944031556",
+              "version": 3
+            },
+            "address": "ddfe1e560cabe7c06b0ec25f71c198e2a676d592",
+            "balance": 0
+          }
+    
+
+        alert(WalletUtils.isValidWalletObj(fakeObj));
     }
 
     testIsAddress() {

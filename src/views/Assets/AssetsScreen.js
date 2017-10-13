@@ -46,8 +46,7 @@ class AssetsScreen extends Component {
         };
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
-        this.onWalletSelected = this.onWalletSelected.bind(this);
-        this.handleBalanceChanged = this.handleBalanceChanged.bind(this);
+        this.handleWalletChange = this.handleWalletChange.bind(this);
     }
 
     componentWillMount() {
@@ -55,7 +54,7 @@ class AssetsScreen extends Component {
     }
 
     componentDidMount() {
-        LVNotificationCenter.addObserver(this, LVNotification.balanceChanged, this.handleBalanceChanged);
+        LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
         this.refetchWalletDatas();
     }
 
@@ -64,7 +63,7 @@ class AssetsScreen extends Component {
     }
 
     refetchWalletDatas = async () => {
-        const wallet = this.state.wallet;
+        const wallet = LVWalletManager.getSelectedWallet();
         if (wallet) {
             try {
                 const lvt = await LVNetworking.fetchBalance(wallet.address, 'lvt');
@@ -72,6 +71,7 @@ class AssetsScreen extends Component {
 
                 wallet.lvt = lvt ? parseFloat(lvt) : 0;
                 wallet.eth = eth ? parseFloat(eth) : 0;
+                this.setState({wallet: wallet});
 
                 LVNotificationCenter.postNotification(LVNotification.balanceChanged);
                 LVWalletManager.saveToDisk();
@@ -82,27 +82,16 @@ class AssetsScreen extends Component {
         
     }
 
-    handleBalanceChanged = () => {
-        const wallet = LVWalletManager.getSelectedWallet();
-        this.setState({wallet: wallet});
+    handleWalletChange = () => {
+        this.refetchWalletDatas();
     }
 
     onPressSelectWallet = () => {
         this.setState({ openSelectWallet: true });
-        //this.props.navigation.navigate('WalletImport');
     };
 
     onSelectWalletClosed = () => {
         this.setState({ openSelectWallet: false });
-    };
-
-    onWalletSelected = (walletObj: Object) => {
-        // this.setState({
-        //     walletId: walletObj.id,
-        //     walletName: walletObj.name,
-        //     walletAddress: walletObj.address,
-        //     openSelectWallet: false
-        // });
     };
 
     onPressShowAll = () => {
@@ -145,8 +134,6 @@ class AssetsScreen extends Component {
                 <LVSelectWalletModal
                     isOpen={this.state.openSelectWallet}
                     onClosed={this.onSelectWalletClosed}
-                    selectedWalletId={'1'}
-                    onSelected={this.onWalletSelected}
                 />
             </View>
         );

@@ -24,7 +24,8 @@ const localized_strings = {
     receive_name:'钱包地址',
     receive_copy:'复制地址',
     receive_save:'保存二维码',
-
+    receive_empty:'您还未添加钱包',
+    
     // Wallet
     wallet_import: '导入',
     wallet_import_header: '导入钱包',
@@ -35,6 +36,15 @@ const localized_strings = {
     wallet_import_private_password_hint: '输入6~12位字母数字组合',
     wallet_import_private_pwd_confirm_hint: '重复输入你的密码',
     wallet_import_keystore_password_hint: '请输入Keystore密码',
+    wallet_importing_wallet: '导入钱包中...',
+    wallet_import_private_key_error: '私钥格式错误',
+    wallet_import_keystore_error: 'Keystore格式错误',
+    wallet_import_keystore_or_pwd_empty: 'Keysotre或者密码不能为空！',
+    wallet_import_private_key_required: '私钥不能为空！',
+    wallet_import_success: '导入成功！',
+    wallet_import_fail: '导入失败！',
+    
+    wallet_import_success: '',
     wallet_create_wallet: '创建钱包',
     wallet_creating_wallet: '创建钱包中...',
     wallet_create_name: '钱包名称',
