@@ -148,6 +148,7 @@ const localized_strings = {
 
     // qr scan
     qrScan_title: 'Scan',
+    qrScan_hint: 'Place the wallet qrCode into the box to scan',
 };
 
 export default localized_strings;

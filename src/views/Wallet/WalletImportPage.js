@@ -15,7 +15,6 @@ import MXCrossTextInput from './../../components/MXCrossTextInput';
 import MXButton from './../../components/MXButton';
 import { MXSwitchTab } from './../../components/MXSwitchTab';
 import { LVQrScanModal } from '../Common/LVQrScanModal';
-import { QrScanner } from '../Common/QrScanner';
 import LVWalletManager from '../../logic/LVWalletManager';
 import LVLoadingToast from '../Common/LVLoadingToast';
 import LVDialog from '../Common/LVDialog';
@@ -170,7 +169,7 @@ const foundation = require('../../foundation/wallet.js');
     render() {
       return (
         <View style = {styles.container}>
-          <QrScanner
+          <LVQrScanModal
               barcodeReceived={this.onBarcodeReceived}
               isOpen= {this.state.showModal}
               onClosed = {this.onModalClosed.bind(this)}/>
