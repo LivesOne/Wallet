@@ -58,7 +58,7 @@ export default class LVSelectWalletModal extends Component {
 
     _onPressItem = (address: string) => {
         this.setState({ selectedAddress: address });
-        
+
         LVWalletManager.setSelectedWallet(address);
         LVNotificationCenter.postNotification(LVNotification.walletChanged);
 
@@ -75,7 +75,10 @@ export default class LVSelectWalletModal extends Component {
     );
 
     render() {
-        const dataSource = LVWalletManager.wallets.map((w) => ({ name: w.name, address: w.address })).sort((a, b) => {(a.name < b.name)})
+        const dataSource = LVWalletManager.wallets
+            .map((w, i) => ({ id: i, name: w.name, address: w.address }))
+            .sort((a, b) => b.id - a.id);
+            
         return (
             <Modal
                 ref={'modal'}
