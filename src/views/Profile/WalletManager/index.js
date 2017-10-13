@@ -80,7 +80,7 @@ export class WalletManagerScreen extends Component {
                                 onPressIn={separators.highlight}
                                 onPressOut={separators.unhighlight}
                                 underlayColor={LVColor.white}
-                                onPress={()=> this.props.navigation.navigate('WalletManagerPage', {wallet:item})}>
+                                onPress={()=> this.props.navigation.navigate('WalletDetailsPage', {wallet:item})}>
                                 <View style={styles.cellContentStyle}>
                                     <View style={styles.cellLeftContentStyle}>
                                         <Image source={WalletIcon} resizeMode={Image.resizeMode.contain} style={styles.cellLeftImageStyle}/>

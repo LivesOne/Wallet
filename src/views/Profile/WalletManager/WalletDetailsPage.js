@@ -41,7 +41,7 @@ const CellVariant = (props) => (
     />
 );
 
-export class WalletManagerPage extends Component {
+export class WalletDetailsPage extends Component {
 
     static navigationOptions = {
         header: null,
@@ -167,4 +167,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default WalletManagerPage
+export default WalletDetailsPage
