@@ -6,16 +6,20 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions, View, Text, Easing } from 'react-native';
+import { StyleSheet, Dimensions, View, ViewPropTypes, Text, Easing, TouchableOpacity } from 'react-native';
+import { Separator } from 'react-native-tableview-simple';
 import Modal from 'react-native-modalbox';
 import PropTypes from 'prop-types';
 import LVColor from '../../styles/LVColor';
+import LVStrings from '../../assets/localization';
 import MXButton from '../../components/MXButton';
 
-class LVDialog extends Component {
+export default class LVDialog extends Component {
     static propTypes = {
         title: PropTypes.string.isRequired,
+        titleStyle: ViewPropTypes.style,
         message: PropTypes.string,
+        messageStyle: ViewPropTypes.style,
         buttonTitle: PropTypes.string,
         onPress: PropTypes.func,
         width: PropTypes.number,
@@ -43,7 +47,7 @@ class LVDialog extends Component {
         const buttonTitle = this.props.buttonTitle;
 
         const modalWidth = { width: this.props.width || '90%' };
-        const modalHeight = { height: this.props.height || (buttonTitle ? 250 : 200) };
+        const modalHeight = { height: this.props.height || (buttonTitle ? 170 : 150) };
 
         return (
             <Modal
@@ -61,20 +65,90 @@ class LVDialog extends Component {
             >
                 <View style={styles.dialog}>
                     <View style={styles.dialogTopPanel}>
-                        <Text style={styles.title}>{this.props.title}</Text>
-                        {message ? <Text style={{ color: '#697485', fontSize: 14, lineHeight: 20 }}>{message}</Text> : null}
+                        <Text style={[styles.title, this.props.titleStyle]}>{this.props.title}</Text>
                     </View>
-                    {this.props.children}
-                    {buttonTitle ? (
-                        <MXButton
-                            style={styles.button}
-                            rounded={true}
-                            title={buttonTitle}
-                            onPress={this.onPressButton.bind(this)}
-                        />
-                    ) : null}
+                    <View style={styles.dialogContent}>
+                        {message ? <Text style={[styles.message, this.props.messageStyle]}>{message}</Text> : null}
+                        {this.props.children}
+                        {buttonTitle ? (
+                            <MXButton
+                                style={styles.button}
+                                rounded={true}
+                                title={buttonTitle}
+                                onPress={this.onPressButton.bind(this)}
+                            />
+                        ) : null}
+                    </View>
                 </View>
             </Modal>
+        );
+    }
+}
+
+export class LVConfirmDialog extends LVDialog {
+    static propTypes = {
+        confirmTitle: PropTypes.string,
+        cancelTitle: PropTypes.string,
+        onConfirm: PropTypes.func
+    };
+
+    show() {
+        this.refs.dialog.show();
+    }
+
+    dismiss() {
+        this.refs.dialog.dismiss();
+    }
+
+    onPressCancel() {
+        this.dismiss();
+    }
+
+    onPressConfirm() {
+        if (this.props.onConfirm) {
+            this.props.onConfirm();
+        }
+        this.dismiss();
+    }
+
+    render() {
+        const buttonPanelStyle = {
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+        };
+        const buttonStyle = {
+            width: '50%', height: '100%',
+            justifyContent: 'center',
+            alignItems: 'center'
+        };
+        const buttonTitleStyle = {
+            fontSize: 16,
+            color: LVColor.text.grey1,
+        };
+        const lineWidth = StyleSheet.hairlineWidth;
+        const lineColor = LVColor.separateLine;
+
+        const confirmTitle = this.props.confirmTitle || LVStrings.common_confirm;
+        const cancelTitle = this.props.cancelTitle || LVStrings.common_cancel;
+
+        return (
+            <LVDialog ref={'dialog'} height={150} {...this.props}>
+                <View style={{ width: '100%', height: 50 }}>
+                    <View style={{width: '100%', height: lineWidth, backgroundColor: lineColor}} />
+                    <Separator insetLeft={0} tintColor={LVColor.separateLine} />
+                    <View style={buttonPanelStyle}>
+                        <TouchableOpacity activeOpacity={0.8} style={buttonStyle} onPress={this.onPressConfirm.bind(this)}>
+                            <Text style={buttonTitleStyle} >{confirmTitle}</Text>
+                        </TouchableOpacity>
+                        <View style={{width: lineWidth, height: '100%', backgroundColor: lineColor}} />
+                        <TouchableOpacity activeOpacity={0.8} style={buttonStyle} onPress={this.onPressCancel.bind(this)}>
+                            <Text style={buttonTitleStyle} >{cancelTitle}</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </LVDialog>
         );
     }
 }
@@ -89,34 +163,40 @@ const styles = StyleSheet.create({
         marginTop: -44,
         borderRadius: 5,
         justifyContent: 'flex-start',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     title: {
-        padding: 25,
         color: LVColor.text.grey1,
         fontSize: 18
     },
-    titleText: {
-        marginBottom: 25,
-        fontSize: 14,
-        color: '#697485'
+    message: {
+        paddingLeft: 25,
+        paddingRight: 25,
+        color: '#697485',
+        fontSize: 16,
+        lineHeight: 20
     },
     dialog: {
         flex: 1,
+        width: '100%',
         flexDirection: 'column',
-        justifyContent: 'space-between',
-        paddingLeft: 25,
-        paddingRight: 25
+        justifyContent: 'space-between'
     },
     dialogTopPanel: {
-        flex: 1,
+        height: 50,
         flexDirection: 'column',
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    dialogContent: {
+        flex: 1,
+        width: '100%',
+        marginTop: 10,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
         alignItems: 'center'
     },
     button: {
-        marginBottom: 40
+        marginBottom: 20
     }
 });
-
-export default LVDialog;
