@@ -36,7 +36,7 @@ class VenusApp extends Component {
 
     componentWillMount() {
         StatusBar.setBarStyle('light-content', false);
-        LVNotificationCenter.addObserver(this, LVNotification.importWalletSuccessFromLaunch, this.handleWalletImportSuccess);
+        LVNotificationCenter.addObserver(this, LVNotification.walletImported, this.handleWalletImportSuccess);
     }
 
     componentDidMount() {
