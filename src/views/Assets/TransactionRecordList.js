@@ -74,12 +74,12 @@ export default class TransactionRecordList extends React.PureComponent {
 
     state = { selected: (new Map(): Map<string, boolean>) };
 
-    _keyExtractor = (item, index) => item.id;
+    _keyExtractor = (item, index) => index.toString();
 
     _onPressItem = (item: Object) => {
         this.setState(state => {
             const selected = new Map(state.selected);
-            selected.set(item.id, !selected.get(item.id)); // toggle
+            selected.set(item.hash, !selected.get(item.hash)); // toggle
             return { selected };
         });
 
@@ -90,16 +90,11 @@ export default class TransactionRecordList extends React.PureComponent {
 
     _renderItem = ({ item }) => (
         <LVTransactionRecordItem
-            id={item.id}
-            type={item.transfer_type}
-            unit={item.transfer_unit}
-            amount={item.transfer_amount}
-            address={item.transfer_address}
-            datetime={item.transfer_datetime}
-            completed={item.transfer_completed}
-            checked_peers={item.transfer_checked_peers}
-            total_check_peers={item.transfer_total_check_peers}
-            selected={!!this.state.selected.get(item.id)}
+            type={item.type}
+            amount={item.amount}
+            address={item.type == 'in' ? item.payer : item.receiver}
+            datetime={item.datetime}
+            selected={!!this.state.selected.get(item.hash)}
             onPressItem={() => {
                 this._onPressItem(item);
             }}
@@ -146,22 +141,19 @@ const LVEmptyListComponent = () => {
 class LVTransactionRecordItem extends React.PureComponent {
     static propTypes = {
         type: PropTypes.string.isRequired,
-        unit: PropTypes.string.isRequired,
         amount: PropTypes.number.isRequired,
         address: PropTypes.string.isRequired,
         datetime: PropTypes.string,
-        completed: PropTypes.bool,
-        checked_peers: PropTypes.number,
-        total_check_peers: PropTypes.number,
         onPressItem: PropTypes.func
     };
 
     render() {
-        const { type, unit, amount, address, datetime, completed, checked_peers, total_check_peers } = this.props;
+        const { type, amount, address, datetime } = this.props;
         const typeImage = type === 'in' ? inImg : outImg;
 
+        const completed = true;
         const prefix = type === 'in' ? '+' : '-';
-        const amountString = prefix + amount + ' ' + unit;
+        const amountString = prefix + amount + ' LVT';
 
         //const
         const t = DateUtils.getTimePastFromNow(datetime);
@@ -174,8 +166,6 @@ class LVTransactionRecordItem extends React.PureComponent {
                 : t.hours
                   ? t.hours + ' ' + LVStrings.time_pass_hours_ago
                   : t.minutes ? t.minutes + ' ' + LVStrings.time_pass_minutes_ago : LVStrings.time_pass_a_moment_ago;
-
-        const progressRate = total_check_peers > 0 ? checked_peers / total_check_peers : 0;
 
         return (
             <TouchableOpacity style={[styles.record]} activeOpacity={0.7} onPress={this.props.onPressItem}>

@@ -18,10 +18,11 @@ import LVNetworking from '../../logic/LVNetworking';
 import LVWalletManager from '../../logic/LVWalletManager';
 import LVNotification from '../../logic/LVNotification';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
+import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVTransactionRecordManager';
 
 import WalletInfoView from './WalletInfoView';
 import WalletBalanceView from './WalletBalanceView';
-import TransactionRecordList, { testRecores } from './TransactionRecordList';
+import TransactionRecordList from './TransactionRecordList';
 
 const selectImg = require('../../assets/images/select_wallet.png');
 
@@ -32,8 +33,8 @@ class AssetsScreen extends Component {
 
     state: {
         wallet: ?Object,
+        transactionList: ?Array<LVTransactionRecord>,
         openSelectWallet: boolean,
-        transferRecords: ?Array<Object>
     };
 
     constructor(props: any) {
@@ -41,8 +42,8 @@ class AssetsScreen extends Component {
         const wallet = LVWalletManager.getSelectedWallet();
         this.state = {
             wallet: wallet,
+            transactionList: null,
             openSelectWallet: false,
-            transferRecords: testRecores
         };
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
@@ -55,21 +56,20 @@ class AssetsScreen extends Component {
 
     componentDidMount() {
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
-        this.refetchWalletDatas();
+        this.refreshWalletDatas();
+        this.refreshTransactionList();
     }
 
     componentWillUnmount() {
         LVNotificationCenter.removeObservers(this);
     }
 
-    refetchWalletDatas = async () => {
+    refreshWalletDatas = async () => {
         const wallet = LVWalletManager.getSelectedWallet();
         if (wallet) {
             try {
                 const lvt = await LVNetworking.fetchBalance(wallet.address, 'lvt');
                 const eth = await LVNetworking.fetchBalance(wallet.address, 'eth');
-
-                console.log('lvt = ' + lvt + ', eth = ' + eth);
 
                 wallet.lvt = lvt ? parseFloat(lvt) : 0;
                 wallet.eth = eth ? parseFloat(eth) : 0;
@@ -78,14 +78,19 @@ class AssetsScreen extends Component {
                 LVNotificationCenter.postNotification(LVNotification.balanceChanged);
                 LVWalletManager.saveToDisk();
             } catch (error) {
-                console.log('error in refetch wallet datas : ' + error);
+                console.log('error in refresh wallet datas : ' + error);
             }
         }
-        
     }
 
-    handleWalletChange = () => {
-        this.refetchWalletDatas();
+    refreshTransactionList = async () => {
+        await LVTransactionRecordManager.refreshTransactionRecords();
+        this.setState({transactionList: LVTransactionRecordManager.transactionRecords});
+    }
+
+    handleWalletChange = async () => {
+        await this.refreshWalletDatas();
+        await this.refreshTransactionList();
     }
 
     onPressSelectWallet = () => {
@@ -107,7 +112,7 @@ class AssetsScreen extends Component {
     };
 
     render() {
-        const { transferRecords } = this.state;
+        const { transactionList } = this.state;
         const wallet = this.state.wallet || {};
 
         return (
@@ -131,7 +136,7 @@ class AssetsScreen extends Component {
 
                 <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }} />
 
-                <TransactionRecordList style={styles.list} records={transferRecords} onPressItem={this.onPressRecord} />
+                <TransactionRecordList style={styles.list} records={transactionList} onPressItem={this.onPressRecord} />
 
                 <LVSelectWalletModal
                     isOpen={this.state.openSelectWallet}
