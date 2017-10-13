@@ -147,7 +147,8 @@ const foundation = require('../../foundation/wallet.js');
     this.refs.toast.show();
     setTimeout(async ()=> {
       try {
-        let wallet = await LVWalletManager.importWalletWithPrivatekey('defaultName2', "niceToMeetYou", "0e9facdcd345415752f51d36687ce5490a9ccc5d9b4b94f70ccbc4cce5677eb5");
+        let defaultName = await WalletUtils.getDefaultName();
+        let wallet = await LVWalletManager.importWalletWithPrivatekey(defaultName, privateKeyPwd, privateKey);
         LVWalletManager.addWallet(wallet);
         LVWalletManager.saveToDisk();
         this.refs.toast.dismiss();
@@ -190,7 +191,8 @@ const foundation = require('../../foundation/wallet.js');
       this.refs.toast.show();
       setTimeout(async ()=> {
         try {
-          let wallet = await LVWalletManager.importWalletWithKeystore('defaultName1', keyStorePwd, JSON.parse(keyStore).keystore);
+          let defaultName = await WalletUtils.getDefaultName();
+          let wallet = await LVWalletManager.importWalletWithKeystore(defaultName, keyStorePwd, JSON.parse(keyStore).keystore);
           LVWalletManager.addWallet(wallet);
           LVWalletManager.saveToDisk();
           this.refs.toast.dismiss();
