@@ -11,6 +11,7 @@ import MXButton from '../../components/MXButton';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import * as LVStyleSheet from '../../styles/LVStyleSheet'
+import WalletUtils from './WalletUtils';
 
 const createImage = require("../../assets/images/create_wallet.png");
 
@@ -36,7 +37,7 @@ export default class WalletCreateOrImportPage extends Component {
                     rounded                
                     title={LVStrings.wallet_import_header}
                     onPress = {() => {
-                        this.props.navigation.navigate("WalletImport")
+                        this.props.navigation.navigate("WalletImport", {from: WalletUtils.OPEN_IMPORT_FROM_LAUNCH})
                     }}
                     themeStyle={"active"}
                     style={styles.importButton}

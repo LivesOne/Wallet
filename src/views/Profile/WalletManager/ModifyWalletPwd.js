@@ -8,6 +8,7 @@ const IconBack = require('../../../assets/images/back_grey.png');
 import LVStrings from '../../../assets/localization';
 import LVColor from '../../../styles/LVColor'
 import MXCrossTextInput from './../../../components/MXCrossTextInput';
+import WalletUtils from '../../Wallet/WalletUtils';
 
 export class ModifyWalletPwd extends Component {
 
@@ -44,6 +45,10 @@ export class ModifyWalletPwd extends Component {
 
     onConfirmPwdChanged(newConfirmPwd: string) {
         this.setState({newConfirmPwd: newConfirmPwd})
+    }
+
+    onImportRightNow() {
+        this.props.navigation.navigate("WalletImportPage", {from: WalletUtils.OPEN_IMPORT_FROM_MODIFY_PASSWORD})
     }
 
     render() {
@@ -86,7 +91,7 @@ export class ModifyWalletPwd extends Component {
                     <View style={{ marginTop: 25, flexDirection: 'row'}}>
                         <Text style={{color: LVColor.text.editTextContent}}>{ LVStrings.profile_wallet_password_hint }
                             <Text style={{marginLeft: 10, color: '#1f7fff'}}
-                                onPress={()=>{alert('press')}}>
+                                onPress={this.onImportRightNow.bind(this)}>
                                 { LVStrings.profile_wallet_import_right_now }
                             </Text>
                         </Text>

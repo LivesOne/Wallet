@@ -12,11 +12,13 @@ import { StackNavigator } from "react-navigation";
 import WalletCreateSuccessPage from './WalletCreateSuccessPage';
 import WalletCreatePage from './WalletCreatePage';
 import WalletCreateOrImportPage from './WalletCreateOrImportPage';
+import WalletImportPage from './WalletImportPage';
 
 const LVWalletCreateNavigator = StackNavigator({
     WalletCreatePage: { screen: WalletCreatePage },
     ImportOrCreate: { screen: WalletCreateOrImportPage },
-    SuccessPage: {screen: WalletCreateSuccessPage}
+    SuccessPage: {screen: WalletCreateSuccessPage},
+    WalletImport: {screen: WalletImportPage},
 });
 
 export default LVWalletCreateNavigator;

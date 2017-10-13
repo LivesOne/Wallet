@@ -80,8 +80,13 @@ var WALLET_JSON_SCHEMA =
     }
   }
 
+
 export default class WalletUtils {
     constructor() {}
+
+    static OPEN_IMPORT_FROM_LAUNCH = 'open_import_from_launch';
+    static OPEN_IMPORT_FROM_WALLET_MANAGER = 'open_import_from_wallet_manager';
+    static OPEN_IMPORT_FROM_MODIFY_PASSWORD = 'open_import_from_modify_password';
 
     static isValidWalletObj(jsonObj: Object) {
         var validate = ajv.compile(WALLET_JSON_SCHEMA);
