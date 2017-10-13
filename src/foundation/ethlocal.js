@@ -94,6 +94,35 @@ module.exports = {
     console.log(encoded);
   },
 
+  generateMethodCallData : function(to, value) {
+    return abi.methodID('transfer', [ 'address', 'uint256' ]).toString('hex') + abi.rawEncode([ 'address', 'uint256' ], [ to, value ]).toString('hex')
+  },
+
+  generateTxData : function(privateKey, nonce, token, from, to, value, gasPrice, gasLimit) {
+    const EthereumTx = require('ethereumjs-tx')
+    const txParams = {
+      nonce: nonce,
+      gasPrice: gasPrice, 
+      gasLimit: gasLimit,
+      //from: from,
+      to: token, 
+      value: '0x00', 
+      data: '0x'+ this.generateMethodCallData(to, value),
+      // EIP 155 chainId - mainnet: 1, ropsten: 3
+      chainId: 3
+    };
+    const params = {
+      privateKey: privateKey,
+      toAddress: to,
+      value: value
+    };
+    console.log("test param = " + JSON.stringify(params) + ' txParams = '+ JSON.stringify(txParams));
+    const tx = new EthereumTx(txParams)
+    tx.sign(this.str2buf(privateKey))
+    const serializedTx = tx.serialize()
+    return '0x'+serializedTx.toString('hex')
+  },
+
   /**
    * Check whether a string is valid hex.
    * @param {string} str String to validate.

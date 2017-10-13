@@ -41,7 +41,8 @@ const CellVariant = (props) => (
 export class WalletManagerPage extends Component {
 
     static navigationOptions = {
-        header: null
+        header: null,
+        tabBarVisible: false
     };
 
     state: {

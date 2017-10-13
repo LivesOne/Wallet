@@ -13,9 +13,18 @@ const LV_Key_HasAppGuidesEverDisplayed = '@Venus:HasAppGuidesEverDisplayed';
 
 const LV_Key_LastTransactionRecordsFilterStartDate = '@Venus:LastTransactionRecordsFilterStartDate';
 const LV_Key_LastTransactionRecordsFilterEndDate = '@Venus:LastTransactionRecordsFilterEndDate';
+const LV_Key_AnyWalletAvailable = '@Venus:AnyWalletAvailable';
 
 class LVConfiguration {
     constructor() {}
+
+    static async isAnyWalletAvailable() {
+        return await LVPersistent.getBoolean(LV_Key_AnyWalletAvailable);
+    }
+
+    static async setAnyWalletAvailable(isAvailable : boolean) {
+        await LVPersistent.setBoolean(LV_Key_AnyWalletAvailable, isAvailable);
+    }
 
     static async hasAppEverLaunched() {
         return await LVPersistent.getBoolean(LV_Key_HasAppEverLaunched);

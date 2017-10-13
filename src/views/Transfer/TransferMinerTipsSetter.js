@@ -10,56 +10,50 @@ import LVColor from '../../styles/LVColor'
 import LVSize from '../../styles/LVFontSize';
 import LVStrings from '../../assets/localization';
 import * as MXUtils from '../../utils/MXUtils'
-import { SlideIndicatior } from './SliderIndicator';
-
-const IconIndicator = require('../../assets/images/slider_background.png');
 
 export class TransferMinerTipsSetter extends Component {
 
     state: {
         value: number,
-        sliderWidth: number,
     }
 
     constructor() {
         super();
         this.state = {
             value: 0,
-            sliderWidth: 0,
         }
     }
 
     onValueChange(value: number) {
-        let newOffset = value < 0.5 ? 20 * value : -20 * value;
         this.setState({
             value: value,
-            sliderOffset: newOffset
         });
-        this.refs.slide.offset(this.calculatePos());
     }
 
-    calculatePos() {
-        return this.state.value * (this.state.sliderWidth - 20);
-    }
-
-    onLayout = (event: any) => {
-        let layoutParms = event.nativeEvent.layout;
-        this.setState({
-            sliderWidth: layoutParms.width
-        })
+    calculateValue() {
+        return (this.state.value * 1).toFixed(2) + ' ETH';
     }
 
     
     render() {
         return (
         <View style={[styles.container, this.props.style]} >
-            <Text style={styles.title}>{ LVStrings.transfer_miner_tips }</Text>
+            <View style={styles.topContainer}>
+                <Text style={styles.title}>{ LVStrings.transfer_miner_tips }</Text>
+                <View style={styles.tipsContainner}>
+                    <Text style={styles.tipsIndicator}>{ this.calculateValue() }</Text>
+                </View>
+            </View>
             <View style={styles.sliderContainer}>
                 <Text style={styles.text}>{ LVStrings.transfer_slow }</Text>
-                <View  style= {styles.sliderWrapper} onLayout = {this.onLayout}>
-                    <SlideIndicatior ref='slide' initOffset={0}></SlideIndicatior>
+                <View  style= {styles.sliderWrapper}>
                     <Slider
                         value={this.state.value}
+                        //minimumValue={0.2}
+                        //maximumValue={1}
+                        trackStyle={styles.track}
+                        thumbStyle={styles.thumb}
+                        minimumTrackTintColor={LVColor.primary}
                         onValueChange={this.onValueChange.bind(this)}
                     />
                 </View>
@@ -74,11 +68,29 @@ export class TransferMinerTipsSetter extends Component {
 const styles = StyleSheet.create({
     container: {
     },
+    topContainer: {
+        flexDirection: 'row',
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginTop: 20,
+        marginBottom:5,
+    },
     title: {
         fontSize: 16,
         color: LVColor.text.editTextContent,
-        marginTop: 10,
         marginBottom:5,
+    },
+    tipsContainner: {
+        height: 35,
+        width: 110,
+        borderColor:LVColor.primary, 
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1, 
+        borderRadius: 2, 
+    },
+    tipsIndicator: {
+        color: LVColor.primary,
     },
     sliderContainer: {
         flexDirection: 'row',
@@ -90,8 +102,21 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 16,
-        color: LVColor.text.grey1,
-    }
+        color: LVColor.text.grey3,
+    },
+    track: {
+        height: 4,
+        borderRadius: 2,
+        backgroundColor: LVColor.separateLine,
+      },
+      thumb: {
+        width: 30,
+        height: 30,
+        borderRadius: 30 / 2,
+        backgroundColor: 'white',
+        borderColor: '#f9903e',
+        borderWidth: 9,
+      }
   });
 
 export default TransferMinerTipsSetter

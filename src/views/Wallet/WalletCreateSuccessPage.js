@@ -12,12 +12,12 @@ import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import * as LVStyleSheet from '../../styles/LVStyleSheet'
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
-
 const createSuccessImage = require("../../assets/images/create_wallet_success.png");
 
 export default class WalletCreateOrImportPage extends Component {
     static navigationOptions = {
-        header: null
+        header: null,
+        tabBarVisible: false
     };
 
     render() {
@@ -26,7 +26,11 @@ export default class WalletCreateOrImportPage extends Component {
                 <MXNavigatorHeader
                     title = {LVStrings.wallet_create_wallet}
                     onLeftPress = {() => {
-                        this.props.navigation.goBack();
+                        if(this.props.screenProps.dismiss) {
+                            this.props.screenProps.dismiss();
+                        } else {
+                            this.props.navigation.goBack();
+                        }
                     }}
                 />
                 <Image source={createSuccessImage} style = {styles.image}/>
@@ -36,7 +40,7 @@ export default class WalletCreateOrImportPage extends Component {
                     rounded                
                     title={LVStrings.wallet_backup}
                     onPress = {() => {
-                        
+                        this.props.navigation.navigate('ImportOrCreate');
                     }}
                     themeStyle={"active"}
                     style={styles.backupButton}

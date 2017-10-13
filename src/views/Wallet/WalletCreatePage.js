@@ -15,13 +15,86 @@ import * as LVStyleSheet from '../../styles/LVStyleSheet';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import MXTouchableImage from '../../components/MXTouchableImage';
 import MXCrossTextInput from '../../components/MXCrossTextInput';
-
+import LVWalletManager from '../../logic/LVWalletManager';
+import LVLoadingToast from '../Common/LVLoadingToast';
+import LVWalletSuccessModalPage from './LVWalletSuccessModalPage';
+import LVDialog from '../Common/LVDialog';
 const backImg = require('../../assets/images/back.png');
 
 export default class WalletCreatePage extends Component {
     static navigationOptions = {
-        header: null
+        header: null,
+        tabBarVisible: false
     };
+
+    createWallet : Function;
+
+    state : {
+        name : ?string,
+        password: ?string,
+        confirmPassword: ?string,
+        alertMessage: ?string
+    }
+
+    constructor() {
+        super();
+        this.createWallet = this.createWallet.bind(this);
+        this.state = {
+            name: null,
+            password: null,
+            confirmPassword: null,
+            alertMessage: ''
+        };
+    }
+
+    async createWallet() {
+        if(!this.state.name) {
+            this.setState({alertMessage:LVStrings.wallet_create_name_required });
+            this.refs.alert.show();
+            return;
+        }
+
+        if(!LVWalletManager.isWalletNameAvailable(this.state.name)) {
+            this.setState({alertMessage:LVStrings.wallet_create_name_unavailable });
+            this.refs.alert.show();
+            return;
+        }
+
+        if(!this.state.password) {
+            this.setState({alertMessage:LVStrings.wallet_create_password_required });
+            this.refs.alert.show();
+            return;
+        }
+
+        if(!/(\d|\w){6,12}/i.test(this.state.password)) {
+            this.setState({alertMessage:LVStrings.wallet_import_private_password_hint });
+            this.refs.alert.show();
+            return;
+        }    
+
+        if(!this.state.confirmPassword) {
+            this.setState({alertMessage:LVStrings.wallet_create_confimpassword_required });
+            this.refs.alert.show();
+            return;
+        }
+
+        if(this.state.password !== this.state.confirmPassword) {
+            this.setState({alertMessage:LVStrings.wallet_create_password_mismatch });
+            this.refs.alert.show();
+            return;
+        }
+
+        this.refs.toast.show();
+      
+        setTimeout(async ()=> {
+            const wallet = await LVWalletManager.createWallet(this.state.name, this.state.password);
+            console.log(wallet);
+            LVWalletManager.addWallet(wallet);
+            LVWalletManager.saveToDisk();
+            this.refs.toast.dismiss();
+            setTimeout(()=>this.refs.successPage.show(),300);
+        },500);
+    }
 
     render() {
         return (
@@ -44,17 +117,20 @@ export default class WalletCreatePage extends Component {
                         <MXCrossTextInput
                             placeholder={LVStrings.wallet_create_wallet}
                             style={ styles.textInput }
+                            onTextChanged= {(text) => this.setState({name: text})}
                         />
                         <MXCrossTextInput
                             placeholder={LVStrings.wallet_create_password}
                             style={ styles.textInput }
                             secureTextEntry
+                            onTextChanged = {(text) => this.setState({password : text})}
                         />
                         <MXCrossTextInput
                             placeholder={LVStrings.wallet_create_password_verify}
                             style={ styles.textInput }
                             secureTextEntry
                             withUnderLine = {false}
+                            onTextChanged = {(text) => this.setState({confirmPassword : text})}
                         />
                     </View>
                     <Text style={styles.text}>{LVStrings.wallet_create_comment}</Text>
@@ -62,12 +138,15 @@ export default class WalletCreatePage extends Component {
                         rounded                
                         title={LVStrings.wallet_create}
                         onPress = {() => {
-                            this.props.navigation.navigate("WalletCreateSuccess")
+                            this.createWallet();
                         }}
                         themeStyle={"active"}
                         style={styles.createButton}
                     />
                 </View>
+                <LVLoadingToast ref={'toast'} title={LVStrings.wallet_creating_wallet}/>
+                <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
+                <LVWalletSuccessModalPage ref={'successPage'} dismissCallback={()=> this.props.navigation.goBack()}/>
             </View>
         )
     }

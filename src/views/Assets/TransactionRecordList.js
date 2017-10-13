@@ -7,11 +7,12 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, ViewPropTypes, Dimensions, View, Image, Text, FlatList, TouchableOpacity } from 'react-native';
+import { Separator } from 'react-native-tableview-simple';
 import PropTypes from 'prop-types';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
-import { DateUtils } from '../../utils';
+import { DateUtils, StringUtils } from '../../utils';
 import * as Progress from 'react-native-progress';
 
 /*
@@ -65,99 +66,27 @@ const windowHeight = Dimensions.get('window').height;
 const inImg = require('../../assets/images/transfer_in.png');
 const outImg = require('../../assets/images/transfer_out.png');
 
-class LVTransactionRecordItem extends React.PureComponent {
-    static propTypes = {
-        type: PropTypes.string.isRequired,
-        unit: PropTypes.string.isRequired,
-        amount: PropTypes.number.isRequired,
-        address: PropTypes.string.isRequired,
-        datetime: PropTypes.string,
-        completed: PropTypes.bool,
-        checked_peers: PropTypes.number,
-        total_check_peers: PropTypes.number,
-        onPressItem: PropTypes.func
-    };
-
-    _onPress = () => {
-        this.props.onPressItem(this.props.id);
-    };
-
-    render() {
-        const { type, unit, amount, address, datetime, completed, checked_peers, total_check_peers } = this.props;
-        const typeImage = type === 'in' ? inImg : outImg;
-
-        const prefix = type === 'in' ? '+' : '-';
-        const amountString = prefix + amount + ' ' + unit;
-
-        //const
-        const t = DateUtils.getTimePastFrom(datetime);
-        const timePast = t.years
-            ? t.years + ' ' + LVStrings.time_pass_years_ago
-            : t.months
-              ? t.months + ' ' + LVStrings.time_pass_months_ago
-              : t.days
-                ? t.days === 1 ? LVStrings.time_pass_yesterday : t.days + ' ' + LVStrings.time_pass_days_ago
-                : t.hours
-                  ? t.hours + ' ' + LVStrings.time_pass_hours_ago
-                  : t.minutes ? t.minutes + ' ' + LVStrings.time_pass_minutes_ago : LVStrings.time_pass_a_moment_ago;
-
-        const progressRate = total_check_peers > 0 ? checked_peers / total_check_peers : 0;
-
-        return (
-            <TouchableOpacity
-                style={[styles.record]}
-                activeOpacity={0.7}
-                onPress={this._onPress}
-            >
-                <View style={styles.info}>
-                    <View style={styles.infoInner}>
-                        <Image source={typeImage} />
-                        <Text style={styles.addressText} numberOfLines={1} ellipsizeMode="middle">
-                            {address.toUpperCase()}
-                        </Text>
-                    </View>
-                    <View style={styles.infoInner}>
-                        {completed ? (
-                            <Text style={styles.amountText}>{amountString}</Text>
-                        ) : (
-                            <Text style={styles.statusText}>{LVStrings.transaction_waiting}</Text>
-                        )}
-                    </View>
-                </View>
-
-                <Text style={styles.timeText}>{timePast}</Text>
-            </TouchableOpacity>
-        );
-    }
-}
-
 export default class TransactionRecordList extends React.PureComponent {
     static propTypes = {
-        records: PropTypes.arrayOf(PropTypes.object)
+        records: PropTypes.arrayOf(PropTypes.object),
+        onPressItem: PropTypes.func
     };
 
     state = { selected: (new Map(): Map<string, boolean>) };
 
     _keyExtractor = (item, index) => item.id;
 
-    _onPressItem = (id: string) => {
+    _onPressItem = (item: Object) => {
         this.setState(state => {
             const selected = new Map(state.selected);
-            selected.set(id, !selected.get(id)); // toggle
+            selected.set(item.id, !selected.get(item.id)); // toggle
             return { selected };
         });
-    };
 
-    _itemSeparator = () => (
-        <View
-            style={{
-                alignSelf: 'center',
-                width: '90%',
-                height: StyleSheet.hairlineWidth,
-                backgroundColor: LVColor.separateLine
-            }}
-        />
-    );
+        if (this.props.onPressItem) {
+            this.props.onPressItem(item);
+        }
+    };
 
     _renderItem = ({ item }) => (
         <LVTransactionRecordItem
@@ -171,30 +100,11 @@ export default class TransactionRecordList extends React.PureComponent {
             checked_peers={item.transfer_checked_peers}
             total_check_peers={item.transfer_total_check_peers}
             selected={!!this.state.selected.get(item.id)}
-            onPressItem={this._onPressItem}
+            onPressItem={() => {
+                this._onPressItem(item);
+            }}
         />
     );
-
-    _renderEmptyView() {
-        const img = require('../../assets/images/no_transactions.png');
-        let imgTop, imgSize, textTop, fontSize;
-        if (windowHeight <= 500.0) {
-            (imgTop = 4), (imgSize = 44), (textTop = 0), (fontSize = LVSize.small);
-        } else if (windowHeight <= 600.0) {
-            (imgTop = 36), (imgSize = 60), (textTop = 5), (fontSize = LVSize.default);
-        } else {
-            (imgTop = 64), (imgSize = 60), (textTop = 10), (fontSize = LVSize.default);
-        }
-
-        return (
-            <View style={{ flex: 1, alignItems: 'center' }}>
-                <Image style={{ marginTop: imgTop, width: imgSize, height: imgSize }} resizeMode="contain" source={img} />
-                <Text style={{ marginTop: textTop, fontSize: fontSize, color: LVColor.text.grey1 }}>
-                    {LVStrings.transaction_records_no_data}
-                </Text>
-            </View>
-        );
-    }
 
     render() {
         const { records, style } = this.props;
@@ -208,9 +118,85 @@ export default class TransactionRecordList extends React.PureComponent {
                 renderItem={this._renderItem}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
-                ItemSeparatorComponent={this._itemSeparator}
-                ListEmptyComponent={this._renderEmptyView.bind(this)}
+                ItemSeparatorComponent={() => <Separator insetRight={15} tintColor={LVColor.separateLine} />}
+                ListEmptyComponent={() => <LVEmptyListComponent />}
             />
+        );
+    }
+}
+
+const LVEmptyListComponent = () => {
+    const img = require('../../assets/images/no_transactions.png');
+    const wh = Dimensions.get('window').height;
+    const top = wh < 500 ? 4 : 64;
+    const size = wh < 500 ? 44 : 60;
+    const sep = wh < 500 ? 0 : 10;
+    const font = wh < 500 ? LVSize.small : LVSize.default;
+
+    return (
+        <View style={{ flex: 1, alignItems: 'center' }}>
+            <Image style={{ marginTop: top, width: size, height: size }} resizeMode="contain" source={img} />
+            <Text style={{ marginTop: sep, fontSize: font, color: LVColor.text.grey1 }}>
+                {LVStrings.transaction_records_no_data}
+            </Text>
+        </View>
+    );
+};
+
+class LVTransactionRecordItem extends React.PureComponent {
+    static propTypes = {
+        type: PropTypes.string.isRequired,
+        unit: PropTypes.string.isRequired,
+        amount: PropTypes.number.isRequired,
+        address: PropTypes.string.isRequired,
+        datetime: PropTypes.string,
+        completed: PropTypes.bool,
+        checked_peers: PropTypes.number,
+        total_check_peers: PropTypes.number,
+        onPressItem: PropTypes.func
+    };
+
+    render() {
+        const { type, unit, amount, address, datetime, completed, checked_peers, total_check_peers } = this.props;
+        const typeImage = type === 'in' ? inImg : outImg;
+
+        const prefix = type === 'in' ? '+' : '-';
+        const amountString = prefix + amount + ' ' + unit;
+
+        //const
+        const t = DateUtils.getTimePastFromNow(datetime);
+        const timePast = t.years
+            ? t.years + ' ' + LVStrings.time_pass_years_ago
+            : t.months
+              ? t.months + ' ' + LVStrings.time_pass_months_ago
+              : t.days
+                ? t.days === 1 ? LVStrings.time_pass_yesterday : t.days + ' ' + LVStrings.time_pass_days_ago
+                : t.hours
+                  ? t.hours + ' ' + LVStrings.time_pass_hours_ago
+                  : t.minutes ? t.minutes + ' ' + LVStrings.time_pass_minutes_ago : LVStrings.time_pass_a_moment_ago;
+
+        const progressRate = total_check_peers > 0 ? checked_peers / total_check_peers : 0;
+
+        return (
+            <TouchableOpacity style={[styles.record]} activeOpacity={0.7} onPress={this.props.onPressItem}>
+                <View style={styles.info}>
+                    <View style={styles.infoInner}>
+                        <Image source={typeImage} />
+                        <Text style={styles.addressText} numberOfLines={1} ellipsizeMode="middle">
+                            {StringUtils.converAddressToDisplayableText(address)}
+                        </Text>
+                    </View>
+                    <View style={styles.infoInner}>
+                        {completed ? (
+                            <Text style={styles.amountText}>{amountString}</Text>
+                        ) : (
+                            <Text style={styles.statusText}>{LVStrings.transaction_waiting}</Text>
+                        )}
+                    </View>
+                </View>
+
+                <Text style={styles.timeText}>{timePast}</Text>
+            </TouchableOpacity>
         );
     }
 }
@@ -236,7 +222,6 @@ const styles = StyleSheet.create({
     },
     addressText: {
         marginLeft: 10,
-        width: 110,
         color: LVColor.text.grey1,
         fontSize: 15,
         textAlign: 'left'

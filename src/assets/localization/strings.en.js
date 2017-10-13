@@ -15,12 +15,16 @@ const localized_strings = {
     common_confirm: 'Confirm',
     common_cancel: 'Cancel',
     common_close: 'Close',
+    alert_warning: 'Warning',
+    alert_hint: 'hint',
+    alert_ok: 'Ok',
 
     //receive
     receive_title:'My payment QR code',
     receive_name:'Wallet address',
     receive_copy:'Copy the address',
     receive_save:'Save the QR code',
+    receive_empty:'You haven’t add a wallet yet',
 
     // Wallet
     wallet_import: 'Import',
@@ -32,12 +36,26 @@ const localized_strings = {
     wallet_import_private_password_hint: 'Enter 6 to 12 alphanumeric groups',
     wallet_import_private_pwd_confirm_hint: 'Confirm password',
     wallet_import_keystore_password_hint: 'Enter keystore password',
+    wallet_importing_wallet: 'Importing wallet...',
+    wallet_import_private_key_error: 'Private key format error',
+    wallet_import_keystore_error: 'Keystore format error',
+    wallet_import_keystore_or_pwd_empty: 'Keysotre or password can\'t be empty',
+    wallet_import_private_key_required: 'Private key is required',
+    wallet_import_success: 'Import success!',
+    wallet_import_fail: 'Import failed',
+
     wallet_create_wallet: 'Create wallet',
+    wallet_creating_wallet: 'Creating wallet...',
     wallet_create_name: 'Wallet name',
     wallet_create_password: 'Set the wallet password (6-12 alphanumeric combination)',
     wallet_create_password_verify: 'Repeat the password',
     wallet_create_comment: 'This password is used to encrypt the wallet address, please try to set the complex password to complete the encryption.',
     wallet_create: 'Create',
+    wallet_create_name_required: 'Please enter wallet name',
+    wallet_create_password_required: 'Please enter password',
+    wallet_create_confimpassword_required: 'Please enter confirmation password',
+    wallet_create_password_mismatch: 'Password and confirmation password mismatch',
+    wallet_create_name_unavailable: 'The name input is unavailable',
     wallet_create_success: 'Create success!',
     wallet_create_success_comment: 'The platform does not store the user\'s password, the password can not be retrieved or reset, it is highly recommended that you make a backup before using your wallet!',
     wallet_backup: 'Backup wallet',
@@ -59,8 +77,8 @@ const localized_strings = {
     transaction_minner_fee: 'Miner fee',
     transaction_remarks: 'Remarks',
     transaction_na: 'N/A',
-    transaction_block: 'Blocks',
-    transaction_number: 'Transaction number',
+    transaction_block_number: 'Blocks',
+    transaction_hash: 'Transaction number',
     transaction_time: 'Transaction time',
     transaction_failure_message: 'No one packs the transaction so it was failed. Miner fee will be returned to the original wallet.',
     
@@ -76,6 +94,7 @@ const localized_strings = {
     profile_about: 'About',
 
     //Profile wallet manager
+    profile_wallet_management: 'Wallet Management',
     profile_wallet_title: 'Maxthon LivesToken',
     profile_wallet_modify_name: 'Modify wallet name',
     profile_wallet_name: 'Wallet name',

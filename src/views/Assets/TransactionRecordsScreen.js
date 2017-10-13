@@ -63,6 +63,14 @@ class TransactionRecordsScreen extends Component {
         LVConfiguration.setLastTransactionRecordsFilterEndDate(date);
     };
 
+    onPressRecord = (record: Object) => {
+        const { walletAddress } = this.props.navigation.state.params;
+        this.props.navigation.navigate('TransactionDetails', {
+            walletAddress: walletAddress,
+            transactionRecord: record
+        });
+    };
+
     render() {
         const { walletName, walletAddress } = this.props.navigation.state.params;
         const { startDate, endDate, transferRecords } = this.state;
@@ -72,8 +80,8 @@ class TransactionRecordsScreen extends Component {
                 <LVGradientPanel style={styles.gradient}>
                     <MXNavigatorHeader
                         title={LVStrings.transaction_records}
-                        style={styles.nav}
-                        titleStyle={styles.navTitle}
+                        style={{ backgroundColor: 'transparent' }}
+                        titleStyle={{ fontSize: LVSize.large, color: LVColor.text.white }}
                         onLeftPress={() => {
                             this.props.navigation.goBack();
                         }}
@@ -89,12 +97,14 @@ class TransactionRecordsScreen extends Component {
 
                     <View style={styles.dateRight}>
                         <LVDataPicker date={startDate} onDateChange={this.onStartDateChange} />
-                        <Text style={[styles.text, {marginLeft: 15, marginRight: 15}]}>{LVStrings.transaction_records_to}</Text>
+                        <Text style={[styles.text, { marginLeft: 15, marginRight: 15 }]}>
+                            {LVStrings.transaction_records_to}
+                        </Text>
                         <LVDataPicker date={endDate} onDateChange={this.onEndDateChange} />
                     </View>
                 </View>
 
-                <TransactionRecordList style={styles.list} records={transferRecords} />
+                <TransactionRecordList style={styles.list} records={transferRecords} onPressItem={this.onPressRecord} />
             </View>
         );
     }
@@ -103,12 +113,12 @@ class TransactionRecordsScreen extends Component {
 const LVDataPicker = ({ date, onDateChange }) => {
     return (
         <DatePicker
-            style={{width: 100}}
+            style={{ width: 100 }}
             customStyles={datePickerStyles}
             date={date}
             mode="date"
             format="YYYY-MM-DD"
-            minDate='2010-01-01'
+            minDate="2010-01-01"
             maxDate={Moment().format('YYYY-MM-DD')}
             showIcon={false}
             confirmBtnText={LVStrings.common_confirm}
@@ -134,15 +144,6 @@ const styles = StyleSheet.create({
         height: 160,
         justifyContent: 'space-between',
         alignItems: 'center'
-    },
-    nav: {
-        backgroundColor: 'transparent'
-    },
-    navTitle: {
-        fontSize: LVSize.large,
-        textAlign: 'center',
-        color: '#ffffff',
-        backgroundColor: 'transparent'
     },
     walletInfo: {
         marginBottom: 15,
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
 
 const datePickerStyles = StyleSheet.create({
     dateInput: {
-        borderWidth: 0,
+        borderWidth: 0
     },
     dateText: {
         color: LVColor.primary

@@ -32,7 +32,7 @@ export default class LVPersistent {
 
     static async getBoolean(key: string) {
         const value = await LVPersistent.getString(key);
-        return value && value === '1';
+        return value === '1';
     }
 
     static async setNumber(key: string, value: number) {
@@ -44,7 +44,7 @@ export default class LVPersistent {
         return value ? Number(value) : 0;
     }
 
-    static async setObject(key: string, value: Object) {
+    static async setObject(key: string, value: any) {
         await LVPersistent.setString(key, JSON.stringify(value));
     }
 
