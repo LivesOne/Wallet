@@ -19,6 +19,8 @@ import LVWalletManager from '../../logic/LVWalletManager';
 import LVLoadingToast from '../Common/LVLoadingToast';
 import LVDialog from '../Common/LVDialog';
 import WalletUtils from './WalletUtils';
+import LVNotification from '../../logic/LVNotification';
+import LVNotificationCenter from '../../logic/LVNotificationCenter';
 const foundation = require('../../foundation/wallet.js');
 
  export default class AssetsImportPage extends Component {
@@ -115,7 +117,7 @@ const foundation = require('../../foundation/wallet.js');
         this.refs.toast.dismiss();
         this.setState({alertMessage: LVStrings.wallet_import_success });
         this.refs.alert.show();
-        setTimeout(()=>{this.props.navigation.goBack();},500);
+        setTimeout(()=>{LVNotificationCenter.postNotification(LVNotification.importWalletSuccessFromLaunch)},500);
       } catch(e) {
         this.refs.toast.dismiss();
         this.setState({alertMessage: LVStrings.wallet_import_fail });
@@ -156,7 +158,7 @@ const foundation = require('../../foundation/wallet.js');
           this.refs.toast.dismiss();
           this.setState({alertMessage: LVStrings.wallet_import_success });
           this.refs.alert.show();
-          setTimeout(()=>{this.props.navigation.goBack();},500);
+          setTimeout(()=>{LVNotificationCenter.postNotification(LVNotification.importWalletSuccessFromLaunch)},500);
         } catch(e) {
           this.refs.toast.dismiss();
           this.setState({alertMessage: LVStrings.wallet_import_fail });
