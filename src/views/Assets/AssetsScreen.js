@@ -69,6 +69,8 @@ class AssetsScreen extends Component {
                 const lvt = await LVNetworking.fetchBalance(wallet.address, 'lvt');
                 const eth = await LVNetworking.fetchBalance(wallet.address, 'eth');
 
+                console.log('lvt = ' + lvt + ', eth = ' + eth);
+
                 wallet.lvt = lvt ? parseFloat(lvt) : 0;
                 wallet.eth = eth ? parseFloat(eth) : 0;
                 this.setState({wallet: wallet});
@@ -76,7 +78,7 @@ class AssetsScreen extends Component {
                 LVNotificationCenter.postNotification(LVNotification.balanceChanged);
                 LVWalletManager.saveToDisk();
             } catch (error) {
-                console.log('error in refetchWalletDatas : ' + error);
+                console.log('error in refetch wallet datas : ' + error);
             }
         }
         
