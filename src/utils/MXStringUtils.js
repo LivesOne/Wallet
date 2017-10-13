@@ -41,7 +41,7 @@ export function converAddressToDisplayableText(address: string, headNum: number 
 
     const upaddr = address.toUpperCase();
     const head = upaddr.substr(0, headNum);
-    const tail = upaddr.substr(upaddr.length - tailNum - 1, tailNum);
+    const tail = upaddr.substr(upaddr.length - tailNum, tailNum);
     return ['0x',head,'...',tail].join('');
 }
 
