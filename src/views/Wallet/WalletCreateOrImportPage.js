@@ -11,14 +11,12 @@ import MXButton from '../../components/MXButton';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import * as LVStyleSheet from '../../styles/LVStyleSheet'
-
+import LVWalletCreationNavigator from '../Wallet/LVWalletCreationNavigator';
+import WalletImportPage from '../Wallet/WalletImportPage';
+import LVFullScreenModalView from '../Common/LVFullScreenModalView';
 const createImage = require("../../assets/images/create_wallet.png");
 
-export default class WalletCreateOrImportPage extends Component {
-    static navigationOptions = {
-        header: null
-    };
-    
+export default class WalletCreateOrImportPage extends Component {    
     render() {
         return (
             <View style = {styles.container}>
@@ -27,7 +25,7 @@ export default class WalletCreateOrImportPage extends Component {
                     rounded
                     title={LVStrings.wallet_create_wallet}
                     onPress = {() => {
-                        this.props.navigation.navigate("WalletCreate")
+                        this.refs.creationPage.show();
                     }}
                     themeStyle={"active"}
                     style={styles.createButton}
@@ -36,11 +34,22 @@ export default class WalletCreateOrImportPage extends Component {
                     rounded                
                     title={LVStrings.wallet_import_header}
                     onPress = {() => {
-                        this.props.navigation.navigate("WalletImport")
+                        this.refs.importPage.show();
                     }}
                     themeStyle={"active"}
                     style={styles.importButton}
                 />
+                <LVFullScreenModalView ref={'creationPage'}>
+                    <LVWalletCreationNavigator screenProps={{dismiss: ()=> {
+                        this.refs.creationPage.dismiss()
+                    } 
+                }}/>
+                </LVFullScreenModalView>
+                <LVFullScreenModalView ref={'importPage'}>
+                    <WalletImportPage dismissCallback={()=> {
+                        this.refs.importPage.dismiss()
+                    }}/>
+                </LVFullScreenModalView>
             </View>
         )
     }

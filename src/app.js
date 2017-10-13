@@ -31,12 +31,13 @@ class VenusApp extends Component {
             hasAnyWallets: false
         };
         this.handleAppGuideCallback = this.handleAppGuideCallback.bind(this);
-        this.handleWalletImportSuccess = this.handleWalletImportSuccess.bind(this);
+        this.handleWalletImportOrCreateSuccess = this.handleWalletImportOrCreateSuccess.bind(this);
     }
 
     componentWillMount() {
         StatusBar.setBarStyle('light-content', false);
-        LVNotificationCenter.addObserver(this, LVNotification.walletImported, this.handleWalletImportSuccess);
+        LVNotificationCenter.addObserver(this, LVNotification.walletImported, this.handleWalletImportOrCreateSuccess);
+        LVNotificationCenter.addObserver(this, LVNotification.walletsChanged, this.handleWalletImportOrCreateSuccess);
     }
 
     componentDidMount() {
@@ -71,7 +72,7 @@ class VenusApp extends Component {
         LVConfiguration.setAppGuidesHasBeenDisplayed();
     };
 
-    handleWalletImportSuccess = async () => {
+    handleWalletImportOrCreateSuccess = async () => {
         const hasWallets = await LVConfiguration.isAnyWalletAvailable();
         this.setState({ hasAnyWallets: hasWallets });
     }
