@@ -9,6 +9,11 @@ import LVStrings from '../../../assets/localization';
 import LVColor from '../../../styles/LVColor'
 import MXCrossTextInput from './../../../components/MXCrossTextInput';
 import WalletUtils from '../../Wallet/WalletUtils';
+import LVNotificationCenter from '../../../logic/LVNotificationCenter';
+import LVNotification from '../../../logic/LVNotification';
+import LVWalletManager from '../../../logic/LVWalletManager';
+import LVLoadingToast from '../../Common/LVLoadingToast';
+import LVDialog from '../../Common/LVDialog';
 
 export class ModifyWalletPwd extends Component {
 
@@ -17,22 +22,82 @@ export class ModifyWalletPwd extends Component {
     };
 
     state: {
+        wallet: ?Object,
         curPwd: string,
         newPwd: string,
         newConfirmPwd: string,
+        alertMessage: string
     }
 
     constructor() {
         super();
+        const wallet = LVWalletManager.getSelectedWallet();
         this.state = {
+            wallet: wallet,
             curPwd: '',
             newPwd: '',
-            newConfirmPwd: ''
+            newConfirmPwd: '',
+            alertMessage: ''
         }
     }
 
-    onSavePressed() {
-        alert(this.state.newPwd)
+    componentWillMount() {
+        const {params} = this.props.navigation.state;
+        this.setState({
+            wallet: params.wallet,
+            curPwd: params.wallet.password,
+        })
+    }
+
+    async onSavePressed() {
+        const {wallet, curPwd, newPwd, newConfirmPwd} = this.state;
+        if (!wallet) {
+            this.setState({alertMessage:LVStrings.wallet_edit_save_failed });
+            this.refs.alert.show();
+            return;
+        }
+
+        if (!curPwd) {
+            this.setState({alertMessage:LVStrings.wallet_edit_cur_pwd_required });
+            this.refs.alert.show();
+            return;
+        }
+
+        if (curPwd !== wallet.password) {
+            this.setState({alertMessage:LVStrings.wallet_edit_cur_pwd_error });
+            this.refs.alert.show();
+            return;
+        }
+
+        if (!newPwd || !newConfirmPwd) {
+            this.setState({alertMessage:LVStrings.wallet_edit_new_pwd_required });
+            this.refs.alert.show();
+            return;
+        }
+
+        if (newPwd !== newConfirmPwd) {
+            this.setState({alertMessage:LVStrings.wallet_create_password_mismatch });
+            this.refs.alert.show();
+            return;
+        }
+
+        this.refs.toast.show();
+        wallet.password = newPwd;
+        setTimeout(async ()=> {
+            try {
+                const newWallet = await LVWalletManager.modifyPassword(wallet, curPwd, newPwd);
+                await LVWalletManager.updateWallet(newWallet);
+                await LVWalletManager.saveToDisk();
+                this.refs.toast.dismiss();
+                LVNotificationCenter.postNotification(LVNotification.walletChanged);
+                this.props.navigation.goBack();
+            } catch(e) {
+                this.refs.toast.dismiss();
+                this.setState({alertMessage:LVStrings.wallet_edit_save_failed });
+                this.refs.alert.show();
+                return;
+            }
+        },500);
     }
 
     onCurPwdChanged(curPwd: string) {
@@ -97,7 +162,9 @@ export class ModifyWalletPwd extends Component {
                         </Text>
                     </View>
                 </View>
-                
+                <LVLoadingToast ref={'toast'} title={LVStrings.wallet_editing}/>
+                <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
+        
             </View>
         )
     }

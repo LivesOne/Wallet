@@ -61,6 +61,15 @@ const localized_strings = {
     wallet_backup: 'Backup wallet',
     wallet_default_name_prefix: "default wallet ",
 
+    //wallet edit
+    wallet_edit_save_failed: 'Save failed!',
+    wallet_edit_cur_pwd_required : 'current password required',
+    wallet_edit_cur_pwd_error : 'current password error',
+    wallet_edit_new_pwd_required : 'new password required',
+    wallet_edit_new_name_required : 'new name required',
+    wallet_edit_equal_to_old : 'new name is equal to the old',
+    wallet_editing : 'wallet editing...',
+
     // Assets
     assets_title: 'My assets',
     recent_records: 'Recent records',

@@ -10,6 +10,8 @@ import { Cell, Section, TableView, Separator } from 'react-native-tableview-simp
 import MXButton from './../../../components/MXButton';
 import LVStrings from '../../../assets/localization';
 import { WalletExportModal } from './WalletExportModal';
+import LVWalletManager from '../../../logic/LVWalletManager';
+import console from 'console-browserify';
 
 const IconWalletModifyName = require('../../../assets/images/wallet_modify_name.png');
 const IconWalletModifyPwd = require('../../../assets/images/wallet_modify_pwd.png');
@@ -46,21 +48,47 @@ export class WalletManagerPage extends Component {
     };
 
     state: {
+        wallet: ?Object,
         walletTitle: string,
-        walletAddress: string,
+        walletAddress: ?string,
         showExportModal: boolean,
-        privateKey: string,
+        privateKey: ?string,
     }
 
     constructor() {
         super();
         this.state = {
-            walletTitle: '2,100,000 LVT',
-            walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
-            privateKey: '7badjaxamad89asdfa2eajkfjak08923h8ass0d9g9xx9ad8a78asd90a',
+            wallet: null,
+            walletTitle: '',
+            walletAddress: '',
+            privateKey: '',
             showExportModal: false,
         }
     }
+
+    componentWillMount() {
+        const { params } = this.props.navigation.state;
+        const wallet = params.wallet;
+        this.setState({
+            wallet: wallet,
+            walletAddress: wallet !== null ? wallet.address : '',
+            walletTitle: wallet !== null ? wallet.lvt + ' LVT' : '',
+        })
+    }
+
+    componentDidMount() {
+        this.fetchPrivateKey();
+    }
+
+    async fetchPrivateKey() {
+        const wallet = this.state.wallet;
+        console.log('test' + JSON.stringify(wallet));
+        if (wallet) {
+            let privateKey = await LVWalletManager.exportPrivateKey(wallet.password);
+            this.setState({privateKey: privateKey});
+        }
+    }
+    
 
     showExportModal() {
         this.setState({ showExportModal: true })
@@ -71,6 +99,7 @@ export class WalletManagerPage extends Component {
     }
 
     render() {
+        const wallet = this.state.wallet;
         return (
             <View style={ styles.container }>
                 <WalletExportModal
@@ -100,10 +129,10 @@ export class WalletManagerPage extends Component {
                         hideSeparator
                         >
                         <CellVariant title= { LVStrings.profile_wallet_modify_name } source={ IconWalletModifyName } 
-                        onPress = {()=>{this.props.navigation.navigate('ModifyWalletName')}}/>
+                        onPress = {()=>{this.props.navigation.navigate('ModifyWalletName', {wallet: wallet})}}/>
                         <Separator insetRight={15} tintColor="#eeeff2"/>
                         <CellVariant title= { LVStrings.profile_wallet_modify_password } source={ IconWalletModifyPwd }
-                        onPress = {()=>{this.props.navigation.navigate('ModifyWalletPwd')}}/>
+                        onPress = {()=>{this.props.navigation.navigate('ModifyWalletPwd', {wallet: wallet})}}/>
                         <Separator insetRight={15} tintColor="#eeeff2"/>
                         <CellVariant title= { LVStrings.profile_wallet_export } source={ IconWalletExportPK }
                         onPress = { this.showExportModal.bind(this) }/>

@@ -62,6 +62,15 @@ const localized_strings = {
     wallet_backup: '备份钱包',
     wallet_default_name_prefix: "默认钱包",
 
+    //wallet edit
+    wallet_edit_save_failed: '保存失败',
+    wallet_edit_cur_pwd_required : '当前密码密码不能为空',
+    wallet_edit_cur_pwd_error : '当前密码不正确',
+    wallet_edit_new_pwd_required : '新密码不能为空',
+    wallet_edit_new_name_required : '名称不能为空',
+    wallet_edit_equal_to_old : '名称跟原名称相同',
+    wallet_editing : '正在修改中...',
+
     // Assets
     assets_title: '我的资产',
     recent_records: '最近交易记录',

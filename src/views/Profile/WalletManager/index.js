@@ -17,6 +17,8 @@ import LVFullScreenModalView from '../../Common/LVFullScreenModalView';
 import LVWalletCreationNavigator from '../../Wallet/LVWalletCreationNavigator';
 import WalletImportPage from '../../Wallet/WalletImportPage';
 import LVWalletManager from '../../../logic/LVWalletManager';
+import LVNotificationCenter from '../../../logic/LVNotificationCenter';
+import LVNotification from '../../../logic/LVNotification';
 const IconBack = require('../../../assets/images/back_grey.png');
 const WalletIcon = require('../../../assets/images/wallet_grey.png');
 const ShowDetailsIcon = require('../../../assets/images/show_detail_arrow.png');
@@ -39,12 +41,14 @@ export class WalletManagerScreen extends Component {
 
         this.onCreateWalletPressed = this.onCreateWalletPressed.bind(this);
         this.onImportWalletPressed = this.onImportWalletPressed.bind(this);
+        this.handleWalletChange = this.handleWalletChange.bind(this);
         this.state = {
             wallets: []
         };
     }
-
+    
     componentDidMount() {
+        LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
         this.setState({
             wallets: LVWalletManager.getWallets()
         });
@@ -56,6 +60,12 @@ export class WalletManagerScreen extends Component {
 
     onImportWalletPressed() {
         this.refs.importPage.show();
+    }
+
+    handleWalletChange() {
+        this.setState({
+            wallets: LVWalletManager.getWallets()
+        });
     }
 
     render() {
