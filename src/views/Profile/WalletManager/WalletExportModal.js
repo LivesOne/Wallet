@@ -2,13 +2,14 @@
 'use strict'
 
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Easing, TextInput } from 'react-native';
+import { Text, View, StyleSheet, Easing, TextInput, Clipboard } from 'react-native';
 import Modal from 'react-native-modalbox';
 import PropTypes from 'prop-types';
 import MXButton from './../../../components/MXButton';
 import LVColor from './../../../styles/LVColor';
 import * as MXUtils from './../../../utils/MXUtils';
 import LVStrings from './../../../assets/localization';
+import Toast from 'react-native-simple-toast';
 
 export class WalletExportModal extends Component {
     static propTypes = {
@@ -28,9 +29,18 @@ export class WalletExportModal extends Component {
         }
     };
 
+    onCopyKey() {
+        Clipboard.setString(this.props.privateKey);
+        Toast.show(LVStrings.wallet_export_private_key_copied_to_clipboard)
+        setTimeout(() => {
+            this.refs.dialog.close();
+        }, 500);
+    }
+
     render() {
         return (
             <Modal 
+                ref={'dialog'}
                 isOpen={this.props.isOpen}
                 style={styles.modal}
                 position={'center'}
@@ -46,13 +56,15 @@ export class WalletExportModal extends Component {
                         textAlignVertical={'top'}             
                         underlineColorAndroid = {'transparent'}
                         multiline= {true} 
+                        editable={false} 
+                        selectTextOnFocus={false}
                         style={ styles.textInput }>{ this.props.privateKey }</TextInput>
                     <Text style={{fontSize: 15, color: LVColor.text.red, marginTop: 15,  fontWeight: '100',}}> {LVStrings.profile_wallet_export_warnning} </Text>
                     <MXButton
                         rounded
                         style={ styles.btn }
-                        title={ LVStrings.prifile_wallet_export_copy_key }>
-                    </MXButton>
+                        onPress={this.onCopyKey.bind(this)}
+                        title={ LVStrings.prifile_wallet_export_copy_key }/>
                 </View>
             </Modal>
         )

@@ -70,6 +70,8 @@ const localized_strings = {
     wallet_edit_new_name_required : '名称不能为空',
     wallet_edit_equal_to_old : '名称跟原名称相同',
     wallet_editing : '正在修改中...',
+    wallet_exporting : '正在导出中...',
+    wallet_export_private_key_copied_to_clipboard: '私钥已经复制到剪切板',
 
     // Assets
     assets_title: '我的资产',

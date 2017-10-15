@@ -12,6 +12,7 @@ import LVStrings from '../../../assets/localization';
 import { WalletExportModal } from './WalletExportModal';
 import LVWalletManager from '../../../logic/LVWalletManager';
 import console from 'console-browserify';
+import LVLoadingToast from '../../Common/LVLoadingToast';
 
 const IconWalletModifyName = require('../../../assets/images/wallet_modify_name.png');
 const IconWalletModifyPwd = require('../../../assets/images/wallet_modify_pwd.png');
@@ -77,21 +78,32 @@ export class WalletManagerPage extends Component {
     }
 
     componentDidMount() {
-        this.fetchPrivateKey();
+        //this.fetchPrivateKey();
     }
 
-    async fetchPrivateKey() {
+    async fetchPrivateKey(callback: Function) {
         const wallet = this.state.wallet;
         console.log('test' + JSON.stringify(wallet));
         if (wallet) {
             let privateKey = await LVWalletManager.exportPrivateKey(wallet.password);
             this.setState({privateKey: privateKey});
+            if (callback) {
+                callback();
+            }
         }
     }
     
 
-    showExportModal() {
-        this.setState({ showExportModal: true })
+    async showExportModal() {
+        this.refs.toast.show();
+        setTimeout(async ()=>{
+            await this.fetchPrivateKey(() => {
+                this.refs.toast.dismiss();
+                setTimeout(()=>{
+                    this.setState({ showExportModal: true })
+                }, 500);
+            });
+        }, 1000);
     }
 
     onExportModalClosed() {
@@ -143,7 +155,7 @@ export class WalletManagerPage extends Component {
                     <MXButton style={{marginBottom: 15}} title={ LVStrings.profile_wallet_backup } rounded></MXButton>
                     <MXButton style={{marginBottom: 25}}title={ LVStrings.profile_wallet_delete_wallet } rounded></MXButton>
                 </View>
-                
+                <LVLoadingToast ref={'toast'} title={LVStrings.wallet_exporting}/>
             </View>
         )
     }
