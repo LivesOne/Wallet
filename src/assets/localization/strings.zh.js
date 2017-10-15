@@ -99,6 +99,9 @@ const localized_strings = {
 
     // Transfer 转账
     transfer_eth_insufficient: '您的钱包ETH不足，无法完成转账，请转账ETH至此钱包', 
+    transfer_address_required: '收款人地址不能为空',
+    transfer_address_invalid: '请输入有效的收款人地址',
+    transfer_amount_required: '转账金额不能为空',
 
     // Profile
     profile_wallet_manager: '钱包管理',

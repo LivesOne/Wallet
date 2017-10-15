@@ -14,11 +14,17 @@ import PropTypes from 'prop-types';
 import LVColor from '../../styles/LVColor'
 import LVSize from '../../styles/LVFontSize';
 import LVStrings from '../../assets/localization';
-import { TransferMinerTipsSetter } from './TransferMinerTipsSetter';
+import { TransferMinerGapSetter } from './TransferMinerGapSetter';
 import MXButton from './../../components/MXButton';
 import * as MXUtils from '../../utils/MXUtils'
+import { converAddressToDisplayableText } from '../../utils/MXStringUtils';
 import { TransferDetailModal } from './TransferDetailModal';
 import { ImageTextInput } from './ImageTextInput';
+import LVSelectWalletModal from '../Common/LVSelectWalletModal';
+import { LVQrScanModal } from '../Common/LVQrScanModal';
+import TransferUtils from './TransferUtils';
+import LVWalletManager from '../../logic/LVWalletManager';
+import LVDialog from '../Common/LVDialog';
 
 class TransferScreen extends Component {
     static navigationOptions = {
@@ -26,30 +32,71 @@ class TransferScreen extends Component {
     };
 
     state: {
+        wallet: ?Object,
         curETH: number,
         addressIn: string,
         amount: number,
-        minerTips: number,
+        minerGap: number,
+        balance: number,
         remarks: string,
         showModal: boolean,
+        openSelectWallet: boolean,
+        showQrScanModal: boolean,
+        alertMessage: string,
     }
 
     constructor() {
         super();
+        const wallet = LVWalletManager.getSelectedWallet();
+        console.log(JSON.stringify(wallet));
         this.state = {
-            curETH: 1.32556,
-            addressIn: '325FDVXVb56EGD838FXC7AD0ASD21LDCH5',
-            amount: 19840,
-            minerTips: 0.0024,
-            remarks: '无',
+            wallet: wallet,
+            curETH: wallet != null ? wallet.eth: 0,
+            addressIn: '',
+            amount: 0,
+            balance: wallet != null ? wallet.lvt: 0,
+            minerGap: 0.0,
+            remarks: '',
             showModal: false,
+            openSelectWallet: false,
+            showQrScanModal: false,
+            alertMessage: '',
         }
     }
 
-    onModalClosed() {
-        this.setState({ showModal: false })
+    onAmountChanged(newAmountText:string) {
+        if (!TransferUtils.isBlank(newAmountText) && !TransferUtils.isValidAmount(newAmountText)) {
+            alert('请输入正确的转账金额');
+            return;
+        } else {
+            this.setState({amount: parseFloat(newAmountText)})
+        }
     }
-    
+
+    onTransferPresse() {
+        const {addressIn, amount, minerGap} = this.state;
+
+        if (!addressIn) {
+            this.setState({alertMessage:LVStrings.transfer_address_required });
+            this.refs.alert.show();
+            return;
+        }
+
+        if (!TransferUtils.isValidAddress(addressIn)) {
+            this.setState({alertMessage:LVStrings.transfer_address_invalid });
+            this.refs.alert.show();
+            return;
+        }
+
+        if (!amount) {
+            this.setState({alertMessage:LVStrings.transfer_amount_required });
+            this.refs.alert.show();
+            return;
+        }
+
+        this.setState({showModal: true})
+    }
+
     render() {
         return (
             <ScrollView 
@@ -60,32 +107,42 @@ class TransferScreen extends Component {
                     isOpen= {this.state.showModal}
                     address= {this.state.addressIn}
                     amount= {MXUtils.formatCurrency(this.state.amount) + ' LVT'}
-                    minerTips= {this.state.minerTips + ' ETH'}
+                    minerTips= {this.state.minerGap + ' ETH'}
                     remarks= {this.state.remarks}
-                    onClosed = {this.onModalClosed.bind(this)}
+                    onClosed = {()=>{this.setState({ showModal: false })}}
                     onTransferConfirmed = {()=>{alert('transfering...')}}
                 />}
                 <View  style={ styles.container }>
+                    <LVQrScanModal
+                        barcodeReceived={(event)=>{this.setState({addressIn: event.data})}}
+                        isOpen= {this.state.showQrScanModal}
+                        onClosed = {()=>{this.setState({ showQrScanModal: false })}}/>
                     <TransferHeader
-                        balance={2100000}
+                        balance={this.state.balance}
+                        onPressSelectWallet={()=>{this.setState({ openSelectWallet: true })}}
                     ></TransferHeader>
                     <View style= { styles.headerBelow }>
                         <ImageTextInput 
                             style= {styles.textInput} 
                             placeholder={LVStrings.transfer_payee_address}
                             onAddClicked={() => {alert('add contracts')}}
-                            onScanClicked={() => {alert('scan clicked')}}
+                            value={converAddressToDisplayableText(this.state.addressIn, 12, 12)}
+                            onScanClicked={() => {this.setState({ showQrScanModal: true })}}
                             onTextChanged={(newText) => {this.setState({addressIn: newText})}}/>
                         <MXCrossTextInput 
                             style= {styles.textInput} 
                             placeholder={LVStrings.transfer_amount}
                             keyboardType = {'numeric'}
-                            onTextChanged={(newText) => {this.setState({amount: (newText * 1) | 0})}}/>
+                            onTextChanged={this.onAmountChanged.bind(this)}/>
                         <MXCrossTextInput 
                             style= {styles.textInput} 
                             placeholder={LVStrings.transfer_remarks}
                             onTextChanged={(newText) => {this.setState({remarks: newText})}}/>
-                        <TransferMinerTipsSetter style = {styles.setter}></TransferMinerTipsSetter>
+                        <TransferMinerGapSetter 
+                            minimumValue={0.2}
+                            maximumValue={0.8}
+                            onGapChanged={(gap)=>{this.setState({minerGap: parseFloat(gap)})}}
+                            style = {styles.setter}/>
                         <View style= { styles.curEth }>
                             <Text style = {styles.text}>{LVStrings.transfer_current_eth}</Text>
                             <Text style = {styles.textCurEth}>{this.state.curETH}</Text>
@@ -94,10 +151,19 @@ class TransferScreen extends Component {
                         <MXButton 
                             rounded = {true} 
                             style ={styles.btn} 
-                            onPress = {()=> {this.setState({showModal: true})}}
+                            onPress = {this.onTransferPresse.bind(this)}
                             title={LVStrings.transfer}>
                             </MXButton>
                     </View>
+                    <LVDialog 
+                        ref={'alert'} 
+                        title={LVStrings.alert_hint} 
+                        message={this.state.alertMessage} 
+                        buttonTitle={LVStrings.alert_ok}/>
+                    <LVSelectWalletModal
+                        isOpen={this.state.openSelectWallet}
+                        onClosed={this.onTransferPresse.bind(this)}
+                    />
                 </View>
             </ScrollView>
         )

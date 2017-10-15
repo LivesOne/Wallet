@@ -47,9 +47,13 @@ export function getRandomInt(min : number, max : number) {
 }
 
 export function formatCurrency(n: number) {
-  return n.toFixed(0).replace(/./g, function(c, i, a) {
-      return i && c !== "." && ((a.length - i) % 3 === 0) ? ',' + c : c;
-  });
+  if (n === 0) {
+    return '0';
+  } else {
+    return n.toFixed(0).replace(/./g, function(c, i, a) {
+        return i && c !== "." && ((a.length - i) % 3 === 0) ? ',' + c : c;
+    });
+  }
 }
 
 export const makeCancelable = (promise : Promise<any>) => {

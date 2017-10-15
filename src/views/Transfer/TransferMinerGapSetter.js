@@ -11,31 +11,41 @@ import LVSize from '../../styles/LVFontSize';
 import LVStrings from '../../assets/localization';
 import * as MXUtils from '../../utils/MXUtils'
 
-export class TransferMinerTipsSetter extends Component {
+export class TransferMinerGapSetter extends Component {
 
     state: {
         value: number,
     }
 
-    constructor() {
-        super();
-        this.state = {
-            value: 0,
-        }
-    }
+    static propTypes = {
+        minimumValue: PropTypes.number,
+        maximumValue: PropTypes.number,
+        onGapChanged: PropTypes.func,
+    }; 
 
-    onValueChange(value: number) {
-        this.setState({
-            value: value,
-        });
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            value: props.minimumValue,
+        }
     }
 
     calculateValue() {
         return (this.state.value * 1).toFixed(2) + ' ETH';
     }
 
+    onValueChange(value: number) {
+        if (this.props.onGapChanged) {
+            this.props.onGapChanged(value);
+        }
+        this.setState({
+            value: value,
+        });
+    }
+
     
     render() {
+        const {maximumValue, minimumValue} = this.props;
         return (
         <View style={[styles.container, this.props.style]} >
             <View style={styles.topContainer}>
@@ -49,12 +59,12 @@ export class TransferMinerTipsSetter extends Component {
                 <View  style= {styles.sliderWrapper}>
                     <Slider
                         value={this.state.value}
-                        //minimumValue={0.2}
-                        //maximumValue={1}
+                        minimumValue={minimumValue}
+                        maximumValue={maximumValue}
+                        onValueChange={this.onValueChange.bind(this)}
                         trackStyle={styles.track}
                         thumbStyle={styles.thumb}
                         minimumTrackTintColor={LVColor.primary}
-                        onValueChange={this.onValueChange.bind(this)}
                     />
                 </View>
                 
@@ -119,4 +129,4 @@ const styles = StyleSheet.create({
       }
   });
 
-export default TransferMinerTipsSetter
+export default TransferMinerGapSetter
