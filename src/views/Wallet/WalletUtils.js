@@ -1,8 +1,13 @@
 //@flow
+import LVPersistent from '../../logic/LVPersistent';
 'use strict'
 
 var Ajv = require('ajv');
 var ajv = new Ajv({allErrors: true});
+
+import LVStrings from '../../assets/localization';
+
+const WalletDefaultNameIndexKey :string = '@Venus:WalletDefaultNameIndex';
 
 var WALLET_JSON_SCHEMA = 
 {
@@ -80,8 +85,13 @@ var WALLET_JSON_SCHEMA =
     }
   }
 
+
 export default class WalletUtils {
     constructor() {}
+
+    static OPEN_IMPORT_FROM_LAUNCH = 'open_import_from_launch';
+    static OPEN_IMPORT_FROM_WALLET_MANAGER = 'open_import_from_wallet_manager';
+    static OPEN_IMPORT_FROM_MODIFY_PASSWORD = 'open_import_from_modify_password';
 
     static isValidWalletObj(jsonObj: Object) {
         var validate = ajv.compile(WALLET_JSON_SCHEMA);
@@ -102,6 +112,14 @@ export default class WalletUtils {
     }
 
     static isPrivateKeyValid(privateKey: string) {
-        return true;
+        return privateKey && privateKey.length === 64 && privateKey.match(/^[0-9a-f]+$/i);
+    }
+
+    static async getDefaultName() {
+      let curIndex = await LVPersistent.getNumber(WalletDefaultNameIndexKey);
+      curIndex = curIndex === 0 ? curIndex + 1 : curIndex;
+      let defaultName = LVStrings.wallet_default_name_prefix + curIndex;
+      await LVPersistent.setNumber(WalletDefaultNameIndexKey, curIndex + 1);
+      return defaultName;
     }
 }

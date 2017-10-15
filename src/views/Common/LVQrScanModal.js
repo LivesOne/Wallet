@@ -40,7 +40,6 @@ export class LVQrScanModal extends Component {
     };
 
     onBarcodeReceived(event: any) {
-        alert(event.data)
         if (this.props.barcodeReceived) {
             this.props.barcodeReceived(event);
         }

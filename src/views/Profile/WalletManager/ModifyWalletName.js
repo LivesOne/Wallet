@@ -8,6 +8,10 @@ const IconBack = require('../../../assets/images/back_grey.png');
 import LVStrings from '../../../assets/localization';
 import LVColor from '../../../styles/LVColor'
 import MXCrossTextInput from './../../../components/MXCrossTextInput';
+import LVWalletManager from '../../../logic/LVWalletManager';
+import LVNotificationCenter from '../../../logic/LVNotificationCenter';
+import LVNotification from '../../../logic/LVNotification';
+import LVDialog from '../../Common/LVDialog';
 
 export class ModifyWalletName extends Component {
 
@@ -16,22 +20,64 @@ export class ModifyWalletName extends Component {
     };
 
     state: {
-        newName: string,
+        wallet: ?Object,
+        name: ?string,
+        alertMessage: string,
     }
 
     constructor() {
         super();
+        const wallet = LVWalletManager.getSelectedWallet();
         this.state = {
-            newName: ''
+            wallet: wallet,
+            name: '',
+            alertMessage: ''
         }
     }
 
-    onTextChanged(newName: string) {
-        this.setState({newName: newName})
+    componentWillMount() {
+        const {params} = this.props.navigation.state;
+        this.setState({
+            wallet: params.wallet,
+            name: params.wallet.name,
+        })
     }
 
-    onSavePressed() {
-        alert(this.state.newName)
+    onTextChanged(newName: string) {
+        this.setState({name: newName})
+    }
+
+    async onSavePressed() {
+        const {name, wallet} = this.state;
+        if (!wallet) {
+            this.setState({alertMessage:LVStrings.wallet_edit_save_failed });
+            this.refs.alert.show();
+            return;
+        }
+        
+        if (!name) {
+            this.setState({alertMessage:LVStrings.wallet_edit_new_name_required });
+            this.refs.alert.show();
+            return;
+        }
+
+        if (name === wallet.name) {
+            this.setState({alertMessage:LVStrings.wallet_edit_equal_to_old });
+            this.refs.alert.show();
+            return;
+        } 
+        
+        wallet.name = name;
+        try {
+            await LVWalletManager.updateWallet(wallet);
+            await LVWalletManager.saveToDisk();
+            LVNotificationCenter.postNotification(LVNotification.walletChanged);
+            this.props.navigation.goBack();
+        } catch(e) {
+            this.setState({alertMessage:LVStrings.wallet_edit_save_failed });
+            this.refs.alert.show();
+            return;
+        }
     }
     
     render() {
@@ -55,6 +101,10 @@ export class ModifyWalletName extends Component {
                             onTextChanged={ this.onTextChanged.bind(this) }
                         />
                     </View>
+                    <LVDialog ref={'alert'} 
+                        title={LVStrings.alert_hint} 
+                        message={this.state.alertMessage} 
+                        buttonTitle={LVStrings.alert_ok}/>
             </View>
         )
     }

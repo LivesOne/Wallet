@@ -11,9 +11,13 @@ import MXButton from './../../../components/MXButton';
 import LVStrings from '../../../assets/localization';
 import { WalletExportModal } from './WalletExportModal';
 import LVWalletManager from '../../../logic/LVWalletManager';
-import LVNotification from '../../../logic/LVNotification';
-import LVNotificationCenter from '../../../logic/LVNotificationCenter';
 import {convertAmountToCurrencyString} from '../../../utils/MXStringUtils';
+import console from 'console-browserify';
+import LVLoadingToast from '../../Common/LVLoadingToast';
+import LVDialog from '../../Common/LVDialog';
+import Toast from 'react-native-simple-toast';
+import LVNotificationCenter from '../../../logic/LVNotificationCenter';
+import LVNotification from '../../../logic/LVNotification';
 
 const IconWalletModifyName = require('../../../assets/images/wallet_modify_name.png');
 const IconWalletModifyPwd = require('../../../assets/images/wallet_modify_pwd.png');
@@ -54,18 +58,33 @@ export class WalletDetailsPage extends Component {
         walletAddress: string,
         showExportModal: boolean,
         privateKey: string,
-        walletName: string
+        walletName: string,
+        wallet: ?Object,
+        walletTitle: string,
+        showExportModal: boolean,
     }
 
     constructor() {
         super();
         this.state = {
             displayTitle: '',
-            walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
-            privateKey: '7badjaxamad89asdfa2eajkfjak08923h8ass0d9g9xx9ad8a78asd90a',
+            wallet: null,
+            walletTitle: '',
+            walletAddress: '',
+            privateKey: '',
             showExportModal: false,
             walletName: ''
         }
+    }
+
+    componentWillMount() {
+        const { params } = this.props.navigation.state;
+        const wallet = params.wallet;
+        this.setState({
+            wallet: wallet,
+            walletAddress: wallet !== null ? wallet.address : '',
+            walletTitle: wallet !== null ? wallet.lvt + ' LVT' : '',
+        })
     }
 
     componentDidMount() {
@@ -82,11 +101,48 @@ export class WalletDetailsPage extends Component {
         this.setState({ showExportModal: true })
     }
 
+    async fetchPrivateKey(callback: Function) {
+        const wallet = this.state.wallet;
+        console.log('test' + JSON.stringify(wallet));
+        if (wallet) {
+            let privateKey = await LVWalletManager.exportPrivateKey(wallet.password);
+            this.setState({privateKey: privateKey});
+            if (callback) {
+                callback();
+            }
+        }
+    }
+    
+    async showExportModal() {
+        this.refs.toast.show();
+        setTimeout(async ()=>{
+            await this.fetchPrivateKey(() => {
+                this.refs.toast.dismiss();
+                setTimeout(()=>{
+                    this.setState({ showExportModal: true })
+                }, 500);
+            });
+        }, 1000);
+    }
+
     onExportModalClosed() {
         this.setState({ showExportModal: false })
     }
 
-    render() {     
+    async onDeleteWallet() {
+        const walletAddress = this.state.walletAddress;
+        await LVWalletManager.deleteWallet(walletAddress); 
+        await LVWalletManager.saveToDisk();
+        LVNotificationCenter.postNotification(LVNotification.walletChanged);
+        this.refs.alert.dismiss();
+        Toast.show(LVStrings.wallet_delete_success);
+        setTimeout(() => {
+            this.props.navigation.goBack();
+        }, 200);
+    }
+
+    render() {
+        const wallet = this.state.wallet;
         return (
             <View style={ styles.container }>
                 <WalletExportModal
@@ -117,10 +173,10 @@ export class WalletDetailsPage extends Component {
                         hideSeparator
                         >
                         <CellVariant title= { LVStrings.profile_wallet_modify_name } source={ IconWalletModifyName } 
-                        onPress = {()=>{this.props.navigation.navigate('ModifyWalletName')}}/>
+                        onPress = {()=>{this.props.navigation.navigate('ModifyWalletName', {wallet: wallet})}}/>
                         <Separator insetRight={15} tintColor="#eeeff2"/>
                         <CellVariant title= { LVStrings.profile_wallet_modify_password } source={ IconWalletModifyPwd }
-                        onPress = {()=>{this.props.navigation.navigate('ModifyWalletPwd')}}/>
+                        onPress = {()=>{this.props.navigation.navigate('ModifyWalletPwd', {wallet: wallet})}}/>
                         <Separator insetRight={15} tintColor="#eeeff2"/>
                         <CellVariant title= { LVStrings.profile_wallet_export } source={ IconWalletExportPK }
                         onPress = { this.showExportModal.bind(this) }/>
@@ -128,19 +184,21 @@ export class WalletDetailsPage extends Component {
                     </Section>
                 </TableView>
                 <View style={{width: '100%', flex: 1, justifyContent:'flex-end', alignItems:'center', backgroundColor: 'white'}}>
-                    <MXButton style={{marginBottom: 15}} 
-                            title={ LVStrings.profile_wallet_backup } 
-                            rounded/>
-                    <MXButton style={{marginBottom: 25}} 
-                            title={ LVStrings.profile_wallet_delete_wallet } 
-                            rounded
-                            onPress={ async ()=> {
-                                LVWalletManager.deleteWallet(this.state.walletAddress);
-                                await LVWalletManager.saveToDisk();
-                                LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
-                            }}/>
+                    <MXButton style={{marginBottom: 15}} title={ LVStrings.profile_wallet_backup } rounded></MXButton>
+                    <MXButton 
+                        style={{marginBottom: 25}}
+                        title={ LVStrings.profile_wallet_delete_wallet } 
+                        rounded
+                        onPress={()=>{this.refs.alert.show()}}
+                    ></MXButton>
                 </View>
-                
+                <LVLoadingToast ref={'toast'} title={LVStrings.wallet_exporting}/>
+                <LVDialog 
+                    ref={'alert'} 
+                    title={LVStrings.alert_hint} 
+                    message={LVStrings.wallet_delete_hint}
+                    onPress={this.onDeleteWallet.bind(this)}
+                    buttonTitle={LVStrings.alert_ok}/>
             </View>
         )
     }

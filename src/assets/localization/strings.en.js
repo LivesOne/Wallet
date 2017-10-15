@@ -59,6 +59,20 @@ const localized_strings = {
     wallet_create_success: 'Create success!',
     wallet_create_success_comment: 'The platform does not store the user\'s password, the password can not be retrieved or reset, it is highly recommended that you make a backup before using your wallet!',
     wallet_backup: 'Backup wallet',
+    wallet_default_name_prefix: "default wallet ",
+
+    //wallet edit
+    wallet_edit_save_failed: 'Save failed!',
+    wallet_edit_cur_pwd_required : 'current password required',
+    wallet_edit_cur_pwd_error : 'current password error',
+    wallet_edit_new_pwd_required : 'new password required',
+    wallet_edit_new_name_required : 'new name required',
+    wallet_edit_equal_to_old : 'new name is equal to the old',
+    wallet_editing : 'wallet editing...',
+    wallet_exporting : 'wallet exporting...',
+    wallet_export_private_key_copied_to_clipboard: 'The private key has been copied to the clipboard',
+    wallet_delete_hint: 'Are your sure to delete the wallet?',
+    wallet_delete_success: 'Delete success',
 
     // Assets
     assets_title: 'My assets',
@@ -84,6 +98,9 @@ const localized_strings = {
     
     // Transfer 转账
     transfer_eth_insufficient: '您的钱包ETH不足，无法完成转账，请转账ETH至此钱包', 
+    transfer_address_required: 'Address required',
+    transfer_address_invalid: 'Invalid address',
+    transfer_amount_required: 'Transfer amount required',
     
     // Profile
     profile_wallet_manager: 'Wallet manager',

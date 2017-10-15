@@ -11,31 +11,25 @@ import MXTouchableImage from '../../components/MXTouchableImage';
 import * as MXUtils from "../../utils/MXUtils";
 import LVGradientPanel from '../Common/LVGradientPanel';
 const selectImg = require('../../assets/images/select_wallet.png');
+import { StringUtils } from '../../utils';
 
 export class TransferHeader extends Component {
 
     static propTypes = {
         balance: PropTypes.number,
-        onPressSelectPurse: PropTypes.func,
+        onPressSelectWallet: PropTypes.func,
     };
 
     onPressSelectPurse = () => {
-        if (this.props.onPressSelectPurse) {
-            this.props.onPressSelectPurse();
+        if (this.props.onPressSelectWallet) {
+            this.props.onPressSelectWallet();
         }
-        alert('select')
     };
-
-    toRenminbi() {
-        // const { balance } = this.props;
-        // if (balance) {
-        //     return '≈￥' + this.format(balance)
-        // }
-        return '≈￥20,000';
-    }
 
     render() {
         const { balance } = this.props;
+        const valueString = StringUtils.convertAmountToCurrencyString(balance, ',', 3);
+        const extValString = StringUtils.convertAmountToCurrencyString(balance, ',', 3);
         return (
             <LVGradientPanel style = {[styles.container, this.props.style]}>
                 <View style={styles.nav}>
@@ -45,8 +39,8 @@ export class TransferHeader extends Component {
                     </View>
                 <View style= {styles.columnContainer}>
                     <Text style= {[styles.textCommon]}>{ LVStrings.transfer_purse_balance }</Text>
-                    <Text style= {[styles.textCommon, {fontSize: 36}]}>{ MXUtils.formatCurrency(balance)}</Text>
-                    <Text style= {[styles.textCommon]}>{ this.toRenminbi() }</Text>
+                    <Text style= {[styles.textCommon, {fontSize: 36}]}>{ valueString }</Text>
+                    <Text style= {[styles.textCommon]}>{ '≈￥' + extValString}</Text>
                 </View>
             </LVGradientPanel>
         )

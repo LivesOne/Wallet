@@ -14,6 +14,8 @@ import * as LVStyleSheet from '../../styles/LVStyleSheet'
 import LVWalletCreationNavigator from '../Wallet/LVWalletCreationNavigator';
 import WalletImportPage from '../Wallet/WalletImportPage';
 import LVFullScreenModalView from '../Common/LVFullScreenModalView';
+import WalletUtils from './WalletUtils';
+
 const createImage = require("../../assets/images/create_wallet.png");
 
 export default class WalletCreateOrImportPage extends Component {    

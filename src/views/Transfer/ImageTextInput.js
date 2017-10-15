@@ -40,10 +40,11 @@ export class ImageTextInput extends Component {
         onAddClicked: PropTypes.func,
         onScanClicked: PropTypes.func,
         KeyboardType: PropTypes.string,
+        value: PropTypes.string,
     };
 
     render() {
-        const { style, placeholder, secureTextEntry, keyboardType, onAddClicked, onScanClicked} = this.props;
+        const { style, placeholder, secureTextEntry, keyboardType, onAddClicked, onScanClicked, value} = this.props;
         return (
             <View style={[styles.container, style]}>
                 <TextInput style={styles.textInput}
@@ -51,7 +52,7 @@ export class ImageTextInput extends Component {
                     underlineColorAndroid = {'transparent'}
                     placeholderTextColor = { LVColor.text.placeHolder }
                     onChangeText = {this.onChangeText}
-                    value={this.state.text}/>
+                    value={value}/>
                     <TouchableOpacity
                         onPress={onAddClicked} >
                         <Image source={AddContractsIcon}></Image>

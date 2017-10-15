@@ -118,12 +118,12 @@ const styles = LVStyleSheet.create({
     },
     normalText: {
         fontSize: 15,
-        color: "#667383"
+        color: "#bec4d0"
     },
 
     pressedText: {
         fontSize: 14,
-        color: "#bec4d0"
+        color: "#667383"
     }
   });
 

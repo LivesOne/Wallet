@@ -42,7 +42,8 @@ const foundation = require('../../foundation/wallet.js');
       privateKeyPwdAgain: string,
       keyStore: string,
       keyStorePwd: string,
-      alertMessage: ?string
+      alertMessage: ?string,
+      fromPage: string,
     }
 
     constructor() {
@@ -55,9 +56,21 @@ const foundation = require('../../foundation/wallet.js');
         privateKeyPwd: '',
         privateKeyPwdAgain: '',
         keyStorePwd: '',
-        alertMessage: ''
+        alertMessage: '',
+        fromPage: WalletUtils.OPEN_IMPORT_FROM_WALLET_MANAGER,
+      }
+      this.exitWhenSuccess = this.exitWhenSuccess.bind(this);
+    }
+
+    componentWillMount = () => {
+      if (!this.props.navigation) {
+        this.setState({fromPage: WalletUtils.OPEN_IMPORT_FROM_WALLET_MANAGER})
+      } else {
+        const { params } = this.props.navigation.state;
+        this.setState({fromPage: params.from})
       }
     }
+    
 
     _onHeaderPressed = (leftPressed: boolean) => {
       this.setState({ leftPressed: leftPressed })
@@ -68,7 +81,26 @@ const foundation = require('../../foundation/wallet.js');
     }
 
     onBarcodeReceived(event: any) {
-      alert("type = " + event.type + " data = " + event.data)
+      if (this.state.leftPressed) {
+          this.setState({keyStore : event.data})
+      } else {
+          this.setState({privateKey: event.data});
+      }
+    }
+
+    exitWhenSuccess = () => {
+      const fromPage = this.state.fromPage;
+      if (fromPage === WalletUtils.OPEN_IMPORT_FROM_LAUNCH) {
+        LVNotificationCenter.postNotification(LVNotification.walletImported)
+      } else if (fromPage === WalletUtils.OPEN_IMPORT_FROM_WALLET_MANAGER) {
+        if (this.props.dismissCallback) {
+          this.props.dismissCallback();
+        }
+      } else {
+        if (this.props.navigation) {
+          this.props.navigation.goBack();
+        }
+      }
     }
 
     async onPrivateImportPress() {
@@ -115,13 +147,16 @@ const foundation = require('../../foundation/wallet.js');
     this.refs.toast.show();
     setTimeout(async ()=> {
       try {
-        let wallet = await LVWalletManager.importWalletWithPrivatekey('defaultName2', "niceToMeetYou", "0e9facdcd345415752f51d36687ce5490a9ccc5d9b4b94f70ccbc4cce5677eb5");
+        let defaultName = await WalletUtils.getDefaultName();
+        let wallet = await LVWalletManager.importWalletWithPrivatekey(defaultName, privateKeyPwd, privateKey);
         LVWalletManager.addWallet(wallet);
         LVWalletManager.saveToDisk();
         this.refs.toast.dismiss();
         this.setState({alertMessage: LVStrings.wallet_import_success });
         this.refs.alert.show();
-        setTimeout(()=>{LVNotificationCenter.postNotification(LVNotification.walletImported)},500);
+        setTimeout(()=>{
+          this.exitWhenSuccess();
+        },500);
       } catch(e) {
         this.refs.toast.dismiss();
         this.setState({alertMessage: LVStrings.wallet_import_fail });
@@ -156,7 +191,8 @@ const foundation = require('../../foundation/wallet.js');
       this.refs.toast.show();
       setTimeout(async ()=> {
         try {
-          let wallet = await LVWalletManager.importWalletWithKeystore('defaultName1', keyStorePwd, JSON.parse(keyStore).keystore);
+          let defaultName = await WalletUtils.getDefaultName();
+          let wallet = await LVWalletManager.importWalletWithKeystore(defaultName, keyStorePwd, JSON.parse(keyStore).keystore);
           LVWalletManager.addWallet(wallet);
           LVWalletManager.saveToDisk();
           this.refs.toast.dismiss();
@@ -176,7 +212,7 @@ const foundation = require('../../foundation/wallet.js');
       return (
         <View style = {styles.container}>
           <LVQrScanModal
-              barcodeReceived={this.onBarcodeReceived}
+              barcodeReceived={this.onBarcodeReceived.bind(this)}
               isOpen= {this.state.showModal}
               onClosed = {this.onModalClosed.bind(this)}/>
           <MXNavigatorHeader
@@ -212,6 +248,7 @@ const foundation = require('../../foundation/wallet.js');
           <TextInput
             textAlignVertical={'top'}
             multiline= {true}
+            value={this.state.keyStore}
             placeholder={ LVStrings.wallet_import_keystore_hint }
             underlineColorAndroid = {'transparent'}
             onChangeText={(newText)=>{this.setState({keyStore: newText})}}
@@ -239,6 +276,7 @@ const foundation = require('../../foundation/wallet.js');
           <TextInput
             textAlignVertical={'top'}
             multiline= {true}
+            value={this.state.privateKey}
             onChangeText={(newText)=>{this.setState({privateKey: newText})}}
             placeholder={ LVStrings.wallet_import_plain_private_key_hint }
             underlineColorAndroid = {'transparent'}

@@ -60,6 +60,20 @@ const localized_strings = {
     wallet_create_name_unavailable: '钱包名字不可用',
     wallet_create_success_comment: '平台不储存用户的私人密码，密码无法找回或重置，强烈建议您在使用钱包前做好钱包备份！',
     wallet_backup: '备份钱包',
+    wallet_default_name_prefix: "默认钱包",
+
+    //wallet edit
+    wallet_edit_save_failed: '保存失败',
+    wallet_edit_cur_pwd_required : '当前密码密码不能为空',
+    wallet_edit_cur_pwd_error : '当前密码不正确',
+    wallet_edit_new_pwd_required : '新密码不能为空',
+    wallet_edit_new_name_required : '名称不能为空',
+    wallet_edit_equal_to_old : '名称跟原名称相同',
+    wallet_editing : '正在修改中...',
+    wallet_exporting : '正在导出中...',
+    wallet_export_private_key_copied_to_clipboard: '私钥已经复制到剪切板',
+    wallet_delete_hint: '确认删除该钱包？',
+    wallet_delete_success: '删除钱包成功',
 
     // Assets
     assets_title: '我的资产',
@@ -85,6 +99,9 @@ const localized_strings = {
 
     // Transfer 转账
     transfer_eth_insufficient: '您的钱包ETH不足，无法完成转账，请转账ETH至此钱包', 
+    transfer_address_required: '收款人地址不能为空',
+    transfer_address_invalid: '请输入有效的收款人地址',
+    transfer_amount_required: '转账金额不能为空',
 
     // Profile
     profile_wallet_manager: '钱包管理',
