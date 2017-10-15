@@ -71,6 +71,9 @@ const localized_strings = {
     wallet_editing : 'wallet editing...',
     wallet_exporting : 'wallet exporting...',
     wallet_export_private_key_copied_to_clipboard: 'The private key has been copied to the clipboard',
+    wallet_delete_hint: 'Are your sure to delete the wallet?',
+    wallet_delete_success: 'Delete success',
+
     // Assets
     assets_title: 'My assets',
     recent_records: 'Recent records',

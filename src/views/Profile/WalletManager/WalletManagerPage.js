@@ -13,6 +13,10 @@ import { WalletExportModal } from './WalletExportModal';
 import LVWalletManager from '../../../logic/LVWalletManager';
 import console from 'console-browserify';
 import LVLoadingToast from '../../Common/LVLoadingToast';
+import LVDialog from '../../Common/LVDialog';
+import Toast from 'react-native-simple-toast';
+import LVNotificationCenter from '../../../logic/LVNotificationCenter';
+import LVNotification from '../../../logic/LVNotification';
 
 const IconWalletModifyName = require('../../../assets/images/wallet_modify_name.png');
 const IconWalletModifyPwd = require('../../../assets/images/wallet_modify_pwd.png');
@@ -51,7 +55,7 @@ export class WalletManagerPage extends Component {
     state: {
         wallet: ?Object,
         walletTitle: string,
-        walletAddress: ?string,
+        walletAddress: string,
         showExportModal: boolean,
         privateKey: ?string,
     }
@@ -77,10 +81,6 @@ export class WalletManagerPage extends Component {
         })
     }
 
-    componentDidMount() {
-        //this.fetchPrivateKey();
-    }
-
     async fetchPrivateKey(callback: Function) {
         const wallet = this.state.wallet;
         console.log('test' + JSON.stringify(wallet));
@@ -93,7 +93,6 @@ export class WalletManagerPage extends Component {
         }
     }
     
-
     async showExportModal() {
         this.refs.toast.show();
         setTimeout(async ()=>{
@@ -108,6 +107,18 @@ export class WalletManagerPage extends Component {
 
     onExportModalClosed() {
         this.setState({ showExportModal: false })
+    }
+
+    async onDeleteWallet() {
+        const walletAddress = this.state.walletAddress;
+        await LVWalletManager.deleteWallet(walletAddress); 
+        await LVWalletManager.saveToDisk();
+        LVNotificationCenter.postNotification(LVNotification.walletChanged);
+        this.refs.alert.dismiss();
+        Toast.show(LVStrings.wallet_delete_success);
+        setTimeout(() => {
+            this.props.navigation.goBack();
+        }, 200);
     }
 
     render() {
@@ -153,9 +164,20 @@ export class WalletManagerPage extends Component {
                 </TableView>
                 <View style={{width: '100%', flex: 1, justifyContent:'flex-end', alignItems:'center', backgroundColor: 'white'}}>
                     <MXButton style={{marginBottom: 15}} title={ LVStrings.profile_wallet_backup } rounded></MXButton>
-                    <MXButton style={{marginBottom: 25}}title={ LVStrings.profile_wallet_delete_wallet } rounded></MXButton>
+                    <MXButton 
+                        style={{marginBottom: 25}}
+                        title={ LVStrings.profile_wallet_delete_wallet } 
+                        rounded
+                        onPress={()=>{this.refs.alert.show()}}
+                    ></MXButton>
                 </View>
                 <LVLoadingToast ref={'toast'} title={LVStrings.wallet_exporting}/>
+                <LVDialog 
+                    ref={'alert'} 
+                    title={LVStrings.alert_hint} 
+                    message={LVStrings.wallet_delete_hint}
+                    onPress={this.onDeleteWallet.bind(this)}
+                    buttonTitle={LVStrings.alert_ok}/>
             </View>
         )
     }

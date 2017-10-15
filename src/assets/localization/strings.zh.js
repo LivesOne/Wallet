@@ -72,6 +72,8 @@ const localized_strings = {
     wallet_editing : '正在修改中...',
     wallet_exporting : '正在导出中...',
     wallet_export_private_key_copied_to_clipboard: '私钥已经复制到剪切板',
+    wallet_delete_hint: '确认删除该钱包？',
+    wallet_delete_success: '删除钱包成功',
 
     // Assets
     assets_title: '我的资产',
