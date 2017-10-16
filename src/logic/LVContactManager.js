@@ -37,6 +37,10 @@ class LVContactManager {
         return [].concat(this.contacts).reverse();
     }
 
+    getContactWithName(name: string) : ?Object {
+        return this.contacts.find((c) => c.name === name);
+    }
+
     async loadLocalContacts() {
         const contacts = await LVPersistent.getObject(ContactsKey);
         if(contacts) {
