@@ -73,7 +73,7 @@ export class WalletManagerScreen extends Component {
         return (
             <View style={styles.container}>
                 <MXNavigatorHeader
-                left={ IconBack }
+                left={ greyNavigationBackIcon }
                 style={styles.nav}
                 title={ LVStrings.profile_wallet_management }
                 titleStyle={styles.navTitle}
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F8F9FB'
     },
     nav: {
-        backgroundColor : '#F8F9FB'
+        backgroundColor : LVColor.profileNavBack
     },
     navTitle: {
         color : '#6d798a'
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
         color: '#BFC5D1'
     },
     cellRightSeparatorStyle: {
-        height: 1,
+        height: StyleSheet.hairlineWidth,
         marginRight: 10,
         backgroundColor: LVColor.separateLine
     },

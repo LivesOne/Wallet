@@ -18,6 +18,8 @@ const localized_strings = {
     common_close: '关闭',
     alert_warning: '警告',
     alert_ok: '确定',
+    common_done: '完成',
+    common_delete: '删除',
 
     //receive
     receive_title:'我的收款码',
@@ -166,6 +168,20 @@ const localized_strings = {
     // qr scan
     qrScan_title: '扫一扫',
     qrScan_hint: '将钱包二维码放入方框内扫描',
+
+    //contacts
+    contact_list_nav_title: '联系人',
+    contact_add_nav_title: '添加联系人',
+    contact_edit_nav_title: '编辑联系人',
+    contact_add_place_holder_nickname: '联系人昵称',
+    contact_add_place_holder_address: '钱包地址',
+    contact_add_place_holder_cellphone: '手机号码',
+    contact_add_place_holder_email: '邮箱',
+    contact_add_place_holder_remarks: '备注',
+    contact_alert_name_required: '名字不能为空',
+    contact_alert_address_required: '钱包地址不能为空',
+    contact_alert_address_invalid: '钱包地址格式错误',
+    contact_alert_contact_exists: '联系人已存在'
 };
 
 export default localized_strings;

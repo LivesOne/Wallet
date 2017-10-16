@@ -53,6 +53,9 @@ const LVColor = {
         grey3: '#f4f4f4',
         editTextBottomBoarder: '#bfc5d1',
     },
+    //profile nav background color
+    profileNavBack: '#F8F9FB',
+    profileNavTitleColor: '#6d798a'
 };
 
 export default {
