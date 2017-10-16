@@ -19,6 +19,7 @@ const localized_strings = {
     alert_hint: 'hint',
     alert_ok: 'Ok',
     common_done: 'Done',
+    common_delete: 'Delete',
 
     //receive
     receive_title:'My payment QR code',
@@ -153,12 +154,17 @@ const localized_strings = {
 
     //contacts
     contact_list_nav_title: 'Contacts',
-    contact_add_nav_title: '添加联系人',
-    contact_add_place_holder_nickname: 'nick name',
-    contact_add_place_holder_address: 'address',
-    contact_add_place_holder_cellphone: 'cellphone number',
-    contact_add_place_holder_email: 'email',
-    contact_add_place_holder_remarks: 'remarks',
+    contact_add_nav_title: 'Add Contact',
+    contact_edit_nav_title: 'Edit Contact',
+    contact_add_place_holder_nickname: 'Nick name',
+    contact_add_place_holder_address: 'Address',
+    contact_add_place_holder_cellphone: 'Cellphone number',
+    contact_add_place_holder_email: 'Email',
+    contact_add_place_holder_remarks: 'Remarks',
+    contact_alert_name_required: 'Name is required',
+    contact_alert_address_required: 'Address is required',
+    contact_alert_address_invalid: 'Wrong address format',
+    contact_alert_contact_exists: 'Contact already exists',
 };
 
 export default localized_strings;

@@ -16,7 +16,7 @@ import { ModifyWalletPwd } from './WalletManager/ModifyWalletPwd';
 import WalletCreatePage from '../Wallet/WalletCreatePage';
 import WalletImportPage from '../Wallet/WalletImportPage';
 import ContactsManagerPage from '../contacts/ContactsManagerPage';
-import AddContactPage from '../contacts/AddContactPage';
+import AddEditContactPage from '../contacts/AddEditContactPage';
 
 const ProfileNavigator = StackNavigator({
     Profile: { screen: ProfileScreen },
@@ -27,7 +27,7 @@ const ProfileNavigator = StackNavigator({
     WalletCreatePage: {screen: WalletCreatePage},
     WalletImportPage: {screen : WalletImportPage},
     ContactList: {screen: ContactsManagerPage},
-    AddContactPage: {screen: AddContactPage}
+    AddEditContactPage: {screen: AddEditContactPage}
 });
 
 export default ProfileNavigator;
