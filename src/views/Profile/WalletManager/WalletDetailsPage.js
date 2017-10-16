@@ -12,12 +12,12 @@ import LVStrings from '../../../assets/localization';
 import { WalletExportModal } from './WalletExportModal';
 import LVWalletManager from '../../../logic/LVWalletManager';
 import {convertAmountToCurrencyString} from '../../../utils/MXStringUtils';
-import console from 'console-browserify';
 import LVLoadingToast from '../../Common/LVLoadingToast';
 import LVDialog from '../../Common/LVDialog';
 import Toast from 'react-native-simple-toast';
 import LVNotificationCenter from '../../../logic/LVNotificationCenter';
 import LVNotification from '../../../logic/LVNotification';
+import { LVConfirmDialog } from '../../Common/LVDialog';
 
 const IconWalletModifyName = require('../../../assets/images/wallet_modify_name.png');
 const IconWalletModifyPwd = require('../../../assets/images/wallet_modify_pwd.png');
@@ -141,7 +141,19 @@ export class WalletDetailsPage extends Component {
         }, 200);
     }
 
-    render() {
+    onPressWalletBackupButton() {
+        this.refs.walletBackupConfirm.show();
+    }
+
+    onWalletBackupConfirm() {
+
+    }
+
+    onPressWalletDeleteButton() {
+        this.refs.walletDeleteConfirm.show();
+    }
+
+    render() {     
         const wallet = this.state.wallet;
         return (
             <View style={ styles.container }>
@@ -184,21 +196,17 @@ export class WalletDetailsPage extends Component {
                     </Section>
                 </TableView>
                 <View style={{width: '100%', flex: 1, justifyContent:'flex-end', alignItems:'center', backgroundColor: 'white'}}>
-                    <MXButton style={{marginBottom: 15}} title={ LVStrings.profile_wallet_backup } rounded></MXButton>
-                    <MXButton 
-                        style={{marginBottom: 25}}
+                    <MXButton style={{marginBottom: 15}} 
+                        title={ LVStrings.profile_wallet_backup } 
+                        rounded onPress={this.onPressWalletBackupButton.bind(this)}/>
+                    <MXButton style={{marginBottom: 25}} 
                         title={ LVStrings.profile_wallet_delete_wallet } 
                         rounded
-                        onPress={()=>{this.refs.alert.show()}}
-                    ></MXButton>
+                        onPress={this.onPressWalletDeleteButton.bind(this)} />
                 </View>
                 <LVLoadingToast ref={'toast'} title={LVStrings.wallet_exporting}/>
-                <LVDialog 
-                    ref={'alert'} 
-                    title={LVStrings.alert_hint} 
-                    message={LVStrings.wallet_delete_hint}
-                    onPress={this.onDeleteWallet.bind(this)}
-                    buttonTitle={LVStrings.alert_ok}/>
+                <LVConfirmDialog ref={'walletBackupConfirm'} title='请输入密码' message='输入密码' onConfirm={this.onWalletBackupConfirm} />
+                <LVConfirmDialog ref={'walletDeleteConfirm'} title={LVStrings.alert_hint}  message={LVStrings.wallet_delete_hint} onConfirm={this.onDeleteWallet} />
             </View>
         )
     }
