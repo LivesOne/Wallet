@@ -40,7 +40,7 @@ class TestComponent extends Component {
                 <MXButton
                     title={"hello"}
                     onPress = {() => {
-                        this.testWalletValidator();
+                        this.testWalletApi();
                     }}
                     themeStyle={"active"}
                 />
@@ -131,7 +131,7 @@ class TestComponent extends Component {
         const result3 = await LVNetworking.fetchTransactionDetail('0x635f86096df7dfa624f2f2eba6ffb79a67f7550704cb618b61045ac5a364633b');
         this.log('detail =' + JSON.stringify(result3));
         
-        //await this.testTransaction(wallet);
+        // await this.testTransaction(wallet);
     }
 
     async testTransaction(wallet: Object) {
