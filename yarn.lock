@@ -4296,6 +4296,10 @@ react-native-randombytes@^3.0.0:
     buffer "^4.9.1"
     sjcl "^1.0.3"
 
+react-native-simple-toast@^0.0.7:
+  version "0.0.7"
+  resolved "http://registry.npm.taobao.org/react-native-simple-toast/download/react-native-simple-toast-0.0.7.tgz#2ef51bdafd3e98df718f74fdd0bc0ce08608dff8"
+
 react-native-slider@^0.11.0:
   version "0.11.0"
   resolved "http://registry.npm.taobao.org/react-native-slider/download/react-native-slider-0.11.0.tgz#b68a0bc43c8422b24cd57947cc5ac2bcdb58fadc"
