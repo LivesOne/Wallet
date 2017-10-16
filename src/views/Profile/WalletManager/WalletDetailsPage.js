@@ -1,17 +1,18 @@
 //@flow
-'use strict'
+'use strict';
 
-import React, { Component } from 'react'
-import { Text, View, StyleSheet, Dimensions, Image } from 'react-native';
+import React, { Component } from 'react';
+import { Text, View, StyleSheet, Dimensions, Image, Share } from 'react-native';
 import MXNavigatorHeader from './../../../components/MXNavigatorHeader';
 import WalletInfoView from '../../Assets/WalletInfoView';
 import LVSize from '../../../styles/LVFontSize';
 import { Cell, Section, TableView, Separator } from 'react-native-tableview-simple';
 import MXButton from './../../../components/MXButton';
+import MXCrossTextInput from '../../../components/MXCrossTextInput';
 import LVStrings from '../../../assets/localization';
 import { WalletExportModal } from './WalletExportModal';
 import LVWalletManager from '../../../logic/LVWalletManager';
-import {convertAmountToCurrencyString} from '../../../utils/MXStringUtils';
+import { convertAmountToCurrencyString } from '../../../utils/MXStringUtils';
 import LVLoadingToast from '../../Common/LVLoadingToast';
 import LVDialog from '../../Common/LVDialog';
 import Toast from 'react-native-simple-toast';
@@ -26,28 +27,26 @@ const IconShowDetailArrow = require('../../../assets/images/show_detail_arrow.pn
 const IconWallet = require('../../../assets/images/wallet_grey.png');
 const IconBack = require('../../../assets/images/back_grey.png');
 
-const CellVariant = (props) => (
+const CellVariant = props => (
     <Cell
         {...props}
         cellContentView={
-        <View style={{alignItems: 'center', flexDirection: 'row', width: '100%', paddingVertical: 10 }}>
-            <Image source={props.source}></Image> 
-            <Text
-                numberOfLines={1}
-                style={{ flex: 1, fontSize: 16, marginLeft: 10, color: '#677384'}}
-            >{props.title}</Text>
-            <Image source={IconShowDetailArrow}></Image> 
-        </View>
+            <View style={{ alignItems: 'center', flexDirection: 'row', width: '100%', paddingVertical: 10 }}>
+                <Image source={props.source} />
+                <Text numberOfLines={1} style={{ flex: 1, fontSize: 16, marginLeft: 10, color: '#677384' }}>
+                    {props.title}
+                </Text>
+                <Image source={IconShowDetailArrow} />
+            </View>
         }
         highlightActiveOpacity={0.8}
         highlightUnderlayColor={'grey'}
         onPress={props.onPress}
-        contentContainerStyle = {{height: 55}}
+        contentContainerStyle={{ height: 55 }}
     />
 );
 
 export class WalletDetailsPage extends Component {
-
     static navigationOptions = {
         header: null,
         tabBarVisible: false
@@ -61,8 +60,8 @@ export class WalletDetailsPage extends Component {
         walletName: string,
         wallet: ?Object,
         walletTitle: string,
-        showExportModal: boolean,
-    }
+        showExportModal: boolean
+    };
 
     constructor() {
         super();
@@ -74,7 +73,7 @@ export class WalletDetailsPage extends Component {
             privateKey: '',
             showExportModal: false,
             walletName: ''
-        }
+        };
     }
 
     componentWillMount() {
@@ -83,22 +82,22 @@ export class WalletDetailsPage extends Component {
         this.setState({
             wallet: wallet,
             walletAddress: wallet !== null ? wallet.address : '',
-            walletTitle: wallet !== null ? wallet.lvt + ' LVT' : '',
-        })
+            walletTitle: wallet !== null ? wallet.lvt + ' LVT' : ''
+        });
     }
 
     componentDidMount() {
         const { params } = this.props.navigation.state;
         const wallet = params.wallet;
         this.setState({
-            displayTitle: convertAmountToCurrencyString(wallet.lvt,',',0),
+            displayTitle: convertAmountToCurrencyString(wallet.lvt, ',', 0),
             walletAddress: wallet.address,
             walletName: wallet.name
         });
     }
 
     showExportModal() {
-        this.setState({ showExportModal: true })
+        this.setState({ showExportModal: true });
     }
 
     async fetchPrivateKey(callback: Function) {
@@ -106,32 +105,36 @@ export class WalletDetailsPage extends Component {
         console.log('test' + JSON.stringify(wallet));
         if (wallet) {
             let privateKey = await LVWalletManager.exportPrivateKey(wallet.password);
-            this.setState({privateKey: privateKey});
+            this.setState({ privateKey: privateKey });
             if (callback) {
                 callback();
             }
         }
     }
-    
+
     async showExportModal() {
         this.refs.toast.show();
-        setTimeout(async ()=>{
+        setTimeout(async () => {
             await this.fetchPrivateKey(() => {
                 this.refs.toast.dismiss();
-                setTimeout(()=>{
-                    this.setState({ showExportModal: true })
+                setTimeout(() => {
+                    this.setState({ showExportModal: true });
                 }, 500);
             });
         }, 1000);
     }
 
     onExportModalClosed() {
-        this.setState({ showExportModal: false })
+        this.setState({ showExportModal: false });
+    }
+
+    onPressWalletDeleteButton() {
+        this.refs.walletDeleteConfirm.show();
     }
 
     async onDeleteWallet() {
         const walletAddress = this.state.walletAddress;
-        await LVWalletManager.deleteWallet(walletAddress); 
+        await LVWalletManager.deleteWallet(walletAddress);
         await LVWalletManager.saveToDisk();
         LVNotificationCenter.postNotification(LVNotification.walletChanged);
         this.refs.walletDeleteConfirm.dismiss();
@@ -142,73 +145,113 @@ export class WalletDetailsPage extends Component {
     }
 
     onPressWalletBackupButton() {
-        this.refs.walletBackupConfirm.show();
+        const wallet = this.state.wallet;
+        
+                if (wallet && wallet.keystore) {
+                    const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
+                    const message: string = JSON.stringify(wallet.keystore);
+                    Share.share({
+                        message: message,
+                        url: '',
+                        title: title
+                    })
+                        .then(this._shareResult)
+                        .catch(error => console.log(error));
+                }
     }
 
-    onWalletBackupConfirm() {
+    _shareResult() {}
 
-    }
-
-    onPressWalletDeleteButton() {
-        this.refs.walletDeleteConfirm.show();
-    }
-
-    render() {     
+    render() {
         const wallet = this.state.wallet;
         return (
-            <View style={ styles.container }>
+            <View style={styles.container}>
                 <WalletExportModal
-                    isOpen= {this.state.showExportModal}
-                    privateKey= { this.state.privateKey }
-                    onClosed = {this.onExportModalClosed.bind(this)}/>
+                    isOpen={this.state.showExportModal}
+                    privateKey={this.state.privateKey}
+                    onClosed={this.onExportModalClosed.bind(this)}
+                />
                 <MXNavigatorHeader
-                    left={ IconBack }
-                    style={{backgroundColor:'#F8F9FB'}}
-                    title={ this.state.walletName }
-                    titleStyle={{color:'#6d798a'}}
-                    onLeftPress={ () => {this.props.navigation.goBack() }}
-                    />
-                <WalletInfoView 
-                    style={styles.walletInfo} title={ this.state.displayTitle } 
-                    address={ this.state.walletAddress }
+                    left={IconBack}
+                    style={{ backgroundColor: '#F8F9FB' }}
+                    title={this.state.walletName}
+                    titleStyle={{ color: '#6d798a' }}
+                    onLeftPress={() => {
+                        this.props.navigation.goBack();
+                    }}
+                />
+                <WalletInfoView
+                    style={styles.walletInfo}
+                    title={this.state.displayTitle}
+                    address={this.state.walletAddress}
                     titleStyle={styles.walletTitle}
                     addressStyle={styles.walletAddress}
-                    walletIcon={ IconWallet }
+                    walletIcon={IconWallet}
                     showLVT
-                     />
+                />
                 <TableView>
                     <Section
-                        sectionPaddingTop={9} 
-                        sectionPaddingBottom={0} 
-                        sectionTintColor="#f5f6fa" 
-                        separatorTintColor={"transparent"}
+                        sectionPaddingTop={9}
+                        sectionPaddingBottom={0}
+                        sectionTintColor="#f5f6fa"
+                        separatorTintColor={'transparent'}
                         hideSeparator
-                        >
-                        <CellVariant title= { LVStrings.profile_wallet_modify_name } source={ IconWalletModifyName } 
-                        onPress = {()=>{this.props.navigation.navigate('ModifyWalletName', {wallet: wallet})}}/>
-                        <Separator insetRight={15} tintColor="#eeeff2"/>
-                        <CellVariant title= { LVStrings.profile_wallet_modify_password } source={ IconWalletModifyPwd }
-                        onPress = {()=>{this.props.navigation.navigate('ModifyWalletPwd', {wallet: wallet})}}/>
-                        <Separator insetRight={15} tintColor="#eeeff2"/>
-                        <CellVariant title= { LVStrings.profile_wallet_export } source={ IconWalletExportPK }
-                        onPress = { this.showExportModal.bind(this) }/>
-                        <Separator insetRight={15} tintColor="#eeeff2"/>
+                    >
+                        <CellVariant
+                            title={LVStrings.profile_wallet_modify_name}
+                            source={IconWalletModifyName}
+                            onPress={() => {
+                                this.props.navigation.navigate('ModifyWalletName', { wallet: wallet });
+                            }}
+                        />
+                        <Separator insetRight={15} tintColor="#eeeff2" />
+                        <CellVariant
+                            title={LVStrings.profile_wallet_modify_password}
+                            source={IconWalletModifyPwd}
+                            onPress={() => {
+                                this.props.navigation.navigate('ModifyWalletPwd', { wallet: wallet });
+                            }}
+                        />
+                        <Separator insetRight={15} tintColor="#eeeff2" />
+                        <CellVariant
+                            title={LVStrings.profile_wallet_export}
+                            source={IconWalletExportPK}
+                            onPress={this.showExportModal.bind(this)}
+                        />
+                        <Separator insetRight={15} tintColor="#eeeff2" />
                     </Section>
                 </TableView>
-                <View style={{width: '100%', flex: 1, justifyContent:'flex-end', alignItems:'center', backgroundColor: 'white'}}>
-                    <MXButton style={{marginBottom: 15}} 
-                        title={ LVStrings.profile_wallet_backup } 
-                        rounded onPress={this.onPressWalletBackupButton.bind(this)}/>
-                    <MXButton style={{marginBottom: 25}} 
-                        title={ LVStrings.profile_wallet_delete_wallet } 
+                <View
+                    style={{
+                        width: '100%',
+                        flex: 1,
+                        justifyContent: 'flex-end',
+                        alignItems: 'center',
+                        backgroundColor: 'white'
+                    }}
+                >
+                    <MXButton
+                        style={{ marginBottom: 15 }}
+                        title={LVStrings.profile_wallet_backup}
                         rounded
-                        onPress={this.onPressWalletDeleteButton.bind(this)} />
+                        onPress={this.onPressWalletBackupButton.bind(this)}
+                    />
+                    <MXButton
+                        style={{ marginBottom: 25 }}
+                        title={LVStrings.profile_wallet_delete_wallet}
+                        rounded
+                        onPress={this.onPressWalletDeleteButton.bind(this)}
+                    />
                 </View>
-                <LVLoadingToast ref={'toast'} title={LVStrings.wallet_exporting}/>
-                <LVConfirmDialog ref={'walletBackupConfirm'} title='请输入密码' message='输入密码' onConfirm={this.onWalletBackupConfirm} />
-                <LVConfirmDialog ref={'walletDeleteConfirm'} title={LVStrings.alert_hint}  message={LVStrings.wallet_delete_hint} onConfirm={this.onDeleteWallet.bind(this)} />
+                <LVLoadingToast ref={'toast'} title={LVStrings.wallet_exporting} />
+                <LVConfirmDialog
+                    ref={'walletDeleteConfirm'}
+                    title={LVStrings.alert_hint}
+                    message={LVStrings.wallet_delete_hint}
+                    onConfirm={this.onDeleteWallet.bind(this)}
+                />
             </View>
-        )
+        );
     }
 }
 
@@ -244,4 +287,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default WalletDetailsPage
+export default WalletDetailsPage;
