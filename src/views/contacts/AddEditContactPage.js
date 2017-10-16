@@ -17,6 +17,9 @@ import { isEmptyString } from '../../utils/MXUtils';
 import { isAddress } from '../../utils/MXStringUtils';
 import LVDialog from '../Common/LVDialog';
 import LVLocalization from '../../assets/localization';
+import MXTouchableImage from '../../components/MXTouchableImage';
+
+const scanImg = require('../../assets/images/transfer_scan.png');
 
 export default class AddEditContactPage extends Component {
     static navigationOptions = {
@@ -122,6 +125,10 @@ export default class AddEditContactPage extends Component {
         }
     }
 
+    onPressScan() {
+        alert('onPressScan');
+    }
+
     render() {
        
 
@@ -137,7 +144,7 @@ export default class AddEditContactPage extends Component {
                     rightTextColor={'#c3c8d3'}
                     onRightPress={this.onAddingDone}
                 />
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
                     <View style={styles.container}>
                         <MXCrossTextInput style={styles.textInputStyle} 
                             placeholder={LVStrings.contact_add_place_holder_nickname}
@@ -146,8 +153,9 @@ export default class AddEditContactPage extends Component {
                             onTextChanged= {(text) => this.setState({name: text})}/>
                         <MXCrossTextInput style={styles.textInputStyle} 
                             placeholder={LVStrings.contact_add_place_holder_address}
-                            withClearButton={false}
+                            withClearButton={true}
                             defaultValue={this.state.address}
+                            rightComponent={<MXTouchableImage source={scanImg} onPress={this.onPressScan.bind(this)} />}
                             onTextChanged= {(text) => this.setState({address: text})}/>
                         <MXCrossTextInput style={styles.textInputStyle} 
                             placeholder={LVStrings.contact_add_place_holder_cellphone}
