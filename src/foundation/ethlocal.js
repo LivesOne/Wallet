@@ -116,7 +116,7 @@ module.exports = {
       toAddress: to,
       value: value
     };
-    console.log("test param = " + JSON.stringify(params) + ' txParams = '+ JSON.stringify(txParams));
+    console.log("test param = " + JSON.stringify(params) + ' txParams = '+ JSON.stringify(txParams) + ' value=' + value);
     const tx = new EthereumTx(txParams)
     tx.sign(this.str2buf(privateKey))
     const serializedTx = tx.serialize()
