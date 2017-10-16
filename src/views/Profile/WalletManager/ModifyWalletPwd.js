@@ -14,6 +14,8 @@ import LVNotification from '../../../logic/LVNotification';
 import LVWalletManager from '../../../logic/LVWalletManager';
 import LVLoadingToast from '../../Common/LVLoadingToast';
 import LVDialog from '../../Common/LVDialog';
+import LVFullScreenModalView from '../../Common/LVFullScreenModalView';
+import LVWalletImportNavigator from '../../Wallet/LVWalletImportNavigator';
 
 export class ModifyWalletPwd extends Component {
 
@@ -113,7 +115,7 @@ export class ModifyWalletPwd extends Component {
     }
 
     onImportRightNow() {
-        this.props.navigation.navigate("WalletImportPage", {from: WalletUtils.OPEN_IMPORT_FROM_MODIFY_PASSWORD})
+        this.refs.importPage.show();
     }
 
     render() {
@@ -164,7 +166,12 @@ export class ModifyWalletPwd extends Component {
                 </View>
                 <LVLoadingToast ref={'toast'} title={LVStrings.wallet_editing}/>
                 <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
-        
+                <LVFullScreenModalView ref={'importPage'}>
+                    <LVWalletImportNavigator screenProps={{dismiss: ()=> {
+                        this.refs.importPage.dismiss()
+                    } , from: WalletUtils.OPEN_IMPORT_FROM_MODIFY_PASSWORD
+                }}/>
+                </LVFullScreenModalView>
             </View>
         )
     }

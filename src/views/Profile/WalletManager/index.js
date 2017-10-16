@@ -20,6 +20,8 @@ import LVWalletManager from '../../../logic/LVWalletManager';
 import LVNotificationCenter from '../../../logic/LVNotificationCenter';
 import LVNotification from '../../../logic/LVNotification';
 import { greyNavigationBackIcon } from '../../../assets/LVIcons';
+import LVWalletImportNavigator from '../../Wallet/LVWalletImportNavigator';
+import WalletUtils from '../../Wallet/WalletUtils';
 const WalletIcon = require('../../../assets/images/wallet_grey.png');
 const ShowDetailsIcon = require('../../../assets/images/show_detail_arrow.png');
 
@@ -54,6 +56,11 @@ export class WalletManagerScreen extends Component {
             wallets: LVWalletManager.getWallets()
         });
     }
+
+    componentWillUnmount(){
+        LVNotificationCenter.removeObserver(this);
+    }
+    
 
     onCreateWalletPressed() {
         this.refs.creationPage.show();
@@ -144,12 +151,10 @@ export class WalletManagerScreen extends Component {
                 }}/>
                 </LVFullScreenModalView>
                 <LVFullScreenModalView ref={'importPage'}>
-                    <WalletImportPage dismissCallback={()=> {
-                        this.refs.importPage.dismiss();
-                        this.setState({
-                            wallets: LVWalletManager.getWallets()
-                        });
-                    }}/>
+                    <LVWalletImportNavigator screenProps={{dismiss: ()=> {
+                        this.refs.importPage.dismiss()
+                    }, from: WalletUtils.OPEN_IMPORT_FROM_WALLET_MANAGER, 
+                }}/>
                 </LVFullScreenModalView>
             </View>
         );

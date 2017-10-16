@@ -57,18 +57,18 @@ const foundation = require('../../foundation/wallet.js');
         privateKeyPwdAgain: '',
         keyStorePwd: '',
         alertMessage: '',
-        fromPage: WalletUtils.OPEN_IMPORT_FROM_WALLET_MANAGER,
+        fromPage: WalletUtils.OPEN_IMPORT_FROM_LAUNCH,
       }
       this.exitWhenSuccess = this.exitWhenSuccess.bind(this);
     }
 
     componentWillMount = () => {
-      if (!this.props.navigation) {
-        this.setState({fromPage: WalletUtils.OPEN_IMPORT_FROM_WALLET_MANAGER})
-      } else {
-        const { params } = this.props.navigation.state;
-        this.setState({fromPage: params.from})
-      }
+      let fromPage = WalletUtils.OPEN_IMPORT_FROM_LAUNCH;
+      if (this.props.screenProps && this.props.screenProps.from) {
+        fromPage = this.props.screenProps.from;
+      } 
+      console.log('from = ' + fromPage);
+      this.setState({fromPage: fromPage});
     }
     
 
@@ -92,14 +92,10 @@ const foundation = require('../../foundation/wallet.js');
       const fromPage = this.state.fromPage;
       if (fromPage === WalletUtils.OPEN_IMPORT_FROM_LAUNCH) {
         LVNotificationCenter.postNotification(LVNotification.walletImported)
-      } else if (fromPage === WalletUtils.OPEN_IMPORT_FROM_WALLET_MANAGER) {
-        if (this.props.dismissCallback) {
-          this.props.dismissCallback();
-        }
-      } else {
-        if (this.props.navigation) {
-          this.props.navigation.goBack();
-        }
+      } 
+
+      if (this.props.screenProps.dismiss) {
+        this.props.screenProps.dismiss();
       }
     }
 
@@ -198,7 +194,7 @@ const foundation = require('../../foundation/wallet.js');
           this.refs.toast.dismiss();
           this.setState({alertMessage: LVStrings.wallet_import_success });
           this.refs.alert.show();
-          setTimeout(()=>{LVNotificationCenter.postNotification(LVNotification.walletImported)},500);
+          setTimeout(()=>{this.exitWhenSuccess()},500);
         } catch(e) {
           this.refs.toast.dismiss();
           this.setState({alertMessage: LVStrings.wallet_import_fail });
@@ -218,8 +214,8 @@ const foundation = require('../../foundation/wallet.js');
           <MXNavigatorHeader
             title = {LVStrings.wallet_import_header}
             onLeftPress = {() => {
-                if(this.props.dismissCallback) {
-                    this.props.dismissCallback();
+                if(this.props.screenProps.dismiss) {
+                    this.props.screenProps.dismiss();
                 } else if(this.props.navigation){
                     this.props.navigation.goBack();
                 }

@@ -76,23 +76,35 @@ export class WalletDetailsPage extends Component {
     }
 
     componentWillMount() {
-        const { params } = this.props.navigation.state;
-        const wallet = params.wallet;
-        this.setState({
-            wallet: wallet,
-            walletAddress: wallet !== null ? wallet.address : '',
-            walletTitle: wallet !== null ? wallet.lvt + ' LVT' : ''
-        });
+        LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChanged.bind(this))
     }
 
     componentDidMount() {
         const { params } = this.props.navigation.state;
         const wallet = params.wallet;
         this.setState({
+            wallet: wallet,
             displayTitle: convertAmountToCurrencyString(wallet.lvt, ',', 0),
             walletAddress: wallet.address,
             walletName: wallet.name
         });
+    }
+
+    async handleWalletChanged() {
+        const wallet = await LVWalletManager.getSelectedWallet();
+        if (wallet) {
+            console.log('new wallet = ' + JSON.stringify(wallet));
+            this.setState({
+                wallet: wallet,
+                displayTitle: convertAmountToCurrencyString(wallet.lvt, ',', 0),
+                walletAddress: wallet.address,
+                walletName: wallet.name
+            });
+        }
+    }
+
+    componentWillUnmount() {
+        LVNotificationCenter.removeObserver(this);
     }
 
     showExportModal() {
@@ -138,9 +150,7 @@ export class WalletDetailsPage extends Component {
         LVNotificationCenter.postNotification(LVNotification.walletChanged);
         this.refs.walletDeleteConfirm.dismiss();
         Toast.show(LVStrings.wallet_delete_success);
-        setTimeout(() => {
-            this.props.navigation.goBack();
-        }, 200);
+        this.props.navigation.goBack();
     }
 
     onPressWalletBackupButton() {
