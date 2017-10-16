@@ -18,6 +18,8 @@ const localized_strings = {
     alert_warning: 'Warning',
     alert_hint: 'hint',
     alert_ok: 'Ok',
+    common_done: 'Done',
+    common_delete: 'Delete',
 
     //receive
     receive_title:'My payment QR code',
@@ -59,6 +61,7 @@ const localized_strings = {
     wallet_create_success: 'Create success!',
     wallet_create_success_comment: 'The platform does not store the user\'s password, the password can not be retrieved or reset, it is highly recommended that you make a backup before using your wallet!',
     wallet_backup: 'Backup wallet',
+    wallet_backup_title_suffix: 'wallet backup',
     wallet_default_name_prefix: "default wallet ",
 
     //wallet edit
@@ -170,6 +173,21 @@ const localized_strings = {
     // qr scan
     qrScan_title: 'Scan',
     qrScan_hint: 'Place the wallet qrCode into the box to scan',
+
+    //contacts
+    contact_list_nav_title: 'Contacts',
+    contact_add_nav_title: 'Add Contact',
+    contact_edit_nav_title: 'Edit Contact',
+    contact_add_place_holder_nickname: 'Nick name',
+    contact_add_place_holder_address: 'Address',
+    contact_add_place_holder_cellphone: 'Cellphone number',
+    contact_add_place_holder_email: 'Email',
+    contact_add_place_holder_remarks: 'Remarks',
+    contact_alert_name_required: 'Name is required',
+    contact_alert_address_required: 'Address is required',
+    contact_alert_address_invalid: 'Wrong address format',
+    contact_alert_contact_exists: 'Contact already exists',
+    contact_confirm_delete_contact: 'Are you sure to delete this contact?'
 };
 
 export default localized_strings;
