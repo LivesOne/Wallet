@@ -134,7 +134,7 @@ export class WalletDetailsPage extends Component {
         await LVWalletManager.deleteWallet(walletAddress); 
         await LVWalletManager.saveToDisk();
         LVNotificationCenter.postNotification(LVNotification.walletChanged);
-        this.refs.alert.dismiss();
+        this.refs.walletDeleteConfirm.dismiss();
         Toast.show(LVStrings.wallet_delete_success);
         setTimeout(() => {
             this.props.navigation.goBack();
@@ -206,7 +206,7 @@ export class WalletDetailsPage extends Component {
                 </View>
                 <LVLoadingToast ref={'toast'} title={LVStrings.wallet_exporting}/>
                 <LVConfirmDialog ref={'walletBackupConfirm'} title='请输入密码' message='输入密码' onConfirm={this.onWalletBackupConfirm} />
-                <LVConfirmDialog ref={'walletDeleteConfirm'} title={LVStrings.alert_hint}  message={LVStrings.wallet_delete_hint} onConfirm={this.onDeleteWallet} />
+                <LVConfirmDialog ref={'walletDeleteConfirm'} title={LVStrings.alert_hint}  message={LVStrings.wallet_delete_hint} onConfirm={this.onDeleteWallet.bind(this)} />
             </View>
         )
     }
