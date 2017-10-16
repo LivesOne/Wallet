@@ -14,11 +14,10 @@ import { WalletExportModal } from './WalletExportModal';
 import LVWalletManager from '../../../logic/LVWalletManager';
 import { convertAmountToCurrencyString } from '../../../utils/MXStringUtils';
 import LVLoadingToast from '../../Common/LVLoadingToast';
-import LVDialog from '../../Common/LVDialog';
 import Toast from 'react-native-simple-toast';
 import LVNotificationCenter from '../../../logic/LVNotificationCenter';
 import LVNotification from '../../../logic/LVNotification';
-import { LVConfirmDialog } from '../../Common/LVDialog';
+import LVDialog, { LVConfirmDialog } from '../../Common/LVDialog';
 
 const IconWalletModifyName = require('../../../assets/images/wallet_modify_name.png');
 const IconWalletModifyPwd = require('../../../assets/images/wallet_modify_pwd.png');
@@ -146,21 +145,26 @@ export class WalletDetailsPage extends Component {
 
     onPressWalletBackupButton() {
         const wallet = this.state.wallet;
-        
-                if (wallet && wallet.keystore) {
-                    const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
-                    const message: string = JSON.stringify(wallet.keystore);
-                    Share.share({
-                        message: message,
-                        url: '',
-                        title: title
-                    })
-                        .then(this._shareResult)
-                        .catch(error => console.log(error));
-                }
+
+        if (wallet && wallet.keystore) {
+            const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
+            const message: string = JSON.stringify(wallet.keystore);
+            Share.share({
+                message: message,
+                url: '',
+                title: title
+            })
+                .then(this._shareResult.bind(this))
+                .catch(error => console.log(error));
+        }
     }
 
-    _shareResult() {}
+    _shareResult(result) {
+        if (result.action === Share.sharedAction) {
+            this.refs.disclaimer.show();
+        } else if (result.action === Share.dismissedAction) {
+        }
+    }
 
     render() {
         const wallet = this.state.wallet;
@@ -244,6 +248,15 @@ export class WalletDetailsPage extends Component {
                     />
                 </View>
                 <LVLoadingToast ref={'toast'} title={LVStrings.wallet_exporting} />
+                <LVDialog
+                    ref={'disclaimer'}
+                    height={230}
+                    title={LVStrings.wallet_disclaimer}
+                    titleStyle={{color: 'red'}}
+                    message={LVStrings.wallet_disclaimer_content}
+                    buttonTitle={LVStrings.common_confirm}
+                    onPress={() => {this.refs.disclaimer.dismiss();}}
+                />
                 <LVConfirmDialog
                     ref={'walletDeleteConfirm'}
                     title={LVStrings.alert_hint}

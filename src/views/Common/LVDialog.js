@@ -18,9 +18,9 @@ import MXCrossTextInput from '../../components/MXCrossTextInput';
 export default class LVDialog extends Component {
     static propTypes = {
         title: PropTypes.string.isRequired,
-        titleStyle: ViewPropTypes.style,
+        titleStyle: PropTypes.any,
         message: PropTypes.string,
-        messageStyle: ViewPropTypes.style,
+        messageStyle: PropTypes.any,
         buttonTitle: PropTypes.string,
         onPress: PropTypes.func,
         width: PropTypes.number,
