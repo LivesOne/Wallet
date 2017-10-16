@@ -107,6 +107,10 @@ const localized_strings = {
     transfer_address_required: 'Address required',
     transfer_address_invalid: 'Invalid address',
     transfer_amount_required: 'Transfer amount required',
+    transfer_amount_format_hint: 'Amount should be a number',
+    transfer_processing: 'Transfer processing...',
+    transfer_success: 'Transfer success',
+    transfer_fail: 'Transfer fail',
     
     // Profile
     profile_wallet_manager: 'Wallet manager',

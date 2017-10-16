@@ -108,6 +108,10 @@ const localized_strings = {
     transfer_address_required: '收款人地址不能为空',
     transfer_address_invalid: '请输入有效的收款人地址',
     transfer_amount_required: '转账金额不能为空',
+    transfer_amount_format_hint: '转账金额必须为数字',
+    transfer_processing: '正在转账中...',
+    transfer_success: '转账成功',
+    transfer_fail: '转账失败',
 
     // Profile
     profile_wallet_manager: '钱包管理',

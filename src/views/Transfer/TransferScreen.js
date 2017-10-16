@@ -29,10 +29,11 @@ import LVNetworking from '../../logic/LVNetworking';
 import TransferLogic from './TransferLogic';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import LVNotification from '../../logic/LVNotification';
+import LVLoadingToast from '../Common/LVLoadingToast';
 
 const MIN_BALANCE_ALLOW_TO_TRANSFER = 0.01;
-const GAP_MIN_VALUE = 0.2;
-const GAP_MAX_VALUE = 0.8;
+const GAP_MIN_VALUE = 0.02;
+const GAP_MAX_VALUE = 0.08;
 
 class TransferScreen extends Component {
     static navigationOptions = {
@@ -53,6 +54,8 @@ class TransferScreen extends Component {
         alertMessage: string,
     }
 
+    isAddressOnFocus = false;
+
     constructor() {
         super();
         const wallet = LVWalletManager.getSelectedWallet();
@@ -63,7 +66,7 @@ class TransferScreen extends Component {
             addressIn: '0x9224A9f81Ac30F0E3B568553bf9a7372EE49548C',
             amount: 0,
             balance: wallet != null ? wallet.lvt: 0,
-            minerGap: 0.0,
+            minerGap: GAP_MIN_VALUE,
             remarks: '',
             showModal: false,
             openSelectWallet: false,
@@ -74,6 +77,7 @@ class TransferScreen extends Component {
 
     componentDidMount() {
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
+        LVNotificationCenter.addObserver(this, LVNotification.balanceChanged, this.handleWalletChange);
         this.refreshWalletDatas();
     }
 
@@ -88,7 +92,8 @@ class TransferScreen extends Component {
 
     onAmountChanged(newAmountText:string) {
         if (!TransferUtils.isBlank(newAmountText) && !TransferUtils.isValidAmount(newAmountText)) {
-            alert('请输入正确的转账金额');
+            this.setState({alertMessage:LVStrings.transfer_amount_format_hint });
+            this.refs.alert.show();
             return;
         } else {
             this.setState({amount: parseFloat(newAmountText)})
@@ -110,7 +115,6 @@ class TransferScreen extends Component {
                     balance: wallet.lvt,
                 });
 
-                LVNotificationCenter.postNotification(LVNotification.balanceChanged);
                 LVWalletManager.saveToDisk();
             } catch (error) {
                 console.log('error in refresh wallet datas : ' + error);
@@ -149,23 +153,22 @@ class TransferScreen extends Component {
     }
 
     async onTransfer() {
+        this.setState({ showModal: false });
         const {wallet, addressIn, amount, minerGap, balance} = this.state;
         let value = minerGap + amount;
-        try {
-            if (wallet !== null) {
-                let params = {password: wallet.password, addressIn: addressIn, value: value, wallet: wallet};
-
-                console.log('test' + JSON.stringify(params));
-                let result = TransferLogic.transaction(wallet.password, addressIn, value, wallet);
-                if (result && result.hasOwnProperty('transactionHash')) {
-                    alert('success');
-                } else {
-                    alert('failed');
-                }
+        this.refs.loading.show();
+        setTimeout(async ()=> {
+            let result = await TransferLogic.transaction(wallet.password, addressIn, value, wallet);
+            this.refs.loading.dismiss();
+            let success = result && result.hasOwnProperty('transactionHash')      
+            if (success) {   
+                LVNotificationCenter.postNotification(LVNotification.balanceChanged);
             }
-        } catch(e) {
-            alert('exception= ' + e.message);
-        }
+            setTimeout(() => {
+                this.setState({alertMessage: success ? LVStrings.transfer_success : LVStrings.transfer_fail });
+                this.refs.alert.show();
+            }, 100);
+        },500);
     }
 
     render() {
@@ -177,8 +180,8 @@ class TransferScreen extends Component {
                 {this.state.showModal && <TransferDetailModal
                     isOpen= {this.state.showModal}
                     address= {this.state.addressIn}
-                    amount= {MXUtils.formatCurrency(this.state.amount) + ' LVT'}
-                    minerTips= {this.state.minerGap + ' ETH'}
+                    amount= {this.state.amount}
+                    minerTips= {this.state.minerGap}
                     remarks= {this.state.remarks}
                     onClosed = {()=>{this.setState({ showModal: false })}}
                     onTransferConfirmed = {this.onTransfer.bind(this)}
@@ -197,7 +200,7 @@ class TransferScreen extends Component {
                             style= {styles.textInput} 
                             placeholder={LVStrings.transfer_payee_address}
                             onAddClicked={() => {alert('add contracts')}}
-                            value={converAddressToDisplayableText(this.state.addressIn, 12, 12)}
+                            value={this.state.addressIn}
                             onScanClicked={() => {this.setState({ showQrScanModal: true })}}
                             onTextChanged={(newText) => {this.setState({addressIn: newText})}}/>
                         <MXCrossTextInput 
@@ -228,6 +231,7 @@ class TransferScreen extends Component {
                     </View>
                     <LVDialog 
                         ref={'alert'} 
+                        height={200}
                         title={LVStrings.alert_hint} 
                         message={this.state.alertMessage} 
                         buttonTitle={LVStrings.alert_ok}/>
@@ -235,6 +239,7 @@ class TransferScreen extends Component {
                         isOpen={this.state.openSelectWallet}
                         onClosed={()=>{this.setState({openSelectWallet: false})}}
                     />
+                    <LVLoadingToast ref={'loading'} title={LVStrings.transfer_processing}/>
                 </View>
             </ScrollView>
         )

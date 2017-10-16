@@ -25,8 +25,8 @@ export class TransferDetailModal extends Component {
         isOpen: PropTypes.bool,
         onClosed: PropTypes.func,
         address: PropTypes.string,
-        amount: PropTypes.string,
-        minerTips: PropTypes.string,
+        amount: PropTypes.number,
+        minerTips: PropTypes.number,
         remarks: PropTypes.string,
         onTransferConfirmed: PropTypes.func,
     };
@@ -62,8 +62,8 @@ export class TransferDetailModal extends Component {
                     <MXTouchableImage style={{width: 40}} source={CloseIcon} onPress={this.onClosed}></MXTouchableImage>
                   </View>
                   <DetailItem leftText={LVStrings.transfer_address_in} rightText={address}></DetailItem>
-                  <DetailItem leftText={LVStrings.transfer_amount} rightText={amount}></DetailItem>
-                  <DetailItem leftText={LVStrings.transfer_miner_tips} rightText={minerTips}></DetailItem>
+                  <DetailItem leftText={LVStrings.transfer_amount} rightText={amount + ' LVT'}></DetailItem>
+                  <DetailItem leftText={LVStrings.transfer_miner_tips} rightText={minerTips + ' ETH'}></DetailItem>
                   <DetailItem leftText={LVStrings.transfer_remarks} rightText={remarks}></DetailItem>
                 <MXButton title={LVStrings.transfer} rounded={true} style={styles.btn} onPress = {onTransferConfirmed}></MXButton>
                 </View>

@@ -19,11 +19,13 @@ export default class TransferLogic {
             TOKEN,
             ' ',
             toAddress,
-            this.formatValue(value),
+            '0x' + (value * Math.pow(10, 18)).toString(16),
             param.gasPrice,
-            param.gasLimit
+            param.gasLimit,
         );
-        return await LVNetworking.transaction(txData);
+        let result = await LVNetworking.transaction(txData);
+        console.log('result = ' + JSON.stringify(result));
+        return result;
     }
 
     static async getPrivateKey(password: string, keystore: Object): Promise<?string> {
@@ -35,9 +37,4 @@ export default class TransferLogic {
         return promise;
     }
 
-    //转账数目，如果是16进制需要‘0x’打头，由于我们的代币小数点后18位，所以如果用户转1lvt，这里需要传入1后面加18个0的string（这是10进制，16进制可以通过换算生成）
-    static formatValue(value: number) {
-        let format = (value * Math.pow(10, 18)).toString();
-        return format;
-    }
 }
