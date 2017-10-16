@@ -162,7 +162,7 @@ class TransferScreen extends Component {
                         buttonTitle={LVStrings.alert_ok}/>
                     <LVSelectWalletModal
                         isOpen={this.state.openSelectWallet}
-                        onClosed={this.onTransferPresse.bind(this)}
+                        onClosed={()=>{this.setState({openSelectWallet: false})}}
                     />
                 </View>
             </ScrollView>
