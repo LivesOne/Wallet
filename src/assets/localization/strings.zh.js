@@ -181,7 +181,8 @@ const localized_strings = {
     contact_alert_name_required: '名字不能为空',
     contact_alert_address_required: '钱包地址不能为空',
     contact_alert_address_invalid: '钱包地址格式错误',
-    contact_alert_contact_exists: '联系人已存在'
+    contact_alert_contact_exists: '联系人已存在',
+    contact_confirm_delete_contact: '确认删除联系人？'
 };
 
 export default localized_strings;

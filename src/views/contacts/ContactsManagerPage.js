@@ -16,6 +16,8 @@ import * as ContactLib from '../../logic/LVContactManager';
 import Swipeout from 'react-native-swipeout';
 import { Separator } from 'react-native-tableview-simple';
 import { converAddressToDisplayableText} from '../../utils/MXStringUtils';
+import { LVConfirmDialog } from '../Common/LVDialog';
+
 const AddIcon = require('../../assets/images/add_contact.png');
 const AvatarIcon = require('../../assets/images/contact_avatar.png');
 const ShowDetailsIcon = require('../../assets/images/show_detail_arrow.png');
@@ -27,17 +29,21 @@ export default class ContactsManagerPage extends Component {
     };
 
     renderRow : Function;
+    onDeleteContact: Function;
 
     constructor() {
         super();
         this.state = {
-            contacts: []
+            contacts: [],
+            toDeDeletedContactName: null
         };
         this.renderRow = this.renderRow.bind(this);
+        this.onDeleteContact = this.onDeleteContact.bind(this);
     }
 
     state: {
-        contacts: Array<Object>
+        contacts: Array<Object>,
+        toDeDeletedContactName: ?string
     }
 
     async loadContacts (){
@@ -45,6 +51,21 @@ export default class ContactsManagerPage extends Component {
         this.setState({
             contacts: ContactLib.instance.getContacts()
         });
+    }
+
+    onDeleteContact() {
+        if(!this.state.toDeDeletedContactName) {
+            return;
+        }
+
+        const contact = ContactLib.instance.getContactWithName(this.state.toDeDeletedContactName);
+        if(!contact) {
+            return;
+        }
+        
+        ContactLib.instance.remove(contact);
+        ContactLib.instance.saveToDisk();
+        this.loadContacts();
     }
 
     componentDidMount() {
@@ -59,9 +80,10 @@ export default class ContactsManagerPage extends Component {
                 color: LVColor.white,
                 buttonWidth: 65,
                 onPress: () => { 
-                    ContactLib.instance.remove(item);
-                    ContactLib.instance.saveToDisk();
-                    this.loadContacts();
+                    this.setState({
+                        toDeDeletedContactName: item.name
+                    });
+                    this.refs.deleteConfirm.show();
                  }
             }
         ];
@@ -118,7 +140,10 @@ export default class ContactsManagerPage extends Component {
                         ItemSeparatorComponent={()=><Separator insetLeft={0} insetRight={12.5} tintColor={LVColor.separateLine} />}
                         />
                 </View>
-               
+                <LVConfirmDialog ref={'deleteConfirm'} 
+                            title={LVStrings.alert_hint}  
+                            message={LVStrings.contact_confirm_delete_contact} 
+                            onConfirm={this.onDeleteContact} />
             </View>
         );
     }

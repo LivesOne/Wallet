@@ -182,6 +182,7 @@ const localized_strings = {
     contact_alert_address_required: 'Address is required',
     contact_alert_address_invalid: 'Wrong address format',
     contact_alert_contact_exists: 'Contact already exists',
+    contact_confirm_delete_contact: 'Are you sure to delete this contact?'
 };
 
 export default localized_strings;
