@@ -61,6 +61,7 @@ const localized_strings = {
     wallet_create_success: 'Create success!',
     wallet_create_success_comment: 'The platform does not store the user\'s password, the password can not be retrieved or reset, it is highly recommended that you make a backup before using your wallet!',
     wallet_backup: 'Backup wallet',
+    wallet_backup_title_suffix: 'wallet backup',
     wallet_default_name_prefix: "default wallet ",
 
     //wallet edit

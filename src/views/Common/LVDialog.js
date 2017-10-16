@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import MXButton from '../../components/MXButton';
+import MXCrossTextInput from '../../components/MXCrossTextInput';
 
 export default class LVDialog extends Component {
     static propTypes = {
@@ -47,7 +48,10 @@ export default class LVDialog extends Component {
         const buttonTitle = this.props.buttonTitle;
 
         const modalWidth = { width: this.props.width || '90%' };
-        const modalHeight = { height: this.props.height || (buttonTitle ? 120 : 100 + message ? 50 : 0) };
+        const childrenHeight = this.props.children ? this.props.children.props.style.height : 0;
+        const modalHeight = {
+            height: this.props.height || 50 + (message ? 40 : 0) + childrenHeight + (buttonTitle ? 100 : 10)
+        };
 
         return (
             <Modal
@@ -119,13 +123,14 @@ export class LVConfirmDialog extends LVDialog {
             alignItems: 'center'
         };
         const buttonStyle = {
-            width: '50%', height: '100%',
+            width: '50%',
+            height: '100%',
             justifyContent: 'center',
             alignItems: 'center'
         };
         const buttonTitleStyle = {
             fontSize: 16,
-            color: LVColor.text.grey1,
+            color: LVColor.text.grey1
         };
         const lineWidth = StyleSheet.hairlineWidth;
         const lineColor = LVColor.separateLine;
@@ -133,19 +138,33 @@ export class LVConfirmDialog extends LVDialog {
         const confirmTitle = this.props.confirmTitle || LVStrings.common_confirm;
         const cancelTitle = this.props.cancelTitle || LVStrings.common_cancel;
 
+        const childrenHeight = this.props.children ? ( this.props.children.props.height || 64) : 0;
+        const modalHeight = 50 + childrenHeight;
+
         return (
-            <LVDialog ref={'dialog'} height={150} {...this.props}>
-                <View style={{ width: '100%', height: 50 }}>
-                    <View style={{width: '100%', height: lineWidth, backgroundColor: lineColor}} />
-                    <Separator insetLeft={0} tintColor={LVColor.separateLine} />
-                    <View style={buttonPanelStyle}>
-                        <TouchableOpacity activeOpacity={0.8} style={buttonStyle} onPress={this.onPressConfirm.bind(this)}>
-                            <Text style={buttonTitleStyle} >{confirmTitle}</Text>
-                        </TouchableOpacity>
-                        <View style={{width: lineWidth, height: '100%', backgroundColor: lineColor}} />
-                        <TouchableOpacity activeOpacity={0.8} style={buttonStyle} onPress={this.onPressCancel.bind(this)}>
-                            <Text style={buttonTitleStyle} >{cancelTitle}</Text>
-                        </TouchableOpacity>
+            <LVDialog ref={'dialog'} {...this.props}>
+                <View style={{ justifyContent: 'space-between', alignItems: 'center', width: '100%', height: modalHeight }}>
+                    <View style={{justifyContent: 'center', alignItems: 'center'}}>{this.props.children}</View>
+                    <View style={{ width: '100%', height: 50 }}>
+                        <View style={{ width: '100%', height: lineWidth, backgroundColor: lineColor }} />
+                        <Separator insetLeft={0} tintColor={LVColor.separateLine} />
+                        <View style={buttonPanelStyle}>
+                            <TouchableOpacity
+                                activeOpacity={0.8}
+                                style={buttonStyle}
+                                onPress={this.onPressConfirm.bind(this)}
+                            >
+                                <Text style={buttonTitleStyle}>{confirmTitle}</Text>
+                            </TouchableOpacity>
+                            <View style={{ width: lineWidth, height: '100%', backgroundColor: lineColor }} />
+                            <TouchableOpacity
+                                activeOpacity={0.8}
+                                style={buttonStyle}
+                                onPress={this.onPressCancel.bind(this)}
+                            >
+                                <Text style={buttonTitleStyle}>{cancelTitle}</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </LVDialog>
