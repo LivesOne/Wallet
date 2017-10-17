@@ -30,7 +30,7 @@ class TransactionRecordsScreen extends Component {
     state: {
         startDate: string,
         endDate: string,
-        transactionList: ?Array<LVTransactionRecord>,
+        transactionList: ?Array<LVTransactionRecord>
     };
 
     constructor(props: any) {
@@ -76,6 +76,13 @@ class TransactionRecordsScreen extends Component {
         const { walletName, walletAddress } = this.props.navigation.state.params;
         const { startDate, endDate, transactionList } = this.state;
 
+        const startTimestamp = Moment(startDate, 'YYYY-MM-DD').format('X');
+        const endTimestamp = Moment(endDate, 'YYYY-MM-DD').add(1, 'days').format('X');
+
+        const filteredList = transactionList
+            ? transactionList.filter(item => item.timestamp >= startTimestamp && item.timestamp <= endTimestamp)
+            : null;
+
         return (
             <View style={styles.container}>
                 <LVGradientPanel style={styles.gradient}>
@@ -105,7 +112,7 @@ class TransactionRecordsScreen extends Component {
                     </View>
                 </View>
 
-                <TransactionRecordList style={styles.list} records={transactionList} onPressItem={this.onPressRecord} />
+                <TransactionRecordList style={styles.list} records={filteredList} onPressItem={this.onPressRecord} />
             </View>
         );
     }
