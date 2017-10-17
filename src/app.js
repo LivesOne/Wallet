@@ -15,6 +15,7 @@ import WalletCreateOrImportPage from './views/Wallet/WalletCreateOrImportPage';
 import LVWalletManager from './logic/LVWalletManager';
 import LVNotification from './logic/LVNotification';
 import LVNotificationCenter from './logic/LVNotificationCenter';
+import SplashScreen from "react-native-splash-screen";
 
 class VenusApp extends Component {
     state: {
@@ -41,6 +42,7 @@ class VenusApp extends Component {
     }
 
     componentDidMount() {
+        SplashScreen.hide();
         LVConfiguration.hasAppGuidesEverDisplayed()
             .then(everDisplayed => {
                 this.setState({ needShowGuide: !everDisplayed });

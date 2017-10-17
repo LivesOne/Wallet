@@ -2,6 +2,7 @@ package com.venus;
 
 import android.app.Application;
 
+import com.cboy.rn.splashscreen.SplashScreenReactPackage;
 import com.facebook.react.ReactApplication;
 import com.rnfs.RNFSPackage;
 import com.horcrux.svg.SvgPackage;
@@ -39,6 +40,7 @@ public class MainApplication extends Application implements ReactApplication {
             new MainReactPackage(),
             new RNFSPackage(),
             new SvgPackage(),
+            new SplashScreenReactPackage(),
             new RCTCameraPackage(),
             new BarcodeScannerPackage(),
             new UdpSocketsModule(),
