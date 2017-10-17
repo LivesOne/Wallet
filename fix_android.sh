@@ -1,5 +1,9 @@
 #!/bin/bash
 
+file2='node_modules/react-native-splash-screen/android/src/main/java/com/cboy/rn/splashscreen/SplashScreenReactPackage.java'
+
+sed -i -e 's/@Override//g' ${file2}
+
 file1='node_modules/react-native-barcodescanner/android/src/main/java/com/eguma/barcodescanner/BarcodeScannerPackage.java'
 
 sed -i -e 's/@Override//g' ${file1}

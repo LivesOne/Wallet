@@ -2,6 +2,7 @@ package com.venus;
 
 import android.app.Application;
 
+import com.cboy.rn.splashscreen.SplashScreenReactPackage;
 import com.facebook.react.ReactApplication;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import com.eguma.barcodescanner.BarcodeScannerPackage;
@@ -35,6 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MyReactPackage(),
             new MainReactPackage(),
+            new SplashScreenReactPackage(),
             new RCTCameraPackage(),
             new BarcodeScannerPackage(),
             new UdpSocketsModule(),
