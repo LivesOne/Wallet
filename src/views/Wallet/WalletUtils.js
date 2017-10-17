@@ -9,78 +9,65 @@ import LVStrings from '../../assets/localization';
 
 const WalletDefaultNameIndexKey :string = '@Venus:WalletDefaultNameIndex';
 
-var WALLET_JSON_SCHEMA = 
+var KEY_STORE_JSON_SCHEMA = 
 {
     "type": "object",
+    "required": ["address", "id", "version", "crypto"] ,
     "additionalProperties": false,
-    "required": ["name", "keystore", "address", "balance"] ,
     "properties": {
-      "name": {
+      "address": {
         "type": "string"
       },
-      "keystore": {
+      "id": {
+        "type": "string"
+      },
+      "version": {
+        "type": "number"
+      },
+      "crypto": {
+        "type": "object",
         "properties": {
-          "address": {
+          "cipher": {
             "type": "string"
           },
-          "id": {
+          "ciphertext": {
             "type": "string"
           },
-          "version": {
-            "type": "number"
-          },
-          "crypto": {
+          "cipherparams": {
             "type": "object",
             "properties": {
-              "cipher": {
+              "iv": {
                 "type": "string"
+              }
+            }
+          },
+          "mac": {
+            "type": "string"
+          },
+          "kdf": {
+            "type": "string"
+          },
+          "kdfparams": {
+            "type": "object",
+            "properties": {
+              "dklen": {
+                "type": "number"
               },
-              "ciphertext": {
+              "n": {
+                "type": "number"
+              },
+              "r": {
+                "type": "number"
+              },
+              "p": {
+                "type": "number"
+              },
+              "salt": {
                 "type": "string"
-              },
-              "cipherparams": {
-                "type": "object",
-                "properties": {
-                  "iv": {
-                    "type": "string"
-                  }
-                }
-              },
-              "mac": {
-                "type": "string"
-              },
-              "kdf": {
-                "type": "string"
-              },
-              "kdfparams": {
-                "type": "object",
-                "properties": {
-                  "dklen": {
-                    "type": "number"
-                  },
-                  "n": {
-                    "type": "number"
-                  },
-                  "r": {
-                    "type": "number"
-                  },
-                  "p": {
-                    "type": "number"
-                  },
-                  "salt": {
-                    "type": "string"
-                  }
-                }
               }
             }
           }
         }
-      },
-      "address": {
-        "type": "string"
-      },
-      "balance": {
-        "type": "number"
       }
     }
   }
@@ -93,15 +80,15 @@ export default class WalletUtils {
     static OPEN_IMPORT_FROM_WALLET_MANAGER = 'open_import_from_wallet_manager';
     static OPEN_IMPORT_FROM_MODIFY_PASSWORD = 'open_import_from_modify_password';
 
-    static isValidWalletObj(jsonObj: Object) {
-        var validate = ajv.compile(WALLET_JSON_SCHEMA);
+    static isValidKeyStoreObj(jsonObj: Object) {
+        var validate = ajv.compile(KEY_STORE_JSON_SCHEMA);
         return validate(jsonObj);
     }
 
-    static isValidWalletStr(walletStr: string) {
+    static isValidKeyStoreStr(walletStr: string) {
         try {
             let o = JSON.parse(walletStr);
-            return this.isValidWalletObj(o);
+            return this.isValidKeyStoreObj(o);
         } catch(e) {
             return false;
         }
@@ -122,4 +109,10 @@ export default class WalletUtils {
       await LVPersistent.setNumber(WalletDefaultNameIndexKey, curIndex + 1);
       return defaultName;
     }
+
+    static log(msg: string) {
+      if (__DEV__) {
+          console.log('wallet ---> ' + msg);
+      }
+  }
 }
