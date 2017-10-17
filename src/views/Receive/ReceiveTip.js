@@ -104,13 +104,12 @@ const styles = StyleSheet.create({
         width:'100%',
         justifyContent: "flex-start",
         alignItems: "center",
-        paddingTop: 40,
+        paddingTop: 20,
         // backgroundColor:'red',
         
         
     },
     contentContainer: {
-        paddingVertical: 20,
         backgroundColor: LVColor.white,
         // height:'100%',
     },
