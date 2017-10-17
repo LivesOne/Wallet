@@ -14,9 +14,16 @@ import LVStrings from '../../assets/localization';
 
 import MxImage from  './MxImage'
 import MXButton from '../../components/MXButton';
+import { StringUtils } from '../../utils';
+
+
 
 import QRCode from 'react-native-qrcode';
+
+
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
+import LVWalletManager from '../../logic/LVWalletManager';
+
 const IconBack = require('../../assets/images/back_grey.png');
 const receive_share = require("../../assets/images/receive_share.png");
 
@@ -24,14 +31,22 @@ class ReceiveTip extends Component {
     static navigationOptions = {
         header: null
     };
-    state = {
-        purseAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
-        
+
+
+
+    
+    state:{
+        wallet: ?Object,       
     };
 
+    
+
     constructor(props) {
-        super();
-        // purseAddress= props.purseAddress !=null ? props.purseAddress  :'0x2A609SF354346FDHFHFGHGFJE6ASD119cB8';
+        super(props);
+        const wallet = LVWalletManager.getSelectedWallet();
+        this.state = {
+            wallet: wallet,
+        };
     }
 
     
@@ -53,12 +68,12 @@ class ReceiveTip extends Component {
                     {LVStrings.receive_name}
                 </Text>
                 <Text ellipsizeMode="middle" numberOfLines={1} style={styles.address}>
-                    {this.state.purseAddress}
+                         {StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9)}            
                 </Text>
 
                 <QRCode
                 style={styles.qrcode_pic}
-                value={this.state.purseAddress}
+                value={this.state.wallet.address}
                 size={162}
                 bgColor='white'
                 fgColor='black'/>
@@ -73,21 +88,22 @@ class ReceiveTip extends Component {
                 <View style={styles.share_container}>
                 {/* <Image source={receive_share} style={styles.share}></Image> */}
                 <MxImage source={receive_share}
-                    onPress = { () => {
-                        Share.share({
-                            url: 'http://bam.tech',
-                            title: 'Share your code?'
-                          }, {
-                            // Android only:
-                            dialogTitle: 'Share your code',
-                            // iOS only:
-                            excludedActivityTypes: [
-                              'com.apple.UIKit.activity.PostToTwitter'
-                            ]
-                          })                       
-                    }
-                    }
-                   ></MxImage>
+                onPress = { () => {
+                    Share.share({
+                        url: this.state.wallet.address,
+                        title: 'Share your wallet address ?',
+                        message: this.state.wallet.address,
+                      }, {
+                        // Android only:
+                        dialogTitle: 'Share your wallet address ',
+                        // iOS only:
+                        excludedActivityTypes: [
+                          'com.apple.UIKit.activity.PostToTwitter'
+                        ]
+                      })                       
+                }
+                }
+               ></MxImage>
                 </View>
 
             </View>
