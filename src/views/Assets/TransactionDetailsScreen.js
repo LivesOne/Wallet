@@ -33,6 +33,7 @@ export default class TransactionDetailsScreen extends Component {
         const is_failed = false;
         const symble = type === 'in' ? '+' : '-';
         const amountString = symble + StringUtils.convertAmountToCurrencyString(amount, ',');
+        const feeString = StringUtils.convertAmountToCurrencyString(minnerFee, ',', 8) + ' ETH';
         const remarks = transactionRecord.remarks || LVStrings.transaction_na;
 
         const typeImg = is_failed ? failureImg : symble === '+' ? receiptImg : transferImg;
