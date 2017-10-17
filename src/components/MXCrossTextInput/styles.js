@@ -11,22 +11,21 @@ import LVColor from '../../styles/LVColor'
 const Base = LVStyleSheet.create({
   main: {
     phone: {
-      flexDirection: 'row',
       height: 46,
       width: MXUtils.getDeviceWidth() - 17 * PixelRatio.get(),
       backgroundColor: LVColor.white,
-      borderWidth : StyleSheet.hairlineWidth,
-      borderColor : LVColor.white,
-      borderBottomColor: LVColor.separateLine,
     },
     pad: {
-      flexDirection: 'row',
       height: 60,
       borderRadius: 3,
       paddingLeft: 18,
       width:  MXUtils.getDeviceWidth() * 3 / 5,
       paddingRight: 15,
     }
+  },
+  content: {
+    flex: 1,
+    flexDirection: 'row',
   },
   rounded: {
     phone: {

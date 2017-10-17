@@ -4,7 +4,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { View, TextInput, TouchableOpacity, Image, ViewPropTypes, Keyboard } from 'react-native';
+import { StyleSheet, View, TextInput, TouchableOpacity, Image, ViewPropTypes, Keyboard } from 'react-native';
 import { Base, DefaultStyles, LightStyles, WhiteStyles } from './styles';
 
 import LVColor from '../../styles/LVColor';
@@ -74,6 +74,8 @@ class MXCrossTextInput extends Component {
 
         const theme = this.getTheme();
 
+        const lineHeight = withUnderLine ? StyleSheet.hairlineWidth : 0;
+
         return (
             <View
                 style={[
@@ -84,36 +86,39 @@ class MXCrossTextInput extends Component {
                     !withUnderLine ? { borderBottomColor: 'transparent' } : null
                 ]}
             >
-                <View style={[Base.textArea]}>
-                    <TextInput
-                        placeholder={placeholder}
-                        underlineColorAndroid={'transparent'}
-                        placeholderTextColor={LVColor.text.placeHolder}
-                        defaultValue={this.props.defaultValue}
-                        value={this.state.text}
-                        tintColor={LVColor.primary}
-                        keyboardType={keyboardType}
-                        style={[Base.label, theme.label]}
-                        secureTextEntry={secureTextEntry}
-                        onChangeText={this.onChangeText.bind(this)}
-                        onFocus={() => this.setState({ hasFocus: true })}
-                        onEndEditing={() => this.setState({ hasFocus: false })}
-                    />
-                </View>
+                <View style={[Base.content]}>
+                    <View style={[Base.textArea]}>
+                        <TextInput
+                            placeholder={placeholder}
+                            underlineColorAndroid={'transparent'}
+                            placeholderTextColor={LVColor.text.placeHolder}
+                            defaultValue={this.props.defaultValue}
+                            value={this.state.text}
+                            tintColor={LVColor.primary}
+                            keyboardType={keyboardType}
+                            style={[Base.label, theme.label]}
+                            secureTextEntry={secureTextEntry}
+                            onChangeText={this.onChangeText.bind(this)}
+                            onFocus={() => this.setState({ hasFocus: true })}
+                            onEndEditing={() => this.setState({ hasFocus: false })}
+                        />
+                    </View>
 
-                <View style={[Base.buttonArea]}>
-                    {this.props.withClearButton &&
-                        this.state.text !== '' &&
-                        this.state.hasFocus && (
-                            <TouchableOpacity style={Base.clearButton} onPress={this.onPressClear.bind(this)}>
-                                <Image source={require('../../assets/images/edit_clear.png')} />
-                            </TouchableOpacity>
+                    <View style={[Base.buttonArea]}>
+                        {this.props.withClearButton &&
+                            this.state.text !== '' &&
+                            this.state.hasFocus && (
+                                <TouchableOpacity style={Base.clearButton} onPress={this.onPressClear.bind(this)}>
+                                    <Image source={require('../../assets/images/edit_clear.png')} />
+                                </TouchableOpacity>
+                            )}
+
+                        {this.props.rightComponent && (
+                            <View style={[Base.rightComponent]}>{this.props.rightComponent}</View>
                         )}
-
-                    {this.props.rightComponent && (
-                        <View style={[Base.rightComponent]}>{this.props.rightComponent}</View>
-                    )}
+                    </View>
                 </View>
+                <View style={{width: '100%', height: lineHeight, backgroundColor: LVColor.separateLine}} />
             </View>
         );
     }
