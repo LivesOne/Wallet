@@ -34,7 +34,7 @@ class LVTransactionRecord {
         date.setTime(timestamp * 1000);
         // 2014-06-18T02:33:24.000Z
         this.datetime = date.toISOString().replace('T', ' ').replace('.000Z', '');
-        this.minnerFee = detailJson.gas * detailJson.gasPrice * Math.pow(10, -10);
+        this.minnerFee = detailJson.gas * detailJson.gasPrice * Math.pow(10, -18);
     }
 }
 
