@@ -27,7 +27,8 @@ const localized_strings = {
     receive_copy:'Copy the address',
     receive_save:'Save the QR code',
     receive_empty:'You haven’t add a wallet yet',
-
+    receive_save_finish:'Save finish',
+    
     // Wallet
     wallet_import: 'Import',
     wallet_import_header: 'Import wallet',

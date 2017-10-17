@@ -138,7 +138,7 @@ class ReceiveScreen extends Component {
               })
               .then(() => {
                   this.setState({ busy: false, imageSaved: true  })
-                  ToastAndroid.show('Saved to gallery !!', ToastAndroid.SHORT)
+                  ToastAndroid.show(LVStrings.receive_save_finish, ToastAndroid.SHORT)
               })
         })
    }
@@ -193,7 +193,9 @@ class ReceiveScreen extends Component {
                     title={LVStrings.receive_copy}
                     onPress = {() => {
                         Clipboard.setString(this.state.walletAddress);
-                        alert("copy your address to clipboard");
+                        // alert(LVStrings.receive_save_finish);
+                        ToastAndroid.show(LVStrings.common_done, ToastAndroid.SHORT)
+
                     }}
                     themeStyle={"active"}
                 /> 
