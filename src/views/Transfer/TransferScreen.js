@@ -42,6 +42,7 @@ class TransferScreen extends Component {
 
     state: {
         wallet: ?Object,
+        transactionParams: ?Object;
         curETH: number,
         addressIn: string,
         amount: number,
@@ -54,14 +55,13 @@ class TransferScreen extends Component {
         alertMessage: string,
     }
 
-    isAddressOnFocus = false;
-
     constructor() {
         super();
         const wallet = LVWalletManager.getSelectedWallet();
         console.log(JSON.stringify(wallet));
         this.state = {
             wallet: wallet,
+            transactionParams: null,
             curETH: wallet != null ? wallet.eth: 0,
             addressIn: '0x9224A9f81Ac30F0E3B568553bf9a7372EE49548C',
             amount: 0,
@@ -81,6 +81,15 @@ class TransferScreen extends Component {
         this.refreshWalletDatas();
     }
 
+    async tryFetchParams() {
+        const {wallet, amount, addressIn} = this.state;
+        if (wallet && amount && addressIn && TransferUtils.isValidAddress(addressIn)) {
+            let params = await LVNetworking.fetchTransactionParam(wallet.address, addressIn, amount);
+            TransferUtils.log('tryFetchParams ' + JSON.stringify(params));
+            this.setState({transactionParams : params});
+        }
+    }
+
     handleWalletChange = async () => {
         await this.refreshWalletDatas();
     }
@@ -89,14 +98,19 @@ class TransferScreen extends Component {
         LVNotificationCenter.removeObservers(this);
     }
 
+   async  onAddressChanged(address: string) {
+        await this.setState({addressIn: address});
+        this.tryFetchParams();
+    }
 
-    onAmountChanged(newAmountText:string) {
+    async onAmountChanged(newAmountText:string) {
         if (!TransferUtils.isBlank(newAmountText) && !TransferUtils.isValidAmount(newAmountText)) {
             this.setState({alertMessage:LVStrings.transfer_amount_format_hint });
             this.refs.alert.show();
             return;
         } else {
-            this.setState({amount: parseFloat(newAmountText)})
+            await this.setState({amount: parseFloat(newAmountText)})
+            this.tryFetchParams();
         }
     }
 
@@ -154,13 +168,20 @@ class TransferScreen extends Component {
 
     async onTransfer() {
         this.setState({ showModal: false });
-        const {wallet, addressIn, amount, minerGap, balance} = this.state;
+        const {wallet, addressIn, amount, minerGap, balance, transactionParams} = this.state;
+        if (!transactionParams) {
+            TransferUtils.log('transaction params is null');
+            this.setState({alertMessage:LVStrings.transfer_fail });
+            this.refs.alert.show();
+            return;
+        }
         let value = minerGap + amount;
         this.refs.loading.show();
         setTimeout(async ()=> {
-            let result = await TransferLogic.transaction(wallet.password, addressIn, value, wallet);
+            let rst = await TransferLogic.transaction(addressIn, value, transactionParams.nonce,
+                transactionParams.gasLimit, transactionParams.gasPrice, transactionParams.token, wallet);
             this.refs.loading.dismiss();
-            let success = result && result.hasOwnProperty('transactionHash')      
+            let success = rst && rst.result;
             if (success) {   
                 LVNotificationCenter.postNotification(LVNotification.balanceChanged);
             }
@@ -202,7 +223,7 @@ class TransferScreen extends Component {
                             onAddClicked={() => {this.props.navigation.navigate('ContactList')}}
                             value={this.state.addressIn}
                             onScanClicked={() => {this.setState({ showQrScanModal: true })}}
-                            onTextChanged={(newText) => {this.setState({addressIn: newText})}}/>
+                            onTextChanged={this.onAddressChanged.bind(this)}/>
                         <MXCrossTextInput 
                             style= {styles.textInput} 
                             placeholder={LVStrings.transfer_amount}

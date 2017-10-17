@@ -11,7 +11,7 @@ const API = {
     GET_BALANCE: HOST + '/wallet/balance',
     GET_TRANSACTION_HISTORY: HOST + '/wallet/history',
     GET_TRANSACTION_DETAIL: HOST + '/wallet/tx',
-    GET_TRANSACTION_PARAM: HOST + '/wallet/param',
+    GET_TRANSACTION_PARAM: HOST + '/wallet/param?',
     POST_SIGNED_TRANSACTION: HOST + '/wallet/tx',
 };
 
@@ -105,8 +105,9 @@ class LVNetworking {
         return await LVFetch.GET(API.GET_TRANSACTION_DETAIL + '/' + transactionHash);
     }
     
-    static async fetchTransactionParam(address: string) {
-        return await LVFetch.GET(API.GET_TRANSACTION_PARAM + '/' + address);
+    static async fetchTransactionParam(from: string, to: string, value: number) {
+        return await LVFetch.GET(API.GET_TRANSACTION_PARAM 
+            + 'from=' + from + '&to=' + to + '&value=' + value);
     }
 
     static async transaction(txData: string) {

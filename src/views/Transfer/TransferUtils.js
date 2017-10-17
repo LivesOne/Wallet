@@ -20,4 +20,10 @@ export default class TransferUtils {
     static isBlank(str: string) : bool {
         return (!str || /^\s*$/.test(str));
     }
+
+    static log(msg: string) {
+        if (__DEV__) {
+            console.log('transfer ---> ' + msg);
+        }
+    }
 }
