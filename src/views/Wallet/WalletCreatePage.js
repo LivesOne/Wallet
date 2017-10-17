@@ -91,7 +91,7 @@ export default class WalletCreatePage extends Component {
             LVWalletManager.addWallet(wallet);
             LVWalletManager.saveToDisk();
             this.refs.toast.dismiss();
-            setTimeout(()=>this.props.navigation.navigate('SuccessPage'),300);
+            setTimeout(()=>this.props.navigation.navigate('SuccessPage', {wallet: wallet}),300);
         },500);
     }
 

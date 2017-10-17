@@ -138,7 +138,7 @@ class ReceiveScreen extends Component {
               })
               .then(() => {
                   this.setState({ busy: false, imageSaved: true  })
-                  ToastAndroid.show('Saved to gallery !!', ToastAndroid.SHORT)
+                  ToastAndroid.show(LVStrings.receive_save_finish, ToastAndroid.SHORT)
               })
         })
    }
@@ -165,11 +165,12 @@ class ReceiveScreen extends Component {
         if(walletIsBlank) {
 
          return (
-            <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor:LVColor.white }}  contentContainerStyle={styles.contentContainer}>
             
             <View style={styles.container}>
                 <ReceiveHeader callback={this.onPressSelectWallet}/>
 
+                <View style={styles.mainContainer2}>
+                <ScrollView showsVerticalScrollIndicator={false} style={{ width:'100%', }}  contentContainerStyle={styles.contentContainer}>
                 <View style={styles.mainContainer}>
 
                 <Text style={styles.name} >
@@ -188,15 +189,19 @@ class ReceiveScreen extends Component {
                 fgColor='black'/>
 
                 <MXButton
+                    rounded = {true}
                     style={styles.button}
                     title={LVStrings.receive_copy}
                     onPress = {() => {
-                        Clipboard.setString(this.state.walletAddress);
-                        alert("copy your address to clipboard");
+                        Clipboard.setString(this.state.wallet.address);
+                        // alert(LVStrings.receive_save_finish);
+                        ToastAndroid.show(LVStrings.common_done, ToastAndroid.SHORT)
+
                     }}
                     themeStyle={"active"}
                 /> 
                 <MXButton
+                    rounded = {true} 
                     title={LVStrings.receive_save}
                     style={styles.button_save}
                     onPress = {() => {
@@ -228,6 +233,8 @@ class ReceiveScreen extends Component {
                     }
                    ></MxImage>
                 </View>
+                </ScrollView>
+                </View>
 
                 <LVSelectWalletModal
                     isOpen={this.state.openSelectWallet}
@@ -237,7 +244,6 @@ class ReceiveScreen extends Component {
                 />
 
             </View>
-            </ScrollView>
         );
     }else {
         return (
@@ -273,9 +279,11 @@ const styles = StyleSheet.create({
         
     },
     contentContainer: {
-        paddingVertical: 20,
-        backgroundColor: LVColor.white,
+        // paddingVertical: 20,
+        // backgroundColor: 'blue',
         // height:'100%',
+        alignItems: 'center',
+        justifyContent:'center',
     },
 
     topContainer:{
@@ -283,7 +291,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         alignItems: "center",
         paddingTop:10,
-        paddingBottom:20,
+        paddingBottom:10,
         justifyContent:'center',
     },
 
@@ -329,6 +337,8 @@ const styles = StyleSheet.create({
         width:'90%',
         flexDirection:'column',
         alignItems: 'center',
+        justifyContent:'center',
+        
         backgroundColor: LVColor.navigationBar,
         // backgroundColor:'black',
         elevation: 20,
@@ -340,7 +350,8 @@ const styles = StyleSheet.create({
      },
 
      mainContainer2:{
-         flex:6,
+         flex:7,
+         width:'100%',
          flexDirection:'column',
          alignItems: 'center', 
         //  backgroundColor:'red',
