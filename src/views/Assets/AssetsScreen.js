@@ -55,6 +55,7 @@ class AssetsScreen extends Component {
     }
 
     componentDidMount() {
+        LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletChange);
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
         this.refreshWalletDatas();
         this.refreshTransactionList();

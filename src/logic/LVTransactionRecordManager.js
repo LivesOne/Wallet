@@ -32,9 +32,7 @@ class LVTransactionRecord {
 
     setRecordDetail(detailJson: any) {
         this.timestamp = detailJson.timestamp;
-        const date = new Date();
-        date.setTime(this.timestamp * 1000);
-        this.datetime = Moment(date).format('YYYY-MM-DD HH:mm:ss'); 
+        this.datetime = Moment(this.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss'); 
         this.minnerFee = detailJson.gas * detailJson.gasPrice * Math.pow(10, -18);
     }
 }

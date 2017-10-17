@@ -147,7 +147,7 @@ export class WalletDetailsPage extends Component {
         const walletAddress = this.state.walletAddress;
         await LVWalletManager.deleteWallet(walletAddress);
         await LVWalletManager.saveToDisk();
-        LVNotificationCenter.postNotification(LVNotification.walletChanged);
+        LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
         this.refs.walletDeleteConfirm.dismiss();
         Toast.show(LVStrings.wallet_delete_success);
         this.props.navigation.goBack();
