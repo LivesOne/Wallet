@@ -129,9 +129,7 @@ class ReceiveScreen extends Component {
     }
 
 
-    test2() {
-        alert("test1");
-    }
+    
     saveQrToDisk() {
         this.svg.toDataURL((data) => {
             RNFS.writeFile(RNFS.CachesDirectoryPath+"/some-name.png", data, 'base64')
@@ -202,7 +200,7 @@ class ReceiveScreen extends Component {
                     title={LVStrings.receive_save}
                     style={styles.button_save}
                     onPress = {() => {
-                    alert("button clicked");
+                    // alert("button clicked");
                     // this.props.navigation.navigate("ReceiveTip")
                     this.saveQrToDisk();
                     // this.test2();
