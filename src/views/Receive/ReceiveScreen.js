@@ -6,7 +6,7 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { StyleSheet,Share, View, Text,Image,ScrollView ,Clipboard} from 'react-native';
+import { StyleSheet,Share, View, Text,Image,ScrollView ,Clipboard,CameraRoll , ToastAndroid} from 'react-native';
 
 import PropTypes from 'prop-types';
 import LVColor from '../../styles/LVColor';
@@ -23,6 +23,7 @@ import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import { StringUtils } from '../../utils';
 
 import QRCode from 'react-native-qrcode-svg';
+import RNFS from "react-native-fs"
 
 // import QRCode from 'react-native-qrcode';
 const receive_share = require("../../assets/images/receive_share.png");
@@ -127,7 +128,22 @@ class ReceiveScreen extends Component {
         }
     }
 
-   
+
+    test2() {
+        alert("test1");
+    }
+    saveQrToDisk() {
+        this.svg.toDataURL((data) => {
+            RNFS.writeFile(RNFS.CachesDirectoryPath+"/some-name.png", data, 'base64')
+              .then((success) => {
+                  return CameraRoll.saveToCameraRoll(RNFS.CachesDirectoryPath+"/some-name.png", 'photo')
+              })
+              .then(() => {
+                  this.setState({ busy: false, imageSaved: true  })
+                  ToastAndroid.show('Saved to gallery !!', ToastAndroid.SHORT)
+              })
+        })
+   }
 
     handleWalletChange = async () => {
         await this.refreshWalletDatas();
@@ -166,6 +182,7 @@ class ReceiveScreen extends Component {
                 </Text>
 
                 <QRCode
+                getRef={(c) => (this.svg = c)}
                 style={styles.qrcode_pic}
                 value={this.state.wallet.address}
                 size={162}
@@ -186,7 +203,9 @@ class ReceiveScreen extends Component {
                     style={styles.button_save}
                     onPress = {() => {
                     alert("button clicked");
-                    this.props.navigation.navigate("ReceiveTip")
+                    // this.props.navigation.navigate("ReceiveTip")
+                    this.saveQrToDisk();
+                    // this.test2();
                     }}
                     themeStyle={"active"}
                 />

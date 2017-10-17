@@ -3,6 +3,7 @@ package com.venus;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.rnfs.RNFSPackage;
 import com.horcrux.svg.SvgPackage;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import com.eguma.barcodescanner.BarcodeScannerPackage;
@@ -36,6 +37,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MyReactPackage(),
             new MainReactPackage(),
+            new RNFSPackage(),
             new SvgPackage(),
             new RCTCameraPackage(),
             new BarcodeScannerPackage(),
