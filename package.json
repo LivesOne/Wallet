@@ -66,7 +66,8 @@
     "url": "^0.10.3",
     "util": "^0.10.3",
     "uuid": "^3.1.0",
-    "vm-browserify": "0.0.4"
+    "vm-browserify": "0.0.4",
+    "react-native-splash-screen": "^2.1.0"
   },
   "devDependencies": {
     "babel-jest": "21.0.2",
