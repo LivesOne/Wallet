@@ -51,7 +51,7 @@ const Base = LVStyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     alignSelf: 'flex-end',
-    marginBottom: 6
+    marginBottom: 6,
   },
 
   clearButton: {

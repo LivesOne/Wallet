@@ -87,8 +87,9 @@ class MXCrossTextInput extends Component {
                 ]}
             >
                 <View style={[Base.content]}>
-                    <View style={[Base.textArea]}>
+                    <TouchableOpacity style={[Base.textArea]} activeOpacity={1} onPress={() => this.refs.textinput.focus() } >
                         <TextInput
+                            ref={'textinput'}
                             placeholder={placeholder}
                             underlineColorAndroid={'transparent'}
                             placeholderTextColor={LVColor.text.placeHolder}
@@ -102,7 +103,7 @@ class MXCrossTextInput extends Component {
                             onFocus={() => this.setState({ hasFocus: true })}
                             onEndEditing={() => this.setState({ hasFocus: false })}
                         />
-                    </View>
+                    </TouchableOpacity>
 
                     <View style={[Base.buttonArea]}>
                         {this.props.withClearButton &&
