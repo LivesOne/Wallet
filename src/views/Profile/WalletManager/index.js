@@ -152,7 +152,10 @@ export class WalletManagerScreen extends Component {
                 </LVFullScreenModalView>
                 <LVFullScreenModalView ref={'importPage'}>
                     <LVWalletImportNavigator screenProps={{dismiss: ()=> {
-                        this.refs.importPage.dismiss()
+                        this.refs.importPage.dismiss();
+                        this.setState({
+                            wallets: LVWalletManager.getWallets()
+                        });
                     }, from: WalletUtils.OPEN_IMPORT_FROM_WALLET_MANAGER, 
                 }}/>
                 </LVFullScreenModalView>
