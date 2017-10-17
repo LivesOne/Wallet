@@ -15,6 +15,7 @@ class LVTransactionRecord {
     payer: string;
     receiver: string;
     amount: number;
+    timestamp: number;
     datetime: string = '';
     minnerFee: number;
     remarks: string;
@@ -29,9 +30,9 @@ class LVTransactionRecord {
     }
 
     setRecordDetail(detailJson: any) {
-        const timestamp = detailJson.timestamp;
+        this.timestamp = detailJson.timestamp;
         const date = new Date();
-        date.setTime(timestamp * 1000);
+        date.setTime(this.timestamp * 1000);
         // 2014-06-18T02:33:24.000Z
         this.datetime = date.toISOString().replace('T', ' ').replace('.000Z', '');
         this.minnerFee = detailJson.gas * detailJson.gasPrice * Math.pow(10, -18);
@@ -57,6 +58,8 @@ export default class LVTransactionRecordManager {
                         const detail = await LVNetworking.fetchTransactionDetail(element.hash);
                         element.setRecordDetail(detail);
                     }
+
+                    this.transactionRecords.sort((a, b) => b.timestamp - a.timestamp);
                 }
             } catch (error) {
                 console.log('error in refresh transaction list : ' + error);
