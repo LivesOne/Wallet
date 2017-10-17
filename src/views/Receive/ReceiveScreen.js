@@ -16,6 +16,12 @@ import MxImage from  './MxImage'
 import MXButton from '../../components/MXButton';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 
+
+import LVWalletManager from '../../logic/LVWalletManager';
+import LVNotification from '../../logic/LVNotification';
+import LVNotificationCenter from '../../logic/LVNotificationCenter';
+
+
 import QRCode from 'react-native-qrcode';
 const receive_share = require("../../assets/images/receive_share.png");
 const receive_change_wallet = require("../../assets/images/receive_change_wallet.png");
@@ -69,27 +75,60 @@ class ReceiveScreen extends Component {
     state:{
         // walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
         // text: 'http://facebook.github.io/react-native/',
-        walletId: string,
-        walletName: string,
-        walletAddress: string,
+        wallet: ?Object,       
         openSelectWallet: boolean,
         walletIsBlank:boolean,
         
     };
 
+    
+
     constructor(props: any) {
         super(props);
+        const wallet = LVWalletManager.getSelectedWallet();
         this.state = {
-            walletId: '3',
-            walletName: '傲游LivesToken',
-            walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
+            wallet: wallet,
             openSelectWallet: false,
             // walletIsBlank:false,
             walletIsBlank:true,
         };
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
-        this.onWalletSelected = this.onWalletSelected.bind(this);
+        this.handleWalletChange = this.handleWalletChange.bind(this);
+    }
+
+
+    componentWillMount() {
+
+    }
+
+    componentDidMount() {
+        LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
+        this.refreshWalletDatas();
+    }
+
+    componentWillUnmount() {
+        LVNotificationCenter.removeObservers(this);
+    }
+
+    refreshWalletDatas = async () => {
+        const wallet = LVWalletManager.getSelectedWallet();
+        if (wallet) {
+            try {
+                this.setState({wallet: wallet});
+
+                LVNotificationCenter.postNotification(LVNotification.balanceChanged);
+                LVWalletManager.saveToDisk();
+            } catch (error) {
+                console.log('error in refresh wallet datas : ' + error);
+            }
+        }
+    }
+
+   
+
+    handleWalletChange = async () => {
+        await this.refreshWalletDatas();
     }
 
     onPressSelectWallet = () => {
@@ -100,15 +139,10 @@ class ReceiveScreen extends Component {
         this.setState({ openSelectWallet: false });
     };
 
-    onWalletSelected = (walletObj: Object) => {
-        this.setState({
-            walletId: walletObj.id,
-            walletName: walletObj.name,
-            walletAddress: walletObj.address,
-            openSelectWallet: false
-        });
-    };
 
+
+  
+  
     render() {
 
         const { walletIsBlank } = this.state;
@@ -126,13 +160,13 @@ class ReceiveScreen extends Component {
                     {LVStrings.receive_name}
                 </Text>
                 <Text ellipsizeMode="middle" numberOfLines={1} style={styles.address}>
-                    {this.state.walletAddress}
+                    {this.state.wallet.address}
                    
                 </Text>
 
                 <QRCode
                 style={styles.qrcode_pic}
-                value={this.state.walletAddress}
+                value={this.state.wallet.address}
                 size={162}
                 bgColor='white'
                 fgColor='black'/>
