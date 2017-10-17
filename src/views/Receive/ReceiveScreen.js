@@ -192,7 +192,7 @@ class ReceiveScreen extends Component {
                     style={styles.button}
                     title={LVStrings.receive_copy}
                     onPress = {() => {
-                        Clipboard.setString(this.state.walletAddress);
+                        Clipboard.setString(this.state.wallet.address);
                         // alert(LVStrings.receive_save_finish);
                         ToastAndroid.show(LVStrings.common_done, ToastAndroid.SHORT)
 
