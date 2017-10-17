@@ -7,6 +7,7 @@
 
 import LVNetworking from './LVNetworking';
 import LVWalletManager from './LVWalletManager';
+import Moment from 'moment';
 
 class LVTransactionRecord {
     block: number;
@@ -33,8 +34,7 @@ class LVTransactionRecord {
         this.timestamp = detailJson.timestamp;
         const date = new Date();
         date.setTime(this.timestamp * 1000);
-        // 2014-06-18T02:33:24.000Z
-        this.datetime = date.toISOString().replace('T', ' ').replace('.000Z', '');
+        this.datetime = Moment(date).format('YYYY-MM-DD HH:mm:ss'); 
         this.minnerFee = detailJson.gas * detailJson.gasPrice * Math.pow(10, -18);
     }
 }
