@@ -12,12 +12,12 @@ const Base = LVStyleSheet.create({
   main: {
     phone: {
       flexDirection: 'row',
-      height: 50,
+      height: 46,
       width: MXUtils.getDeviceWidth() - 17 * PixelRatio.get(),
-      borderWidth: 0.5,
       backgroundColor: LVColor.white,
-      borderColor : "transparent",
-      borderBottomColor: LVColor.border.editTextBottomBoarder,
+      borderWidth : StyleSheet.hairlineWidth,
+      borderColor : LVColor.white,
+      borderBottomColor: LVColor.separateLine,
     },
     pad: {
       flexDirection: 'row',
@@ -37,13 +37,29 @@ const Base = LVStyleSheet.create({
     }
   },
 
-  label: {
+  textArea: {
     flex: 1,
+    justifyContent: 'flex-end', 
+    paddingBottom: 6
+  },
+
+  label: {
     fontSize: 15,
   },
 
+  buttonArea: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    marginBottom: 6
+  },
+
   clearButton: {
-    alignSelf: 'center',
+  },
+
+  rightComponent: {
+    marginLeft: 6
   }
 
 });

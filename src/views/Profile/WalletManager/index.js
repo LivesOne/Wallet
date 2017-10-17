@@ -19,7 +19,9 @@ import WalletImportPage from '../../Wallet/WalletImportPage';
 import LVWalletManager from '../../../logic/LVWalletManager';
 import LVNotificationCenter from '../../../logic/LVNotificationCenter';
 import LVNotification from '../../../logic/LVNotification';
-const IconBack = require('../../../assets/images/back_grey.png');
+import { greyNavigationBackIcon } from '../../../assets/LVIcons';
+import LVWalletImportNavigator from '../../Wallet/LVWalletImportNavigator';
+import WalletUtils from '../../Wallet/WalletUtils';
 const WalletIcon = require('../../../assets/images/wallet_grey.png');
 const ShowDetailsIcon = require('../../../assets/images/show_detail_arrow.png');
 
@@ -35,6 +37,7 @@ export class WalletManagerScreen extends Component {
 
     onCreateWalletPressed : Function;
     onImportWalletPressed : Function;
+    handleWalletChange: Function;
 
     constructor() {
         super();
@@ -53,6 +56,11 @@ export class WalletManagerScreen extends Component {
             wallets: LVWalletManager.getWallets()
         });
     }
+
+    componentWillUnmount(){
+        LVNotificationCenter.removeObserver(this);
+    }
+    
 
     onCreateWalletPressed() {
         this.refs.creationPage.show();
@@ -73,7 +81,7 @@ export class WalletManagerScreen extends Component {
         return (
             <View style={styles.container}>
                 <MXNavigatorHeader
-                left={ IconBack }
+                left={ greyNavigationBackIcon }
                 style={styles.nav}
                 title={ LVStrings.profile_wallet_management }
                 titleStyle={styles.navTitle}
@@ -143,12 +151,10 @@ export class WalletManagerScreen extends Component {
                 }}/>
                 </LVFullScreenModalView>
                 <LVFullScreenModalView ref={'importPage'}>
-                    <WalletImportPage dismissCallback={()=> {
-                        this.refs.importPage.dismiss();
-                        this.setState({
-                            wallets: LVWalletManager.getWallets()
-                        });
-                    }}/>
+                    <LVWalletImportNavigator screenProps={{dismiss: ()=> {
+                        this.refs.importPage.dismiss()
+                    }, from: WalletUtils.OPEN_IMPORT_FROM_WALLET_MANAGER, 
+                }}/>
                 </LVFullScreenModalView>
             </View>
         );
@@ -163,7 +169,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F8F9FB'
     },
     nav: {
-        backgroundColor : '#F8F9FB'
+        backgroundColor : LVColor.profileNavBack
     },
     navTitle: {
         color : '#6d798a'
@@ -253,7 +259,7 @@ const styles = StyleSheet.create({
         color: '#BFC5D1'
     },
     cellRightSeparatorStyle: {
-        height: 1,
+        height: StyleSheet.hairlineWidth,
         marginRight: 10,
         backgroundColor: LVColor.separateLine
     },

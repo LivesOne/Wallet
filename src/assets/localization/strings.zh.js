@@ -18,6 +18,8 @@ const localized_strings = {
     common_close: '关闭',
     alert_warning: '警告',
     alert_ok: '确定',
+    common_done: '完成',
+    common_delete: '删除',
 
     //receive
     receive_title:'我的收款码',
@@ -60,7 +62,11 @@ const localized_strings = {
     wallet_create_name_unavailable: '钱包名字不可用',
     wallet_create_success_comment: '平台不储存用户的私人密码，密码无法找回或重置，强烈建议您在使用钱包前做好钱包备份！',
     wallet_backup: '备份钱包',
+    wallet_backup_title_suffix: '钱包备份',
     wallet_default_name_prefix: "默认钱包",
+
+    wallet_disclaimer: '免责声明',
+    wallet_disclaimer_content: '请确认已经导出的钱包备份的安全性，任何钱包的丢失、被盗、忘记密码等行为产生的所示均与平台无关',
 
     //wallet edit
     wallet_edit_save_failed: '保存失败',
@@ -102,6 +108,10 @@ const localized_strings = {
     transfer_address_required: '收款人地址不能为空',
     transfer_address_invalid: '请输入有效的收款人地址',
     transfer_amount_required: '转账金额不能为空',
+    transfer_amount_format_hint: '转账金额必须为数字',
+    transfer_processing: '正在转账中...',
+    transfer_success: '转账成功',
+    transfer_fail: '转账失败',
 
     // Profile
     profile_wallet_manager: '钱包管理',
@@ -166,6 +176,21 @@ const localized_strings = {
     // qr scan
     qrScan_title: '扫一扫',
     qrScan_hint: '将钱包二维码放入方框内扫描',
+
+    //contacts
+    contact_list_nav_title: '联系人',
+    contact_add_nav_title: '添加联系人',
+    contact_edit_nav_title: '编辑联系人',
+    contact_add_place_holder_nickname: '联系人昵称',
+    contact_add_place_holder_address: '钱包地址',
+    contact_add_place_holder_cellphone: '手机号码',
+    contact_add_place_holder_email: '邮箱',
+    contact_add_place_holder_remarks: '备注',
+    contact_alert_name_required: '名字不能为空',
+    contact_alert_address_required: '钱包地址不能为空',
+    contact_alert_address_invalid: '钱包地址格式错误',
+    contact_alert_contact_exists: '联系人已存在',
+    contact_confirm_delete_contact: '确认删除联系人？'
 };
 
 export default localized_strings;

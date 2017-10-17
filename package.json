@@ -46,6 +46,7 @@
     "react-native-randombytes": "^3.0.0",
     "react-native-simple-toast": "^0.0.7",
     "react-native-slider": "^0.11.0",
+    "react-native-swipeout": "^2.2.2",
     "react-native-swiper": "^1.5.12",
     "react-native-tableview-simple": "^0.16.12",
     "react-native-tcp": "^3.3.0",

@@ -15,6 +15,7 @@ import LVWalletCreationNavigator from '../Wallet/LVWalletCreationNavigator';
 import WalletImportPage from '../Wallet/WalletImportPage';
 import LVFullScreenModalView from '../Common/LVFullScreenModalView';
 import WalletUtils from './WalletUtils';
+import LVWalletImportNavigator from './LVWalletImportNavigator';
 
 const createImage = require("../../assets/images/create_wallet.png");
 
@@ -48,9 +49,10 @@ export default class WalletCreateOrImportPage extends Component {
                 }}/>
                 </LVFullScreenModalView>
                 <LVFullScreenModalView ref={'importPage'}>
-                    <WalletImportPage dismissCallback={()=> {
+                    <LVWalletImportNavigator screenProps={{dismiss: ()=> {
                         this.refs.importPage.dismiss()
-                    }}/>
+                    } , from: WalletUtils.OPEN_IMPORT_FROM_LAUNCH
+                }}/>
                 </LVFullScreenModalView>
             </View>
         )

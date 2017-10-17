@@ -1,119 +1,122 @@
 /**
  * @flow
  */
-'use strict'
+'use strict';
 
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { View, TextInput, TouchableOpacity, Image, ViewPropTypes, Keyboard } from 'react-native';
 import { Base, DefaultStyles, LightStyles, WhiteStyles } from './styles';
 
-import LVColor from '../../styles/LVColor'
+import LVColor from '../../styles/LVColor';
 import PropTypes from 'prop-types';
 
-
 class MXCrossTextInput extends Component {
-
-  state: {
-    text: ?string,
-    hasFocus: boolean,
-  }
-
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      text: null,
-      hasFocus: false,
+    state: {
+        text: ?string,
+        hasFocus: boolean
     };
-    this.onChangeText = this.onChangeText.bind(this);
-  }
 
-  static propTypes = {
-    placeholder: PropTypes.string,
-    rounded: PropTypes.bool,
-    themeStyle: PropTypes.string,
-    style: ViewPropTypes.style,
-    secureTextEntry: PropTypes.bool,
-    onTextChanged: PropTypes.func,
-    withUnderLine: PropTypes.bool,
-    KeyboardType: PropTypes.string,
-  };
-
-  static defaultProps = {
-    withUnderLine: true,
- };
-
-  getTheme() {
-    switch (this.props.themeStyle) {
-      case "lightTheme":
-        return LightStyles;
-      case "whiteStyles":
-        return WhiteStyles;
-      default:
-        return DefaultStyles;
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            text: null,
+            hasFocus: false
+        };
+        this.onChangeText = this.onChangeText.bind(this);
     }
-  }
 
+    static propTypes = {
+        placeholder: PropTypes.string,
+        rounded: PropTypes.bool,
+        themeStyle: PropTypes.string,
+        style: ViewPropTypes.style,
+        secureTextEntry: PropTypes.bool,
+        onTextChanged: PropTypes.func,
+        withUnderLine: PropTypes.bool,
+        KeyboardType: PropTypes.string,
+        withClearButton: PropTypes.bool,
+        rightComponent: PropTypes.element
+    };
 
+    static defaultProps = {
+        withUnderLine: true,
+        withClearButton: true
+    };
 
-  onChangeText = function(newText: string) {
-    this.setState({
-      text:newText,
-      hasFocus: true
-    });
-    this.props.onTextChanged && this.props.onTextChanged(newText);
-  }
+    getTheme() {
+        switch (this.props.themeStyle) {
+            case 'lightTheme':
+                return LightStyles;
+            case 'whiteStyles':
+                return WhiteStyles;
+            default:
+                return DefaultStyles;
+        }
+    }
 
-  render() {
+    onChangeText = function(newText: string) {
+        this.setState({
+            text: newText
+        });
+        this.props.onTextChanged && this.props.onTextChanged(newText);
+    };
 
-    const { rounded, style,
-       placeholder, secureTextEntry, withUnderLine, keyboardType } = this.props;
+    onPressClear() {
+        this.setState({
+            text: '',
+            hasFocus: true
+        });
+        this.props.onTextChanged && this.props.onTextChanged('');
+    }
 
-    const theme = this.getTheme();
+    render() {
+        const { rounded, style, placeholder, secureTextEntry, withUnderLine, keyboardType } = this.props;
 
-    return (
-    <View style={
-      [Base.main,
-        style,
-        theme.main,
-        rounded ? Base.rounded : null,
-        !withUnderLine ? {borderBottomColor: 'transparent'} : null,
-        ]
-    }>
-      <TextInput
-        placeholder = {placeholder}
-        underlineColorAndroid = {'transparent'}
-        placeholderTextColor = { LVColor.text.placeHolder }
-        defaultValue={ this.props.defaultValue}
-        value={this.state.text}
-        tintColor={LVColor.primary}
-        keyboardType = { keyboardType }
-        style={[
-          Base.label,
-          theme.label,
-          ]}
-        secureTextEntry={secureTextEntry}
-        onChangeText = {this.onChangeText}
-        onFocus={() => this.setState({hasFocus : true})}
-        onEndEditing={() => this.setState({hasFocus : false})}
-      />
+        const theme = this.getTheme();
 
-      {this.state.text !== "" && this.state.hasFocus && <TouchableOpacity
-        style={Base.clearButton}
-        onPress={() => {
-          this.onChangeText("")
-        }}
-      >
-        <Image
-          source={require('../../assets/images/edit_clear.png')}
-        />
-    
-      </TouchableOpacity>
+        return (
+            <View
+                style={[
+                    Base.main,
+                    style,
+                    theme.main,
+                    rounded ? Base.rounded : null,
+                    !withUnderLine ? { borderBottomColor: 'transparent' } : null
+                ]}
+            >
+                <View style={[Base.textArea]}>
+                    <TextInput
+                        placeholder={placeholder}
+                        underlineColorAndroid={'transparent'}
+                        placeholderTextColor={LVColor.text.placeHolder}
+                        defaultValue={this.props.defaultValue}
+                        value={this.state.text}
+                        tintColor={LVColor.primary}
+                        keyboardType={keyboardType}
+                        style={[Base.label, theme.label]}
+                        secureTextEntry={secureTextEntry}
+                        onChangeText={this.onChangeText.bind(this)}
+                        onFocus={() => this.setState({ hasFocus: true })}
+                        onEndEditing={() => this.setState({ hasFocus: false })}
+                    />
+                </View>
 
-      }
-    </View>
+                <View style={[Base.buttonArea]}>
+                    {this.props.withClearButton &&
+                        this.state.text !== '' &&
+                        this.state.hasFocus && (
+                            <TouchableOpacity style={Base.clearButton} onPress={this.onPressClear.bind(this)}>
+                                <Image source={require('../../assets/images/edit_clear.png')} />
+                            </TouchableOpacity>
+                        )}
 
-    );
-  }
+                    {this.props.rightComponent && (
+                        <View style={[Base.rightComponent]}>{this.props.rightComponent}</View>
+                    )}
+                </View>
+            </View>
+        );
+    }
 }
 
 export default MXCrossTextInput;

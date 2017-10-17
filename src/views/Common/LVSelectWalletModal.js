@@ -29,16 +29,8 @@ export default class LVSelectWalletModal extends Component {
         onSelected: PropTypes.func
     };
 
-    state: {
-        selectedAddress: string
-    };
-
     constructor(props: any) {
         super(props);
-        const wallet = LVWalletManager.getSelectedWallet();
-        this.state = {
-            selectedAddress: wallet ? wallet.address : ''
-        };
 
         this.onClosed = this.onClosed.bind(this);
         this.onPressCloseButton = this.onPressCloseButton.bind(this);
@@ -57,8 +49,6 @@ export default class LVSelectWalletModal extends Component {
     _keyExtractor = (item, index) => item.address;
 
     _onPressItem = (address: string) => {
-        this.setState({ selectedAddress: address });
-
         LVWalletManager.setSelectedWallet(address);
         LVNotificationCenter.postNotification(LVNotification.walletChanged);
 
@@ -69,14 +59,17 @@ export default class LVSelectWalletModal extends Component {
         <LVSelectWalletItem
             name={item.name}
             address={item.address}
-            selected={item.address === this.state.selectedAddress}
+            selected={item.selected}
             onPressItem={this._onPressItem}
         />
     );
 
     render() {
+        const wallet = LVWalletManager.getSelectedWallet();
+        const selectedAddress = wallet ? wallet.address : ''
+
         const dataSource = LVWalletManager.wallets
-            .map((w, i) => ({ id: i, name: w.name, address: w.address }))
+            .map((w, i) => ({ id: i, name: w.name, address: w.address, selected: w.address == selectedAddress }))
             .sort((a, b) => b.id - a.id);
             
         return (
