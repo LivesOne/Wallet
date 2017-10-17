@@ -17,10 +17,12 @@ import Swipeout from 'react-native-swipeout';
 import { Separator } from 'react-native-tableview-simple';
 import { converAddressToDisplayableText} from '../../utils/MXStringUtils';
 import { LVConfirmDialog } from '../Common/LVDialog';
+import LVLocalization from '../../assets/localization';
 
 const AddIcon = require('../../assets/images/add_contact.png');
 const AvatarIcon = require('../../assets/images/contact_avatar.png');
 const ShowDetailsIcon = require('../../assets/images/show_detail_arrow.png');
+const EmptyContactListIndicatorIcon = require('../../assets/images/contant_list_empty.png');
 
 export default class ContactsManagerPage extends Component {
     static navigationOptions = {
@@ -62,7 +64,7 @@ export default class ContactsManagerPage extends Component {
         if(!contact) {
             return;
         }
-        
+
         ContactLib.instance.remove(contact);
         ContactLib.instance.saveToDisk();
         this.loadContacts();
@@ -138,7 +140,12 @@ export default class ContactsManagerPage extends Component {
                         keyExtractor={(item,index)=> item.name}
                         renderItem={this.renderRow}
                         ItemSeparatorComponent={()=><Separator insetLeft={0} insetRight={12.5} tintColor={LVColor.separateLine} />}
-                        />
+                        ListEmptyComponent={()=> 
+                            <View style={styles.emptyListContainer}>
+                                <Image source={EmptyContactListIndicatorIcon}/>
+                                <Text style={styles.emptyListTextStyle}>{LVLocalization.contact_empty_list_demonstration}</Text>
+                            </View>
+                        }/>
                 </View>
                 <LVConfirmDialog ref={'deleteConfirm'} 
                             title={LVStrings.alert_hint}  
@@ -191,5 +198,17 @@ const styles = StyleSheet.create({
     addressTextStyle: {
         fontSize: 12,
         color: LVColor.text.grey3
+    },
+    emptyListContainer: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        marginTop: 125
+    },
+    emptyListTextStyle: {
+        marginTop: 5,
+        color: LVColor.text.editTextContent,
+        fontSize: 15
     }
 });
