@@ -22,7 +22,9 @@ import LVNotification from '../../logic/LVNotification';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import { StringUtils } from '../../utils';
 
-import QRCode from 'react-native-qrcode';
+import QRCode from 'react-native-qrcode-svg';
+
+// import QRCode from 'react-native-qrcode';
 const receive_share = require("../../assets/images/receive_share.png");
 const receive_change_wallet = require("../../assets/images/receive_change_wallet.png");
 const receive_wallet_blank = require("../../assets/images/wallet_blank.png");

@@ -18,7 +18,8 @@ import { StringUtils } from '../../utils';
 
 
 
-import QRCode from 'react-native-qrcode';
+// import QRCode from 'react-native-qrcode';
+import QRCode from 'react-native-qrcode-svg';
 
 
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
