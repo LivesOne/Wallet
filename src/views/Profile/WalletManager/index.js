@@ -107,7 +107,9 @@ export class WalletManagerScreen extends Component {
                                         <View style={styles.cellRightInnnerContainerStyle}>
                                             <View style={styles.cellRightTopPanelStyle}>
                                                 <View style={styles.cellRightTopDetailsPanelStyle}>
-                                                    <Text style={styles.cellWalletNameTextStyle}>{item.name}</Text>
+                                                    <Text style={styles.cellWalletNameTextStyle} 
+                                                        ellipsizeMode='tail' 
+                                                        numberOfLines={1}>{item.name}</Text>
                                                     <Text style={styles.cellWalletAddressTextStyle}>{converAddressToDisplayableText(item.address,9,9)}</Text>
                                                 </View>
                                                 <Image source={ShowDetailsIcon} style={styles.cellRightTopShowDetailsIconStyle}/>
