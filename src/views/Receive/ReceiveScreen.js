@@ -20,7 +20,7 @@ import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 import LVWalletManager from '../../logic/LVWalletManager';
 import LVNotification from '../../logic/LVNotification';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
-
+import { StringUtils } from '../../utils';
 
 import QRCode from 'react-native-qrcode';
 const receive_share = require("../../assets/images/receive_share.png");
@@ -160,8 +160,7 @@ class ReceiveScreen extends Component {
                     {LVStrings.receive_name}
                 </Text>
                 <Text ellipsizeMode="middle" numberOfLines={1} style={styles.address}>
-                    {this.state.wallet.address}
-                   
+                    {StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9)}
                 </Text>
 
                 <QRCode
@@ -195,12 +194,12 @@ class ReceiveScreen extends Component {
                 <MxImage source={receive_share}
                     onPress = { () => {
                         Share.share({
-                            url: 'http://bam.tech',
-                            title: 'Share your code?',
-                            message:'http://m.sohu.com',
+                            url: this.state.wallet.address,
+                            title: 'Share your wallet address ?',
+                            message: this.state.wallet.address,
                           }, {
                             // Android only:
-                            dialogTitle: 'Share your code for title',
+                            dialogTitle: 'Share your wallet address ',
                             // iOS only:
                             excludedActivityTypes: [
                               'com.apple.UIKit.activity.PostToTwitter'
