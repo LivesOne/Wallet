@@ -199,7 +199,7 @@ class TransferScreen extends Component {
                         <ImageTextInput 
                             style= {styles.textInput} 
                             placeholder={LVStrings.transfer_payee_address}
-                            onAddClicked={() => {alert('add contracts')}}
+                            onAddClicked={() => {this.props.navigation.navigate('ContactList')}}
                             value={this.state.addressIn}
                             onScanClicked={() => {this.setState({ showQrScanModal: true })}}
                             onTextChanged={(newText) => {this.setState({addressIn: newText})}}/>

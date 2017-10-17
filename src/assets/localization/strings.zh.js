@@ -42,7 +42,7 @@ const localized_strings = {
     wallet_importing_wallet: '导入钱包中...',
     wallet_import_private_key_error: '私钥格式错误',
     wallet_import_keystore_error: 'Keystore格式错误',
-    wallet_import_keystore_or_pwd_empty: 'Keysotre或者密码不能为空！',
+    wallet_import_keystore_or_pwd_empty: 'Keystore或者密码不能为空！',
     wallet_import_private_key_required: '私钥不能为空！',
     wallet_import_success: '导入成功！',
     wallet_import_fail: '导入失败！',
