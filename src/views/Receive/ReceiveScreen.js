@@ -188,6 +188,7 @@ class ReceiveScreen extends Component {
                 fgColor='black'/>
 
                 <MXButton
+                    rounded = {true}
                     style={styles.button}
                     title={LVStrings.receive_copy}
                     onPress = {() => {
@@ -197,6 +198,7 @@ class ReceiveScreen extends Component {
                     themeStyle={"active"}
                 /> 
                 <MXButton
+                    rounded = {true} 
                     title={LVStrings.receive_save}
                     style={styles.button_save}
                     onPress = {() => {
