@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  Venus
+
+  Created by LiuCharles on 18/10/2017.
+  Copyright © 2017 Facebook. All rights reserved.
+*/
+"CFBundleDisplayName" = "共生钱包";
+"CFBundleName" = "共生钱包";
