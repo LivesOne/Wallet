@@ -60,7 +60,7 @@ const localized_strings = {
     wallet_create_password_required: '请输入密码',
     wallet_create_confimpassword_required: '请输入确认密码',
     wallet_create_password_mismatch: '密码与确认密码不匹配',
-    wallet_create_name_unavailable: '钱包名字不可用',
+    wallet_create_name_unavailable: '钱包名字已存在',
     wallet_create_success_comment: '平台不储存用户的私人密码，密码无法找回或重置，强烈建议您在使用钱包前做好钱包备份！',
     wallet_backup: '备份钱包',
     wallet_backup_title_suffix: '钱包备份',
