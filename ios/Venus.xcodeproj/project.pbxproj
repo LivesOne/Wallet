@@ -323,13 +323,6 @@
 			remoteGlobalIDString = 15209BEF1D250F63000D0F44;
 			remoteInfo = LRDRCTSimpleToast;
 		};
-		56738D931F960A5B00EA481F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3F684093B72345E7B56476AC /* SplashScreen.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3D7682761D8E76B80014119E;
-			remoteInfo = SplashScreen;
-		};
 		5E9157321DD0AC6500FF2AA8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */;
@@ -469,7 +462,7 @@
 		562622B31F7517B2009581B6 /* LVReactExport.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LVReactExport.m; sourceTree = "<group>"; };
 		562622CF1F7527B6009581B6 /* NSString+LVHexStringToBinary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+LVHexStringToBinary.h"; sourceTree = "<group>"; };
 		562622D01F7527B6009581B6 /* NSString+LVHexStringToBinary.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+LVHexStringToBinary.m"; sourceTree = "<group>"; };
-		56738DAF1F961A3800EA481F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		56738E281F96F58800EA481F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		62840C1FE64D4FB1A2C3C2EA /* TcpSockets.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = TcpSockets.xcodeproj; path = "../node_modules/react-native-tcp/ios/TcpSockets.xcodeproj"; sourceTree = "<group>"; };
 		63E6F7107ADD48448F24A136 /* RCTCamera.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTCamera.xcodeproj; path = "../node_modules/react-native-camera/ios/RCTCamera.xcodeproj"; sourceTree = "<group>"; };
@@ -773,14 +766,6 @@
 			isa = PBXGroup;
 			children = (
 				56738CD01F94511E00EA481F /* libLRDRCTSimpleToast.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		56738D901F960A5B00EA481F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				56738D941F960A5B00EA481F /* libSplashScreen.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1125,11 +1110,7 @@
 					ProjectRef = A1852B34075C485E97D33AAC /* RNSVG.xcodeproj */;
 				},
 				{
-<<<<<<< HEAD
 					ProductGroup = C48308BA1F95FA300036FDC5 /* Products */;
-=======
-					ProductGroup = 56738D901F960A5B00EA481F /* Products */;
->>>>>>> 25b660bb4e5e2f5d857aa3f2f97f713bc8c765e3
 					ProjectRef = 3F684093B72345E7B56476AC /* SplashScreen.xcodeproj */;
 				},
 				{
@@ -1397,13 +1378,6 @@
 			remoteRef = 56738CCF1F94511E00EA481F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		56738D941F960A5B00EA481F /* libSplashScreen.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libSplashScreen.a;
-			remoteRef = 56738D931F960A5B00EA481F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1621,7 +1595,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				13B07FB21A68108700A75B9A /* Base */,
-				56738DAF1F961A3800EA481F /* zh-Hans */,
+				56738E281F96F58800EA481F /* zh-Hans */,
 			);
 			name = LaunchScreen.xib;
 			path = Venus;
