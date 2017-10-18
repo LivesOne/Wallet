@@ -47,7 +47,6 @@ export class ModifyWalletPwd extends Component {
         const {params} = this.props.navigation.state;
         this.setState({
             wallet: params.wallet,
-            curPwd: params.wallet.password,
         })
     }
 
