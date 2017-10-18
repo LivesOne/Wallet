@@ -89,6 +89,12 @@ export class ModifyWalletPwd extends Component {
             return;
         }
 
+        if (newConfirmPwd === wallet.password) {
+            this.setState({alertMessage:LVStrings.wallet_edit_password_same });
+            this.refs.alert.show();
+            return;
+        }
+
         this.refs.toast.show();
         wallet.password = newPwd;
         setTimeout(async ()=> {

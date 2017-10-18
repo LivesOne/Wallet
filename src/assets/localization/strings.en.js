@@ -81,6 +81,7 @@ const localized_strings = {
     wallet_edit_new_name_required : 'new name required',
     wallet_edit_equal_to_old : 'new name is equal to the old',
     wallet_editing : 'wallet editing...',
+    wallet_edit_password_same: 'New passward is equal to the Old',
     wallet_exporting : 'wallet exporting...',
     wallet_export_private_key_copied_to_clipboard: 'The private key has been copied to the clipboard',
     wallet_delete_hint: 'Are your sure to delete the wallet?',
