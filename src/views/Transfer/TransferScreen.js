@@ -160,8 +160,10 @@ class TransferScreen extends Component {
         }
 
         if (balance < MIN_BALANCE_ALLOW_TO_TRANSFER || balance < minerGap + amount) {
-            this.setState({alertMessage:LVStrings.transfer_eth_insufficient });
-            this.refs.alert.show();
+            // this.setState({alertMessage:LVStrings.transfer_eth_insufficient });
+            // this.refs.alert.show();
+            this.props.navigation.navigate("ReceiveTip")
+            
             return;
         }
         this.refs.inputPwdDialog.show();
