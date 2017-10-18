@@ -22,6 +22,7 @@ export function convertAmountToCurrencyString(amount: number, thousandsSeparator
 
     if (arr.length === 2) {
         result = result + '.' + decimal;
+        result = parseFloat(result).toString();
     }
 
     return result;

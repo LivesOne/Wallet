@@ -46,6 +46,7 @@ const localized_strings = {
     wallet_import_private_key_required: 'Private key is required',
     wallet_import_success: 'Import success!',
     wallet_import_fail: 'Import failed',
+    wallet_password_incorrect: 'Password incorrect',
 
     wallet_create_wallet: 'Create wallet',
     wallet_creating_wallet: 'Creating wallet...',
