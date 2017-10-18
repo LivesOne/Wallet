@@ -65,7 +65,7 @@ export default class WalletCreatePage extends Component {
             return;
         }
 
-        if(!/(\d|\w){6,12}/i.test(this.state.password)) {
+        if(!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,12}$/i.test(this.state.password)) {
             this.setState({alertMessage:LVStrings.wallet_import_private_password_hint });
             this.refs.alert.show();
             return;
