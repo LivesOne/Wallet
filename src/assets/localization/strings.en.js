@@ -42,7 +42,7 @@ const localized_strings = {
     wallet_importing_wallet: 'Importing wallet...',
     wallet_import_private_key_error: 'Private key format error',
     wallet_import_keystore_error: 'Keystore format error',
-    wallet_import_keystore_or_pwd_empty: 'Keysotre or password can\'t be empty',
+    wallet_import_keystore_or_pwd_empty: 'Keystore or password can\'t be empty',
     wallet_import_private_key_required: 'Private key is required',
     wallet_import_success: 'Import success!',
     wallet_import_fail: 'Import failed',
@@ -191,7 +191,8 @@ const localized_strings = {
     contact_alert_address_required: 'Address is required',
     contact_alert_address_invalid: 'Wrong address format',
     contact_alert_contact_exists: 'Contact already exists',
-    contact_confirm_delete_contact: 'Are you sure to delete this contact?'
+    contact_confirm_delete_contact: 'Are you sure to delete this contact?',
+    contact_empty_list_demonstration: 'You haven\'t added any contact yet'
 };
 
 export default localized_strings;

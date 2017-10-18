@@ -42,7 +42,7 @@ const localized_strings = {
     wallet_importing_wallet: '导入钱包中...',
     wallet_import_private_key_error: '私钥格式错误',
     wallet_import_keystore_error: 'Keystore格式错误',
-    wallet_import_keystore_or_pwd_empty: 'Keysotre或者密码不能为空！',
+    wallet_import_keystore_or_pwd_empty: 'Keystore或者密码不能为空！',
     wallet_import_private_key_required: '私钥不能为空！',
     wallet_import_success: '导入成功！',
     wallet_import_fail: '导入失败！',
@@ -191,7 +191,8 @@ const localized_strings = {
     contact_alert_address_required: '钱包地址不能为空',
     contact_alert_address_invalid: '钱包地址格式错误',
     contact_alert_contact_exists: '联系人已存在',
-    contact_confirm_delete_contact: '确认删除联系人？'
+    contact_confirm_delete_contact: '确认删除联系人？',
+    contact_empty_list_demonstration: '您还未添加联系人'
 };
 
 export default localized_strings;

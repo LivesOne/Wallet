@@ -31,7 +31,9 @@ export default class LVFullScreenModalView extends Component {
             backButtonClose={false}
             backdropOpacity={0.5}
             animationDuration={300}
+            swipeToClose={false}
             backdropPressToClose={false}
+            keyboardTopOffset={0}
             easing={Easing.elastic(0.75)}
         >
             {this.props.children}
