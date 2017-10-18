@@ -22,6 +22,7 @@ import WalletUtils from './WalletUtils';
 import LVNotification from '../../logic/LVNotification';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import PropTypes from 'prop-types';
+import console from 'console-browserify';
 const foundation = require('../../foundation/wallet.js');
 
  export default class AssetsImportPage extends Component {
@@ -63,6 +64,7 @@ const foundation = require('../../foundation/wallet.js');
     }
 
     componentWillMount = () => {
+      LVNotificationCenter.addObserver(this, LVNotification.foundationError, this.onImportError.bind(this));
       let fromPage = WalletUtils.OPEN_IMPORT_FROM_LAUNCH;
       if (this.props.screenProps && this.props.screenProps.from) {
         fromPage = this.props.screenProps.from;
@@ -70,7 +72,20 @@ const foundation = require('../../foundation/wallet.js');
       console.log('from = ' + fromPage);
       this.setState({fromPage: fromPage});
     }
-    
+
+    componentWillUnmount() {
+      LVNotificationCenter.removeObserver(this);
+    }
+
+    onImportError(errorObj: Object) {
+      console.log(JSON.stringify(errorObj));
+      this.refs.toast.dismiss();
+      setTimeout(() => {
+        let error = WalletUtils.getInnerError(errorObj.error, LVStrings.wallet_import_fail);
+        this.setState({alertMessage: error });
+        this.refs.alert.show();
+      }, 500);
+    }
 
     _onHeaderPressed = (leftPressed: boolean) => {
       this.setState({ leftPressed: leftPressed })
@@ -100,9 +115,7 @@ const foundation = require('../../foundation/wallet.js');
     }
 
     async onPrivateImportPress() {
-      const privateKey = this.state.privateKey;
-      const privateKeyPwd = this.state.privateKeyPwd;
-      const privateKeyPwdAgain = this.state.privateKeyPwdAgain;
+      const { privateKey, privateKeyPwd,privateKeyPwdAgain}  = this.state;
 
       if(!privateKey) {
         this.setState({alertMessage:LVStrings.wallet_import_private_key_required });
@@ -145,9 +158,9 @@ const foundation = require('../../foundation/wallet.js');
       try {
         let defaultName = await WalletUtils.getDefaultName();
         let wallet = await LVWalletManager.importWalletWithPrivatekey(defaultName, privateKeyPwd, privateKey);
+        this.refs.toast.dismiss();
         LVWalletManager.addWallet(wallet);
         LVWalletManager.saveToDisk();
-        this.refs.toast.dismiss();
         this.setState({alertMessage: LVStrings.wallet_import_success });
         this.refs.alert.show();
         setTimeout(()=>{
@@ -158,14 +171,12 @@ const foundation = require('../../foundation/wallet.js');
         this.setState({alertMessage: LVStrings.wallet_import_fail });
         this.refs.alert.show();
       }
-    },500);
+    },100);
   }
 
 
     async onKeystoreImportPress() {
-      const keyStore = this.state.keyStore;
-      const keyStorePwd = this.state.keyStorePwd;
-
+      const { keyStore, keyStorePwd } = this.state;
       if (!keyStore || !keyStorePwd) {
         this.setState({alertMessage: LVStrings.wallet_import_keystore_or_pwd_empty });
         this.refs.alert.show();
@@ -176,7 +187,7 @@ const foundation = require('../../foundation/wallet.js');
         this.setState({alertMessage: LVStrings.wallet_import_private_password_hint });
         this.refs.alert.show();
         return;
-      }``
+      }
 
       if (!WalletUtils.isValidKeyStoreStr(keyStore)) {
         this.setState({alertMessage: LVStrings.wallet_import_keystore_error });
@@ -190,12 +201,14 @@ const foundation = require('../../foundation/wallet.js');
           let defaultName = await WalletUtils.getDefaultName();
           WalletUtils.log(JSON.stringify(JSON.parse(keyStore)));
           let wallet = await LVWalletManager.importWalletWithKeystore(defaultName, keyStorePwd, JSON.parse(keyStore));
-          LVWalletManager.addWallet(wallet);
-          LVWalletManager.saveToDisk();
-          this.refs.toast.dismiss();
-          this.setState({alertMessage: LVStrings.wallet_import_success });
-          this.refs.alert.show();
-          setTimeout(()=>{this.exitWhenSuccess()},500);
+          if (wallet) {
+            LVWalletManager.addWallet(wallet);
+            LVWalletManager.saveToDisk();
+            this.refs.toast.dismiss();
+            this.setState({alertMessage: LVStrings.wallet_import_success });
+            this.refs.alert.show();
+            setTimeout(()=>{this.exitWhenSuccess()},500);
+          }
         } catch(e) {
           this.refs.toast.dismiss();
           this.setState({alertMessage: LVStrings.wallet_import_fail });

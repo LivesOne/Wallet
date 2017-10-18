@@ -139,14 +139,14 @@ class TestComponent extends Component {
 
     async testTransaction(wallet: Object) {
         const valueArray = ['1'];
-        try {
-            for(var i =0; i < valueArray.length; i++) {
-                const result4 = await TransferLogic.transaction('niceToMeetYou', '0x9224A9f81Ac30F0E3B568553bf9a7372EE49548C', valueArray[i], wallet);
-                this.log(JSON.stringify(result4));
-            }   
-        } catch(e) {
-            this.log(e.message);
-        }
+        // try {
+        //     for(var i =0; i < valueArray.length; i++) {
+        //         const result4 = await TransferLogic.transaction('niceToMeetYou', '0x9224A9f81Ac30F0E3B568553bf9a7372EE49548C', valueArray[i], wallet);
+        //         this.log(JSON.stringify(result4));
+        //     }   
+        // } catch(e) {
+        //     this.log(e.message);
+        // }
     }
 
     testWalletValidator() {
