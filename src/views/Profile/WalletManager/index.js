@@ -51,7 +51,7 @@ export class WalletManagerScreen extends Component {
     }
     
     componentDidMount() {
-        LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
+        LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletChange);
         this.setState({
             wallets: LVWalletManager.getWallets()
         });
