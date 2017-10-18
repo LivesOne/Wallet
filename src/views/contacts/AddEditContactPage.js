@@ -211,8 +211,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-start',
-        paddingLeft: 12.5,
-        paddingRight: 12.5
+        alignItems: 'center'
     },
     textInputStyle: {
         height: 60
