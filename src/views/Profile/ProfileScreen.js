@@ -44,6 +44,7 @@ export default class ProfleScreen extends Component {
             <View style={styles.container}>
                 <MXNavigatorHeader
                     title = {LVStrings.profile}
+                    hideLeft={true}
                     style={{backgroundColor:'#f8f9fb'}}
                     titleStyle={{color:'#6d798a'}}
                 />
