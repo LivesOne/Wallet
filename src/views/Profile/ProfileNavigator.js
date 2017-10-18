@@ -3,10 +3,11 @@
  * File: src/views/Profile/ProfileNavigator.js
  * @flow
  */
-"use strict";
+'use strict';
 
 import React from 'react';
-import { StackNavigator } from "react-navigation";
+import { Animated, Easing, Platform } from 'react-native';
+import { StackNavigator } from 'react-navigation';
 
 import ProfileScreen from './ProfileScreen';
 import { WalletManagerScreen } from './WalletManager';
@@ -18,16 +19,49 @@ import WalletImportPage from '../Wallet/WalletImportPage';
 import ContactsManagerPage from '../contacts/ContactsManagerPage';
 import AddEditContactPage from '../contacts/AddEditContactPage';
 
-const ProfileNavigator = StackNavigator({
-    Profile: { screen: ProfileScreen },
-    WalletManager: { screen: WalletManagerScreen },
-    WalletDetailsPage : {screen: WalletDetailsPage},
-    ModifyWalletName: { screen: ModifyWalletName },
-    ModifyWalletPwd: { screen: ModifyWalletPwd },
-    WalletCreatePage: {screen: WalletCreatePage},
-    WalletImportPage: {screen : WalletImportPage},
-    ContactList: {screen: ContactsManagerPage},
-    AddEditContactPage: {screen: AddEditContactPage}
-});
+const ProfileNavigator = StackNavigator(
+    {
+        Profile: { screen: ProfileScreen },
+        WalletManager: { screen: WalletManagerScreen },
+        WalletDetailsPage: { screen: WalletDetailsPage },
+        ModifyWalletName: { screen: ModifyWalletName },
+        ModifyWalletPwd: { screen: ModifyWalletPwd },
+        WalletCreatePage: { screen: WalletCreatePage },
+        WalletImportPage: { screen: WalletImportPage },
+        ContactList: { screen: ContactsManagerPage },
+        AddEditContactPage: { screen: AddEditContactPage }
+    },
+    {
+        headerMode: 'none',
+        mode: Platform.OS === 'ios' ? 'card' : 'modal',
+        navigationOptions: {
+            gesturesEnabled: false
+        },
+        transitionConfig: Platform.OS === 'ios' ? () => {} : () => ({
+            transitionSpec: {
+                duration: 300,
+                easing: Easing.out(Easing.poly(4)),
+                timing: Animated.timing
+            },
+            screenInterpolator: sceneProps => {
+                const { layout, position, scene } = sceneProps;
+                const { index } = scene;
+
+                const height = layout.initHeight;
+                const translateY = position.interpolate({
+                    inputRange: [index - 1, index, index + 1],
+                    outputRange: [height, 0, 0]
+                });
+
+                const opacity = position.interpolate({
+                    inputRange: [index - 1, index - 0.99, index],
+                    outputRange: [0, 1, 1]
+                });
+
+                return { opacity, transform: [{ translateY }] };
+            }
+        })
+    }
+);
 
 export default ProfileNavigator;

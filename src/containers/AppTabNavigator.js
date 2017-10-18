@@ -71,8 +71,9 @@ const AppTabNavigator = TabNavigator(
             style: {
                 backgroundColor: LVColor.tabBar.background
             },
-            activeTintColor: LVColor.tabBar.tintColor
+            activeTintColor: LVColor.tabBar.tintColor,
         },
+        swipeEnabled: false,
         mode: Platform.OS === 'ios' ? 'modal' : 'card',
         navigationOptions: {
             header: null,
