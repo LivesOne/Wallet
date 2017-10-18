@@ -23,7 +23,7 @@ const localized_strings = {
 
     //receive
     receive_title:'我的收款码',
-    receive_name:'钱包地址',
+    receive_name:'钱包地址',
     receive_copy:'复制地址',
     receive_save:'保存二维码',
     receive_empty:'您还未添加钱包',
