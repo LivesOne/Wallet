@@ -16,6 +16,7 @@ import * as ContactLib from '../../logic/LVContactManager';
 import { isEmptyString } from '../../utils/MXUtils';
 import { isAddress } from '../../utils/MXStringUtils';
 import LVDialog from '../Common/LVDialog';
+import LVQrScanModal from '../Common/LVQrScanModal';
 import LVLocalization from '../../assets/localization';
 import MXTouchableImage from '../../components/MXTouchableImage';
 
@@ -38,7 +39,8 @@ export default class AddEditContactPage extends Component {
         alertMessage: string,
         navTitle: string,
         mode: string,
-        editModel: ?Object
+        editModel: ?Object,
+        showQrScanModal: boolean
     }
 
     onAddingDone : Function;
@@ -55,7 +57,8 @@ export default class AddEditContactPage extends Component {
             alertMessage: '',
             navTitle: '',
             mode: 'add',
-            editModel: null
+            editModel: null,
+            showQrScanModal: false
         };
 
         this.onAddingDone = this.onAddingDone.bind(this);
@@ -128,7 +131,9 @@ export default class AddEditContactPage extends Component {
     }
 
     onPressScan() {
-        alert('onPressScan');
+        this.setState({
+            showQrScanModal:true
+        });
     }
 
     render() {
@@ -181,6 +186,10 @@ export default class AddEditContactPage extends Component {
                              onTextChanged= {(text) => this.setState({remarks: text})}/>
                     </View>
                 </ScrollView>
+                <LVQrScanModal 
+                    barcodeReceived={(event)=>{this.setState({address: event.data})}} 
+                    isOpen= {this.state.showQrScanModal}
+                    onClosed = {()=>{this.setState({ showQrScanModal: false })}}/>
                 <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
             </View>
         );
