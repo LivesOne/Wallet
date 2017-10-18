@@ -77,6 +77,12 @@ export class ModifyWalletPwd extends Component {
             return;
         }
 
+        if (!WalletUtils.isPasswordValid(newPwd) || !WalletUtils.isPasswordValid(newConfirmPwd)) {
+            this.setState({alertMessage:LVStrings.wallet_import_private_password_hint });
+            this.refs.alert.show();
+            return;
+        }
+
         if (newPwd !== newConfirmPwd) {
             this.setState({alertMessage:LVStrings.wallet_create_password_mismatch });
             this.refs.alert.show();
