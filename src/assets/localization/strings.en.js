@@ -28,6 +28,10 @@ const localized_strings = {
     receive_save:'Save the QR code',
     receive_empty:'You haven’t add a wallet yet',
     receive_save_finish:'Save finish',
+
+    // inner error
+    inner_common_error: 'Inner error',
+    inner_error_password_mismatch: 'Password mismatch',
     
     // Wallet
     wallet_import: 'Import',

@@ -69,6 +69,11 @@ const localized_strings = {
     wallet_disclaimer: '免责声明',
     wallet_disclaimer_content: '请确认已经导出的钱包备份的安全性，任何钱包的丢失、被盗、忘记密码等行为产生的所示均与平台无关',
 
+
+      // inner error
+      inner_common_error: '内部错误',
+      inner_error_password_mismatch: '密码不匹配',
+
     //wallet edit
     wallet_edit_save_failed: '保存失败',
     wallet_edit_cur_pwd_required : '当前密码密码不能为空',

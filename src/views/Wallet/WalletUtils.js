@@ -4,6 +4,7 @@ import LVPersistent from '../../logic/LVPersistent';
 
 var Ajv = require('ajv');
 var ajv = new Ajv({allErrors: true});
+const eth_local = require('../../foundation/ethlocal.js');
 
 import LVStrings from '../../assets/localization';
 
@@ -100,6 +101,15 @@ export default class WalletUtils {
 
     static isPrivateKeyValid(privateKey: string) {
         return privateKey && privateKey.length === 64 && privateKey.match(/^[0-9a-f]+$/i);
+    }
+
+    static getInnerError(errorMessage: string, defaultError: string = LVStrings.inner_common_error) {
+        switch(errorMessage) {
+            case eth_local.errors.passwordMismatch:
+              return LVStrings.inner_error_password_mismatch;
+            default: 
+              return defaultError;
+        }
     }
 
     static async getDefaultName() {

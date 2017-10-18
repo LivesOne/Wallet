@@ -61,11 +61,14 @@ module.exports = {
       p: 8
     }
   },
+  errors : {
+    passwordMismatch: 'message authentication code mismatch',
+  },
   internalErrorHandleHook: null,
   internalErrorHandle: function(error) {
     console.log(error);
-    if(internalErrorHandleHook && typeof internalErrorHandleHook === 'function') {
-      internalErrorHandleHook(error);
+    if(this.internalErrorHandleHook && typeof this.internalErrorHandleHook === 'function') {
+      this.internalErrorHandleHook({error: error.message});
     }
   }, 
   myTest : function(testFunc) {
@@ -283,7 +286,7 @@ module.exports = {
     // use scrypt as key derivation function
     if (options.kdf === "scrypt") {
       if (isFunction(cb)) {
-        setTimeout(function () {
+        setTimeout(() => {
           lvExport.libscrypt(
             originPassword, 
             to_hex(salt),
@@ -294,7 +297,8 @@ module.exports = {
               try {
                 cb(Buffer.from(result));
               } catch (error) {
-                  this.internalErrorHandle(error);
+                console.log(error.message);
+                  self.internalErrorHandle(error);
               }
           });
         }, 0);
@@ -491,7 +495,7 @@ module.exports = {
     function verifyAndDecrypt(derivedKey, salt, iv, ciphertext, algo) {
       var key;
       if (self.getMAC(derivedKey, ciphertext) !== keyObjectCrypto.mac) {
-        throw new Error("message authentication code mismatch");
+        throw new Error(self.errors.passwordMismatch);
       }
       if (keyObject.version === "1") {
         key = keccak256(derivedKey.slice(0, 16)).slice(0, 16);

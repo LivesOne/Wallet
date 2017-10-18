@@ -4,6 +4,7 @@
  * Author: Charles Liu
  * @flow
  */
+import WalletUtils from '../views/Wallet/WalletUtils';
 
 const eth_local = require('./ethlocal.js');
 const ethUtil = require('ethereumjs-util');
@@ -96,11 +97,16 @@ module.exports = {
 
         const self = this;
 
-        eth_local.recover(password, keyStoreObject, function(privateKeyBuffer) {
-            const privateKey = privateKeyBuffer.toString('hex');
-
-            self.createKeyStore(password, privateKey, callback);
-        });
+        try {
+            eth_local.recover(password, keyStoreObject, function(privateKeyBuffer) {
+                const privateKey = privateKeyBuffer.toString('hex');
+    
+                self.createKeyStore(password, privateKey, callback);
+            });
+        } catch(e) {
+            WalletUtils.log(e.message);
+        }
+       
     },
 
     /**
