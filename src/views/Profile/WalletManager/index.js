@@ -61,7 +61,6 @@ export class WalletManagerScreen extends Component {
         LVNotificationCenter.removeObserver(this);
     }
     
-
     onCreateWalletPressed() {
         this.refs.creationPage.show();
     }
@@ -71,6 +70,11 @@ export class WalletManagerScreen extends Component {
     }
 
     handleWalletChange() {
+        const wallets = LVWalletManager.getWallets();
+        if(wallets.length === 0){
+            return;
+        }
+
         this.setState({
             wallets: LVWalletManager.getWallets()
         });
