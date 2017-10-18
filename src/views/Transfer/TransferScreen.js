@@ -194,7 +194,7 @@ class TransferScreen extends Component {
         this.refs.loading.show();
         setTimeout(async ()=> {
             let rst = await TransferLogic.transaction(addressIn, value, transactionParams.nonce,
-                transactionParams.gasLimit, transactionParams.gasPrice, transactionParams.token, wallet);
+                transactionParams.gasLimit, transactionParams.gasPrice, transactionParams.token, transactionParams.chainID, wallet);
             this.refs.loading.dismiss();
             let success = rst && rst.result;
             if (success) {   
