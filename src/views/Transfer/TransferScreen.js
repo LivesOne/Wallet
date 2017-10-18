@@ -30,6 +30,7 @@ import TransferLogic from './TransferLogic';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import LVNotification from '../../logic/LVNotification';
 import LVLoadingToast from '../Common/LVLoadingToast';
+import Moment from 'moment';
 
 const MIN_BALANCE_ALLOW_TO_TRANSFER = 0.01;
 const GAP_MIN_VALUE = 0.02;
@@ -199,6 +200,13 @@ class TransferScreen extends Component {
             let success = rst && rst.result;
             if (success) {   
                 LVNotificationCenter.postNotification(LVNotification.balanceChanged);
+                LVNotificationCenter.postNotification(LVNotification.transcationCreated, {
+                    transactionHash: rst.transactionHash,
+                    from: wallet.address,
+                    to: addressIn,
+                    value: amount,
+                    timestamp: Moment().format('X'),
+                });
             }
             setTimeout(() => {
                 this.setState({alertMessage: success ? LVStrings.transfer_success : LVStrings.transfer_fail });
