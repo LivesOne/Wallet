@@ -38,7 +38,7 @@ class TransactionRecordsScreen extends Component {
         this.state = {
             startDate: '',
             endDate: '',
-            transactionList: LVTransactionRecordManager.transactionRecords
+            transactionList: LVTransactionRecordManager.records
         };
         this.onStartDateChange = this.onStartDateChange.bind(this);
         this.onEndDateChange = this.onEndDateChange.bind(this);
