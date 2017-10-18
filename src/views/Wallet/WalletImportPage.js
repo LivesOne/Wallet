@@ -106,9 +106,9 @@ const foundation = require('../../foundation/wallet.js');
     exitWhenSuccess = () => {
       const fromPage = this.state.fromPage;
       if (fromPage === WalletUtils.OPEN_IMPORT_FROM_LAUNCH) {
-        LVNotificationCenter.postNotification(LVNotification.walletImported)
+          LVNotificationCenter.postNotification(LVNotification.walletImported)
       } 
-
+      LVNotificationCenter.postNotification(LVNotification.walletChanged);
       if (this.props.screenProps.dismiss) {
         this.props.screenProps.dismiss();
       }
@@ -171,7 +171,7 @@ const foundation = require('../../foundation/wallet.js');
         this.setState({alertMessage: LVStrings.wallet_import_fail });
         this.refs.alert.show();
       }
-    },100);
+    },500);
   }
 
 
