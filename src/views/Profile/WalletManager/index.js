@@ -21,6 +21,8 @@ import LVWalletManager from '../../../logic/LVWalletManager';
 import { greyNavigationBackIcon } from '../../../assets/LVIcons';
 import LVWalletImportNavigator from '../../Wallet/LVWalletImportNavigator';
 import WalletUtils from '../../Wallet/WalletUtils';
+import LVNotificationCenter from '../../../logic/LVNotificationCenter';
+import LVNotification from '../../../logic/LVNotification';
 const WalletIcon = require('../../../assets/images/wallet_grey.png');
 const ShowDetailsIcon = require('../../../assets/images/show_detail_arrow.png');
 
@@ -47,6 +49,15 @@ export class WalletManagerScreen extends Component {
         this.state = {
             wallets: []
         };
+    }
+
+    componentWillMount() {
+        LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange.bind(this))
+    }
+
+
+    componentWillUnMount() {
+        LVNotificationCenter.removeObserver(this);
     }
     
     componentDidMount() {

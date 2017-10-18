@@ -17,7 +17,7 @@ import LVLoadingToast from '../../Common/LVLoadingToast';
 import Toast from 'react-native-simple-toast';
 import LVNotificationCenter from '../../../logic/LVNotificationCenter';
 import LVNotification from '../../../logic/LVNotification';
-import LVDialog, { LVConfirmDialog, LVInputDialog } from '../../Common/LVDialog';
+import LVDialog, { LVConfirmDialog } from '../../Common/LVDialog';
 
 const IconWalletModifyName = require('../../../assets/images/wallet_modify_name.png');
 const IconWalletModifyPwd = require('../../../assets/images/wallet_modify_pwd.png');
@@ -95,13 +95,12 @@ export class WalletDetailsPage extends Component {
     }
 
     async handleWalletChanged() {
-        const wallet = await LVWalletManager.getSelectedWallet();
+        const wallet = await LVWalletManager.findWalletWithAddress(this.state.walletAddress);
         if (wallet) {
             console.log('new wallet = ' + JSON.stringify(wallet));
             this.setState({
                 wallet: wallet,
                 displayTitle: convertAmountToCurrencyString(wallet.lvt, ',', 0),
-                walletAddress: wallet.address,
                 walletName: wallet.name
             });
         }
