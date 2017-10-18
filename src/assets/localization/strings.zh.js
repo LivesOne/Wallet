@@ -55,7 +55,7 @@ const localized_strings = {
     wallet_create_password_verify: '重复输入密码',
     wallet_create_comment: '该密码用来加密钱包地址，请尽量设置复杂密码完成加密。',
     wallet_create: '创建',
-    wallet_create_sucess: '创建成功！',
+    wallet_create_success: '创建成功！',
     wallet_create_name_required: '请输入钱包名称',
     wallet_create_password_required: '请输入密码',
     wallet_create_confimpassword_required: '请输入确认密码',
