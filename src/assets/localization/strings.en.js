@@ -132,7 +132,7 @@ const localized_strings = {
     profile_wallet_cur_password: 'Current password',
     profile_wallet_new_password: 'New password',
     profile_wallet_password_confirm: 'Confirm password',
-    profile_wallet_password_hint: 'Forgot password? reset it by importing private key.',
+    profile_wallet_password_hint: 'Forgot password? Reset it by importing private key. ',
     profile_wallet_import_right_now: 'Import right now',
     profile_wallet_export: 'Export private key',
     profile_wallet_backup: 'Backup keystore',
