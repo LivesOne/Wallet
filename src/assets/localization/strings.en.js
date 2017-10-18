@@ -20,6 +20,7 @@ const localized_strings = {
     alert_ok: 'Ok',
     common_done: 'Done',
     common_delete: 'Delete',
+    common_camera_not_authorized: 'Camera not authorized',
 
     //receive
     receive_title:'My payment QR code',

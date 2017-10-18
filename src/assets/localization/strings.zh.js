@@ -20,6 +20,7 @@ const localized_strings = {
     alert_ok: '确定',
     common_done: '完成',
     common_delete: '删除',
+    common_camera_not_authorized: '相机权限未开启',
 
     //receive
     receive_title:'我的收款码',
