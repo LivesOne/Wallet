@@ -61,7 +61,13 @@ module.exports = {
       p: 8
     }
   },
-
+  internalErrorHandleHook: null,
+  internalErrorHandle: function(error) {
+    console.log(error);
+    if(internalErrorHandleHook && typeof internalErrorHandleHook === 'function') {
+      internalErrorHandleHook(error);
+    }
+  }, 
   myTest : function(testFunc) {
     callback = testFunc;
     callback();
@@ -285,7 +291,11 @@ module.exports = {
             options.kdfparams.r || self.constants.scrypt.r,
             options.kdfparams.p || self.constants.scrypt.p,
             options.kdfparams.dklen || self.constants.scrypt.dklen, function(result){
-              cb(Buffer.from(result));
+              try {
+                cb(Buffer.from(result));
+              } catch (error) {
+                  this.internalErrorHandle(error);
+              }
           });
         }, 0);
       } else {
@@ -506,11 +516,7 @@ module.exports = {
       return verifyAndDecrypt(this.deriveKey(password, salt, keyObjectCrypto), salt, iv, ciphertext, algo);
     }
     this.deriveKey(password, salt, keyObjectCrypto, function (derivedKey) {
-      try {
-        cb(verifyAndDecrypt(derivedKey, salt, iv, ciphertext, algo));
-      } catch (error) {
-        console.log(error); 
-      }
+      cb(verifyAndDecrypt(derivedKey, salt, iv, ciphertext, algo));
     });
   },
 

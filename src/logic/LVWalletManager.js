@@ -7,6 +7,8 @@
 
 import LVPersistent from './LVPersistent';
 import LVConfiguration from './LVConfiguration';
+import LVNotificationCenter from '../logic/LVNotificationCenter';
+import LVNotification from '../logic/LVNotification';
 
 const foundation = require('../foundation/wallet.js');
 const WalletsKey :string = '@Venus:WalletsInfo';
@@ -31,6 +33,9 @@ class WalletManager {
     constructor() {
         this.wallets = [];
         this.selectedIndex = 0;
+        foundation.setInternalErrorHandleHook((error)=>{
+            LVNotificationCenter.postNotification(LVNotification.foundationError, error);
+        });
     }
 
     /**
