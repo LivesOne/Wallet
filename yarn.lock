@@ -4373,6 +4373,10 @@ react-native-slider@^0.11.0:
   dependencies:
     prop-types "^15.5.6"
 
+react-native-splash-screen@^2.1.0:
+  version "2.1.0"
+  resolved "http://registry.npm.taobao.org/react-native-splash-screen/download/react-native-splash-screen-2.1.0.tgz#4e0a5e4e8c32974fe7a3cdb4d9a226d06d9daf4f"
+
 react-native-svg@^5.4.2:
   version "5.4.2"
   resolved "http://registry.npm.taobao.org/react-native-svg/download/react-native-svg-5.4.2.tgz#a01b4d88cda4b8ef4b2bc1adf05e11ec93a77b79"
