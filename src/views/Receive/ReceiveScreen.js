@@ -6,7 +6,8 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { StyleSheet,Share, View, Text,Image,ScrollView ,Clipboard,CameraRoll , ToastAndroid} from 'react-native';
+
+import { StyleSheet,Share, View, Text,Image,ScrollView ,Clipboard,CameraRoll } from 'react-native';
 
 import PropTypes from 'prop-types';
 import LVColor from '../../styles/LVColor';
@@ -24,6 +25,8 @@ import { StringUtils } from '../../utils';
 
 import QRCode from 'react-native-qrcode-svg';
 import RNFS from "react-native-fs"
+import Toast from 'react-native-simple-toast';
+
 
 // import QRCode from 'react-native-qrcode';
 const receive_share = require("../../assets/images/receive_share.png");
@@ -138,7 +141,7 @@ class ReceiveScreen extends Component {
               })
               .then(() => {
                   this.setState({ busy: false, imageSaved: true  })
-                  ToastAndroid.show(LVStrings.receive_save_finish, ToastAndroid.SHORT)
+                  Toast.show(LVStrings.receive_save_finish)
               })
         })
    }
@@ -196,12 +199,7 @@ class ReceiveScreen extends Component {
                     onPress = {() => {
                         Clipboard.setString(this.state.wallet.address);
                         // alert(LVStrings.receive_save_finish);
-                        ToastAndroid.show(LVStrings.common_done, ToastAndroid.SHORT)
-                        var m="";
-                        for(let i=0;i<LVStrings.receive_name.length;i++) {
-                            m+=LVStrings.receive_name.charCodeAt(i).toString(16);
-                        }
-                        alert(m);
+                        Toast.show(LVStrings.common_done)
 
                     }}
                     themeStyle={"active"}
