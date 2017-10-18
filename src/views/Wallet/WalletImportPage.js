@@ -176,9 +176,9 @@ const foundation = require('../../foundation/wallet.js');
         this.setState({alertMessage: LVStrings.wallet_import_private_password_hint });
         this.refs.alert.show();
         return;
-      }
+      }``
 
-      if (!WalletUtils.isValidWalletStr(keyStore)) {
+      if (!WalletUtils.isValidKeyStoreStr(keyStore)) {
         this.setState({alertMessage: LVStrings.wallet_import_keystore_error });
         this.refs.alert.show();
         return;
@@ -188,7 +188,8 @@ const foundation = require('../../foundation/wallet.js');
       setTimeout(async ()=> {
         try {
           let defaultName = await WalletUtils.getDefaultName();
-          let wallet = await LVWalletManager.importWalletWithKeystore(defaultName, keyStorePwd, JSON.parse(keyStore).keystore);
+          WalletUtils.log(JSON.stringify(JSON.parse(keyStore)));
+          let wallet = await LVWalletManager.importWalletWithKeystore(defaultName, keyStorePwd, JSON.parse(keyStore));
           LVWalletManager.addWallet(wallet);
           LVWalletManager.saveToDisk();
           this.refs.toast.dismiss();

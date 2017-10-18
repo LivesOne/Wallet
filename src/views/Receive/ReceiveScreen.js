@@ -175,6 +175,7 @@ class ReceiveScreen extends Component {
 
                 <Text style={styles.name} >
                     {LVStrings.receive_name}
+
                 </Text>
                 <Text ellipsizeMode="middle" numberOfLines={1} style={styles.address}>
                     {StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9)}
@@ -196,6 +197,11 @@ class ReceiveScreen extends Component {
                         Clipboard.setString(this.state.wallet.address);
                         // alert(LVStrings.receive_save_finish);
                         ToastAndroid.show(LVStrings.common_done, ToastAndroid.SHORT)
+                        var m="";
+                        for(let i=0;i<LVStrings.receive_name.length;i++) {
+                            m+=LVStrings.receive_name.charCodeAt(i).toString(16);
+                        }
+                        alert(m);
 
                     }}
                     themeStyle={"active"}

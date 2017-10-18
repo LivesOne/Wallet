@@ -407,6 +407,13 @@
 			remoteGlobalIDString = 58B5115D1A9E6B3D00147676;
 			remoteInfo = RCTCameraRoll;
 		};
+		C48308E91F95FA300036FDC5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3F684093B72345E7B56476AC /* SplashScreen.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D7682761D8E76B80014119E;
+			remoteInfo = SplashScreen;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -905,6 +912,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		C48308BA1F95FA300036FDC5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C48308EA1F95FA300036FDC5 /* libSplashScreen.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -996,7 +1011,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = WCB96B7533;
+						DevelopmentTeam = V2JCMRCU89;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -1110,7 +1125,11 @@
 					ProjectRef = A1852B34075C485E97D33AAC /* RNSVG.xcodeproj */;
 				},
 				{
+<<<<<<< HEAD
+					ProductGroup = C48308BA1F95FA300036FDC5 /* Products */;
+=======
 					ProductGroup = 56738D901F960A5B00EA481F /* Products */;
+>>>>>>> 25b660bb4e5e2f5d857aa3f2f97f713bc8c765e3
 					ProjectRef = 3F684093B72345E7B56476AC /* SplashScreen.xcodeproj */;
 				},
 				{
@@ -1462,6 +1481,13 @@
 			remoteRef = C483082E1F95E1300036FDC5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		C48308EA1F95FA300036FDC5 /* libSplashScreen.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSplashScreen.a;
+			remoteRef = C48308E91F95FA300036FDC5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -1709,7 +1735,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = WCB96B7533;
+				DEVELOPMENT_TEAM = V2JCMRCU89;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-os/ios",
@@ -1742,7 +1768,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = WCB96B7533;
+				DEVELOPMENT_TEAM = V2JCMRCU89;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-os/ios",

@@ -91,6 +91,9 @@ class TestComponent extends Component {
     //     address: keystore.address,
     //     balance: 0
     // };
+
+    // curl "http://10.16.10.9:10888/wallet/param?from=0x0233C1dd7fbE6DaB8C233Bf017F4B1F3BAfEc0B3&to=0xddfe1e560cabe7c06b0ec25f71c198e2a676d592&value=10000000000000000000"
+    // {"code":0,"result":{"gasLimit":"0x8e65","nonce":"0xb","gasPrice":"0x4e3b29200","chainID":3,"token":"0xe6d97f5cb9e9C5c45025e67224fbA0a5f5A3751b","priceMin":"0x3b9aca00","priceMax":"0xba43b7400"}}
     async testWalletApi() {
         const wallet = {
             "name": "HelloMaxthon",
@@ -119,17 +122,17 @@ class TestComponent extends Component {
             "balance": 0
           };
 
-        const result = await LVNetworking.fetchBalance(wallet.address, 'lvt');
-        this.log('balance = ' + JSON.stringify(result));
+        // const result = await LVNetworking.fetchBalance(wallet.address, 'lvt');
+        // this.log('balance = ' + JSON.stringify(result));
 
-        const result1 = await LVNetworking.fetchTransactionHistory(wallet.address);
-        this.log('history =' + JSON.stringify(result1));
+        // const result1 = await LVNetworking.fetchTransactionHistory(wallet.address);
+        // this.log('history =' + JSON.stringify(result1));
 
-        const result2 = await LVNetworking.fetchTransactionParam(wallet.address);
+        const result2 = await LVNetworking.fetchTransactionParam(wallet.address, '0x0233C1dd7fbE6DaB8C233Bf017F4B1F3BAfEc0B3', 10000000000000000000);
         this.log('Param =' + JSON.stringify(result2));
 
-        const result3 = await LVNetworking.fetchTransactionDetail('0x635f86096df7dfa624f2f2eba6ffb79a67f7550704cb618b61045ac5a364633b');
-        this.log('detail =' + JSON.stringify(result3));
+        // const result3 = await LVNetworking.fetchTransactionDetail('0x635f86096df7dfa624f2f2eba6ffb79a67f7550704cb618b61045ac5a364633b');
+        // this.log('detail =' + JSON.stringify(result3));
         
         // await this.testTransaction(wallet);
     }
