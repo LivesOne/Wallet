@@ -63,6 +63,15 @@ export class LVQrScanModal extends Component {
                     style={{ flex: 1}}
                     onRead={this.onBarcodeReceived.bind(this)}
                     showMarker={false}
+                    notAuthorizedView={(
+                        <View style={{
+                            flex: 1,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            }}>
+                            <Text style={{ textAlign: 'center', fontSize: 16}}>{LVStrings.common_camera_not_authorized}</Text>
+                        </View>
+                    )}
                     containerStyle={{backgroundColor: 'rgba(40, 41, 44, 0.5)'}}
                     topContent={(
                         <View style= {styles.header}>
