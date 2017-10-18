@@ -99,9 +99,10 @@ const styles = StyleSheet.create({
     },
     left: {
         width: 50,
+        marginLeft: 15,
         color: LVColor.primary,
         fontSize: 16,
-        textAlign:'center'
+        textAlign:'left'
     },
     title: {
         color: 'white',

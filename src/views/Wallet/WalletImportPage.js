@@ -22,6 +22,7 @@ import WalletUtils from './WalletUtils';
 import LVNotification from '../../logic/LVNotification';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import PropTypes from 'prop-types';
+import console from 'console-browserify';
 const foundation = require('../../foundation/wallet.js');
 
  export default class AssetsImportPage extends Component {
@@ -77,11 +78,13 @@ const foundation = require('../../foundation/wallet.js');
     }
 
     onImportError(errorObj: Object) {
-      WalletUtils.log(JSON.stringify(errorObj));
+      console.log(JSON.stringify(errorObj));
       this.refs.toast.dismiss();
-      let error = WalletUtils.getInnerError(errorObj.error, LVStrings.wallet_import_fail);
-      this.setState({alertMessage: error });
-      this.refs.alert.show();
+      setTimeout(() => {
+        let error = WalletUtils.getInnerError(errorObj.error, LVStrings.wallet_import_fail);
+        this.setState({alertMessage: error });
+        this.refs.alert.show();
+      }, 500);
     }
 
     _onHeaderPressed = (leftPressed: boolean) => {

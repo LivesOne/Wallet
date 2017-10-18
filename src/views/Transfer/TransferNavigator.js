@@ -12,10 +12,12 @@ import TransferScreen from './TransferScreen';
 import AddEditContactPage from '../contacts/AddEditContactPage';
 import ContactsManagerPage from '../contacts/ContactsManagerPage';
 
+import ReceiveTip from '../Receive/ReceiveTip';
 
 const TransferNavigator = StackNavigator({
     Transfer: { screen: TransferScreen },
     ContactList: {screen: ContactsManagerPage},
+    ReceiveTip: { screen:ReceiveTip},
     AddEditContactPage: {screen: AddEditContactPage}
 });
 

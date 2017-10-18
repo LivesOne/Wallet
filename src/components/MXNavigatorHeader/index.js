@@ -43,7 +43,7 @@ export default class MXNavigatorHeader extends Component {
                     )}
                 </TouchableOpacity>
 
-                <Text style={[styles.titleStyle, titleStyle]}>{title || 'header'}</Text>
+                <Text numberOfLines={1} style={[styles.titleStyle, titleStyle]}>{title || 'header'}</Text>
 
                 <TouchableOpacity style={[styles.defaultRightStyle, rightStyle]} onPress={onRightPress}>
                     {right && (
@@ -75,7 +75,8 @@ const styles = LVStyleSheet.create({
         alignSelf: 'center',
         textAlign: 'center',
         color: LVColor.white,
-        fontSize: LVFontSize.large
+        fontSize: LVFontSize.large,
+        flex: 1
     },
 
     defaultLeftStyle: {
