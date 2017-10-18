@@ -11,6 +11,7 @@ import { Cell } from 'react-native-tableview-simple';
 import MXNavigatorHeader from './../../../components/MXNavigatorHeader';
 import LVStrings from '../../../assets/localization';
 import LVColor from '../../../styles/LVColor';
+import LVFontSize from '../../../styles/LVFontSize';
 import LVGradientPanel from '../../../views/Common/LVGradientPanel';
 import { converAddressToDisplayableText } from '../../../utils/MXStringUtils';
 import LVFullScreenModalView from '../../Common/LVFullScreenModalView';
@@ -163,7 +164,8 @@ const styles = StyleSheet.create({
         backgroundColor : LVColor.profileNavBack
     },
     navTitle: {
-        color : '#6d798a'
+        color : '#6d798a',
+        fontSize: LVFontSize.large
     },
     bottomPanel: {
         height: 50
