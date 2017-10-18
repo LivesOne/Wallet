@@ -14,6 +14,7 @@ import LVGradientPanel from '../Common/LVGradientPanel';
 import LVDetailTextCell from '../Common/LVDetailTextCell';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 import MXTouchableImage from '../../components/MXTouchableImage';
+import LVMarketInfo from '../../logic/LVMarketInfo';
 import LVNetworking from '../../logic/LVNetworking';
 import LVWalletManager from '../../logic/LVWalletManager';
 import LVNotification from '../../logic/LVNotification';
@@ -33,26 +34,33 @@ class AssetsScreen extends Component {
 
     state: {
         wallet: ?Object,
+        extEth: number,
+        extLvt: number,
         transactionList: ?Array<LVTransactionRecord>,
-        openSelectWallet: boolean,
+        openSelectWallet: boolean
     };
+
+    _panResponder: {};
+    _previousLeft: 0;
+    _previousTop: 0;
+    _refreshStyles: {};
 
     constructor(props: any) {
         super(props);
         const wallet = LVWalletManager.getSelectedWallet();
         this.state = {
             wallet: wallet,
+            extEth: 0,
+            extLvt: 0,
             transactionList: null,
-            openSelectWallet: false,
+            openSelectWallet: false
         };
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
         this.handleWalletChange = this.handleWalletChange.bind(this);
     }
 
-    componentWillMount() {
-
-    }
+    componentWillMount() {}
 
     componentDidMount() {
         LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletChange);
@@ -72,9 +80,13 @@ class AssetsScreen extends Component {
                 const lvt = await LVNetworking.fetchBalance(wallet.address, 'lvt');
                 const eth = await LVNetworking.fetchBalance(wallet.address, 'eth');
 
+                await LVMarketInfo.updateExchangeRateIfNecessary();
+                const extEth = eth * LVMarketInfo.usd_per_eth;
+                const extLvt = lvt / LVMarketInfo.lvt_per_eth * LVMarketInfo.usd_per_eth;
+
                 wallet.lvt = lvt ? parseFloat(lvt) : 0;
                 wallet.eth = eth ? parseFloat(eth) : 0;
-                this.setState({wallet: wallet});
+                this.setState({ wallet: wallet, extEth: extEth, extLvt: extLvt });
 
                 LVNotificationCenter.postNotification(LVNotification.balanceChanged);
                 LVWalletManager.saveToDisk();
@@ -82,17 +94,17 @@ class AssetsScreen extends Component {
                 console.log('error in refresh wallet datas : ' + error);
             }
         }
-    }
+    };
 
     refreshTransactionList = async () => {
         await LVTransactionRecordManager.refreshTransactionRecords();
-        this.setState({transactionList: LVTransactionRecordManager.transactionRecords});
-    }
+        this.setState({ transactionList: LVTransactionRecordManager.transactionRecords });
+    };
 
     handleWalletChange = async () => {
         await this.refreshWalletDatas();
         await this.refreshTransactionList();
-    }
+    };
 
     onPressSelectWallet = () => {
         this.setState({ openSelectWallet: true });
@@ -104,7 +116,10 @@ class AssetsScreen extends Component {
 
     onPressShowAll = () => {
         if (this.state.wallet) {
-            this.props.navigation.navigate('TransactionRecords', {walletName: this.state.wallet.name, walletAddress: this.state.wallet.address});
+            this.props.navigation.navigate('TransactionRecords', {
+                walletName: this.state.wallet.name,
+                walletAddress: this.state.wallet.address
+            });
         }
     };
 
@@ -115,7 +130,7 @@ class AssetsScreen extends Component {
     };
 
     render() {
-        const { transactionList } = this.state;
+        const { transactionList, extEth, extLvt } = this.state;
         const wallet = this.state.wallet || {};
 
         return (
@@ -127,7 +142,7 @@ class AssetsScreen extends Component {
                         <MXTouchableImage style={{ width: 27 }} source={selectImg} onPress={this.onPressSelectWallet} />
                     </View>
                     <WalletInfoView style={styles.walletInfo} title={wallet.name} address={wallet.address} />
-                    <WalletBalanceView style={styles.balance} lvt={wallet.lvt} eth={wallet.eth} extLvt={0} extEth={0} />
+                    <WalletBalanceView style={styles.balance} lvt={wallet.lvt} eth={wallet.eth} extLvt={extLvt} extEth={extEth} />
                 </LVGradientPanel>
 
                 <LVDetailTextCell
@@ -141,10 +156,7 @@ class AssetsScreen extends Component {
 
                 <TransactionRecordList style={styles.list} records={transactionList} onPressItem={this.onPressRecord} />
 
-                <LVSelectWalletModal
-                    isOpen={this.state.openSelectWallet}
-                    onClosed={this.onSelectWalletClosed}
-                />
+                <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
             </View>
         );
     }

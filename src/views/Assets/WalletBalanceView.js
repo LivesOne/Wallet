@@ -30,14 +30,14 @@ export default class WalletBalanceView extends Component {
             <View style={[styles.container, this.props.style]}>
                 <View style={styles.rows}>
                     <BalanceItemHeader icon={lvtIcon} title="LVT" />
-                    <BalanceValueView value={lvt} extValue={extLvt} extUnit="￥" />
+                    <BalanceValueView value={lvt} extValue={extLvt} extUnit="$" />
                 </View>
                 <View
                     style={{ width: '90%', height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }}
                 />
                 <View style={styles.rows}>
                     <BalanceItemHeader icon={ethIcon} title="ETH" />
-                    <BalanceValueView value={eth} extValue={extEth} extUnit="￥" />
+                    <BalanceValueView value={eth} extValue={extEth} extUnit="$" />
                 </View>
             </View>
         );
@@ -52,7 +52,7 @@ const BalanceItemHeader = ({ icon, title }) => (
 );
 
 const BalanceValueView = ({ value, extValue, extUnit }) => {
-    const valueString = StringUtils.convertAmountToCurrencyString(value, ',', 3);
+    const valueString = StringUtils.convertAmountToCurrencyString(value, ',', 8);
     const extValString = StringUtils.convertAmountToCurrencyString(extValue, ',', 3);
     return (
         <View>

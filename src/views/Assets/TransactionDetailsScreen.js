@@ -32,7 +32,7 @@ export default class TransactionDetailsScreen extends Component {
 
         const is_failed = false;
         const symble = type === 'in' ? '+' : '-';
-        const amountString = symble + StringUtils.convertAmountToCurrencyString(amount, ',');
+        const amountString = symble + StringUtils.convertAmountToCurrencyString(amount, ',', 8);
         const feeString = StringUtils.convertAmountToCurrencyString(minnerFee, ',', 8) + ' ETH';
         const remarks = transactionRecord.remarks || LVStrings.transaction_na;
 
