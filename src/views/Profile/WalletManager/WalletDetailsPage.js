@@ -17,7 +17,7 @@ import LVLoadingToast from '../../Common/LVLoadingToast';
 import Toast from 'react-native-simple-toast';
 import LVNotificationCenter from '../../../logic/LVNotificationCenter';
 import LVNotification from '../../../logic/LVNotification';
-import LVDialog, { LVConfirmDialog } from '../../Common/LVDialog';
+import LVDialog, { LVConfirmDialog, LVInputDialog } from '../../Common/LVDialog';
 
 const IconWalletModifyName = require('../../../assets/images/wallet_modify_name.png');
 const IconWalletModifyPwd = require('../../../assets/images/wallet_modify_pwd.png');
@@ -59,7 +59,9 @@ export class WalletDetailsPage extends Component {
         walletName: string,
         wallet: ?Object,
         walletTitle: string,
-        showExportModal: boolean
+        showExportModal: boolean,
+        deleteInputPwd: string,
+        alertMessage: string,
     };
 
     constructor() {
@@ -71,7 +73,9 @@ export class WalletDetailsPage extends Component {
             walletAddress: '',
             privateKey: '',
             showExportModal: false,
-            walletName: ''
+            walletName: '',
+            deleteInputPwd: '',
+            alertMessage: '',
         };
     }
 
@@ -144,7 +148,12 @@ export class WalletDetailsPage extends Component {
     }
 
     async onDeleteWallet() {
-        const walletAddress = this.state.walletAddress;
+        const {wallet, deleteInputPwd, walletAddress} = this.state;
+        if (wallet && wallet.password !== deleteInputPwd) {
+            this.setState({alertMessage:LVStrings.wallet_password_incorrect });
+            this.refs.alert.show();
+            return;
+        }
         await LVWalletManager.deleteWallet(walletAddress);
         await LVWalletManager.saveToDisk();
         LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
@@ -267,12 +276,17 @@ export class WalletDetailsPage extends Component {
                     buttonTitle={LVStrings.common_confirm}
                     onPress={() => {this.refs.disclaimer.dismiss();}}
                 />
+                <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
                 <LVConfirmDialog
                     ref={'walletDeleteConfirm'}
-                    title={LVStrings.alert_hint}
-                    message={LVStrings.wallet_delete_hint}
-                    onConfirm={this.onDeleteWallet.bind(this)}
-                />
+                    title={LVStrings.wallet_create_password_required}
+                    onConfirm={this.onDeleteWallet.bind(this)}>
+                    <MXCrossTextInput
+                        secureTextEntry={true}
+                        withUnderLine={false}
+                        onTextChanged={(newText)=>{this.setState({deleteInputPwd: newText})}}
+                        placeholder={LVStrings.wallet_create_password_required}/>
+                </LVConfirmDialog>
             </View>
         );
     }
