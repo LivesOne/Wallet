@@ -45,7 +45,13 @@ const CellVariant = props => (
     />
 );
 
+const SHOW_INPUT_FOR_EXPORT = 'for_export';
+const SHOW_INPUT_FOR_DELETE = 'for_delete';
+const SHOW_INPUT_FOR_BACKUP = 'for_backup';
+
 export class WalletDetailsPage extends Component {
+
+
     static navigationOptions = {
         header: null,
         tabBarVisible: false
@@ -60,8 +66,9 @@ export class WalletDetailsPage extends Component {
         wallet: ?Object,
         walletTitle: string,
         showExportModal: boolean,
-        deleteInputPwd: string,
+        inputPwd: string,
         alertMessage: string,
+        showInputFor: string,
     };
 
     constructor() {
@@ -74,8 +81,9 @@ export class WalletDetailsPage extends Component {
             privateKey: '',
             showExportModal: false,
             walletName: '',
-            deleteInputPwd: '',
+            inputPwd: '',
             alertMessage: '',
+            showInputFor: '',
         };
     }
 
@@ -110,10 +118,6 @@ export class WalletDetailsPage extends Component {
         LVNotificationCenter.removeObserver(this);
     }
 
-    showExportModal() {
-        this.setState({ showExportModal: true });
-    }
-
     async fetchPrivateKey(callback: Function) {
         const wallet = this.state.wallet;
         console.log('test' + JSON.stringify(wallet));
@@ -135,24 +139,20 @@ export class WalletDetailsPage extends Component {
                     this.setState({ showExportModal: true });
                 }, 500);
             });
-        }, 1000);
+        }, 500);
     }
 
     onExportModalClosed() {
         this.setState({ showExportModal: false });
     }
 
-    onPressWalletDeleteButton() {
-        this.refs.walletDeleteConfirm.show();
+    onPressExportOrDeleteButton(showFor: string) {
+        this.setState({showInputFor: showFor});
+        this.refs.passwordConfirm.show();
     }
 
     async onDeleteWallet() {
-        const {wallet, deleteInputPwd, walletAddress} = this.state;
-        if (wallet && wallet.password !== deleteInputPwd) {
-            this.setState({alertMessage:LVStrings.wallet_password_incorrect });
-            this.refs.alert.show();
-            return;
-        }
+        const {walletAddress} = this.state;
         await LVWalletManager.deleteWallet(walletAddress);
         await LVWalletManager.saveToDisk();
 
@@ -161,12 +161,11 @@ export class WalletDetailsPage extends Component {
             callback();
         }
         LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
-        this.refs.walletDeleteConfirm.dismiss();
         Toast.show(LVStrings.wallet_delete_success);
         this.props.navigation.goBack();
     }
 
-    onPressWalletBackupButton() {
+    onWalletBackup() {
         const wallet = this.state.wallet;
 
         if (wallet && wallet.keystore) {
@@ -186,6 +185,30 @@ export class WalletDetailsPage extends Component {
         if (result.action === Share.sharedAction) {
             this.refs.disclaimer.show();
         } else if (result.action === Share.dismissedAction) {
+        }
+    }
+
+    onInputConfirm() {
+        const {wallet, inputPwd, showInputFor} = this.state;
+        if (wallet && wallet.password !== inputPwd) {
+            this.setState({alertMessage:LVStrings.wallet_password_incorrect });
+            this.refs.alert.show();
+            return;
+        }
+        this.refs.passwordConfirm.dismiss();
+
+        switch(showInputFor) {
+            case SHOW_INPUT_FOR_EXPORT:
+                this.showExportModal();
+                break;
+            case SHOW_INPUT_FOR_DELETE:
+                this.onDeleteWallet();
+                break;
+            case SHOW_INPUT_FOR_BACKUP:
+                setTimeout(()=>{
+                    this.onWalletBackup();
+                }, 500);
+                break;
         }
     }
 
@@ -243,7 +266,7 @@ export class WalletDetailsPage extends Component {
                         <CellVariant
                             title={LVStrings.profile_wallet_export}
                             source={IconWalletExportPK}
-                            onPress={this.showExportModal.bind(this)}
+                            onPress={()=> {this.onPressExportOrDeleteButton(SHOW_INPUT_FOR_EXPORT)}}
                         />
                         <Separator insetRight={15} tintColor="#eeeff2" />
                     </Section>
@@ -261,13 +284,13 @@ export class WalletDetailsPage extends Component {
                         style={{ marginBottom: 15 }}
                         title={LVStrings.profile_wallet_backup}
                         rounded
-                        onPress={this.onPressWalletBackupButton.bind(this)}
+                        onPress={()=> {this.onPressExportOrDeleteButton(SHOW_INPUT_FOR_BACKUP)}}
                     />
                     <MXButton
                         style={{ marginBottom: 25 }}
                         title={LVStrings.profile_wallet_delete_wallet}
                         rounded
-                        onPress={this.onPressWalletDeleteButton.bind(this)}
+                        onPress={()=> {this.onPressExportOrDeleteButton(SHOW_INPUT_FOR_DELETE)}}
                     />
                 </View>
                 <LVLoadingToast ref={'toast'} title={LVStrings.wallet_exporting} />
@@ -282,13 +305,13 @@ export class WalletDetailsPage extends Component {
                 />
                 <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
                 <LVConfirmDialog
-                    ref={'walletDeleteConfirm'}
+                    ref={'passwordConfirm'}
                     title={LVStrings.wallet_create_password_required}
-                    onConfirm={this.onDeleteWallet.bind(this)}>
+                    onConfirm={this.onInputConfirm.bind(this)}>
                     <MXCrossTextInput
                         secureTextEntry={true}
                         withUnderLine={false}
-                        onTextChanged={(newText)=>{this.setState({deleteInputPwd: newText})}}
+                        onTextChanged={(newText)=>{this.setState({inputPwd: newText})}}
                         placeholder={LVStrings.wallet_create_password_required}/>
                 </LVConfirmDialog>
             </View>
