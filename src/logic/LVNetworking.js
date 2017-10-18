@@ -9,6 +9,7 @@ const HOST = 'http://office.metellica.cn:51515';
 
 const API = {
     GET_BALANCE: HOST + '/wallet/balance',
+    GET_MARKET: HOST + '/wallet/market',
     GET_TRANSACTION_HISTORY: HOST + '/wallet/history',
     GET_TRANSACTION_DETAIL: HOST + '/wallet/tx',
     GET_TRANSACTION_PARAM: HOST + '/wallet/param?',
@@ -95,6 +96,10 @@ class LVNetworking {
 
     static async fetchBalance(address: string, type: string = 'eth') {
         return await LVFetch.GET(API.GET_BALANCE + '/' + address + '?type=' + type);
+    }
+
+    static async fetchMarketExchangeRates() {
+        return await LVFetch.GET(API.GET_MARKET);
     }
 
     static async fetchTransactionHistory(address: string) {

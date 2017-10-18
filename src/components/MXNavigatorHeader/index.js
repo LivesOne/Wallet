@@ -8,6 +8,7 @@ import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Image, PixelRatio, Text, TouchableOpacity, Platform } from 'react-native';
 
 import LVColor from '../../styles/LVColor';
+import LVFontSize from '../../styles/LVFontSize';
 let LVStyleSheet = require('../../styles/LVStyleSheet');
 
 const defaultBackIcon = require('../../assets/images/back.png');
@@ -74,7 +75,7 @@ const styles = LVStyleSheet.create({
         alignSelf: 'center',
         textAlign: 'center',
         color: LVColor.white,
-        fontSize: 20
+        fontSize: LVFontSize.large
     },
 
     defaultLeftStyle: {

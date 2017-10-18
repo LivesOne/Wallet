@@ -21,6 +21,10 @@ module.exports = {
         }
     },
 
+    setInternalErrorHandleHook: function(hook: Function) {
+        eth_local.internalErrorHandleHook = hook;
+    },
+
     /**
      * Create key store.
      * @param  {string} password

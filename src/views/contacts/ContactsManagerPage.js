@@ -37,7 +37,8 @@ export default class ContactsManagerPage extends Component {
         super();
         this.state = {
             contacts: [],
-            toDeDeletedContactName: null
+            toDeDeletedContactName: null,
+            scrollEnabled: true
         };
         this.renderRow = this.renderRow.bind(this);
         this.onDeleteContact = this.onDeleteContact.bind(this);
@@ -45,7 +46,8 @@ export default class ContactsManagerPage extends Component {
 
     state: {
         contacts: Array<Object>,
-        toDeDeletedContactName: ?string
+        toDeDeletedContactName: ?string,
+        scrollEnabled: boolean,
     }
 
     async loadContacts (){
@@ -68,6 +70,7 @@ export default class ContactsManagerPage extends Component {
         ContactLib.instance.remove(contact);
         ContactLib.instance.saveToDisk();
         this.loadContacts();
+        this.state.toDeDeletedContactName = null;
     }
 
     componentDidMount() {
@@ -91,7 +94,14 @@ export default class ContactsManagerPage extends Component {
         ];
         return (
             <Swipeout right={swipeBts} 
-                autoClose={true}>
+                autoClose={true}
+                scroll={ (scrollEnabled)=> {this.setState({scrollEnabled: scrollEnabled});}}
+                close={!(this.state.toDeDeletedContactName == item.name)}
+                onOpen={(sectionID, rowID) => {
+                    this.setState({
+                        toDeDeletedContactName: item.name
+                    });
+                }}>
                 <TouchableHighlight
                     onPressIn={separators.highlight}
                     onPressOut={separators.unhighlight}
@@ -135,6 +145,7 @@ export default class ContactsManagerPage extends Component {
                 />
                 <View style={styles.listContainer}>
                     <FlatList
+                        scrollEnabled={this.state.scrollEnabled}
                         extraData={this.state}
                         data={contacts}
                         keyExtractor={(item,index)=> item.name}

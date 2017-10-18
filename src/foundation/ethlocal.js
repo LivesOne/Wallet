@@ -61,7 +61,13 @@ module.exports = {
       p: 8
     }
   },
-
+  internalErrorHandleHook: null,
+  internalErrorHandle: function(error) {
+    console.log(error);
+    if(internalErrorHandleHook && typeof internalErrorHandleHook === 'function') {
+      internalErrorHandleHook(error);
+    }
+  }, 
   myTest : function(testFunc) {
     callback = testFunc;
     callback();
@@ -285,7 +291,11 @@ module.exports = {
             options.kdfparams.r || self.constants.scrypt.r,
             options.kdfparams.p || self.constants.scrypt.p,
             options.kdfparams.dklen || self.constants.scrypt.dklen, function(result){
-              cb(Buffer.from(result));
+              try {
+                cb(Buffer.from(result));
+              } catch (error) {
+                  this.internalErrorHandle(error);
+              }
           });
         }, 0);
       } else {

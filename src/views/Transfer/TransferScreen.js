@@ -24,7 +24,7 @@ import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 import { LVQrScanModal } from '../Common/LVQrScanModal';
 import TransferUtils from './TransferUtils';
 import LVWalletManager from '../../logic/LVWalletManager';
-import LVDialog from '../Common/LVDialog';
+import LVDialog, { LVConfirmDialog } from '../Common/LVDialog';
 import LVNetworking from '../../logic/LVNetworking';
 import TransferLogic from './TransferLogic';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
@@ -53,6 +53,7 @@ class TransferScreen extends Component {
         openSelectWallet: boolean,
         showQrScanModal: boolean,
         alertMessage: string,
+        inputPwd: string,
     }
 
     constructor() {
@@ -72,6 +73,7 @@ class TransferScreen extends Component {
             openSelectWallet: false,
             showQrScanModal: false,
             alertMessage: '',
+            inputPwd: '',
         }
     }
 
@@ -137,7 +139,7 @@ class TransferScreen extends Component {
     }
 
     onTransferPresse() {
-        const {addressIn, amount, minerGap, balance} = this.state;
+        const { addressIn, amount, minerGap, balance} = this.state;
 
         if (!addressIn) {
             this.setState({alertMessage:LVStrings.transfer_address_required });
@@ -164,9 +166,20 @@ class TransferScreen extends Component {
             
             return;
         }
+        this.refs.inputPwdDialog.show();
+    }
 
+    onPwdConfirmed() {
+        const {wallet, inputPwd} = this.state;
+        if (wallet && wallet.password !== inputPwd) {
+            this.setState({alertMessage:LVStrings.wallet_password_incorrect });
+            this.refs.alert.show();
+            return;
+        }
         this.setState({showModal: true})
     }
+
+
 
     async onTransfer() {
         this.setState({ showModal: false });
@@ -263,6 +276,16 @@ class TransferScreen extends Component {
                         onClosed={()=>{this.setState({openSelectWallet: false})}}
                     />
                     <LVLoadingToast ref={'loading'} title={LVStrings.transfer_processing}/>
+                    <LVConfirmDialog
+                        ref={'inputPwdDialog'}
+                        title={LVStrings.wallet_create_password_required}
+                        onConfirm={this.onPwdConfirmed.bind(this)}>
+                        <MXCrossTextInput
+                            secureTextEntry={true}
+                            withUnderLine={false}
+                            onTextChanged={(newText)=>{this.setState({inputPwd: newText})}}
+                            placeholder={LVStrings.wallet_create_password_required}/>
+                    </LVConfirmDialog>
                 </View>
             </ScrollView>
         )

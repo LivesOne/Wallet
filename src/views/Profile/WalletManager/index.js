@@ -11,14 +11,13 @@ import { Cell } from 'react-native-tableview-simple';
 import MXNavigatorHeader from './../../../components/MXNavigatorHeader';
 import LVStrings from '../../../assets/localization';
 import LVColor from '../../../styles/LVColor';
+import LVFontSize from '../../../styles/LVFontSize';
 import LVGradientPanel from '../../../views/Common/LVGradientPanel';
 import { converAddressToDisplayableText } from '../../../utils/MXStringUtils';
 import LVFullScreenModalView from '../../Common/LVFullScreenModalView';
 import LVWalletCreationNavigator from '../../Wallet/LVWalletCreationNavigator';
 import WalletImportPage from '../../Wallet/WalletImportPage';
 import LVWalletManager from '../../../logic/LVWalletManager';
-import LVNotificationCenter from '../../../logic/LVNotificationCenter';
-import LVNotification from '../../../logic/LVNotification';
 import { greyNavigationBackIcon } from '../../../assets/LVIcons';
 import LVWalletImportNavigator from '../../Wallet/LVWalletImportNavigator';
 import WalletUtils from '../../Wallet/WalletUtils';
@@ -51,17 +50,9 @@ export class WalletManagerScreen extends Component {
     }
     
     componentDidMount() {
-        LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
-        this.setState({
-            wallets: LVWalletManager.getWallets()
-        });
-    }
-
-    componentWillUnmount(){
-        LVNotificationCenter.removeObserver(this);
+        this.handleWalletChange();
     }
     
-
     onCreateWalletPressed() {
         this.refs.creationPage.show();
     }
@@ -98,7 +89,7 @@ export class WalletManagerScreen extends Component {
                                 onPressIn={separators.highlight}
                                 onPressOut={separators.unhighlight}
                                 underlayColor={LVColor.white}
-                                onPress={()=> this.props.navigation.navigate('WalletDetailsPage', {wallet:item})}>
+                                onPress={()=> this.props.navigation.navigate('WalletDetailsPage', {wallet:item, callback:()=>this.handleWalletChange()})}>
                                 <View style={styles.cellContentStyle}>
                                     <View style={styles.cellLeftContentStyle}>
                                         <Image source={WalletIcon} resizeMode={Image.resizeMode.contain} style={styles.cellLeftImageStyle}/>
@@ -146,18 +137,14 @@ export class WalletManagerScreen extends Component {
                 <LVFullScreenModalView ref={'creationPage'}>
                     <LVWalletCreationNavigator screenProps={{dismiss: ()=> {
                         this.refs.creationPage.dismiss()
-                        this.setState({
-                            wallets: LVWalletManager.getWallets()
-                        });
+                        this.handleWalletChange();
                     } 
                 }}/>
                 </LVFullScreenModalView>
                 <LVFullScreenModalView ref={'importPage'}>
                     <LVWalletImportNavigator screenProps={{dismiss: ()=> {
                         this.refs.importPage.dismiss();
-                        this.setState({
-                            wallets: LVWalletManager.getWallets()
-                        });
+                        this.handleWalletChange();
                     }, from: WalletUtils.OPEN_IMPORT_FROM_WALLET_MANAGER, 
                 }}/>
                 </LVFullScreenModalView>
@@ -177,7 +164,8 @@ const styles = StyleSheet.create({
         backgroundColor : LVColor.profileNavBack
     },
     navTitle: {
-        color : '#6d798a'
+        color : '#6d798a',
+        fontSize: LVFontSize.large
     },
     bottomPanel: {
         height: 50

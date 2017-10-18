@@ -96,8 +96,7 @@ class VenusApp extends Component {
 
 const LVAppLoadingView = () => {
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Image source={require('./assets/images/create_wallet.png')} />
+        <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
         </View>
     );
 };
