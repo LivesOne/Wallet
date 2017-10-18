@@ -106,9 +106,13 @@ class WalletManager {
             if(!selectedWallet) {
                 resolve(null);
             } else {
-                foundation.exportPrivateKey(password, selectedWallet.keystore,(p) => {
-                    resolve(p);
-                });
+                try {
+                    foundation.exportPrivateKey(password, selectedWallet.keystore,(p) => {
+                        resolve(p);
+                    });
+                } catch (e) {
+                    reject(e);
+                }
             }
         });
 
@@ -124,8 +128,12 @@ class WalletManager {
     async createWallet(name : string, password : string) : Promise<Object> {
         const promise = new Promise(function(resolve, reject){
             foundation.createKeyStore(password, null, function(keystore){
-                const walletInfo = createNewKeystore(name, password, keystore);
-                resolve(walletInfo);
+                try {
+                    const walletInfo = createNewKeystore(name, password, keystore);
+                    resolve(walletInfo);
+                } catch (error) {
+                    reject(error);
+                }
             });
         });
         return promise;
@@ -199,10 +207,14 @@ class WalletManager {
      */
     async importWalletWithPrivatekey(name: string, password : string, privateKey : string) {
         const promise = new Promise(function(resolve, reject){
-            foundation.importWithPrivateKey(password, privateKey, function(keystore){
-                const walletInfo = createNewKeystore(name, password, keystore);
-                resolve(walletInfo);
-            });
+            try {
+                foundation.importWithPrivateKey(password, privateKey, function(keystore){
+                    const walletInfo = createNewKeystore(name, password, keystore);
+                    resolve(walletInfo);
+                });
+            } catch (e) {
+                reject(e);
+            }
         });
         return promise;
     }
@@ -214,10 +226,14 @@ class WalletManager {
      */
     async importWalletWithKeystore(name: string, password: string, keystore: Object) {
         const promise = new Promise(function(resolve, reject){
-            foundation.importWithKeyStoreObject(password, keystore, function(calcedKeystore) {
-                const walletInfo = createNewKeystore(name, password, calcedKeystore)
-                resolve(walletInfo);
-            })
+            try {
+                foundation.importWithKeyStoreObject(password, keystore, function(calcedKeystore) {
+                    const walletInfo = createNewKeystore(name, password, calcedKeystore)
+                    resolve(walletInfo);
+                })
+            } catch (e) {
+                reject(e);
+            }
         });
         return promise;
     }
@@ -229,14 +245,18 @@ class WalletManager {
      */
     async modifyPassword(wallet : Object, oldPassword : string, newPassword: string) {
         const promise = new Promise(function(resolve, reject) {
-            foundation.modifyPassword(oldPassword, wallet.keystore, newPassword, function(calcedKeystore){;
-                wallet.keystore = calcedKeystore;
-                if(wallet.address !== calcedKeystore.address) {
-                    reject({error: 'internal error, keystore addresses are different.'});
-                } else {
-                    resolve(wallet);
-                }
-            });
+            try {
+                foundation.modifyPassword(oldPassword, wallet.keystore, newPassword, function(calcedKeystore){;
+                    wallet.keystore = calcedKeystore;
+                    if(wallet.address !== calcedKeystore.address) {
+                        reject({error: 'internal error, keystore addresses are different.'});
+                    } else {
+                        resolve(wallet);
+                    }
+                });
+            } catch (e) {
+                reject(e);
+            }
         });
         return promise;
     }
