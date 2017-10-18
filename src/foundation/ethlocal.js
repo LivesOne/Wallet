@@ -506,7 +506,11 @@ module.exports = {
       return verifyAndDecrypt(this.deriveKey(password, salt, keyObjectCrypto), salt, iv, ciphertext, algo);
     }
     this.deriveKey(password, salt, keyObjectCrypto, function (derivedKey) {
-      cb(verifyAndDecrypt(derivedKey, salt, iv, ciphertext, algo));
+      try {
+        cb(verifyAndDecrypt(derivedKey, salt, iv, ciphertext, algo));
+      } catch (error) {
+        console.log(error); 
+      }
     });
   },
 

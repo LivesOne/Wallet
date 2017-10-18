@@ -20,6 +20,8 @@ import LVLocalization from '../../assets/localization';
 import MXTouchableImage from '../../components/MXTouchableImage';
 
 const scanImg = require('../../assets/images/transfer_scan.png');
+const navButtonEnableColor = '#FFAE1F';
+const navButtonDisableColor = '#c3c8d3';
 
 export default class AddEditContactPage extends Component {
     static navigationOptions = {
@@ -130,7 +132,12 @@ export default class AddEditContactPage extends Component {
     }
 
     render() {
-       
+       let rightNavTextColor = navButtonDisableColor;
+       if(!isEmptyString(this.state.name) 
+            && !isEmptyString(this.state.address)
+            && isAddress(this.state.address)) {
+           rightNavTextColor = navButtonEnableColor;
+       }
 
         return (
             <View style={styles.rootView}>
@@ -141,7 +148,7 @@ export default class AddEditContactPage extends Component {
                     titleStyle={styles.navTitle}
                     onLeftPress={ () => {this.props.navigation.goBack() }}
                     right={LVStrings.common_done}
-                    rightTextColor={'#c3c8d3'}
+                    rightTextColor={rightNavTextColor}
                     onRightPress={this.onAddingDone}
                 />
                 <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
