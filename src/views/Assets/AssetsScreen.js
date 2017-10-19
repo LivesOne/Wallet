@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions, View, Text, Image } from 'react-native';
+import { StyleSheet, Dimensions, Platform, View, Text, Image } from 'react-native';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     nav: {
         width: Window.width - 25,
         height: 64,
-        paddingTop: 20,
+        paddingTop: Platform.OS === 'ios' ? 20 : 0,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'

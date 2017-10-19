@@ -30,12 +30,14 @@ class MXCrossTextInput extends Component {
         rounded: PropTypes.bool,
         themeStyle: PropTypes.string,
         style: ViewPropTypes.style,
+        defaultValue: PropTypes.string,
         secureTextEntry: PropTypes.bool,
         onTextChanged: PropTypes.func,
         withUnderLine: PropTypes.bool,
         KeyboardType: PropTypes.string,
         withClearButton: PropTypes.bool,
-        rightComponent: PropTypes.element
+        rightComponent: PropTypes.element,
+        setFocusWhenMounted: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -60,6 +62,12 @@ class MXCrossTextInput extends Component {
         });
         this.props.onTextChanged && this.props.onTextChanged(newText);
     };
+
+    componentDidMount() {
+        if (this.props.setFocusWhenMounted) {
+            this.refs.textinput.focus();
+        }
+    }
 
     onPressClear() {
         this.setState({
@@ -95,6 +103,7 @@ class MXCrossTextInput extends Component {
                             placeholderTextColor={LVColor.text.placeHolder}
                             defaultValue={this.props.defaultValue}
                             value={this.state.text}
+                            selectTextOnFocus={this.props.setFocusWhenMounted}
                             tintColor={LVColor.primary}
                             keyboardType={keyboardType}
                             style={[Base.label, theme.label]}
