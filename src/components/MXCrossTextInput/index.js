@@ -19,7 +19,7 @@ class MXCrossTextInput extends Component {
     constructor(props: any) {
         super(props);
         this.state = {
-            text: null,
+            text: props.defaultValue,
             hasFocus: false
         };
         this.onChangeText = this.onChangeText.bind(this);
