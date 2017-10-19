@@ -10,7 +10,6 @@ import LVStrings from '../../assets/localization';
 import MXTouchableImage from '../../components/MXTouchableImage';
 import * as MXUtils from "../../utils/MXUtils";
 import LVGradientPanel from '../Common/LVGradientPanel';
-const selectImg = require('../../assets/images/select_wallet.png');
 import { StringUtils } from '../../utils';
 
 export class TransferHeader extends Component {
@@ -33,10 +32,10 @@ export class TransferHeader extends Component {
         return (
             <LVGradientPanel style = {[styles.container, this.props.style]}>
                 <View style={styles.nav}>
-                        <View style={{ width: 50 }} />
+                        <View style={{ width: 30 }} />
                         <Text style={styles.navTitle}>{ LVStrings.transfer_title }</Text>
-                        <MXTouchableImage style={{ width: 50 }} source={selectImg} onPress={this.onPressSelectPurse.bind(this)} />
-                    </View>
+                        <View style={{ width: 30 }} />
+                </View>
                 <View style= {styles.columnContainer}>
                     <Text style= {[styles.textCommon]}>{ LVStrings.transfer_purse_balance }</Text>
                     <Text style= {[styles.textCommon, {fontSize: 36}]}>{ valueString }</Text>

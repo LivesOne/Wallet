@@ -16,6 +16,7 @@ import LVStrings from '../../assets/localization';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVConfiguration from '../../logic/LVConfiguration';
+import LVWalletManager from '../../logic/LVWalletManager';
 import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVTransactionRecordManager';
 
 import WalletInfoView from './WalletInfoView';
@@ -65,15 +66,15 @@ class TransactionRecordsScreen extends Component {
     };
 
     onPressRecord = (record: Object) => {
-        const { walletAddress } = this.props.navigation.state.params;
         this.props.navigation.navigate('TransactionDetails', {
-            walletAddress: walletAddress,
             transactionRecord: record
         });
     };
 
     render() {
-        const { walletName, walletAddress } = this.props.navigation.state.params;
+        const wallet = LVWalletManager.getSelectedWallet();
+        const walletName = wallet && wallet.name;
+        const walletAddress = wallet && wallet.address;
         const { startDate, endDate, transactionList } = this.state;
 
         const startTimestamp = Moment(startDate, 'YYYY-MM-DD').format('X');

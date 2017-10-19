@@ -66,7 +66,7 @@ export default class ProfleScreen extends Component {
                         <ProfileCell
                             title={LVStrings.profile_trading_record}
                             accessory="DisclosureIndicator"
-                            onPress={() => alert(LVStrings.profile_trading_record)}
+                            onPress={() => this.props.navigation.navigate('TransactionRecords')}
                             disableImageResize
                             image={<Image source={TradingImage} style={styles.tableViewImage}/>}
                         />

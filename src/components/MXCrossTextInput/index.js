@@ -116,7 +116,9 @@ class MXCrossTextInput extends Component {
 
                     <View style={[Base.buttonArea]}>
                         {this.props.withClearButton &&
-                            this.state.text !== '' &&
+                            this.state.text !== null &&
+                            this.state.text !== '' && 
+                            this.state.text !== undefined &&
                             this.state.hasFocus && (
                                 <TouchableOpacity style={Base.clearButton} onPress={this.onPressClear.bind(this)}>
                                     <Image source={require('../../assets/images/edit_clear.png')} />
