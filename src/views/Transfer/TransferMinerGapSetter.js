@@ -25,6 +25,8 @@ export class TransferMinerGapSetter extends Component {
         onGapChanged: PropTypes.func,
     }; 
 
+    _beginEnable: false;
+
     constructor(props: any) {
         super(props);
         this.state = {
@@ -35,7 +37,8 @@ export class TransferMinerGapSetter extends Component {
 
     calculateValue() {
         if (this.props.enable) {
-            return (this.state.value * 1).toFixed(8) + ' ETH';
+            let value = this._beginEnable ? this.props.minimumValue : this.state.value;
+            return (value * 1).toFixed(8) + ' ETH';
         } else {
             return '-- ETH'
         }
@@ -48,6 +51,20 @@ export class TransferMinerGapSetter extends Component {
         this.setState({
             value: value,
         });
+    }
+
+    componentWillReceiveProps(nextProps: any) {
+        if (this.props.enable !== nextProps.enable) {
+            this.setState({
+                value: nextProps.enable ? (nextProps.maximumValue - nextProps.minimumValue) / 100 : 0,
+            })
+            this._beginEnable = nextProps.enable;
+        }
+    }
+
+    componentDidUpdate(prevProps : any, prevState: any) {
+        this._beginEnable = !prevProps.enable;
+        //TransferUtils.log('componentDidUpdate _beginEnable = ' + this._beginEnable);
     }
 
     render() {
@@ -65,9 +82,9 @@ export class TransferMinerGapSetter extends Component {
                 <View  style= {styles.sliderWrapper}>
                     <Slider
                         disabled={!this.props.enable}
-                        value={this.props.enable ? this.state.value : 0}
-                        minimumValue={minimumValue}
-                        maximumValue={maximumValue}
+                        value={this.state.value}
+                        minimumValue={this.props.enable ? minimumValue : 0}
+                        maximumValue={this.props.enable ? maximumValue : 100}
                         onValueChange={this.onValueChange.bind(this)}
                         trackStyle={styles.track}
                         thumbStyle={[styles.thumb, {borderColor: this.props.enable ? '#f9903e' : '#DDDDDD',}]}
