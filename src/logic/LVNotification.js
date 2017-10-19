@@ -12,4 +12,5 @@ export default class LVNotification {
     static walletsNumberChanged = 'lv_notification_wallets_number_changed'
     static foundationError = 'lv_notification_foundation_error';
     static transcationCreated = 'lv_notification_transaction_created';
+    static transcationRecordsChanged = 'lv_notification_transaction_records_changed';
 }

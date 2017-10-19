@@ -20,6 +20,7 @@ const localized_strings = {
     alert_ok: '确定',
     common_done: '完成',
     common_delete: '删除',
+    common_camera_not_authorized: '相机权限未开启',
 
     //receive
     receive_title:'我的收款码',
@@ -80,6 +81,7 @@ const localized_strings = {
     wallet_edit_cur_pwd_error : '当前密码不正确',
     wallet_edit_new_pwd_required : '新密码不能为空',
     wallet_edit_new_name_required : '名称不能为空',
+    wallet_edit_password_same: '新旧密码不能相同',
     wallet_edit_equal_to_old : '名称跟原名称相同',
     wallet_editing : '正在修改中...',
     wallet_exporting : '正在导出中...',

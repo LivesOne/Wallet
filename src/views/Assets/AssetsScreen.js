@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions, View, Text, Image } from 'react-native';
+import { StyleSheet, Dimensions, Platform, View, Text, Image } from 'react-native';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
@@ -58,11 +58,13 @@ class AssetsScreen extends Component {
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
         this.handleWalletChange = this.handleWalletChange.bind(this);
+        this.handleRecordsChanged = this.handleRecordsChanged.bind(this);
     }
 
     componentWillMount() {}
 
     componentDidMount() {
+        LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.handleRecordsChanged);
         LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletChange);
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
         this.refreshWalletDatas();
@@ -98,13 +100,18 @@ class AssetsScreen extends Component {
 
     refreshTransactionList = async () => {
         await LVTransactionRecordManager.refreshTransactionRecords();
-        this.setState({ transactionList: LVTransactionRecordManager.transactionRecords });
+        this.setState({ transactionList: LVTransactionRecordManager.records });
     };
 
     handleWalletChange = async () => {
         await this.refreshWalletDatas();
         await this.refreshTransactionList();
     };
+
+    handleRecordsChanged = () => {
+        this.setState({ transactionList: null });
+        this.setState({ transactionList: LVTransactionRecordManager.records });
+    }
 
     onPressSelectWallet = () => {
         this.setState({ openSelectWallet: true });
@@ -182,7 +189,7 @@ const styles = StyleSheet.create({
     nav: {
         width: Window.width - 25,
         height: 64,
-        paddingTop: 20,
+        paddingTop: Platform.OS === 'ios' ? 20 : 0,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'

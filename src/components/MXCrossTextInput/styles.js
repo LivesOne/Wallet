@@ -2,7 +2,7 @@
 
 // @flow
 
-import { StyleSheet, PixelRatio } from 'react-native';
+import { StyleSheet, PixelRatio, Platform } from 'react-native';
 
 import * as MXUtils from "../../utils/MXUtils";
 let LVStyleSheet = require('../../styles/LVStyleSheet');
@@ -48,9 +48,9 @@ const Base = LVStyleSheet.create({
 
   buttonArea: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
     alignItems: 'center',
-    alignSelf: 'flex-end',
+    alignSelf: Platform.OS === 'ios' ? 'flex-end' : 'center',
     marginBottom: 6,
   },
 

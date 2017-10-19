@@ -39,7 +39,6 @@ export class ModifyWalletName extends Component {
         const {params} = this.props.navigation.state;
         this.setState({
             wallet: params.wallet,
-            name: params.wallet.name,
         })
     }
 
@@ -54,7 +53,6 @@ export class ModifyWalletName extends Component {
             this.refs.alert.show();
             return;
         }
-        
         if (!name) {
             this.setState({alertMessage:LVStrings.wallet_edit_new_name_required });
             this.refs.alert.show();
@@ -96,7 +94,10 @@ export class ModifyWalletName extends Component {
                         <Text style={styles.text}>
                         { LVStrings.profile_wallet_name }</Text>
                         <MXCrossTextInput
+                            ref={'textinput'}
+                            setFocusWhenMounted = {true}
                             style={styles.textInput}
+                            defaultValue={this.state.wallet.name}
                             placeholder= { LVStrings.profile_wallet_new_name }
                             onTextChanged={ this.onTextChanged.bind(this) }
                         />

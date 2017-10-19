@@ -37,7 +37,7 @@ export default class TransactionRecordList extends React.PureComponent {
             return { selected };
         });
 
-        if (this.props.onPressItem) {
+        if (item.completed && this.props.onPressItem) {
             this.props.onPressItem(item);
         }
     };
@@ -48,6 +48,7 @@ export default class TransactionRecordList extends React.PureComponent {
             amount={item.amount}
             address={item.type == 'in' ? item.payer : item.receiver}
             datetime={item.datetime}
+            completed={item.completed}
             selected={!!this.state.selected.get(item.hash)}
             onPressItem={() => {
                 this._onPressItem(item);
@@ -98,14 +99,14 @@ class LVTransactionRecordItem extends React.PureComponent {
         amount: PropTypes.number.isRequired,
         address: PropTypes.string.isRequired,
         datetime: PropTypes.string,
+        completed: PropTypes.bool,
         onPressItem: PropTypes.func
     };
 
     render() {
-        const { type, amount, address, datetime } = this.props;
+        const { type, amount, address, datetime, completed } = this.props;
         const typeImage = type === 'in' ? inImg : outImg;
 
-        const completed = true;
         const prefix = type === 'in' ? '+' : '-';
         const amountString = prefix + StringUtils.convertAmountToCurrencyString(amount, ',', 8) + ' LVT';
 

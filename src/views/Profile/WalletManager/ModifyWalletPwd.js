@@ -47,7 +47,6 @@ export class ModifyWalletPwd extends Component {
         const {params} = this.props.navigation.state;
         this.setState({
             wallet: params.wallet,
-            curPwd: params.wallet.password,
         })
     }
 
@@ -85,6 +84,12 @@ export class ModifyWalletPwd extends Component {
 
         if (newPwd !== newConfirmPwd) {
             this.setState({alertMessage:LVStrings.wallet_create_password_mismatch });
+            this.refs.alert.show();
+            return;
+        }
+
+        if (newConfirmPwd === wallet.password) {
+            this.setState({alertMessage:LVStrings.wallet_edit_password_same });
             this.refs.alert.show();
             return;
         }
