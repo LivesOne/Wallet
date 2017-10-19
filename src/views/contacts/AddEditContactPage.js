@@ -70,11 +70,6 @@ export default class AddEditContactPage extends Component {
             this.refs.alert.show();
             return;
         }
-        if(ContactLib.instance.containsContact(this.state.name)) {
-            this.setState({alertMessage: LVLocalization.contact_alert_contact_exists});
-            this.refs.alert.show();
-            return;
-        }
         if(isEmptyString(this.state.address)) {
             this.setState({alertMessage: LVLocalization.contact_alert_address_required});
             this.refs.alert.show();
@@ -87,6 +82,12 @@ export default class AddEditContactPage extends Component {
         }
 
         if(this.state.mode === 'add') {
+            if(ContactLib.instance.containsContact(this.state.name)) {
+                this.setState({alertMessage: LVLocalization.contact_alert_contact_exists});
+                this.refs.alert.show();
+                return;
+            }
+
             const contact = ContactLib.LVContactManager.createContact(this.state.name,
                 this.state.address,
                 this.state.cellPhone,
@@ -94,6 +95,14 @@ export default class AddEditContactPage extends Component {
                 this.state.remarks);
             ContactLib.instance.add(contact);
         } else if(this.state.editModel) {
+            const originalName = this.state.editModel.name;
+
+            if(originalName !== this.state.name
+                && ContactLib.instance.containsContact(this.state.name)) {
+                    this.setState({alertMessage: LVLocalization.contact_alert_contact_exists});
+                    this.refs.alert.show();
+                    return;
+            }
             this.state.editModel.name = this.state.name;
             this.state.editModel.address = this.state.address;
             this.state.editModel.cellPhone = this.state.cellPhone;

@@ -34,9 +34,6 @@ const ProfileNavigator = StackNavigator(
     {
         headerMode: 'none',
         mode: Platform.OS === 'ios' ? 'card' : 'modal',
-        navigationOptions: {
-            gesturesEnabled: false
-        },
         transitionConfig: Platform.OS === 'ios' ? () => {} : () => ({
             transitionSpec: {
                 duration: 300,
