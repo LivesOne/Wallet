@@ -205,18 +205,26 @@ export class WalletDetailsPage extends Component {
     onInputConfirm() {
         const {wallet, inputPwd, showInputFor} = this.state;
         if (wallet && wallet.password !== inputPwd) {
-            this.setState({alertMessage:LVStrings.wallet_password_incorrect });
-            this.refs.alert.show();
+            setTimeout(() => {
+                // this.setState({ showExportModal: true });
+                this.setState({alertMessage:LVStrings.wallet_password_incorrect });
+                this.refs.alert.show();
+            }, 500);
+
             return;
         }
         this.refs.passwordConfirm.dismiss();
 
         switch(showInputFor) {
             case SHOW_INPUT_FOR_EXPORT:
-                this.showExportModal();
+                setTimeout(() => {
+                    this.showExportModal();
+                },500);
                 break;
             case SHOW_INPUT_FOR_DELETE:
+                setTimeout(() => {
                 this.onDeleteWallet();
+                },500);
                 break;
             case SHOW_INPUT_FOR_BACKUP:
                 setTimeout(()=>{
