@@ -6,7 +6,7 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Keyboard } from 'react-native';
 import { TransferHeader } from './TransferHeader';
 import MXCrossTextInput from './../../components/MXCrossTextInput';
 
@@ -217,7 +217,7 @@ class TransferScreen extends Component {
 
     render() {
         return (
-            <ScrollView 
+            <ScrollView
                 keyboardShouldPersistTaps={'always'}
                 showsVerticalScrollIndicator = {false}
                 contentContainerStyle={ styles.container }>
@@ -230,7 +230,7 @@ class TransferScreen extends Component {
                     onClosed = {()=>{this.setState({ showModal: false })}}
                     onTransferConfirmed = {this.onTransfer.bind(this)}
                 />}
-                <View  style={ styles.container }>
+                <TouchableOpacity  style={ styles.container } activeOpacity={1} onPress={Keyboard.dismiss} >
                     <LVQrScanModal
                         barcodeReceived={(event)=>{this.setState({addressIn: event.data})}}
                         isOpen= {this.state.showQrScanModal}
@@ -294,7 +294,7 @@ class TransferScreen extends Component {
                             onTextChanged={(newText)=>{this.setState({inputPwd: newText})}}
                             placeholder={LVStrings.wallet_create_password_required}/>
                     </LVConfirmDialog>
-                </View>
+                </TouchableOpacity>
             </ScrollView>
         )
     }
