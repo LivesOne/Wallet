@@ -118,7 +118,7 @@ export default class WalletCreatePage extends Component {
                 <View style={styles.content}>
                     <View style={styles.textInputContainer}>
                         <MXCrossTextInput
-                            placeholder={LVStrings.wallet_create_wallet}
+                            placeholder={LVStrings.wallet_create_name}
                             style={ styles.textInput }
                             onTextChanged= {(text) => this.setState({name: text})}
                         />
