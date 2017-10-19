@@ -50,7 +50,7 @@ class LVConfiguration {
         const value = await LVPersistent.getString(LV_Key_LastTransactionRecordsFilterStartDate);
 
         if (!value) {
-            return Moment().format('YYYY-MM-DD');
+            return Moment().add(-2, 'days').format('YYYY-MM-DD');
         } else {
             return value;
         }
