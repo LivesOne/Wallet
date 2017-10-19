@@ -58,8 +58,9 @@ export class WalletExportModal extends Component {
                         multiline= {true} 
                         editable={false} 
                         selectTextOnFocus={false}
-                        style={ styles.textInput }>{ this.props.privateKey }</TextInput>
-                    <Text style={{fontSize: 15, color: LVColor.text.red, marginTop: 15,  fontWeight: '100',}}> {LVStrings.profile_wallet_export_warnning} </Text>
+                        style={ styles.textInput }>{ this.props.privateKey }
+                    </TextInput>
+                    <Text style={{fontSize: 15, color: LVColor.text.red, marginTop: 15,  fontWeight: '200', textAlign: 'left'}}>{LVStrings.profile_wallet_export_warnning}</Text>
                     <MXButton
                         rounded
                         style={ styles.btn }
