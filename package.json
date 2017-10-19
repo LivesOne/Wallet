@@ -46,8 +46,10 @@
     "react-native-qrcode-scanner": "0.0.22",
     "react-native-qrcode-svg": "^5.0.3",
     "react-native-randombytes": "^3.0.0",
+    "react-native-rk-pull-to-refresh": "^1.1.7",
     "react-native-simple-toast": "^0.0.7",
     "react-native-slider": "^0.11.0",
+    "react-native-splash-screen": "^2.1.0",
     "react-native-svg": "^5.4.2",
     "react-native-swipeout": "^2.2.2",
     "react-native-swiper": "^1.5.12",
@@ -66,8 +68,7 @@
     "url": "^0.10.3",
     "util": "^0.10.3",
     "uuid": "^3.1.0",
-    "vm-browserify": "0.0.4",
-    "react-native-splash-screen": "^2.1.0"
+    "vm-browserify": "0.0.4"
   },
   "devDependencies": {
     "babel-jest": "21.0.2",

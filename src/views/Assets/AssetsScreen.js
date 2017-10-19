@@ -19,6 +19,7 @@ import {
     PanResponder
 } from 'react-native';
 import PropTypes from 'prop-types';
+import { PullView } from 'react-native-rk-pull-to-refresh';
 import * as Progress from 'react-native-progress';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
@@ -77,8 +78,6 @@ class AssetsScreen extends Component {
         LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.handleRecordsChanged);
         LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletChange);
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
-        //this.refreshWalletDatas();
-        //this.refreshTransactionList();
     }
 
     componentWillUnmount() {
@@ -143,13 +142,10 @@ class AssetsScreen extends Component {
         });
     };
 
-    onRefresh() {
-        this.refreshTransactionList()
-            .then(() => {
-                alert('done');
-                this.setState({ reloading: false });
-            })
-            .catch(error => {});
+    async onRefresh() {
+        await this.refreshWalletDatas();
+        await this.refreshTransactionList();
+        this.setState({ reloading: false });
     }
 
     render() {
@@ -157,11 +153,7 @@ class AssetsScreen extends Component {
         const wallet = this.state.wallet || {};
 
         return (
-            <LVAssetsContainer
-                style={{ flex: 1 }}
-                refreshing={this.state.reloading}
-                onRefresh={this.onRefresh.bind(this)}
-            >
+            <LVAssetsContainer style={{ flex: 1, width: Window.width }} onRefresh={this.onRefresh.bind(this)}>
                 <LVGradientPanel style={styles.topPanel}>
                     <View style={styles.nav}>
                         <View style={{ width: 27 }} />
@@ -195,46 +187,34 @@ class AssetsScreen extends Component {
     }
 }
 
+const topIndicatorHeight = 100;
+
 class LVAssetsContainer extends Component {
     static propTypes = {
-        refreshing: PropTypes.bool,
         onRefresh: PropTypes.func
     };
 
-    _panResponder: Object;
-    _previousTop: number;
-    _circleStyles: Object;
-
-    componentWillMount() {
-        this._panResponder = PanResponder.create({
-            onStartShouldSetPanResponder: this._handleStartShouldSetPanResponder.bind(this),
-            onMoveShouldSetPanResponder: this._handleMoveShouldSetPanResponder.bind(this),
-            onPanResponderGrant: this._handlePanResponderGrant.bind(this),
-            onPanResponderMove: this._handlePanResponderMove.bind(this),
-            onPanResponderRelease: this._handlePanResponderEnd.bind(this),
-            onPanResponderTerminate: this._handlePanResponderEnd.bind(this)
-        });
-        this._previousTop = -CIRCLE_SIZE;
-        this._circleStyles = {
-            style: {
-                top: this._previousTop
-            }
-        };
-    }
-
     componentDidMount() {
-        this._updateNativeStyles();
+        this.pull && this.pull.beginRefresh()
     }
+
+    onPullRelease = async () => {
+        await this.props.onRefresh();
+        this.pull && this.pull.resolveHandler();
+    };
 
     render() {
         if (Platform.OS === 'ios') {
             return (
-                <View {...this.props} {...this._panResponder.panHandlers}>
+                <PullView
+                    ref={c => (this.pull = c)}
+                    {...this.props}
+                    onPullRelease={this.onPullRelease.bind(this)}
+                    topIndicatorHeight={topIndicatorHeight}
+                    topIndicatorRender={this.topIndicatorRender.bind(this)}
+                >
                     {this.props.children}
-                    <View ref={'circle'} style={indicatorStyles.circle}>
-                        <Progress.CircleSnail size={30} color={[LVColor.primary]} />
-                    </View>
-                </View>
+                </PullView>
             );
         } else {
             return (
@@ -258,32 +238,14 @@ class LVAssetsContainer extends Component {
         }
     }
 
-    _updateNativeStyles() {
-        this.refs.circle && this.refs.circle.setNativeProps(this._circleStyles);
-    }
-
-    _handleStartShouldSetPanResponder(e: Object, gestureState: Object) {
-        return !this.props.refreshing;
-    }
-
-    _handleMoveShouldSetPanResponder(e: Object, gestureState: Object) {
-        return !this.props.refreshing;
-    }
-
-    _handlePanResponderGrant(e: Object, gestureState: Object) {
-    }
-
-    _handlePanResponderMove(e: Object, gestureState: Object) {
-        if (this.props.refreshing) {
-            return;
-        }
-        const top = this._previousTop + gestureState.dy;
-        this._circleStyles.style.top = Math.min(top, 80);
-        this._updateNativeStyles();
-    }
-
-    _handlePanResponderEnd(e: Object, gestureState: Object) {
-        //this._previousTop += Math.min(Math.max(gestureState.dy, 0), 100);
+    topIndicatorRender() {
+        return (
+            <View style={indicatorStyles.container}>
+                <View style={indicatorStyles.circle}>
+                    <Progress.CircleSnail size={26} color={[LVColor.primary]} />
+                </View>
+            </View>
+        );
     }
 }
 
@@ -345,13 +307,15 @@ const styles = StyleSheet.create({
     }
 });
 
-const CIRCLE_SIZE = 50;
+const CIRCLE_SIZE = 36;
 
 var indicatorStyles = StyleSheet.create({
+    container: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: topIndicatorHeight
+    },
     circle: {
-        position: 'absolute',
-        top: 0,
-        left: (Window.width - CIRCLE_SIZE) / 2,
         width: CIRCLE_SIZE,
         height: CIRCLE_SIZE,
         borderRadius: CIRCLE_SIZE / 2,
