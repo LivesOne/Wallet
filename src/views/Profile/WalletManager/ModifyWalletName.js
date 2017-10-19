@@ -95,7 +95,7 @@ export class ModifyWalletName extends Component {
                         { LVStrings.profile_wallet_name }</Text>
                         <MXCrossTextInput
                             ref={'textinput'}
-                            setFocusWhenMounted = {true}
+                            setFocusWhenMounted = {false}
                             style={styles.textInput}
                             defaultValue={this.state.wallet.name}
                             placeholder= { LVStrings.profile_wallet_new_name }
