@@ -18,6 +18,8 @@ import WalletCreatePage from '../Wallet/WalletCreatePage';
 import WalletImportPage from '../Wallet/WalletImportPage';
 import ContactsManagerPage from '../contacts/ContactsManagerPage';
 import AddEditContactPage from '../contacts/AddEditContactPage';
+import TransactionRecordsScreen from '../Assets/TransactionRecordsScreen'
+import TransactionDetailsScreen from '../Assets/TransactionDetailsScreen';
 
 const ProfileNavigator = StackNavigator(
     {
@@ -29,11 +31,16 @@ const ProfileNavigator = StackNavigator(
         WalletCreatePage: { screen: WalletCreatePage },
         WalletImportPage: { screen: WalletImportPage },
         ContactList: { screen: ContactsManagerPage },
-        AddEditContactPage: { screen: AddEditContactPage }
+        AddEditContactPage: { screen: AddEditContactPage },
+        TransactionRecords: { screen: TransactionRecordsScreen },
+        TransactionDetails: { screen: TransactionDetailsScreen },
     },
     {
         headerMode: 'none',
         mode: Platform.OS === 'ios' ? 'card' : 'modal',
+        navigationOptions: {
+            gesturesEnabled: true
+        },
         transitionConfig: Platform.OS === 'ios' ? () => {} : () => ({
             transitionSpec: {
                 duration: 300,
