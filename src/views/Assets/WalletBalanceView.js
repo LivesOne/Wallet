@@ -56,15 +56,15 @@ const BalanceValueView = ({ value, extValue, extUnit }) => {
     const extValString = StringUtils.convertAmountToCurrencyString(extValue, ',', 3);
     return (
         <View>
-            <Text />
+            {/* <Text /> */}
             <Text
                 style={{ fontSize: LVSize.xxlarge, textAlign: 'right', fontWeight: '600', color: LVColor.text.grey1 }}
             >
                 {valueString}
             </Text>
-            <Text style={{ fontSize: LVSize.xsmall, textAlign: 'right', fontWeight: '400', color: LVColor.text.grey3 }}>
+            {/* <Text style={{ fontSize: LVSize.xsmall, textAlign: 'right', fontWeight: '400', color: LVColor.text.grey3 }}>
                 {'≈' + extUnit + extValString}
-            </Text>
+            </Text> */}
         </View>
     );
 };

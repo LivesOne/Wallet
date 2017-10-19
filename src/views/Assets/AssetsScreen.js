@@ -6,7 +6,21 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions, Platform, View, Text, Image } from 'react-native';
+import {
+    StyleSheet,
+    Dimensions,
+    Platform,
+    ViewPropTypes,
+    View,
+    Text,
+    Image,
+    ScrollView,
+    RefreshControl,
+    PanResponder
+} from 'react-native';
+import PropTypes from 'prop-types';
+import { PullView } from 'react-native-rk-pull-to-refresh';
+import * as Progress from 'react-native-progress';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
@@ -36,14 +50,10 @@ class AssetsScreen extends Component {
         wallet: ?Object,
         extEth: number,
         extLvt: number,
+        reloading: boolean,
         transactionList: ?Array<LVTransactionRecord>,
         openSelectWallet: boolean
     };
-
-    _panResponder: {};
-    _previousLeft: 0;
-    _previousTop: 0;
-    _refreshStyles: {};
 
     constructor(props: any) {
         super(props);
@@ -52,6 +62,7 @@ class AssetsScreen extends Component {
             wallet: wallet,
             extEth: 0,
             extLvt: 0,
+            reloading: false,
             transactionList: null,
             openSelectWallet: false
         };
@@ -67,8 +78,6 @@ class AssetsScreen extends Component {
         LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.handleRecordsChanged);
         LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletChange);
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
-        this.refreshWalletDatas();
-        this.refreshTransactionList();
     }
 
     componentWillUnmount() {
@@ -82,13 +91,13 @@ class AssetsScreen extends Component {
                 const lvt = await LVNetworking.fetchBalance(wallet.address, 'lvt');
                 const eth = await LVNetworking.fetchBalance(wallet.address, 'eth');
 
-                await LVMarketInfo.updateExchangeRateIfNecessary();
-                const extEth = eth * LVMarketInfo.usd_per_eth;
-                const extLvt = lvt / LVMarketInfo.lvt_per_eth * LVMarketInfo.usd_per_eth;
+                // await LVMarketInfo.updateExchangeRateIfNecessary();
+                // const extEth = eth * LVMarketInfo.usd_per_eth;
+                // const extLvt = lvt / LVMarketInfo.lvt_per_eth * LVMarketInfo.usd_per_eth;
 
                 wallet.lvt = lvt ? parseFloat(lvt) : 0;
                 wallet.eth = eth ? parseFloat(eth) : 0;
-                this.setState({ wallet: wallet, extEth: extEth, extLvt: extLvt });
+                this.setState({ wallet: wallet, extEth: 0, extLvt: 0 });
 
                 LVNotificationCenter.postNotification(LVNotification.balanceChanged);
                 LVWalletManager.saveToDisk();
@@ -111,7 +120,7 @@ class AssetsScreen extends Component {
     handleRecordsChanged = () => {
         this.setState({ transactionList: null });
         this.setState({ transactionList: LVTransactionRecordManager.records });
-    }
+    };
 
     onPressSelectWallet = () => {
         this.setState({ openSelectWallet: true });
@@ -133,34 +142,108 @@ class AssetsScreen extends Component {
         });
     };
 
+    async onRefresh() {
+        await this.refreshWalletDatas();
+        await this.refreshTransactionList();
+        this.setState({ reloading: false });
+    }
+
     render() {
         const { transactionList, extEth, extLvt } = this.state;
         const wallet = this.state.wallet || {};
 
         return (
-            <View style={styles.container}>
-                <LVGradientPanel style={styles.gradient}>
+            <LVAssetsContainer style={{ flex: 1, width: Window.width }} onRefresh={this.onRefresh.bind(this)}>
+                <LVGradientPanel style={styles.topPanel}>
                     <View style={styles.nav}>
                         <View style={{ width: 27 }} />
                         <Text style={styles.navTitle}>{LVStrings.assets_title}</Text>
                         <MXTouchableImage style={{ width: 27 }} source={selectImg} onPress={this.onPressSelectWallet} />
                     </View>
                     <WalletInfoView style={styles.walletInfo} title={wallet.name} address={wallet.address} />
-                    <WalletBalanceView style={styles.balance} lvt={wallet.lvt} eth={wallet.eth} extLvt={extLvt} extEth={extEth} />
+                    <WalletBalanceView style={styles.balance} lvt={wallet.lvt} eth={wallet.eth} extLvt={0} extEth={0} />
                 </LVGradientPanel>
 
-                <LVDetailTextCell
-                    style={styles.recent}
-                    text={LVStrings.recent_records}
-                    detailText={LVStrings.view_all_records}
-                    onPress={this.onPressShowAll}
-                />
+                <View style={styles.bottomPanel}>
+                    <LVDetailTextCell
+                        style={styles.recent}
+                        text={LVStrings.recent_records}
+                        detailText={LVStrings.view_all_records}
+                        onPress={this.onPressShowAll}
+                    />
 
-                <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }} />
+                    <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }} />
 
-                <TransactionRecordList style={styles.list} records={transactionList} onPressItem={this.onPressRecord} />
+                    <TransactionRecordList
+                        style={styles.list}
+                        records={transactionList}
+                        onPressItem={this.onPressRecord}
+                    />
+                </View>
 
                 <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
+            </LVAssetsContainer>
+        );
+    }
+}
+
+const topIndicatorHeight = 100;
+
+class LVAssetsContainer extends Component {
+    static propTypes = {
+        onRefresh: PropTypes.func
+    };
+
+    componentDidMount() {
+        this.pull && this.pull.beginRefresh()
+    }
+
+    onPullRelease = async () => {
+        await this.props.onRefresh();
+        this.pull && this.pull.resolveHandler();
+    };
+
+    render() {
+        if (Platform.OS === 'ios') {
+            return (
+                <PullView
+                    ref={c => (this.pull = c)}
+                    {...this.props}
+                    onPullRelease={this.onPullRelease.bind(this)}
+                    topIndicatorHeight={topIndicatorHeight}
+                    topIndicatorRender={this.topIndicatorRender.bind(this)}
+                >
+                    {this.props.children}
+                </PullView>
+            );
+        } else {
+            return (
+                <ScrollView
+                    {...this.props}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={styles.container}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.props.refreshing}
+                            onRefresh={this.props.onRefresh}
+                            tintColor="#fff"
+                            colors={[LVColor.primary]}
+                            progressBackgroundColor="#fff"
+                        />
+                    }
+                >
+                    {this.props.children}
+                </ScrollView>
+            );
+        }
+    }
+
+    topIndicatorRender() {
+        return (
+            <View style={indicatorStyles.container}>
+                <View style={indicatorStyles.circle}>
+                    <Progress.CircleSnail size={26} color={[LVColor.primary]} />
+                </View>
             </View>
         );
     }
@@ -177,7 +260,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center'
     },
-    gradient: {
+    topPanel: {
         width: '100%',
         height: 315,
         justifyContent: 'flex-start',
@@ -205,6 +288,13 @@ const styles = StyleSheet.create({
         height: 150,
         marginTop: 15
     },
+    bottomPanel: {
+        flex: 1,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: LVColor.separateLine
+    },
     recent: {
         width: '100%',
         alignItems: 'center',
@@ -213,6 +303,28 @@ const styles = StyleSheet.create({
     },
     list: {
         width: '100%',
+        backgroundColor: LVColor.white
+    }
+});
+
+const CIRCLE_SIZE = 36;
+
+var indicatorStyles = StyleSheet.create({
+    container: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: topIndicatorHeight
+    },
+    circle: {
+        width: CIRCLE_SIZE,
+        height: CIRCLE_SIZE,
+        borderRadius: CIRCLE_SIZE / 2,
+        shadowOffset: { width: 3, height: 3 },
+        shadowColor: '#ACBFE5',
+        shadowOpacity: 0.3,
+        shadowRadius: 3,
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: LVColor.white
     }
 });
