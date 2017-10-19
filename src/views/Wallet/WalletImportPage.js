@@ -339,6 +339,8 @@ const foundation = require('../../foundation/wallet.js');
       height: 110,
       marginTop: 20,
       borderRadius: 3,
+      padding: 6,
+      fontSize: 14,
     },
 
   });
