@@ -9,6 +9,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Keyboard } from 'react-native';
 import { TransferHeader } from './TransferHeader';
 import MXCrossTextInput from './../../components/MXCrossTextInput';
+import MXTouchableImage from '../../components/MXTouchableImage';
 
 import PropTypes from 'prop-types';
 import LVColor from '../../styles/LVColor'
@@ -32,6 +33,9 @@ import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import LVNotification from '../../logic/LVNotification';
 import LVLoadingToast from '../Common/LVLoadingToast';
 import Moment from 'moment';
+
+const addImg = require('../../assets/images/transfer_add_contracts.png');
+const scanImg = require('../../assets/images/transfer_scan.png');
 
 const MIN_BALANCE_ALLOW_TO_TRANSFER = 0.01;
 const GAP_MIN_VALUE = 0.02;
@@ -271,13 +275,18 @@ class TransferScreen extends Component {
                         onPressSelectWallet={()=>{this.setState({ openSelectWallet: true })}}
                     ></TransferHeader>
                     <View style= { styles.headerBelow }>
-                        <ImageTextInput 
-                            style= {styles.textInput} 
+                        
+                        <MXCrossTextInput 
+                            style={styles.textInput} 
                             placeholder={LVStrings.transfer_payee_address}
-                            onAddClicked={() => {this.props.navigation.navigate('ContactList')}}
-                            value={this.state.addressIn}
-                            onScanClicked={() => {this.setState({ showQrScanModal: true })}}
-                            onTextChanged={this.onAddressChanged.bind(this)}/>
+                            defaultValue={this.state.addressIn}
+                            rightComponent={
+                                <View style={{flexDirection:'row', justifyContent: 'space-between', width: 55}}>
+                                    <MXTouchableImage source={addImg} onPress={() => {this.props.navigation.navigate('ContactList')}}/>
+                                    <MXTouchableImage source={scanImg} onPress={() => {this.setState({ showQrScanModal: true })}}/>
+                                </View>
+                            }
+                            onTextChanged= {this.onAddressChanged.bind(this)}/>
                         <MXCrossTextInput 
                             style= {styles.textInput} 
                             placeholder={LVStrings.transfer_amount}

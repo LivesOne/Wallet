@@ -11,6 +11,7 @@ import MXButton from '../../components/MXButton';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
+import WalletUtils from '../Wallet/WalletUtils'
 import * as LVStyleSheet from '../../styles/LVStyleSheet';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import MXTouchableImage from '../../components/MXTouchableImage';
@@ -65,7 +66,7 @@ export default class WalletCreatePage extends Component {
             return;
         }
 
-        if(!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,12}$/i.test(this.state.password)) {
+        if(!WalletUtils.isPasswordValid(this.state.password)) {
             this.setState({alertMessage:LVStrings.wallet_import_private_password_hint });
             this.refs.alert.show();
             return;

@@ -45,22 +45,40 @@ export default class AddEditContactPage extends Component {
 
     onAddingDone : Function;
 
-    constructor() {
+    constructor(props: any) {
         super();
 
-        this.state = {
-            name: '',
-            address: '',
-            cellPhone: '',
-            email: '',
-            remarks: '',
-            alertMessage: '',
-            navTitle: '',
-            mode: 'add',
-            editModel: null,
-            showQrScanModal: false
-        };
-
+        const { params } = props.navigation.state;
+        const navTitle = params.mode === 'add' ?  LVStrings.contact_add_nav_title : LVStrings.contact_edit_nav_title;
+        const model = params.model;
+        if(!model) {
+            this.state = {
+                name: '',
+                address: '',
+                cellPhone: '',
+                email: '',
+                remarks: '',
+                alertMessage: '',
+                navTitle: navTitle,
+                mode: params.mode,
+                editModel: null,
+                showQrScanModal: false
+            };
+        } else {
+            this.state = {
+                name: model.name,
+                address: model.address,
+                cellPhone: model.cellPhone,
+                email: model.email,
+                remarks: model.remarks,
+                alertMessage: '',
+                navTitle: navTitle,
+                mode: params.mode,
+                editModel: model,
+                showQrScanModal: false
+            };
+        }
+       
         this.onAddingDone = this.onAddingDone.bind(this);
     }
 
@@ -114,29 +132,6 @@ export default class AddEditContactPage extends Component {
         const {params} = this.props.navigation.state;
         this.props.navigation.goBack();
         params.callback();
-    }
-
-    componentDidMount() {
-        const { params } = this.props.navigation.state;
-        const navTitle = params.mode === 'add' ?  LVStrings.contact_add_nav_title : LVStrings.contact_edit_nav_title;
-        const model = params.model;
-        if(!model) {
-            this.setState({
-                navTitle: navTitle,
-                mode: params.mode
-            });
-        } else {
-            this.setState({
-                navTitle: navTitle,
-                name: model.name,
-                address: model.address,
-                cellPhone: model.cellPhone,
-                email: model.email,
-                remarks: model.remarks,
-                mode: params.mode,
-                editModel: model
-            });
-        }
     }
 
     onPressScan() {

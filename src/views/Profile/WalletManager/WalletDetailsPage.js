@@ -50,8 +50,6 @@ const SHOW_INPUT_FOR_DELETE = 'for_delete';
 const SHOW_INPUT_FOR_BACKUP = 'for_backup';
 
 export class WalletDetailsPage extends Component {
-
-
     static navigationOptions = {
         header: null,
         tabBarVisible: false
@@ -68,7 +66,7 @@ export class WalletDetailsPage extends Component {
         showExportModal: boolean,
         inputPwd: string,
         alertMessage: string,
-        showInputFor: string,
+        showInputFor: string
     };
 
     constructor() {
@@ -83,7 +81,7 @@ export class WalletDetailsPage extends Component {
             walletName: '',
             inputPwd: '',
             alertMessage: '',
-            showInputFor: '',
+            showInputFor: ''
         };
     }
 
@@ -147,12 +145,12 @@ export class WalletDetailsPage extends Component {
     }
 
     onPressExportOrDeleteButton(showFor: string) {
-        this.setState({showInputFor: showFor});
+        this.setState({ showInputFor: showFor });
         this.refs.passwordConfirm.show();
     }
 
     async onDeleteWallet() {
-        const {walletAddress} = this.state;
+        const { walletAddress } = this.state;
         await LVWalletManager.deleteWallet(walletAddress);
         await LVWalletManager.saveToDisk();
 
@@ -203,23 +201,31 @@ export class WalletDetailsPage extends Component {
     }
 
     onInputConfirm() {
-        const {wallet, inputPwd, showInputFor} = this.state;
+        const { wallet, inputPwd, showInputFor } = this.state;
         if (wallet && wallet.password !== inputPwd) {
-            this.setState({alertMessage:LVStrings.wallet_password_incorrect });
-            this.refs.alert.show();
+            setTimeout(() => {
+                // this.setState({ showExportModal: true });
+                this.setState({ alertMessage: LVStrings.wallet_password_incorrect });
+                this.refs.alert.show();
+            }, 500);
+
             return;
         }
         this.refs.passwordConfirm.dismiss();
 
-        switch(showInputFor) {
+        switch (showInputFor) {
             case SHOW_INPUT_FOR_EXPORT:
-                this.showExportModal();
+                setTimeout(() => {
+                    this.showExportModal();
+                }, 500);
                 break;
             case SHOW_INPUT_FOR_DELETE:
-                this.onDeleteWallet();
+                setTimeout(() => {
+                    this.onDeleteWallet();
+                }, 500);
                 break;
             case SHOW_INPUT_FOR_BACKUP:
-                setTimeout(()=>{
+                setTimeout(() => {
                     this.onWalletBackup();
                 }, 500);
                 break;
@@ -280,7 +286,9 @@ export class WalletDetailsPage extends Component {
                         <CellVariant
                             title={LVStrings.profile_wallet_export}
                             source={IconWalletExportPK}
-                            onPress={()=> {this.onPressExportOrDeleteButton(SHOW_INPUT_FOR_EXPORT)}}
+                            onPress={() => {
+                                this.onPressExportOrDeleteButton(SHOW_INPUT_FOR_EXPORT);
+                            }}
                         />
                         <Separator insetRight={15} tintColor="#eeeff2" />
                     </Section>
@@ -298,13 +306,17 @@ export class WalletDetailsPage extends Component {
                         style={{ marginBottom: 15 }}
                         title={LVStrings.profile_wallet_backup}
                         rounded
-                        onPress={()=> {this.onPressExportOrDeleteButton(SHOW_INPUT_FOR_BACKUP)}}
+                        onPress={() => {
+                            this.onPressExportOrDeleteButton(SHOW_INPUT_FOR_BACKUP);
+                        }}
                     />
                     <MXButton
                         style={{ marginBottom: 25 }}
                         title={LVStrings.profile_wallet_delete_wallet}
                         rounded
-                        onPress={()=> {this.onPressExportOrDeleteButton(SHOW_INPUT_FOR_DELETE)}}
+                        onPress={() => {
+                            this.onPressExportOrDeleteButton(SHOW_INPUT_FOR_DELETE);
+                        }}
                     />
                 </View>
                 <LVLoadingToast ref={'toast'} title={LVStrings.wallet_exporting} />
@@ -328,12 +340,17 @@ export class WalletDetailsPage extends Component {
                 <LVConfirmDialog
                     ref={'passwordConfirm'}
                     title={LVStrings.wallet_create_password_required}
-                    onConfirm={this.onInputConfirm.bind(this)}>
+                    onConfirm={this.onInputConfirm.bind(this)}
+                >
                     <MXCrossTextInput
+                        style={{height: 44, width: Dimensions.get('window').width * 0.8}}
                         secureTextEntry={true}
-                        withUnderLine={false}
-                        onTextChanged={(newText)=>{this.setState({inputPwd: newText})}}
-                        placeholder={LVStrings.wallet_create_password_required}/>
+                        withUnderLine={true}
+                        onTextChanged={newText => {
+                            this.setState({ inputPwd: newText });
+                        }}
+                        placeholder={LVStrings.wallet_create_password_required}
+                    />
                 </LVConfirmDialog>
             </View>
         );
