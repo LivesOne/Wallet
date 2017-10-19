@@ -38,10 +38,6 @@ const addImg = require('../../assets/images/transfer_add_contracts.png');
 const scanImg = require('../../assets/images/transfer_scan.png');
 
 const MIN_BALANCE_ALLOW_TO_TRANSFER = 0.01;
-const GAP_MIN_VALUE = 0.02;
-const GAP_MAX_VALUE = 0.08;
-const PRICE_LIMIT = '0x186A0';
-const PRICE_LIMIT_NUMBER = parseInt('0x186A0', 16);
 
 class TransferScreen extends Component {
     static navigationOptions = {
@@ -78,7 +74,7 @@ class TransferScreen extends Component {
             addressIn: '0x9224A9f81Ac30F0E3B568553bf9a7372EE49548C',
             amount: 0,
             balance: wallet != null ? wallet.lvt: 0,
-            minerGap: GAP_MIN_VALUE,
+            minerGap: 0,
             minGap: 0,
             maxGap:0,
             remarks: '',
@@ -101,14 +97,14 @@ class TransferScreen extends Component {
         const {wallet, amount, addressIn} = this.state;
         if (wallet && amount && addressIn && TransferUtils.isValidAddress(addressIn)) {
             let params = await LVNetworking.fetchTransactionParam(wallet.address, addressIn, amount);
+            let range = TransferUtils.getMinerGapRange(params);
             TransferUtils.log('tryFetchParams ' + JSON.stringify(params)
-            + ' price limit = ' + PRICE_LIMIT_NUMBER 
-            + ' minGap = ' +  TransferUtils.hexStr2Number(params.priceMin) * PRICE_LIMIT_NUMBER / Math.pow(10, 18)
-            + ' maxGap = ' +  TransferUtils.hexStr2Number(params.priceMax) * PRICE_LIMIT_NUMBER / Math.pow(10, 18));
+            + ' minGap = ' +  range.min
+            + ' maxGap = ' +  range.max);
             this.setState({
                 transactionParams : params,
-                minGap: TransferUtils.hexStr2Number(params.priceMin) * PRICE_LIMIT_NUMBER / Math.pow(10, 18),
-                maxGap: TransferUtils.hexStr2Number(params.priceMax) * PRICE_LIMIT_NUMBER / Math.pow(10, 18),
+                minGap: range.min,
+                maxGap: range.max,
             });
         } else {
             this.setState({transactionParams: null})
@@ -225,10 +221,9 @@ class TransferScreen extends Component {
         }
         this.refs.loading.show();
         setTimeout(async ()=> {
-            let gasPrice = userHasSetGap ? 
-            TransferUtils.number2HexStr(parseInt(minerGap * Math.pow(10, 18) / PRICE_LIMIT_NUMBER)) : transactionParams.gasPrice;
+            let gasPrice = userHasSetGap ? TransferUtils.getSetGasPriceHexStr(minerGap) : transactionParams.gasPrice;
             let rst = await TransferLogic.transaction(addressIn, amount, transactionParams.nonce,
-                PRICE_LIMIT, gasPrice, transactionParams.token, transactionParams.chainID, wallet);
+                TransferUtils.PRICE_LIMIT, gasPrice, transactionParams.token, transactionParams.chainID, wallet);
             this.refs.loading.dismiss();
             let success = rst && rst.result;
             if (success) {  

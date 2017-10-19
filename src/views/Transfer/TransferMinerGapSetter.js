@@ -46,7 +46,7 @@ export class TransferMinerGapSetter extends Component {
 
     onValueChange(value: number) {
         if (this.props.onGapChanged) {
-            this.props.onGapChanged(parseFloat(value.toFixed(8)));
+            this.props.onGapChanged(parseFloat(value.toFixed(9)));
         }
         this.setState({
             value: value,
