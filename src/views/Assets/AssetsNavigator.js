@@ -11,6 +11,7 @@ import { StackNavigator } from "react-navigation";
 import AssetsScreen from './AssetsScreen';
 import TransactionRecordsScreen from './TransactionRecordsScreen';
 import TransactionDetailsScreen from './TransactionDetailsScreen';
+import PanResponderExample from './PanResponderExample';
 
 const AssetsNavigator = StackNavigator({
     Assets: { screen: AssetsScreen },
