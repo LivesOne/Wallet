@@ -71,7 +71,7 @@ class TransferScreen extends Component {
             wallet: wallet,
             transactionParams: null,
             curETH: wallet != null ? wallet.eth: 0,
-            addressIn: '0x9224A9f81Ac30F0E3B568553bf9a7372EE49548C',
+            addressIn: '',
             amount: 0,
             balance: wallet != null ? wallet.lvt: 0,
             minerGap: 0,
@@ -103,6 +103,7 @@ class TransferScreen extends Component {
             + ' maxGap = ' +  range.max);
             this.setState({
                 transactionParams : params,
+                minerGap: TransferUtils.convertHex2Eth(params.gasPrice),
                 minGap: range.min,
                 maxGap: range.max,
             });
@@ -210,6 +211,15 @@ class TransferScreen extends Component {
         }
     }
 
+    resetStateAfterSuccesss() {
+        this.refs.refAddressIn.onPressClear();
+        this.refs.refAmount.onPressClear();
+        this.refs.refRemarks.onPressClear();
+        this.setState({
+            transactionParams: null
+        })
+    }
+
     async onTransfer() {
         this.setState({ showModal: false });
         const {wallet, addressIn, amount, minerGap, balance, transactionParams, userHasSetGap} = this.state;
@@ -240,6 +250,7 @@ class TransferScreen extends Component {
             setTimeout(() => {
                 this.setState({alertMessage: success ? LVStrings.transfer_success : LVStrings.transfer_fail });
                 this.refs.alert.show();
+                this.resetStateAfterSuccesss();
             }, 100);
         },500);
     }
@@ -254,7 +265,7 @@ class TransferScreen extends Component {
                     isOpen= {this.state.showModal}
                     address= {this.state.addressIn}
                     amount= {this.state.amount}
-                    minerTips= {this.state.minerGap}
+                    minerGap= {this.state.minerGap}
                     remarks= {this.state.remarks}
                     onClosed = {()=>{this.setState({ showModal: false })}}
                     onTransferConfirmed = {this.onTransfer.bind(this)}
@@ -272,6 +283,7 @@ class TransferScreen extends Component {
                     <View style= { styles.headerBelow }>
                         
                         <MXCrossTextInput 
+                            ref={'refAddressIn'}
                             style={styles.textInput} 
                             placeholder={LVStrings.transfer_payee_address}
                             defaultValue={this.state.addressIn}
@@ -283,11 +295,13 @@ class TransferScreen extends Component {
                             }
                             onTextChanged= {this.onAddressChanged.bind(this)}/>
                         <MXCrossTextInput 
+                            ref={'refAmount'}
                             style= {styles.textInput} 
                             placeholder={LVStrings.transfer_amount}
                             keyboardType = {'numeric'}
                             onTextChanged={this.onAmountChanged.bind(this)}/>
-                        <MXCrossTextInput 
+                        <MXCrossTextInput
+                            ref={'refRemarks'} 
                             style= {styles.textInput} 
                             placeholder={LVStrings.transfer_remarks}
                             onTextChanged={(newText) => {this.setState({remarks: newText})}}/>

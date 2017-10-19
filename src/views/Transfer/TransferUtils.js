@@ -26,11 +26,14 @@ export default class TransferUtils {
 
     static getMinerGapRange(params: Object) {
         let {priceMin, priceMax} = params;
+        return {min: this.convertHex2Eth(priceMin),
+                max: this.convertHex2Eth(priceMax)}
+    }
+
+    static convertHex2Eth(price: string) {
         const priceLimit = new BN(this.PRICE_LIMIT.slice(2), 16);
-        let min = new BN(priceMin.slice(2), 16);
-        let max = new BN(priceMax.slice(2), 16);
-        return {min: (parseInt(min.mul(priceLimit).toString()) /  Math.pow(10, 18)),
-                max: (parseInt(max.mul(priceLimit).toString()) /  Math.pow(10, 18))}
+        let g = new BN(price.slice(2), 16);
+        return (parseInt(g.mul(priceLimit).toString()) /  Math.pow(10, 18));
     }
 
     static getSetGasPriceHexStr(setGasPrice: number) : string {
