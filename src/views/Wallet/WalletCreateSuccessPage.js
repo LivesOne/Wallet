@@ -6,12 +6,13 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { View, Share, Image, Text, NativeModules, Platform } from 'react-native';
+import { View, Share, Image, Text, NativeModules, Platform, ActionSheetIOS } from 'react-native';
 import MXButton from '../../components/MXButton';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import * as LVStyleSheet from '../../styles/LVStyleSheet';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
+import LVDialog from '../Common/LVDialog';
 const createSuccessImage = require('../../assets/images/create_wallet_success.png');
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import LVNotification from '../../logic/LVNotification';
@@ -29,26 +30,30 @@ export default class WalletCreateSuccessPage extends Component {
             const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
             const message: string = title + '\n' + JSON.stringify(wallet.keystore);
 
-            Share.share({
-                message: message,
-                url: '',
-                title: title
-            })
-                .then(this._shareResult.bind(this))
-                .catch(error => console.log(error));
+            const options = { title: title, message: message, subject: title };
+
+            if (Platform.OS === 'ios') {
+                ActionSheetIOS.showShareActionSheetWithOptions(
+                    options,
+                    error => console.log(error),
+                    (success, activityType) => {
+                        if (success) {
+                            this.refs.disclaimer.show();
+                        } else {
+                            console.log('User did not share');
+                        }
+                    }
+                );
+            } else {
+                Share.share(options)
+                    .then(this._shareResult.bind(this))
+                    .catch(error => console.log(error));
+            }
         }
     }
 
     _shareResult(result) {
-        if (result.action === Share.sharedAction) {
-            LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
-            if (this.props.screenProps.dismiss) {
-                this.props.screenProps.dismiss();
-            } else {
-                this.props.navigation.goBack();
-            }
-        } else if (result.action === Share.dismissedAction) {
-        }
+        this.refs.disclaimer.show();
     }
 
     render() {
@@ -74,6 +79,15 @@ export default class WalletCreateSuccessPage extends Component {
                     onPress={this.onPressWalletBackupButton.bind(this)}
                     themeStyle={'active'}
                     style={styles.backupButton}
+                />
+                <LVDialog
+                    ref={'disclaimer'}
+                    height={230}
+                    title={LVStrings.wallet_disclaimer}
+                    titleStyle={{ color: 'red' }}
+                    message={LVStrings.wallet_disclaimer_content}
+                    buttonTitle={LVStrings.common_confirm}
+                    onPress={() => this.refs.disclaimer.dismiss()}
                 />
             </View>
         );
