@@ -2,7 +2,7 @@
 'use strict'
 
 import React, { Component } from 'react'
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Keyboard } from 'react-native';
 import MXNavigatorHeader from './../../../components/MXNavigatorHeader';
 const IconBack = require('../../../assets/images/back_grey.png');
 import LVStrings from '../../../assets/localization';
@@ -51,6 +51,8 @@ export class ModifyWalletPwd extends Component {
     }
 
     async onSavePressed() {
+        Keyboard.dismiss();
+        
         const {wallet, curPwd, newPwd, newConfirmPwd} = this.state;
         if (!wallet) {
             this.setState({alertMessage:LVStrings.wallet_edit_save_failed });
