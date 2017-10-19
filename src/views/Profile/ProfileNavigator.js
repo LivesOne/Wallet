@@ -39,7 +39,7 @@ const ProfileNavigator = StackNavigator(
         headerMode: 'none',
         mode: Platform.OS === 'ios' ? 'card' : 'modal',
         navigationOptions: {
-            gesturesEnabled: false
+            gesturesEnabled: true
         },
         transitionConfig: Platform.OS === 'ios' ? () => {} : () => ({
             transitionSpec: {
