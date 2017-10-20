@@ -74,7 +74,7 @@ export default class ProfleScreen extends Component {
                         <ProfileCell
                             title={LVStrings.profile_contacts}
                             accessory="DisclosureIndicator"
-                            onPress={() => this.props.navigation.navigate('ContactList')}
+                            onPress={() => this.props.navigation.navigate('ContactList', {readonly: false})}
                             disableImageResize
                             image={<Image source={ContactsImage} style={styles.tableViewImage}/>}
                         />
