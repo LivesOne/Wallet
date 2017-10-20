@@ -7,7 +7,7 @@
 
 import React, { Component } from 'react';
 
-import { StyleSheet,Share, View, Text,Image,ScrollView ,Clipboard,CameraRoll } from 'react-native';
+import { StyleSheet,Share, View, Platform,Text,Image,ScrollView ,Clipboard,CameraRoll ,ActionSheetIOS} from 'react-native';
 
 import PropTypes from 'prop-types';
 import LVColor from '../../styles/LVColor';
@@ -131,6 +131,37 @@ class ReceiveScreen extends Component {
         }
     }
 
+    onWalletShare() {
+        const wallet = this.state.wallet;
+
+       if (wallet && wallet.address) {
+            const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
+            const message: string = JSON.stringify(wallet.address);
+
+            const options = {
+                title: title,
+                message: message,
+                subject: title
+            };
+
+            if (Platform.OS === 'ios') {
+                ActionSheetIOS.showShareActionSheetWithOptions(
+                    options,
+                    error => console.log(error),
+                    (success, activityType) => {
+                        if (success) {
+                        } else {
+                            console.log('User did not share');
+                        }
+                    }
+                );
+            } else {
+                Share.share(options)
+                    // .then(this._shareResult.bind(this))
+                    .catch(error => console.log('share error'));
+            }
+        } 
+    }
 
     
     saveQrToDisk() {
@@ -138,11 +169,18 @@ class ReceiveScreen extends Component {
             RNFS.writeFile(RNFS.CachesDirectoryPath+"/some-name.png", data, 'base64')
               .then((success) => {
                   return CameraRoll.saveToCameraRoll(RNFS.CachesDirectoryPath+"/some-name.png", 'photo')
+                  .then((data) => {
+                    //   Toast.show("data:"+data);
+                      Toast.show(LVStrings.receive_save_finish)
+
+                  }).catch((err) => {
+                      Toast.show("err"+err);
+                  });
                 // Toast.show("ok");
               })
               .then(() => {
                   this.setState({ busy: false, imageSaved: true  })
-                  Toast.show(LVStrings.receive_save_finish)
+                //   Toast.show(LVStrings.receive_save_finish)
               })
         })
    }
@@ -222,18 +260,20 @@ class ReceiveScreen extends Component {
                 {/* <Image source={receive_share} style={styles.share}></Image> */}
                 <MxImage source={receive_share}
                     onPress = { () => {
-                        Share.share({
-                            url: this.state.wallet.address,
-                            title: 'Share your wallet address ?',
-                            message: this.state.wallet.address,
-                          }, {
-                            // Android only:
-                            dialogTitle: 'Share your wallet address ',
-                            // iOS only:
-                            excludedActivityTypes: [
-                              'com.apple.UIKit.activity.PostToTwitter'
-                            ]
-                          })                       
+                        // Share.share({
+                        //     url: this.state.wallet.address,
+                        //     title: 'Share your wallet address ?',
+                        //     message: this.state.wallet.address,
+                        //   }, {
+                        //     // Android only:
+                        //     dialogTitle: 'Share your wallet address ',
+                        //     // iOS only:
+                        //     excludedActivityTypes: [
+                        //       'com.apple.UIKit.activity.PostToTwitter'
+                        //     ]
+                        //   })                       
+
+                        this.onWalletShare();
                     }
                     }
                    ></MxImage>
