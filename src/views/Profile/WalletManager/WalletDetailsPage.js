@@ -162,27 +162,29 @@ export class WalletDetailsPage extends Component {
         this.props.navigation.goBack();
     }
 
-    async onWalletBackup(password: string) {
+    onWalletBackup(password: string) {
         const wallet = this.state.wallet;
         if(wallet){
-            try {
                 this.refs.toast.show();
-                await backupWallet(wallet, password);
-                this.refs.toast.dismiss();
-                this.refs.disclaimer.show();
-            } catch (error) {
-                this.refs.toast.dismiss();
-                if(error === 'cancelled') {
-                    return;
-                }
-                
-                setTimeout(() => {
-                    this.setState({
-                        alertMessage: LVStrings.wallet_backup_failed
-                    });
-                    this.refs.alert.show();
-                }, 500);
-            }
+                setTimeout(async ()=>{
+                    try {
+                        await backupWallet(wallet, password);
+                        this.refs.toast.dismiss();
+                        this.refs.disclaimer.show();
+                    } catch (error) {
+                        this.refs.toast.dismiss();
+                        if(error === 'cancelled') {
+                            return;
+                        }
+                        setTimeout(() => {
+                            this.setState({
+                                alertMessage: LVStrings.wallet_backup_failed
+                            });
+                            this.refs.alert.show();
+                        }, 500);
+                    }
+                   
+                }, 500)
         }
     }
 

@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 // import Orientation from 'react-native-orientation';
 import LVWalletManager from '../logic/LVWalletManager';
+import WalletUtils from '../views/Wallet/WalletUtils';
 
 export const getDeviceHeight = () => Dimensions.get('window').height;
 export const getDeviceWidth = () => Dimensions.get('window').width;
@@ -109,7 +110,9 @@ export async function backupWallet(wallet: Object, password: string) {
      });
      return promise;
   } else {
-    await Share.share(options);
+    
+    let r =  await Share.share(options);
+    WalletUtils.log(JSON.stringify(r));
   }
 }
 
