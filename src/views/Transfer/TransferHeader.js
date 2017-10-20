@@ -15,6 +15,7 @@ import { StringUtils } from '../../utils';
 export class TransferHeader extends Component {
 
     static propTypes = {
+        eth: PropTypes.number,
         balance: PropTypes.number,
         onPressSelectWallet: PropTypes.func,
     };
@@ -26,9 +27,9 @@ export class TransferHeader extends Component {
     };
 
     render() {
-        const { balance } = this.props;
-        const valueString = StringUtils.convertAmountToCurrencyString(balance, ',', 3);
-        const extValString = StringUtils.convertAmountToCurrencyString(balance, ',', 3);
+        const { balance, eth } = this.props;
+        const lvtValString = StringUtils.convertAmountToCurrencyString(balance, ',', 3);
+        const ethValString = StringUtils.convertAmountToCurrencyString(eth, ',', 8);
         return (
             <LVGradientPanel style = {[styles.container, this.props.style]}>
                 <View style={styles.nav}>
@@ -38,8 +39,8 @@ export class TransferHeader extends Component {
                 </View>
                 <View style= {styles.columnContainer}>
                     <Text style= {[styles.textCommon]}>{ LVStrings.transfer_purse_balance }</Text>
-                    <Text style= {[styles.textCommon, {fontSize: 36}]}>{ valueString }</Text>
-                    <Text style= {[styles.textCommon]}>{ '≈￥' + extValString}</Text>
+                    <Text style= {[styles.textCommon, {fontSize: 36}]}>{ lvtValString }</Text>
+                    <Text style= {[styles.textCommon]}>{ '≈￥' + ethValString}</Text>
                 </View>
             </LVGradientPanel>
         )

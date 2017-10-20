@@ -18,6 +18,7 @@ import LVStrings from '../../assets/localization';
 import { TransferMinerGapSetter } from './TransferMinerGapSetter';
 import MXButton from './../../components/MXButton';
 import * as MXUtils from '../../utils/MXUtils'
+import { StringUtils } from '../../utils';
 import { converAddressToDisplayableText } from '../../utils/MXStringUtils';
 import { TransferDetailModal } from './TransferDetailModal';
 import { ImageTextInput } from './ImageTextInput';
@@ -37,8 +38,6 @@ const addImg = require('../../assets/images/transfer_add_contracts.png');
 const scanImg = require('../../assets/images/transfer_scan.png');
 
 const MIN_BALANCE_ALLOW_TO_TRANSFER = 0.01;
-const GAP_MIN_VALUE = 0.02;
-const GAP_MAX_VALUE = 0.08;
 
 class TransferScreen extends Component {
     static navigationOptions = {
@@ -54,6 +53,8 @@ class TransferScreen extends Component {
         addressIn: string,
         amount: number,
         minerGap: number,
+        minGap: number,
+        maxGap:number,
         balance: number,
         remarks: string,
         showModal: boolean,
@@ -61,6 +62,7 @@ class TransferScreen extends Component {
         showQrScanModal: boolean,
         alertMessage: string,
         inputPwd: string,
+        userHasSetGap: boolean, 
     }
 
     constructor() {
@@ -71,16 +73,19 @@ class TransferScreen extends Component {
             wallet: wallet,
             transactionParams: null,
             curETH: wallet != null ? wallet.eth: 0,
-            addressIn: '',
+            addressIn: '0xe094f69b5b9687b532867a0f29cd17c7d1acd2d65eae2d010755f896617cdbbd',
             amount: 0,
             balance: wallet != null ? wallet.lvt: 0,
-            minerGap: GAP_MIN_VALUE,
+            minerGap: 0,
+            minGap: 0,
+            maxGap:0,
             remarks: '',
             showModal: false,
             openSelectWallet: false,
             showQrScanModal: false,
             alertMessage: '',
             inputPwd: '',
+            userHasSetGap: false,
         }
         this.onSelectedContact = this.onSelectedContact.bind(this);
     }
@@ -94,9 +99,20 @@ class TransferScreen extends Component {
     async tryFetchParams() {
         const {wallet, amount, addressIn} = this.state;
         if (wallet && amount && addressIn && TransferUtils.isValidAddress(addressIn)) {
-            let params = await LVNetworking.fetchTransactionParam(wallet.address, addressIn, amount);
-            TransferUtils.log('tryFetchParams ' + JSON.stringify(params));
-            this.setState({transactionParams : params});
+            let params = await LVNetworking.fetchTransactionParam(wallet.address, addressIn, amount * Math.pow(10, 18));
+            TransferUtils.log('tryFetchParams request = ' + JSON.stringify({from: wallet.address, to: addressIn, value: amount * Math.pow(10, 18)}));
+            let range = TransferUtils.getMinerGapRange(params);
+            TransferUtils.log('tryFetchParams result = ' + JSON.stringify(params)
+            + ' minGap = ' +  range.min
+            + ' maxGap = ' +  range.max);
+            this.setState({
+                transactionParams : params,
+                minerGap: TransferUtils.convertHex2Eth(params.gasPrice, params.gasLimit),
+                minGap: range.min,
+                maxGap: range.max,
+            });
+        } else {
+            this.setState({transactionParams: null})
         }
     }
 
@@ -115,11 +131,13 @@ class TransferScreen extends Component {
 
     async onAmountChanged(newAmountText:string) {
         if (!TransferUtils.isBlank(newAmountText) && !TransferUtils.isValidAmount(newAmountText)) {
-            this.setState({alertMessage:LVStrings.transfer_amount_format_hint });
+            this.setState({
+                alertMessage:LVStrings.transfer_amount_format_hint,
+             });
             this.refs.alert.show();
             return;
         } else {
-            await this.setState({amount: parseFloat(newAmountText)})
+            await this.setState({amount: parseInt(newAmountText)})
             this.tryFetchParams();
         }
     }
@@ -192,37 +210,56 @@ class TransferScreen extends Component {
             addressIn: address
         });
     }
+    
+    onGapChanged(newGap: number) {
+        if (newGap !== this.state.minerGap) {
+            this.setState({
+                minerGap: newGap,
+                userHasSetGap: true,
+            })
+        }
+    }
 
+    resetStateAfterSuccesss() {
+        this.refs.refAddressIn.onPressClear();
+        this.refs.refAmount.onPressClear();
+        this.refs.refRemarks.onPressClear();
+        this.setState({
+            transactionParams: null
+        })
+    }
 
     async onTransfer() {
         this.setState({ showModal: false });
-        const {wallet, addressIn, amount, minerGap, balance, transactionParams} = this.state;
+        const {wallet, addressIn, amount, minerGap, balance, transactionParams, userHasSetGap} = this.state;
         if (!transactionParams) {
             TransferUtils.log('transaction params is null');
             this.setState({alertMessage:LVStrings.transfer_fail });
             this.refs.alert.show();
             return;
         }
-        let value = minerGap + amount;
         this.refs.loading.show();
         setTimeout(async ()=> {
-            let rst = await TransferLogic.transaction(addressIn, value, transactionParams.nonce,
-                transactionParams.gasLimit, transactionParams.gasPrice, transactionParams.token, transactionParams.chainID, wallet);
+            let gasPrice = userHasSetGap ? TransferUtils.getSetGasPriceHexStr(minerGap, transactionParams.gasLimit) : transactionParams.gasPrice;
+            let rst = await TransferLogic.transaction(addressIn, amount, transactionParams.nonce,
+                transactionParams.gasLimit, gasPrice, transactionParams.token, transactionParams.chainID, wallet);
             this.refs.loading.dismiss();
             let success = rst && rst.result;
-            if (success) {   
+            if (success) {  
+                await this.refreshWalletDatas(); 
                 LVNotificationCenter.postNotification(LVNotification.balanceChanged);
                 LVNotificationCenter.postNotification(LVNotification.transcationCreated, {
                     transactionHash: rst.transactionHash,
                     from: wallet.address,
                     to: addressIn,
-                    value: amount,
+                    value: 0,
                     timestamp: Moment().format('X'),
                 });
             }
             setTimeout(() => {
                 this.setState({alertMessage: success ? LVStrings.transfer_success : LVStrings.transfer_fail });
                 this.refs.alert.show();
+                this.resetStateAfterSuccesss();
             }, 100);
         },500);
     }
@@ -237,7 +274,7 @@ class TransferScreen extends Component {
                     isOpen= {this.state.showModal}
                     address= {this.state.addressIn}
                     amount= {this.state.amount}
-                    minerTips= {this.state.minerGap}
+                    minerGap= {this.state.minerGap}
                     remarks= {this.state.remarks}
                     onClosed = {()=>{this.setState({ showModal: false })}}
                     onTransferConfirmed = {this.onTransfer.bind(this)}
@@ -248,11 +285,13 @@ class TransferScreen extends Component {
                         isOpen= {this.state.showQrScanModal}
                         onClosed = {()=>{this.setState({ showQrScanModal: false })}}/>
                     <TransferHeader
+                        eth={this.state.curETH}
                         balance={this.state.balance}
                         onPressSelectWallet={()=>{this.setState({ openSelectWallet: true })}}
                     ></TransferHeader>
                     <View style= { styles.headerBelow }>
                         <MXCrossTextInput 
+                            ref={'refAddressIn'}
                             style={styles.textInput} 
                             placeholder={LVStrings.transfer_payee_address}
                             defaultValue={this.state.addressIn}
@@ -264,22 +303,25 @@ class TransferScreen extends Component {
                             }
                             onTextChanged= {this.onAddressChanged.bind(this)}/>
                         <MXCrossTextInput 
+                            ref={'refAmount'}
                             style= {styles.textInput} 
                             placeholder={LVStrings.transfer_amount}
                             keyboardType = {'numeric'}
                             onTextChanged={this.onAmountChanged.bind(this)}/>
-                        <MXCrossTextInput 
+                        <MXCrossTextInput
+                            ref={'refRemarks'} 
                             style= {styles.textInput} 
                             placeholder={LVStrings.transfer_remarks}
                             onTextChanged={(newText) => {this.setState({remarks: newText})}}/>
                         <TransferMinerGapSetter 
-                            minimumValue={GAP_MIN_VALUE}
-                            maximumValue={GAP_MAX_VALUE}
-                            onGapChanged={(gap)=>{this.setState({minerGap: parseFloat(gap)})}}
+                            enable={this.state.transactionParams !== null}
+                            minimumValue={this.state.minGap}
+                            maximumValue={this.state.maxGap}
+                            onGapChanged={this.onGapChanged.bind(this)}
                             style = {styles.setter}/>
                         <View style= { styles.curEth }>
                             <Text style = {styles.text}>{LVStrings.transfer_current_eth}</Text>
-                            <Text style = {styles.textCurEth}>{this.state.curETH}</Text>
+                            <Text style = {styles.textCurEth}>{StringUtils.convertAmountToCurrencyString(this.state.curETH, ',', 8)}</Text>
                         </View>   
                         <Text style = {styles.textHint}>{LVStrings.transfer_hint}</Text>
                         <MXButton 

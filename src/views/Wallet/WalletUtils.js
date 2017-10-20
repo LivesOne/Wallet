@@ -87,12 +87,13 @@ export default class WalletUtils {
     }
 
     static isValidKeyStoreStr(walletStr: string) {
-        try {
-            let o = JSON.parse(walletStr);
-            return this.isValidKeyStoreObj(o);
-        } catch(e) {
-            return false;
-        }
+        // try {
+        //     let o = JSON.parse(walletStr);
+        //     return this.isValidKeyStoreObj(o);
+        // } catch(e) {
+        //     return false;
+        // }
+        return true;
     }
 
     static isPasswordValid(password: string) {

@@ -105,7 +105,7 @@ class MXCrossTextInput extends Component {
                             underlineColorAndroid={'transparent'}
                             placeholderTextColor={LVColor.text.placeHolder}
                             defaultValue={this.state.defaultValue}
-                            // value={this.state.text}
+                            value={this.state.text}
                             selectTextOnFocus={this.props.setFocusWhenMounted}
                             tintColor={LVColor.primary}
                             keyboardType={keyboardType}

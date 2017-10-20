@@ -6,16 +6,20 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions, Platform, View, Text, Image } from 'react-native';
+import { AppState, StyleSheet, Dimensions, Platform, View, Text, Image } from 'react-native';
+import { PullView } from 'react-native-rk-pull-to-refresh';
+import Moment from 'moment';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import LVDetailTextCell from '../Common/LVDetailTextCell';
+import LVRefreshIndicator from '../Common/LVRefreshIndicator';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 import MXTouchableImage from '../../components/MXTouchableImage';
 import LVMarketInfo from '../../logic/LVMarketInfo';
 import LVNetworking from '../../logic/LVNetworking';
+import LVPersistent from '../../logic/LVPersistent';
 import LVWalletManager from '../../logic/LVWalletManager';
 import LVNotification from '../../logic/LVNotification';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
@@ -26,6 +30,7 @@ import WalletBalanceView from './WalletBalanceView';
 import TransactionRecordList from './TransactionRecordList';
 
 const selectImg = require('../../assets/images/select_wallet.png');
+const LVLastAssetsRefreshTimeKey = '@Venus:LastAssetsRefreshTime';
 
 class AssetsScreen extends Component {
     static navigationOptions = {
@@ -33,30 +38,24 @@ class AssetsScreen extends Component {
     };
 
     state: {
+        appState: string,
         wallet: ?Object,
-        extEth: number,
-        extLvt: number,
         transactionList: ?Array<LVTransactionRecord>,
         openSelectWallet: boolean
     };
-
-    _panResponder: {};
-    _previousLeft: 0;
-    _previousTop: 0;
-    _refreshStyles: {};
 
     constructor(props: any) {
         super(props);
         const wallet = LVWalletManager.getSelectedWallet();
         this.state = {
+            appState: AppState.currentState || 'inactive',
             wallet: wallet,
-            extEth: 0,
-            extLvt: 0,
             transactionList: null,
             openSelectWallet: false
         };
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
+        this.handleAppStateChange = this.handleAppStateChange.bind(this);
         this.handleWalletChange = this.handleWalletChange.bind(this);
         this.handleRecordsChanged = this.handleRecordsChanged.bind(this);
     }
@@ -64,15 +63,25 @@ class AssetsScreen extends Component {
     componentWillMount() {}
 
     componentDidMount() {
+        AppState.addEventListener('change', this.handleAppStateChange);
+
         LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.handleRecordsChanged);
         LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletChange);
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
-        this.refreshWalletDatas();
-        this.refreshTransactionList();
+
+        this.refs.pull && this.refs.pull.beginRefresh();
     }
 
     componentWillUnmount() {
+        AppState.removeEventListener('change', this.handleAppStateChange);
         LVNotificationCenter.removeObservers(this);
+    }
+
+    async onPullRelease() {
+        await this.refreshWalletDatas();
+        await this.refreshTransactionList();
+        await LVPersistent.setNumber(LVLastAssetsRefreshTimeKey, Moment().format('X'));
+        this.refs.pull && this.refs.pull.resolveHandler();
     }
 
     refreshWalletDatas = async () => {
@@ -82,13 +91,9 @@ class AssetsScreen extends Component {
                 const lvt = await LVNetworking.fetchBalance(wallet.address, 'lvt');
                 const eth = await LVNetworking.fetchBalance(wallet.address, 'eth');
 
-                await LVMarketInfo.updateExchangeRateIfNecessary();
-                const extEth = eth * LVMarketInfo.usd_per_eth;
-                const extLvt = lvt / LVMarketInfo.lvt_per_eth * LVMarketInfo.usd_per_eth;
-
                 wallet.lvt = lvt ? parseFloat(lvt) : 0;
                 wallet.eth = eth ? parseFloat(eth) : 0;
-                this.setState({ wallet: wallet, extEth: extEth, extLvt: extLvt });
+                this.setState({ wallet: wallet });
 
                 LVNotificationCenter.postNotification(LVNotification.balanceChanged);
                 LVWalletManager.saveToDisk();
@@ -103,15 +108,28 @@ class AssetsScreen extends Component {
         this.setState({ transactionList: LVTransactionRecordManager.records });
     };
 
+    handleAppStateChange = async (nextAppState: string) => {
+        if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+            console.log('App has come to the foreground!');
+
+            // refresh
+            const lastRefreshTime = await LVPersistent.getNumber(LVLastAssetsRefreshTimeKey);
+            const currentTime = Moment().format('X');
+            if (currentTime - lastRefreshTime > 60) {
+                this.refs.pull && this.refs.pull.beginRefresh();
+            }
+        }
+        this.setState({ appState: nextAppState });
+    };
+
     handleWalletChange = async () => {
-        await this.refreshWalletDatas();
-        await this.refreshTransactionList();
+        this.refs.pull && this.refs.pull.beginRefresh();
     };
 
     handleRecordsChanged = () => {
         this.setState({ transactionList: null });
         this.setState({ transactionList: LVTransactionRecordManager.records });
-    }
+    };
 
     onPressSelectWallet = () => {
         this.setState({ openSelectWallet: true });
@@ -134,31 +152,61 @@ class AssetsScreen extends Component {
     };
 
     render() {
-        const { transactionList, extEth, extLvt } = this.state;
+        const { transactionList } = this.state;
         const wallet = this.state.wallet || {};
 
         return (
-            <View style={styles.container}>
-                <LVGradientPanel style={styles.gradient}>
-                    <View style={styles.nav}>
-                        <View style={{ width: 27 }} />
-                        <Text style={styles.navTitle}>{LVStrings.assets_title}</Text>
-                        <MXTouchableImage style={{ width: 27 }} source={selectImg} onPress={this.onPressSelectWallet} />
-                    </View>
-                    <WalletInfoView style={styles.walletInfo} title={wallet.name} address={wallet.address} />
-                    <WalletBalanceView style={styles.balance} lvt={wallet.lvt} eth={wallet.eth} extLvt={extLvt} extEth={extEth} />
-                </LVGradientPanel>
+            <View style={{ flex: 1 }}>
+                <PullView
+                    ref={'pull'}
+                    style={styles.topPanel}
+                    onPullRelease={this.onPullRelease.bind(this)}
+                    topIndicatorHeight={LVRefreshIndicator.indicatorHeight}
+                    topIndicatorRender={() => <LVRefreshIndicator />}
+                >
+                    <LVGradientPanel
+                        style={{
+                            flex: 1,
+                            justifyContent: 'flex-start',
+                            alignItems: 'center'
+                        }}
+                    >
+                        <View style={styles.nav}>
+                            <View style={{ width: 27 }} />
+                            <Text style={styles.navTitle}>{LVStrings.assets_title}</Text>
+                            <MXTouchableImage
+                                style={{ width: 27 }}
+                                source={selectImg}
+                                onPress={this.onPressSelectWallet}
+                            />
+                        </View>
+                        <WalletInfoView style={styles.walletInfo} title={wallet.name} address={wallet.address} />
+                        <WalletBalanceView
+                            style={styles.balance}
+                            lvt={wallet.lvt}
+                            eth={wallet.eth}
+                            extLvt={0}
+                            extEth={0}
+                        />
+                    </LVGradientPanel>
+                </PullView>
 
-                <LVDetailTextCell
-                    style={styles.recent}
-                    text={LVStrings.recent_records}
-                    detailText={LVStrings.view_all_records}
-                    onPress={this.onPressShowAll}
-                />
+                <View style={styles.bottomPanel}>
+                    <LVDetailTextCell
+                        style={styles.recent}
+                        text={LVStrings.recent_records}
+                        detailText={LVStrings.view_all_records}
+                        onPress={this.onPressShowAll}
+                    />
 
-                <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }} />
+                    <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }} />
 
-                <TransactionRecordList style={styles.list} records={transactionList} onPressItem={this.onPressRecord} />
+                    <TransactionRecordList
+                        style={styles.list}
+                        records={transactionList}
+                        onPressItem={this.onPressRecord}
+                    />
+                </View>
 
                 <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
             </View>
@@ -177,11 +225,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center'
     },
-    gradient: {
-        width: '100%',
-        height: 315,
-        justifyContent: 'flex-start',
-        alignItems: 'center'
+    topPanel: {
+        width: Window.width,
+        height: 315
     },
     nav: {
         width: Window.width - 25,
@@ -204,6 +250,13 @@ const styles = StyleSheet.create({
         width: Window.width - 25,
         height: 150,
         marginTop: 15
+    },
+    bottomPanel: {
+        flex: 1,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: LVColor.separateLine
     },
     recent: {
         width: '100%',

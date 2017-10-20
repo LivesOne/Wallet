@@ -79,7 +79,7 @@ const foundation = require('../../foundation/wallet.js');
 
     onImportError(errorObj: Object) {
       console.log(JSON.stringify(errorObj));
-      this.refs.toast.dismiss();
+      setTimeout(()=> {this.refs.toast.dismiss();}, 100);
       setTimeout(() => {
         let error = WalletUtils.getInnerError(errorObj.error, LVStrings.wallet_import_fail);
         this.setState({alertMessage: error });

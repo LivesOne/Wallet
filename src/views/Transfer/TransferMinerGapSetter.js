@@ -10,6 +10,7 @@ import LVColor from '../../styles/LVColor'
 import LVSize from '../../styles/LVFontSize';
 import LVStrings from '../../assets/localization';
 import * as MXUtils from '../../utils/MXUtils'
+import TransferUtils from './TransferUtils';
 
 export class TransferMinerGapSetter extends Component {
 
@@ -18,52 +19,75 @@ export class TransferMinerGapSetter extends Component {
     }
 
     static propTypes = {
+        enable: PropTypes.bool,
         minimumValue: PropTypes.number,
         maximumValue: PropTypes.number,
         onGapChanged: PropTypes.func,
     }; 
+
+    _beginEnable: false;
 
     constructor(props: any) {
         super(props);
         this.state = {
             value: props.minimumValue,
         }
+        TransferUtils.log('default value = ' + props.minimumValue);
     }
 
     calculateValue() {
-        return (this.state.value * 1).toFixed(2) + ' ETH';
+        if (this.props.enable) {
+            let value = this._beginEnable ? this.props.minimumValue : this.state.value;
+            return (value * 1).toFixed(8) + ' ETH';
+        } else {
+            return '-- ETH'
+        }
     }
 
     onValueChange(value: number) {
         if (this.props.onGapChanged) {
-            this.props.onGapChanged(value);
+            this.props.onGapChanged(parseFloat(value.toFixed(9)));
         }
         this.setState({
             value: value,
         });
     }
 
-    
+    componentWillReceiveProps(nextProps: any) {
+        if (this.props.enable !== nextProps.enable) {
+            this.setState({
+                value: nextProps.enable ? (nextProps.maximumValue - nextProps.minimumValue) / 100 : 0,
+            })
+            this._beginEnable = nextProps.enable;
+        }
+    }
+
+    componentDidUpdate(prevProps : any, prevState: any) {
+        this._beginEnable = !prevProps.enable;
+        //TransferUtils.log('componentDidUpdate _beginEnable = ' + this._beginEnable);
+    }
+
     render() {
         const {maximumValue, minimumValue} = this.props;
         return (
         <View style={[styles.container, this.props.style]} >
             <View style={styles.topContainer}>
                 <Text style={styles.title}>{ LVStrings.transfer_miner_tips }</Text>
-                <View style={styles.tipsContainner}>
-                    <Text style={styles.tipsIndicator}>{ this.calculateValue() }</Text>
+                <View style={[styles.tipsContainner, {borderColor:this.props.enable ? LVColor.primary: '#DDDDDD'}]}>
+                    <Text style={[styles.tipsIndicator, {color: this.props.enable ?LVColor.primary : '#DDDDDD'}]}>{ this.calculateValue() }</Text>
                 </View>
             </View>
             <View style={styles.sliderContainer}>
                 <Text style={styles.text}>{ LVStrings.transfer_slow }</Text>
                 <View  style= {styles.sliderWrapper}>
                     <Slider
+                        disabled={!this.props.enable}
                         value={this.state.value}
-                        minimumValue={minimumValue}
-                        maximumValue={maximumValue}
+                        minimumValue={this.props.enable ? minimumValue : 0}
+                        maximumValue={this.props.enable ? maximumValue : 100}
                         onValueChange={this.onValueChange.bind(this)}
                         trackStyle={styles.track}
-                        thumbStyle={styles.thumb}
+                        thumbStyle={[styles.thumb, {borderColor: this.props.enable ? '#f9903e' : '#DDDDDD',}]}
                         minimumTrackTintColor={LVColor.primary}
                     />
                 </View>
@@ -92,8 +116,7 @@ const styles = StyleSheet.create({
     },
     tipsContainner: {
         height: 35,
-        width: 110,
-        borderColor:LVColor.primary, 
+        width: 130,
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 1, 
@@ -124,7 +147,6 @@ const styles = StyleSheet.create({
         height: 30,
         borderRadius: 30 / 2,
         backgroundColor: 'white',
-        borderColor: '#f9903e',
         borderWidth: 9,
       }
   });

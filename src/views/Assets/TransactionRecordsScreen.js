@@ -7,6 +7,7 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, Dimensions, View, Text, Image, TouchableOpacity } from 'react-native';
+import { PullView } from 'react-native-rk-pull-to-refresh';
 import Moment from 'moment';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-native-datepicker';
@@ -14,9 +15,12 @@ import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import LVGradientPanel from '../Common/LVGradientPanel';
+import LVRefreshIndicator from '../Common/LVRefreshIndicator';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVConfiguration from '../../logic/LVConfiguration';
 import LVWalletManager from '../../logic/LVWalletManager';
+import LVNotification from '../../logic/LVNotification';
+import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVTransactionRecordManager';
 
 import WalletInfoView from './WalletInfoView';
@@ -71,6 +75,14 @@ class TransactionRecordsScreen extends Component {
         });
     };
 
+    async onPullRelease() {
+        await LVTransactionRecordManager.refreshTransactionRecords();
+        LVNotificationCenter.postNotification(LVNotification.transcationRecordsChanged);
+
+        this.setState({ transactionList: LVTransactionRecordManager.records });
+        this.refs.pull && this.refs.pull.resolveHandler();
+    }
+
     render() {
         const wallet = LVWalletManager.getSelectedWallet();
         const walletName = wallet && wallet.name;
@@ -78,14 +90,22 @@ class TransactionRecordsScreen extends Component {
         const { startDate, endDate, transactionList } = this.state;
 
         const startTimestamp = Moment(startDate, 'YYYY-MM-DD').format('X');
-        const endTimestamp = Moment(endDate, 'YYYY-MM-DD').add(1, 'days').format('X');
+        const endTimestamp = Moment(endDate, 'YYYY-MM-DD')
+            .add(1, 'days')
+            .format('X');
 
         const filteredList = transactionList
             ? transactionList.filter(item => item.timestamp >= startTimestamp && item.timestamp <= endTimestamp)
             : null;
 
         return (
-            <View style={styles.container}>
+            <PullView
+                ref={'pull'}
+                style={styles.container}
+                onPullRelease={this.onPullRelease.bind(this)}
+                topIndicatorHeight={LVRefreshIndicator.indicatorHeight}
+                topIndicatorRender={() => <LVRefreshIndicator />}
+            >
                 <LVGradientPanel style={styles.gradient}>
                     <MXNavigatorHeader
                         title={LVStrings.transaction_records}
@@ -114,7 +134,7 @@ class TransactionRecordsScreen extends Component {
                 </View>
 
                 <TransactionRecordList style={styles.list} records={filteredList} onPressItem={this.onPressRecord} />
-            </View>
+            </PullView>
         );
     }
 }
@@ -145,6 +165,7 @@ const Window = {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        width: Window.width,
         justifyContent: 'space-between',
         alignItems: 'center'
     },
