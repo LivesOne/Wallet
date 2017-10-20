@@ -23,7 +23,7 @@ export default class LVDialog extends Component {
         messageStyle: PropTypes.any,
         buttonTitle: PropTypes.string,
         onPress: PropTypes.func,
-        width: PropTypes.number,
+        width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         height: PropTypes.number
     };
 
