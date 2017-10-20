@@ -75,7 +75,7 @@ export default class WalletCreateSuccessPage extends Component {
                 <Text style={styles.detailText}>{LVStrings.wallet_create_success_comment}</Text>
                 <MXButton
                     rounded
-                    title={LVStrings.wallet_backup}
+                    title={LVStrings.profile_wallet_backup}
                     onPress={this.onPressWalletBackupButton.bind(this)}
                     themeStyle={'active'}
                     style={styles.backupButton}

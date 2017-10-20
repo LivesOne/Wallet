@@ -116,28 +116,23 @@ export class WalletDetailsPage extends Component {
         LVNotificationCenter.removeObserver(this);
     }
 
-    async fetchPrivateKey(callback: Function) {
+    async fetchPrivateKey(password:string) {
         const wallet = this.state.wallet;
-        console.log('test' + JSON.stringify(wallet));
-        if (wallet) {
-            let privateKey = await LVWalletManager.exportPrivateKey(wallet.password);
-            this.setState({ privateKey: privateKey });
-            if (callback) {
-                callback();
-            }
+        try {
+            let privateKey = await LVWalletManager.exportPrivateKey(wallet, password);
+            alert(privateKey);
+            this.setState({ 
+                privateKey: privateKey,
+                showExportModal: true
+            });
+        } catch (error) {
+            alert(error);
         }
     }
 
-    async showExportModal() {
+    async showExportModal(password:string) {
         this.refs.toast.show();
-        setTimeout(async () => {
-            await this.fetchPrivateKey(() => {
-                this.refs.toast.dismiss();
-                setTimeout(() => {
-                    this.setState({ showExportModal: true });
-                }, 500);
-            });
-        }, 500);
+        await this.fetchPrivateKey(password);
     }
 
     onExportModalClosed() {
@@ -202,21 +197,12 @@ export class WalletDetailsPage extends Component {
 
     onInputConfirm() {
         const { wallet, inputPwd, showInputFor } = this.state;
-        if (wallet && wallet.password !== inputPwd) {
-            setTimeout(() => {
-                // this.setState({ showExportModal: true });
-                this.setState({ alertMessage: LVStrings.wallet_password_incorrect });
-                this.refs.alert.show();
-            }, 500);
-
-            return;
-        }
         this.refs.passwordConfirm.dismiss();
 
         switch (showInputFor) {
             case SHOW_INPUT_FOR_EXPORT:
                 setTimeout(() => {
-                    this.showExportModal();
+                    this.showExportModal(inputPwd);
                 }, 500);
                 break;
             case SHOW_INPUT_FOR_DELETE:
