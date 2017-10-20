@@ -167,7 +167,8 @@ export default class AddEditContactPage extends Component {
                             withClearButton
                             defaultValue={this.state.name}
                             onTextChanged= {(text) => this.setState({name: text})}/>
-                        <MXCrossTextInput style={styles.textInputStyle} 
+                        <MXCrossTextInput ref={'addressTextInput'}
+                            style={styles.textInputStyle} 
                             placeholder={LVStrings.contact_add_place_holder_address}
                             withClearButton={true}
                             defaultValue={this.state.address}
@@ -191,7 +192,9 @@ export default class AddEditContactPage extends Component {
                     </View>
                 </ScrollView>
                 <LVQrScanModal 
-                    barcodeReceived={(event)=>{this.setState({address: event.data})}} 
+                    barcodeReceived={(event)=>{
+                        this.refs.addressTextInput.setText(event.data);
+                    }} 
                     isOpen= {this.state.showQrScanModal}
                     onClosed = {()=>{this.setState({ showQrScanModal: false })}}/>
                 <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
