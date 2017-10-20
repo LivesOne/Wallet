@@ -9,6 +9,8 @@ import LVPersistent from './LVPersistent';
 import LVConfiguration from './LVConfiguration';
 import LVNotificationCenter from '../logic/LVNotificationCenter';
 import LVNotification from '../logic/LVNotification';
+import LVNetworking from './LVNetworking';
+import LVTransactionRecordManager from './LVTransactionRecordManager';
 
 const foundation = require('../foundation/wallet.js');
 const WalletsKey :string = '@Venus:WalletsInfo';
@@ -98,7 +100,26 @@ class WalletManager {
         return index === -1;
     }
 
-     /**
+    async updateWalletBalance() {
+        const wallet = this.getSelectedWallet();
+        if (wallet) {
+            try {
+                const lvt = await LVNetworking.fetchBalance(wallet.address, 'lvt');
+                const eth = await LVNetworking.fetchBalance(wallet.address, 'eth');
+
+                wallet.lvt = (lvt ? parseFloat(lvt) : 0) - LVTransactionRecordManager.preUsedLvt;
+                wallet.eth = (eth ? parseFloat(eth) : 0) - LVTransactionRecordManager.preUsedEth;
+
+                await this.saveToDisk();
+
+                LVNotificationCenter.postNotification(LVNotification.balanceChanged);
+            } catch (error) {
+                console.log('error in refresh wallet datas : ' + error);
+            }
+        }
+    }
+
+    /**
      * export the private key of current wallet.
      * @param  {string} password
      */

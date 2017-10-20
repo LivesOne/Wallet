@@ -123,9 +123,6 @@ class TestComponent extends Component {
             "balance": 0
           };
 
-        // const result = await LVNetworking.fetchBalance(wallet.address, 'lvt');
-        // this.log('balance = ' + JSON.stringify(result));
-
         // const result1 = await LVNetworking.fetchTransactionHistory(wallet.address);
         // this.log('history =' + JSON.stringify(result1));
 

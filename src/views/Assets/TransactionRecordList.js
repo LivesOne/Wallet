@@ -37,7 +37,7 @@ export default class TransactionRecordList extends React.PureComponent {
             return { selected };
         });
 
-        if (item.completed && this.props.onPressItem) {
+        if (this.props.onPressItem) {
             this.props.onPressItem(item);
         }
     };
@@ -48,7 +48,7 @@ export default class TransactionRecordList extends React.PureComponent {
             amount={item.amount}
             address={item.type == 'in' ? item.payer : item.receiver}
             datetime={item.datetime}
-            completed={item.completed}
+            state={item.state}
             selected={!!this.state.selected.get(item.hash)}
             onPressItem={() => {
                 this._onPressItem(item);
@@ -58,7 +58,7 @@ export default class TransactionRecordList extends React.PureComponent {
 
     getScrollMetrics = () => {
         return this.refs.list._listRef._scrollMetrics;
-    }
+    };
 
     render() {
         const { records, style } = this.props;
@@ -104,12 +104,12 @@ class LVTransactionRecordItem extends React.PureComponent {
         amount: PropTypes.number.isRequired,
         address: PropTypes.string.isRequired,
         datetime: PropTypes.string,
-        completed: PropTypes.bool,
+        state: PropTypes.string,
         onPressItem: PropTypes.func
     };
 
     render() {
-        const { type, amount, address, datetime, completed } = this.props;
+        const { type, amount, address, datetime, state } = this.props;
         const typeImage = type === 'in' ? inImg : outImg;
 
         const prefix = type === 'in' ? '+' : '-';
@@ -137,11 +137,13 @@ class LVTransactionRecordItem extends React.PureComponent {
                         </Text>
                     </View>
                     <View style={styles.infoInner}>
-                        {completed ? (
+                        {state === 'ok' ? (
                             <Text style={styles.amountText}>{amountString}</Text>
-                        ) : (
+                        ) : state === 'waiting' ? (
                             <Text style={styles.statusText}>{LVStrings.transaction_waiting}</Text>
-                        )}
+                        ) : state === 'failed' ? (
+                            <Text style={styles.statusText}>{LVStrings.transaction_failed}</Text>
+                        ) : null}
                     </View>
                 </View>
 

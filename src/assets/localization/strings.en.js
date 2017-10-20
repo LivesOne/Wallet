@@ -99,6 +99,7 @@ const localized_strings = {
     transaction_records_time: 'Date',
     transaction_records_to: 'to',
     transaction_waiting: 'Please wait',
+    transaction_failed: 'Failed',
     transaction_details: 'Transaction details',
     transaction_payer: 'Paye',
     transaction_receiver: 'Receiver',

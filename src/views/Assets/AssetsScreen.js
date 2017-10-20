@@ -78,35 +78,15 @@ class AssetsScreen extends Component {
     }
 
     async onPullRelease() {
-        await this.refreshWalletDatas();
-        await this.refreshTransactionList();
+        await LVTransactionRecordManager.refreshTransactionRecords();
+        await LVWalletManager.updateWalletBalance();
         await LVPersistent.setNumber(LVLastAssetsRefreshTimeKey, Moment().format('X'));
+
+        const wallet = LVWalletManager.getSelectedWallet();
+        this.setState({ transactionList: LVTransactionRecordManager.records, wallet: wallet });
+
         this.refs.pull && this.refs.pull.resolveHandler();
     }
-
-    refreshWalletDatas = async () => {
-        const wallet = LVWalletManager.getSelectedWallet();
-        if (wallet) {
-            try {
-                const lvt = await LVNetworking.fetchBalance(wallet.address, 'lvt');
-                const eth = await LVNetworking.fetchBalance(wallet.address, 'eth');
-
-                wallet.lvt = lvt ? parseFloat(lvt) : 0;
-                wallet.eth = eth ? parseFloat(eth) : 0;
-                this.setState({ wallet: wallet });
-
-                LVNotificationCenter.postNotification(LVNotification.balanceChanged);
-                LVWalletManager.saveToDisk();
-            } catch (error) {
-                console.log('error in refresh wallet datas : ' + error);
-            }
-        }
-    };
-
-    refreshTransactionList = async () => {
-        await LVTransactionRecordManager.refreshTransactionRecords();
-        this.setState({ transactionList: LVTransactionRecordManager.records });
-    };
 
     handleAppStateChange = async (nextAppState: string) => {
         if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
@@ -127,8 +107,9 @@ class AssetsScreen extends Component {
     };
 
     handleRecordsChanged = () => {
+        const wallet = LVWalletManager.getSelectedWallet();
         this.setState({ transactionList: null });
-        this.setState({ transactionList: LVTransactionRecordManager.records });
+        this.setState({ transactionList: LVTransactionRecordManager.records, wallet: wallet });
     };
 
     onPressSelectWallet = () => {
