@@ -32,6 +32,7 @@ const localized_strings = {
 
     // inner error
     inner_common_error: 'Inner error',
+    inner_error_password_required: 'Password required',
     inner_error_password_mismatch: 'Password mismatch',
     
     // Wallet

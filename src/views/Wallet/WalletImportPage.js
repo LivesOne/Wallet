@@ -77,7 +77,7 @@ const foundation = require('../../foundation/wallet.js');
     }
 
     onImportError(errorObj: Object) {
-      console.log(JSON.stringify(errorObj));
+      console.log('error---> ' + JSON.stringify(errorObj));
       setTimeout(()=> {this.refs.toast.dismiss();}, 100);
       setTimeout(() => {
         let error = WalletUtils.getInnerError(errorObj.error, LVStrings.wallet_import_fail);
@@ -166,9 +166,11 @@ const foundation = require('../../foundation/wallet.js');
           this.exitWhenSuccess();
         },500);
       } catch(e) {
-        this.refs.toast.dismiss();
-        this.setState({alertMessage: LVStrings.wallet_import_fail });
-        this.refs.alert.show();
+        setTimeout(()=>{
+          this.refs.toast.dismiss();
+          this.setState({alertMessage: WalletUtils.getInnerError(e.message, LVStrings.wallet_import_fail) });
+          this.refs.alert.show();
+        },500);
       }
     },500);
   }
@@ -209,9 +211,11 @@ const foundation = require('../../foundation/wallet.js');
             setTimeout(()=>{this.exitWhenSuccess()},500);
           }
         } catch(e) {
-          this.refs.toast.dismiss();
-          this.setState({alertMessage: LVStrings.wallet_import_fail });
-          this.refs.alert.show();
+          setTimeout(()=>{
+            this.refs.toast.dismiss();
+            this.setState({alertMessage: WalletUtils.getInnerError(e.message, LVStrings.wallet_import_fail) });
+            this.refs.alert.show();
+          },500);
         }
       },500);
 

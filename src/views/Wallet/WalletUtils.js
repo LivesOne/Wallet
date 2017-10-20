@@ -7,6 +7,7 @@ var ajv = new Ajv({allErrors: true});
 const eth_local = require('../../foundation/ethlocal.js');
 
 import LVStrings from '../../assets/localization';
+import knownFoundationErrors from '../../foundation/knownFoundationErrors';
 
 const WalletDefaultNameIndexKey :string = '@Venus:WalletDefaultNameIndex';
 
@@ -106,8 +107,10 @@ export default class WalletUtils {
 
     static getInnerError(errorMessage: string, defaultError: string = LVStrings.inner_common_error) {
         switch(errorMessage) {
-            case eth_local.errors.passwordMismatch:
+            case knownFoundationErrors.passwordMismatch:
               return LVStrings.inner_error_password_mismatch;
+            case knownFoundationErrors.passwordRequired:
+              return LVStrings.inner_error_password_required;
             default: 
               return defaultError;
         }

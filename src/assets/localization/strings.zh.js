@@ -74,6 +74,7 @@ const localized_strings = {
 
       // inner error
       inner_common_error: '内部错误',
+      inner_error_password_required: '必须提供密码',
       inner_error_password_mismatch: '密码不匹配',
 
     //wallet edit

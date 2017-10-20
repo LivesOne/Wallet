@@ -55,8 +55,8 @@ export default class TransferLogic {
             TransferUtils.log('transfer result = ' + JSON.stringify(result));
             if (result && result.hasOwnProperty('transactionHash')) {
                 let transactionHash = result.transactionHash;
-                let detail = await LVNetworking.fetchTransactionDetail(transactionHash);
-                TransferUtils.log('transfer detail = ' + JSON.stringify(detail));
+                // let detail = await LVNetworking.fetchTransactionDetail(transactionHash);
+                // TransferUtils.log('transfer detail = ' + JSON.stringify(detail));
                 // success = detail && detail.hasOwnProperty('error') && !detail.error;
                 return {result: true, transactionHash: transactionHash};
             }
