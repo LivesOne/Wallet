@@ -156,21 +156,16 @@ class AssetsScreen extends Component {
         const wallet = this.state.wallet || {};
 
         return (
-            <View style={{ flex: 1 }}>
-                <PullView
+            <View style={styles.container}>
+            <View style={styles.topPanel}>
+            <PullView
                     ref={'pull'}
                     style={styles.topPanel}
                     onPullRelease={this.onPullRelease.bind(this)}
                     topIndicatorHeight={LVRefreshIndicator.indicatorHeight}
                     topIndicatorRender={() => <LVRefreshIndicator />}
                 >
-                    <LVGradientPanel
-                        style={{
-                            flex: 1,
-                            justifyContent: 'flex-start',
-                            alignItems: 'center'
-                        }}
-                    >
+                    <LVGradientPanel style={styles.gradient} >
                         <View style={styles.nav}>
                             <View style={{ width: 27 }} />
                             <Text style={styles.navTitle}>{LVStrings.assets_title}</Text>
@@ -190,6 +185,7 @@ class AssetsScreen extends Component {
                         />
                     </LVGradientPanel>
                 </PullView>
+            </View>
 
                 <View style={styles.bottomPanel}>
                     <LVDetailTextCell
@@ -228,6 +224,11 @@ const styles = StyleSheet.create({
     topPanel: {
         width: Window.width,
         height: 315
+    },
+    gradient: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'center'
     },
     nav: {
         width: Window.width - 25,
