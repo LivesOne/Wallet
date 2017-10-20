@@ -8,8 +8,6 @@ const BN = require('bn.js');
 export default class TransferUtils {
     constructor() {}
 
-    static PRICE_LIMIT = '0x186A0';
-
     static isValidAmount(amount: string) : bool {
         let result = parseFloat(amount);
         console.log(result);
@@ -25,22 +23,22 @@ export default class TransferUtils {
     }
 
     static getMinerGapRange(params: Object) {
-        let {priceMin, priceMax} = params;
-        return {min: this.convertHex2Eth(priceMin),
-                max: this.convertHex2Eth(priceMax)}
+        let {priceMin, priceMax, gasLimit} = params;
+        return {min: this.convertHex2Eth(priceMin, gasLimit),
+                max: this.convertHex2Eth(priceMax, gasLimit)}
     }
 
-    static convertHex2Eth(price: string) {
-        const priceLimit = new BN(this.PRICE_LIMIT.slice(2), 16);
-        let g = new BN(price.slice(2), 16);
-        return (parseInt(g.mul(priceLimit).toString()) /  Math.pow(10, 18));
+    static convertHex2Eth(gas: string, gasLimitHex: string) {
+        const gasLimit = new BN(gasLimitHex.slice(2), 16);
+        let g = new BN(gas.slice(2), 16);
+        return (parseInt(g.mul(gasLimit).toString()) /  Math.pow(10, 18));
     }
 
-    static getSetGasPriceHexStr(setGasPrice: number) : string {
+    static getSetGasPriceHexStr(setGasPrice: number, gasLimit: string) : string {
         // gasPrice = fee/gasLimit
         // 这里会去掉小数点
         // setGasPrice fixed num = 9
-        return '0x' + parseInt(setGasPrice *  Math.pow(10, 18) / parseInt(this.PRICE_LIMIT, 16)).toString(16);
+        return '0x' + parseInt(setGasPrice *  Math.pow(10, 18) / parseInt(gasLimit, 16)).toString(16);
     }
 
     static log(msg: string) {

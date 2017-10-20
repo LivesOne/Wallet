@@ -71,7 +71,7 @@ class TransferScreen extends Component {
             wallet: wallet,
             transactionParams: null,
             curETH: wallet != null ? wallet.eth: 0,
-            addressIn: '',
+            addressIn: '0xe094f69b5b9687b532867a0f29cd17c7d1acd2d65eae2d010755f896617cdbbd',
             amount: 0,
             balance: wallet != null ? wallet.lvt: 0,
             minerGap: 0,
@@ -96,14 +96,15 @@ class TransferScreen extends Component {
     async tryFetchParams() {
         const {wallet, amount, addressIn} = this.state;
         if (wallet && amount && addressIn && TransferUtils.isValidAddress(addressIn)) {
-            let params = await LVNetworking.fetchTransactionParam(wallet.address, addressIn, amount);
+            let params = await LVNetworking.fetchTransactionParam(wallet.address, addressIn, amount * Math.pow(10, 18));
+            TransferUtils.log('tryFetchParams request = ' + JSON.stringify({from: wallet.address, to: addressIn, value: amount * Math.pow(10, 18)}));
             let range = TransferUtils.getMinerGapRange(params);
-            TransferUtils.log('tryFetchParams ' + JSON.stringify(params)
+            TransferUtils.log('tryFetchParams result = ' + JSON.stringify(params)
             + ' minGap = ' +  range.min
             + ' maxGap = ' +  range.max);
             this.setState({
                 transactionParams : params,
-                minerGap: TransferUtils.convertHex2Eth(params.gasPrice),
+                minerGap: TransferUtils.convertHex2Eth(params.gasPrice, params.gasLimit),
                 minGap: range.min,
                 maxGap: range.max,
             });
@@ -203,7 +204,6 @@ class TransferScreen extends Component {
 
     onGapChanged(newGap: number) {
         if (newGap !== this.state.minerGap) {
-            TransferUtils.log('new gap = ' + newGap);
             this.setState({
                 minerGap: newGap,
                 userHasSetGap: true,
@@ -231,9 +231,9 @@ class TransferScreen extends Component {
         }
         this.refs.loading.show();
         setTimeout(async ()=> {
-            let gasPrice = userHasSetGap ? TransferUtils.getSetGasPriceHexStr(minerGap) : transactionParams.gasPrice;
+            let gasPrice = userHasSetGap ? TransferUtils.getSetGasPriceHexStr(minerGap, transactionParams.gasLimit) : transactionParams.gasPrice;
             let rst = await TransferLogic.transaction(addressIn, amount, transactionParams.nonce,
-                TransferUtils.PRICE_LIMIT, gasPrice, transactionParams.token, transactionParams.chainID, wallet);
+                transactionParams.gasLimit, gasPrice, transactionParams.token, transactionParams.chainID, wallet);
             this.refs.loading.dismiss();
             let success = rst && rst.result;
             if (success) {  

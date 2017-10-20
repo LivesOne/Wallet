@@ -44,18 +44,19 @@ export default class TransferLogic {
                 toAddress,
                 '0x' + (value * Math.pow(10, 18)).toString(16),
                 gasPrice,
-                gasLimit,
+                '0x186A0',
                 chainId
             );
-            let params = {to: toAddress, value: value, nonce: nonce, gasLimit: gasLimit, gasPrice: gasPrice, token: token, chainId: chainId, wallet: wallet};
+            // let params = {to: toAddress, value: value, nonce: nonce, gasLimit: gasLimit, gasPrice: gasPrice, token: token, chainId: chainId, wallet: wallet};
+            let params = {from: wallet.address, to: toAddress, value: value, nonce: nonce, gasLimit: gasLimit, gasPrice: gasPrice, lvt: wallet.lvt, eth: wallet.eth};
             TransferUtils.log('transfer params = '+ JSON.stringify(params));
             let success = false;
             let result = await LVNetworking.transaction(txData);
             TransferUtils.log('transfer result = ' + JSON.stringify(result));
             if (result && result.hasOwnProperty('transactionHash')) {
                 let transactionHash = result.transactionHash;
-                // let detail = await LVNetworking.fetchTransactionDetail(transactionHash);
-                // TransferUtils.log('transfer detail = ' + JSON.stringify(detail));
+                let detail = await LVNetworking.fetchTransactionDetail(transactionHash);
+                TransferUtils.log('transfer detail = ' + JSON.stringify(detail));
                 // success = detail && detail.hasOwnProperty('error') && !detail.error;
                 return {result: true, transactionHash: transactionHash};
             }
@@ -63,10 +64,10 @@ export default class TransferLogic {
     }
 
     static async testGetDetails(transactionHash: string) {
-        setInterval(function() {
+        setTimeout(function() {
             let details = LVNetworking.fetchTransactionDetail(transactionHash);
             TransferUtils.log('transfer details = ' + JSON.stringify(details));
-        }, 200);
+        }, 5000);
     }
 
     static async getPrivateKey(password: string, keystore: Object): Promise<?string> {
