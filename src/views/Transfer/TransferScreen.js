@@ -206,9 +206,7 @@ class TransferScreen extends Component {
     }
 
     onSelectedContact(address: string) {
-        this.setState({
-            addressIn: address
-        });
+        this.refs.refAddressIn.setText(address);
     }
     
     onGapChanged(newGap: number) {
