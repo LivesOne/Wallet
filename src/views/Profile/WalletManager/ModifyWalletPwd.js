@@ -52,8 +52,10 @@ export class ModifyWalletPwd extends Component {
 
     async onSavePressed() {
         Keyboard.dismiss();
+
         
         const {wallet, curPwd, newPwd, newConfirmPwd} = this.state;
+        alert('password = ' + wallet.password);
         if (!wallet) {
             this.setState({alertMessage:LVStrings.wallet_edit_save_failed });
             this.refs.alert.show();

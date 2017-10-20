@@ -169,7 +169,7 @@ class TransferScreen extends Component {
     }
 
     onTransferPresse() {
-        const { addressIn, amount, minerGap, balance} = this.state;
+        const { wallet, addressIn, amount, minerGap, balance} = this.state;
 
         if (!addressIn) {
             this.setState({alertMessage:LVStrings.transfer_address_required });
@@ -189,7 +189,7 @@ class TransferScreen extends Component {
             return;
         }
 
-        if (balance < MIN_BALANCE_ALLOW_TO_TRANSFER || balance < minerGap + amount) {
+        if (balance < MIN_BALANCE_ALLOW_TO_TRANSFER || (wallet && wallet.eth < minerGap)) {
             // this.setState({alertMessage:LVStrings.transfer_eth_insufficient });
             // this.refs.alert.show();
             this.props.navigation.navigate("ReceiveTip")
@@ -202,11 +202,16 @@ class TransferScreen extends Component {
     onPwdConfirmed() {
         const {wallet, inputPwd} = this.state;
         if (wallet && wallet.password !== inputPwd) {
-            this.setState({alertMessage:LVStrings.wallet_password_incorrect });
-            this.refs.alert.show();
+            setTimeout(() => {
+                this.setState({alertMessage:LVStrings.wallet_password_incorrect });
+                this.refs.alert.show();
+            }, 500);
+           
             return;
         }
-        this.setState({showModal: true})
+        setTimeout(() => {
+            this.setState({showModal: true})
+        }, 500);
     }
 
     onSelectedContact(address: string) {
@@ -263,7 +268,7 @@ class TransferScreen extends Component {
                 this.setState({alertMessage: success ? LVStrings.transfer_success : LVStrings.transfer_fail });
                 this.refs.alert.show();
                 this.resetStateAfterSuccesss();
-            }, 100);
+            }, 500);
         },500);
     }
 
