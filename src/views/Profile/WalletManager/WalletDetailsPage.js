@@ -13,6 +13,7 @@ import LVStrings from '../../../assets/localization';
 import { WalletExportModal } from './WalletExportModal';
 import LVWalletManager from '../../../logic/LVWalletManager';
 import { convertAmountToCurrencyString } from '../../../utils/MXStringUtils';
+import { backupWallet } from '../../../utils/MXUtils';
 import LVLoadingToast from '../../Common/LVLoadingToast';
 import Toast from 'react-native-simple-toast';
 import LVNotificationCenter from '../../../logic/LVNotificationCenter';
@@ -69,6 +70,8 @@ export class WalletDetailsPage extends Component {
         showInputFor: string
     };
 
+    onWalletBackup: Function;
+
     constructor() {
         super();
         this.state = {
@@ -83,6 +86,7 @@ export class WalletDetailsPage extends Component {
             alertMessage: '',
             showInputFor: ''
         };
+        this.onWalletBackup = this.onWalletBackup.bind(this);
     }
 
     componentWillMount() {
@@ -158,41 +162,28 @@ export class WalletDetailsPage extends Component {
         this.props.navigation.goBack();
     }
 
-    onWalletBackup() {
+    async onWalletBackup(password: string) {
         const wallet = this.state.wallet;
-
-        if (wallet && wallet.keystore) {
-            const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
-            const message: string = JSON.stringify(wallet.keystore);
-
-            const options = {
-                title: title,
-                message: message,
-                subject: title
-            };
-
-            if (Platform.OS === 'ios') {
-                ActionSheetIOS.showShareActionSheetWithOptions(
-                    options,
-                    error => console.log(error),
-                    (success, activityType) => {
-                        if (success) {
-                            this.refs.disclaimer.show();
-                        } else {
-                            console.log('User did not share');
-                        }
-                    }
-                );
-            } else {
-                Share.share(options)
-                    .then(this._shareResult.bind(this))
-                    .catch(error => console.log('share error'));
+        if(wallet){
+            try {
+                this.refs.toast.show();
+                await backupWallet(wallet, password);
+                this.refs.toast.dismiss();
+                this.refs.disclaimer.show();
+            } catch (error) {
+                this.refs.toast.dismiss();
+                if(error === 'cancelled') {
+                    return;
+                }
+                
+                setTimeout(() => {
+                    this.setState({
+                        alertMessage: LVStrings.wallet_backup_failed
+                    });
+                    this.refs.alert.show();
+                }, 500);
             }
         }
-    }
-
-    _shareResult(result) {
-        this.refs.disclaimer.show();
     }
 
     onInputConfirm() {
@@ -212,7 +203,7 @@ export class WalletDetailsPage extends Component {
                 break;
             case SHOW_INPUT_FOR_BACKUP:
                 setTimeout(() => {
-                    this.onWalletBackup();
+                    this.onWalletBackup(inputPwd);
                 }, 500);
                 break;
         }

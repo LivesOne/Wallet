@@ -2,9 +2,12 @@
 
 import {
   Dimensions,
+  ActionSheetIOS,
+  Share,
+  Platform
 } from 'react-native';
 // import Orientation from 'react-native-orientation';
-
+import LVWalletManager from '../logic/LVWalletManager';
 
 export const getDeviceHeight = () => Dimensions.get('window').height;
 export const getDeviceWidth = () => Dimensions.get('window').width;
@@ -73,6 +76,42 @@ export const makeCancelable = (promise : Promise<any>) => {
     },
   };
 };
+
+export async function backupWallet(wallet: Object, password: string) {
+  const isPasswordCorrect = await LVWalletManager.verifyPassword(password, wallet.keystore);
+
+  if(!isPasswordCorrect) {
+    throw new Error('passwordIncorrect');
+  }
+  
+  const title: string = wallet.name;
+  const message: string = JSON.stringify(wallet.keystore);
+  const options = {
+      title: title,
+      message: message,
+      subject: title
+  };
+
+  if (Platform.OS === 'ios') {
+     const promise = new Promise(function(resolve, reject){
+        ActionSheetIOS.showShareActionSheetWithOptions(
+          options,
+          error => reject(error),
+          (success, activityType) => {
+              if (success) {
+                  console.log('bakcup success');
+                  resolve(success);
+              } else {
+                  reject('cancelled');
+              }
+          }
+      );
+     });
+     return promise;
+  } else {
+    await Share.share(options);
+  }
+}
 
 // const PORTRAIT = 'PORTRAIT';
 // const LANDSCAPE = 'LANDSCAPE';
