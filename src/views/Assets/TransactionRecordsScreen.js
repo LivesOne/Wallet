@@ -78,7 +78,7 @@ class TransactionRecordsScreen extends Component {
     async onPullRelease() {
         await LVTransactionRecordManager.refreshTransactionRecords();
         LVNotificationCenter.postNotification(LVNotification.transcationRecordsChanged);
-        
+
         this.setState({ transactionList: LVTransactionRecordManager.records });
         this.refs.pull && this.refs.pull.resolveHandler();
     }
@@ -165,6 +165,7 @@ const Window = {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        width: Window.width,
         justifyContent: 'space-between',
         alignItems: 'center'
     },
