@@ -61,8 +61,7 @@ class LVTransactionRecord {
     }
 }
 
-const LVTransactionFailedRecordList = '@Venus:TransactionFailedRecordList';
-const LVTransactionUnfinishedRecordList = '@Venus:TransactionUnfinishedRecordList';
+const LVTransactionUnfinishedRecords = '@Venus:UnfinishedRecords';
 
 export default class LVTransactionRecordManager {
     static unfinishedRecords: Array<LVTransactionRecord> = [];
@@ -92,7 +91,7 @@ export default class LVTransactionRecordManager {
             wallet.eth -= record.minnerFee;
 
             await LVPersistent.setObject(
-                LVTransactionUnfinishedRecordList + '_' + wallet.address,
+                LVTransactionUnfinishedRecords + '_' + wallet.address,
                 LVTransactionRecordManager.unfinishedRecords
             );
 
@@ -103,7 +102,8 @@ export default class LVTransactionRecordManager {
     static async reloadSavedUnfinishedTransactionRecords() {
         const wallet = LVWalletManager.getSelectedWallet();
         if (wallet) {
-            const unfinished = await LVPersistent.getObject(LVTransactionUnfinishedRecordList + '_' + wallet.address);
+            console.log(LVTransactionUnfinishedRecords + '_' + wallet.address);
+            const unfinished = await LVPersistent.getObject(LVTransactionUnfinishedRecords + '_' + wallet.address);
             if (unfinished && unfinished.length > 0) {
                 LVTransactionRecordManager.unfinishedRecords = [];
                 LVTransactionRecordManager.unfinishedRecords.push(...unfinished);
@@ -117,6 +117,7 @@ export default class LVTransactionRecordManager {
             try {
                 const value = await LVNetworking.fetchTransactionHistory(wallet.address);
                 this.records = [];
+                this.unfinishedRecords = [];
                 this.preUsedLvt = 0;
                 this.preUsedEth = 0;
 
@@ -145,7 +146,7 @@ export default class LVTransactionRecordManager {
                 }
 
                 await LVPersistent.setObject(
-                    LVTransactionUnfinishedRecordList + '_' + wallet.address,
+                    LVTransactionUnfinishedRecords + '_' + wallet.address,
                     LVTransactionRecordManager.unfinishedRecords
                 );
 

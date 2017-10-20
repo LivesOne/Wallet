@@ -64,6 +64,7 @@ const localized_strings = {
     wallet_create_name_unavailable: '钱包名字已存在',
     wallet_create_success_comment: '平台不储存用户的私人密码，密码无法找回或重置，强烈建议您在使用钱包前做好钱包备份！',
     wallet_backup: '备份钱包',
+    wallet_backuping: '备份钱包中...',
     wallet_backup_failed: '备份钱包失败，请确认输入的密码是否正确',
     wallet_backup_title_suffix: '钱包备份',
     wallet_default_name_prefix: "默认钱包",

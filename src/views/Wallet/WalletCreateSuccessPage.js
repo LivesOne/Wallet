@@ -12,10 +12,13 @@ import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import * as LVStyleSheet from '../../styles/LVStyleSheet';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
-import LVDialog from '../Common/LVDialog';
+import LVDialog, { LVConfirmDialog } from '../Common/LVDialog';
 const createSuccessImage = require('../../assets/images/create_wallet_success.png');
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import LVNotification from '../../logic/LVNotification';
+import MXCrossTextInput from '../../components/MXCrossTextInput';
+import LVLoadingToast from '../Common/LVLoadingToast';
+import { backupWallet } from '../../utils/MXUtils';
 
 export default class WalletCreateSuccessPage extends Component {
     static navigationOptions = {
@@ -23,33 +26,48 @@ export default class WalletCreateSuccessPage extends Component {
         tabBarVisible: false
     };
 
-    onPressWalletBackupButton() {
+    onInputConfirm: Function;
+
+    constructor() {
+        super();
+
+        this.state = {
+            inputPwd: '',
+            alertMessage: ''
+        };
+    }
+
+    state: {
+        inputPwd: string,
+        alertMessage: string
+    };
+
+    onInputConfirm() {
         const wallet = this.props.navigation.state.params.wallet;
-
-        if (wallet && wallet.keystore) {
-            const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
-            const message: string = title + '\n' + JSON.stringify(wallet.keystore);
-
-            const options = { title: title, message: message, subject: title };
-
-            if (Platform.OS === 'ios') {
-                ActionSheetIOS.showShareActionSheetWithOptions(
-                    options,
-                    error => console.log(error),
-                    (success, activityType) => {
-                        if (success) {
-                            this.refs.disclaimer.show();
-                        } else {
-                            console.log('User did not share');
-                        }
-                    }
-                );
-            } else {
-                Share.share(options)
-                    .then(this._shareResult.bind(this))
-                    .catch(error => console.log(error));
+        const { inputPwd } = this.state;
+        setTimeout(async ()=>{
+            this.refs.toast.show();
+            try {
+                await backupWallet(wallet, inputPwd);
+                this.refs.toast.dismiss();
+                this.refs.disclaimer.show();
+            } catch (error) {
+                this.refs.toast.dismiss();
+                if(error === 'cancelled') {
+                    return;
+                }
+                setTimeout(() => {
+                    this.setState({
+                        alertMessage: LVStrings.wallet_backup_failed
+                    });
+                    this.refs.alert.show();
+                }, 500);
             }
-        }
+        }, 500);
+    }
+
+    onPressWalletBackupButton() {
+        this.refs.passwordConfirm.show();
     }
 
     _shareResult(result) {
@@ -88,6 +106,28 @@ export default class WalletCreateSuccessPage extends Component {
                     message={LVStrings.wallet_disclaimer_content}
                     buttonTitle={LVStrings.common_confirm}
                     onPress={() => this.refs.disclaimer.dismiss()}
+                />
+                <LVConfirmDialog
+                    ref={'passwordConfirm'}
+                    title={LVStrings.wallet_create_password_required}
+                    onConfirm={this.onInputConfirm.bind(this)}
+                    >
+                    <MXCrossTextInput
+                        style={{width: 200, alignSelf: 'center'}}
+                        secureTextEntry={true}
+                        withUnderLine={true}
+                        onTextChanged={newText => {
+                            this.setState({ inputPwd: newText });
+                        }}
+                        placeholder={LVStrings.wallet_create_password_required}
+                    />
+                </LVConfirmDialog>
+                <LVLoadingToast ref={'toast'} title={LVStrings.wallet_backuping} />
+                <LVDialog
+                    ref={'alert'}
+                    title={LVStrings.alert_hint}
+                    message={this.state.alertMessage}
+                    buttonTitle={LVStrings.alert_ok}
                 />
             </View>
         );
