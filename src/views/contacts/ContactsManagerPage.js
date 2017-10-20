@@ -33,12 +33,16 @@ export default class ContactsManagerPage extends Component {
     renderRow : Function;
     onDeleteContact: Function;
 
-    constructor() {
+    constructor(props: any) {
         super();
+
+        const { params } = props.navigation.state;
         this.state = {
             contacts: [],
             toDeDeletedContactName: null,
-            scrollEnabled: true
+            scrollEnabled: true,
+            readonly: params.readonly,
+            callback: params.callback
         };
         this.renderRow = this.renderRow.bind(this);
         this.onDeleteContact = this.onDeleteContact.bind(this);
@@ -48,6 +52,8 @@ export default class ContactsManagerPage extends Component {
         contacts: Array<Object>,
         toDeDeletedContactName: ?string,
         scrollEnabled: boolean,
+        readonly: boolean,
+        callback: Function
     }
 
     async loadContacts (){
@@ -107,9 +113,14 @@ export default class ContactsManagerPage extends Component {
                     onPressOut={separators.unhighlight}
                     underlayColor={LVColor.white}
                     onPress={()=>{
-                        this.props.navigation.navigate('AddEditContactPage', {
-                        callback:()=> this.loadContacts(),
-                        mode: 'edit', model: item})
+                        if(this.state.callback) {
+                            this.state.callback(item.address);
+                            this.props.navigation.goBack();
+                        } else {
+                            this.props.navigation.navigate('AddEditContactPage', {
+                                callback:()=> this.loadContacts(),
+                                mode: 'edit', model: item})
+                        }
                     }}>
                     <View style={styles.cellContentContainer}>
                         <View style={styles.cellLeftContentContainer}>
@@ -119,7 +130,7 @@ export default class ContactsManagerPage extends Component {
                                 <Text style={styles.addressTextStyle}>{converAddressToDisplayableText(item.address,9,9)}</Text>
                             </View>
                         </View>
-                        <Image source={ShowDetailsIcon}/>
+                        {!this.state.readonly && <Image source={ShowDetailsIcon}/>}
                     </View>
                 </TouchableHighlight>
             </Swipeout>
@@ -128,6 +139,12 @@ export default class ContactsManagerPage extends Component {
     
     render() {
         const { contacts } = this.state;
+        const { params } = this.props.navigation.state;
+
+        let addIcon = AddIcon;
+        if(this.state.readonly) {
+            addIcon = null;
+        }
 
         return (
             <View style={styles.rootContainer}>
@@ -137,7 +154,7 @@ export default class ContactsManagerPage extends Component {
                     title={ LVStrings.contact_list_nav_title }
                     titleStyle={styles.navTitle}
                     onLeftPress={ () => {this.props.navigation.goBack() }}
-                    right={AddIcon}
+                    right={addIcon}
                     onRightPress={ () => this.props.navigation.navigate('AddEditContactPage', {
                             callback:()=> this.loadContacts(),
                             mode: 'add'

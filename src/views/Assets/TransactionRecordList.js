@@ -56,11 +56,16 @@ export default class TransactionRecordList extends React.PureComponent {
         />
     );
 
+    getScrollMetrics = () => {
+        return this.refs.list._listRef._scrollMetrics;
+    }
+
     render() {
         const { records, style } = this.props;
 
         return (
             <FlatList
+                ref={'list'}
                 style={style}
                 data={records}
                 extraData={this.state}

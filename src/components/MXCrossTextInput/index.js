@@ -13,13 +13,15 @@ import PropTypes from 'prop-types';
 class MXCrossTextInput extends Component {
     state: {
         text: ?string,
+        defaultValue: string,
         hasFocus: boolean
     };
 
     constructor(props: any) {
         super(props);
         this.state = {
-            text: props.defaultValue,
+            defaultValue: props.defaultValue,
+            text: props.value,
             hasFocus: false
         };
         this.onChangeText = this.onChangeText.bind(this);
@@ -38,6 +40,7 @@ class MXCrossTextInput extends Component {
         withClearButton: PropTypes.bool,
         rightComponent: PropTypes.element,
         setFocusWhenMounted: PropTypes.bool,
+        value: PropTypes.string
     };
 
     static defaultProps = {
@@ -102,7 +105,7 @@ class MXCrossTextInput extends Component {
                             placeholder={placeholder}
                             underlineColorAndroid={'transparent'}
                             placeholderTextColor={LVColor.text.placeHolder}
-                            defaultValue={this.props.defaultValue}
+                            defaultValue={this.state.defaultValue}
                             value={this.state.text}
                             selectTextOnFocus={this.props.setFocusWhenMounted}
                             tintColor={LVColor.primary}

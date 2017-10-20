@@ -5,9 +5,9 @@ var sha3 = require('crypto-js/sha3');
 * Convert the number like 20000 into '20,000' this form of the amount of the string.
 * The fraction digits will be retained if precision is not set, eg: 2000.050 -> '2,000.050'
 */
-export function convertAmountToCurrencyString(amount: number, thousandsSeparator: ?string, precision: ?number): string {
+export function convertAmountToCurrencyString(amount: number, thousandsSeparator: ?string, precision: number = 0, keepZero: boolean = false): string {
     const sep = thousandsSeparator || ',';
-    const arr = (precision ? amount.toFixed(precision) : (amount + '')).split('.');
+    const arr = (precision >= 0 ? amount.toFixed(precision) : (amount + '')).split('.');
 
     let result = '';
     let num = (arr[0] || 0).toString();
@@ -22,7 +22,9 @@ export function convertAmountToCurrencyString(amount: number, thousandsSeparator
 
     if (arr.length === 2) {
         result = result + '.' + decimal;
-        result = parseFloat(result).toString();
+        if (keepZero === false) {
+            result = parseFloat(result).toString();
+        }
     }
 
     return result;

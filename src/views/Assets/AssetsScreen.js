@@ -156,40 +156,30 @@ class AssetsScreen extends Component {
         const wallet = this.state.wallet || {};
 
         return (
-            <View style={{ flex: 1 }}>
-                <PullView
-                    ref={'pull'}
-                    style={styles.topPanel}
-                    onPullRelease={this.onPullRelease.bind(this)}
-                    topIndicatorHeight={LVRefreshIndicator.indicatorHeight}
-                    topIndicatorRender={() => <LVRefreshIndicator />}
-                >
-                    <LVGradientPanel
-                        style={{
-                            flex: 1,
-                            justifyContent: 'flex-start',
-                            alignItems: 'center'
-                        }}
+            <View style={styles.container}>
+                <View style={styles.topPanel}>
+                    <PullView
+                        ref={'pull'}
+                        style={styles.topPanel}
+                        onPullRelease={this.onPullRelease.bind(this)}
+                        topIndicatorHeight={LVRefreshIndicator.indicatorHeight}
+                        topIndicatorRender={() => <LVRefreshIndicator />}
                     >
-                        <View style={styles.nav}>
-                            <View style={{ width: 27 }} />
-                            <Text style={styles.navTitle}>{LVStrings.assets_title}</Text>
-                            <MXTouchableImage
-                                style={{ width: 27 }}
-                                source={selectImg}
-                                onPress={this.onPressSelectWallet}
-                            />
-                        </View>
-                        <WalletInfoView style={styles.walletInfo} title={wallet.name} address={wallet.address} />
-                        <WalletBalanceView
-                            style={styles.balance}
-                            lvt={wallet.lvt}
-                            eth={wallet.eth}
-                            extLvt={0}
-                            extEth={0}
-                        />
-                    </LVGradientPanel>
-                </PullView>
+                        <LVGradientPanel style={styles.gradient}>
+                            <View style={styles.nav}>
+                                <View style={{ width: 27 }} />
+                                <Text style={styles.navTitle}>{LVStrings.assets_title}</Text>
+                                <MXTouchableImage
+                                    style={{ width: 27 }}
+                                    source={selectImg}
+                                    onPress={this.onPressSelectWallet}
+                                />
+                            </View>
+                            <WalletInfoView style={styles.walletInfo} title={wallet.name} address={wallet.address} />
+                            <WalletBalanceView style={styles.balance} lvt={wallet.lvt} eth={wallet.eth} />
+                        </LVGradientPanel>
+                    </PullView>
+                </View>
 
                 <View style={styles.bottomPanel}>
                     <LVDetailTextCell
@@ -228,6 +218,11 @@ const styles = StyleSheet.create({
     topPanel: {
         width: Window.width,
         height: 315
+    },
+    gradient: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'center'
     },
     nav: {
         width: Window.width - 25,

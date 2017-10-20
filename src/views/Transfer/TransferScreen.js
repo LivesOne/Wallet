@@ -6,7 +6,7 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Keyboard } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Keyboard,TextInput } from 'react-native';
 import { TransferHeader } from './TransferHeader';
 import MXCrossTextInput from './../../components/MXCrossTextInput';
 import MXTouchableImage from '../../components/MXTouchableImage';
@@ -43,6 +43,8 @@ class TransferScreen extends Component {
     static navigationOptions = {
         header: null
     };
+
+    onSelectedContact: Function;
 
     state: {
         wallet: ?Object,
@@ -85,6 +87,7 @@ class TransferScreen extends Component {
             inputPwd: '',
             userHasSetGap: false,
         }
+        this.onSelectedContact = this.onSelectedContact.bind(this);
     }
 
     componentDidMount() {
@@ -206,6 +209,10 @@ class TransferScreen extends Component {
         this.setState({showModal: true})
     }
 
+    onSelectedContact(address: string) {
+        this.refs.refAddressIn.setText(address);
+    }
+    
     onGapChanged(newGap: number) {
         if (newGap !== this.state.minerGap) {
             this.setState({
@@ -288,7 +295,6 @@ class TransferScreen extends Component {
                         onPressSelectWallet={()=>{this.setState({ openSelectWallet: true })}}
                     ></TransferHeader>
                     <View style= { styles.headerBelow }>
-                        
                         <MXCrossTextInput 
                             ref={'refAddressIn'}
                             style={styles.textInput} 
@@ -296,7 +302,7 @@ class TransferScreen extends Component {
                             defaultValue={this.state.addressIn}
                             rightComponent={
                                 <View style={{flexDirection:'row', justifyContent: 'space-between', width: 55}}>
-                                    <MXTouchableImage source={addImg} onPress={() => {this.props.navigation.navigate('ContactList')}}/>
+                                    <MXTouchableImage source={addImg} onPress={() => {this.props.navigation.navigate('ContactList',{readonly:true, callback:this.onSelectedContact})}}/>
                                     <MXTouchableImage source={scanImg} onPress={() => {this.setState({ showQrScanModal: true })}}/>
                                 </View>
                             }
