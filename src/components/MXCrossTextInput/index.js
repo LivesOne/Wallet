@@ -56,6 +56,11 @@ class MXCrossTextInput extends Component {
         }
     }
 
+    setText(newText: string) {
+        this.setState({text: newText, hasFocus: true});
+        this.props.onTextChanged && this.props.onTextChanged(newText);
+    }
+
     onChangeText = function(newText: string) {
         this.setState({
             text: newText
@@ -70,11 +75,7 @@ class MXCrossTextInput extends Component {
     }
 
     onPressClear() {
-        this.setState({
-            text: '',
-            hasFocus: true
-        });
-        this.props.onTextChanged && this.props.onTextChanged('');
+        this.setText('')
     }
 
     render() {
