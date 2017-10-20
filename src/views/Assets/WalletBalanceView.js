@@ -19,25 +19,23 @@ export default class WalletBalanceView extends Component {
     static propTypes = {
         style: ViewPropTypes.style,
         lvt: PropTypes.number,
-        eth: PropTypes.number,
-        extLvt: PropTypes.number,
-        extEth: PropTypes.number
+        eth: PropTypes.number
     };
 
     render() {
-        const { lvt, eth, extLvt, extEth } = this.props;
+        const { lvt, eth } = this.props;
         return (
             <View style={[styles.container, this.props.style]}>
                 <View style={styles.rows}>
                     <BalanceItemHeader icon={lvtIcon} title="LVT" />
-                    <BalanceValueView value={lvt} extValue={extLvt} extUnit="$" />
+                    <BalanceValueView value={lvt} num={0} keepZero={false} />
                 </View>
                 <View
                     style={{ width: '90%', height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }}
                 />
                 <View style={styles.rows}>
                     <BalanceItemHeader icon={ethIcon} title="ETH" />
-                    <BalanceValueView value={eth} extValue={extEth} extUnit="$" />
+                    <BalanceValueView value={eth} num={8} keepZero={true} />
                 </View>
             </View>
         );
@@ -51,20 +49,13 @@ const BalanceItemHeader = ({ icon, title }) => (
     </View>
 );
 
-const BalanceValueView = ({ value, extValue, extUnit }) => {
-    const valueString = StringUtils.convertAmountToCurrencyString(value, ',', 8);
-    const extValString = StringUtils.convertAmountToCurrencyString(extValue, ',', 3);
+const BalanceValueView = ({ value, num, keepZero }) => {
+    const valueString = StringUtils.convertAmountToCurrencyString(value, ',', num, keepZero);
     return (
         <View>
-            {/* <Text /> */}
-            <Text
-                style={{ fontSize: LVSize.xxlarge, textAlign: 'right', fontWeight: '600', color: LVColor.text.grey1 }}
-            >
+            <Text style={{ fontSize: 24, textAlign: 'right', fontWeight: '600', color: LVColor.text.grey1 }}>
                 {valueString}
             </Text>
-            {/* <Text style={{ fontSize: LVSize.xsmall, textAlign: 'right', fontWeight: '400', color: LVColor.text.grey3 }}>
-                {'≈' + extUnit + extValString}
-            </Text> */}
         </View>
     );
 };
