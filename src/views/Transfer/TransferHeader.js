@@ -28,7 +28,7 @@ export class TransferHeader extends Component {
 
     render() {
         const { balance, eth } = this.props;
-        const lvtValString = StringUtils.convertAmountToCurrencyString(balance, ',', 3);
+        const lvtValString = StringUtils.convertAmountToCurrencyString(balance, ',', 0);
         const ethValString = StringUtils.convertAmountToCurrencyString(eth, ',', 8);
         return (
             <LVGradientPanel style = {[styles.container, this.props.style]}>
