@@ -6,6 +6,7 @@
 //"use strict";
 
 import { NativeModules } from 'react-native';
+import knownFoundationErrors from './knownFoundationErrors';
 
 const lvExport = NativeModules.LVReactExport;
 
@@ -61,16 +62,6 @@ module.exports = {
       p: 8
     }
   },
-  errors : {
-    passwordMismatch: 'message authentication code mismatch',
-  },
-  internalErrorHandleHook: null,
-  internalErrorHandle: function(error) {
-    console.log(error);
-    if(this.internalErrorHandleHook && typeof this.internalErrorHandleHook === 'function') {
-      this.internalErrorHandleHook({error: error.message});
-    }
-  }, 
   myTest : function(testFunc) {
     callback = testFunc;
     callback();
@@ -263,7 +254,7 @@ module.exports = {
   deriveKey: function (password, salt, options, cb) {
     var prf, self = this;
     if (typeof password === "undefined" || password === null || !salt) {
-      throw new Error("Must provide password and salt to derive a key");
+      throw new Error(knownFoundationErrors.passwordRequired);
     }
 
     let originPassword = password;
@@ -295,10 +286,15 @@ module.exports = {
             options.kdfparams.p || self.constants.scrypt.p,
             options.kdfparams.dklen || self.constants.scrypt.dklen, function(result){
               try {
-                cb(Buffer.from(result));
+                cb({
+                  error: null,
+                  derivedKey: Buffer.from(result)
+                });
               } catch (error) {
-                console.log(error.message);
-                  self.internalErrorHandle(error);
+                cb({
+                  error: error,
+                  derivedKey: null
+                })
               }
           });
         }, 0);
@@ -476,8 +472,12 @@ module.exports = {
     }
 
     // asynchronous if callback provided
-    this.deriveKey(password, salt, options, function (derivedKey) {
-      cb(this.marshal(derivedKey, privateKey, salt, iv, options));
+    this.deriveKey(password, salt, options, function (result) {
+      if(result.error) {
+        cb(null, result.error);
+      } else {
+        cb(this.marshal(result.derivedKey, privateKey, salt, iv, options), result.error);
+      }
     }.bind(this));
   },
 
@@ -495,7 +495,7 @@ module.exports = {
     function verifyAndDecrypt(derivedKey, salt, iv, ciphertext, algo) {
       var key;
       if (self.getMAC(derivedKey, ciphertext) !== keyObjectCrypto.mac) {
-        throw new Error(self.errors.passwordMismatch);
+        throw new Error(knownFoundationErrors.passwordMismatch);
       }
       if (keyObject.version === "1") {
         key = keccak256(derivedKey.slice(0, 16)).slice(0, 16);
@@ -519,8 +519,12 @@ module.exports = {
       throw "Callback parameter is required.";
       return verifyAndDecrypt(this.deriveKey(password, salt, keyObjectCrypto), salt, iv, ciphertext, algo);
     }
-    this.deriveKey(password, salt, keyObjectCrypto, function (derivedKey) {
-      cb(verifyAndDecrypt(derivedKey, salt, iv, ciphertext, algo));
+    this.deriveKey(password, salt, keyObjectCrypto, function (result) {
+      if(result.error) {
+        cb(null, result.error);
+      } else {
+        cb(verifyAndDecrypt(result.derivedKey, salt, iv, ciphertext, algo), result.error);
+      }
     });
   },
 

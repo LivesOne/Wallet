@@ -10,7 +10,6 @@ export default class LVNotification {
     static balanceChanged = 'lv_notification_balance_changed';
     static walletImported = 'lv_notification_import_wallet_imported';
     static walletsNumberChanged = 'lv_notification_wallets_number_changed'
-    static foundationError = 'lv_notification_foundation_error';
     static transcationCreated = 'lv_notification_transaction_created';
     static transcationRecordsChanged = 'lv_notification_transaction_records_changed';
 }

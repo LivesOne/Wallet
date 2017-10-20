@@ -64,7 +64,6 @@ const foundation = require('../../foundation/wallet.js');
     }
 
     componentWillMount = () => {
-      LVNotificationCenter.addObserver(this, LVNotification.foundationError, this.onImportError.bind(this));
       let fromPage = WalletUtils.OPEN_IMPORT_FROM_LAUNCH;
       if (this.props.screenProps && this.props.screenProps.from) {
         fromPage = this.props.screenProps.from;

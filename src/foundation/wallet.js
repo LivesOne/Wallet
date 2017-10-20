@@ -21,11 +21,6 @@ module.exports = {
             dklen: 32
         }
     },
-
-    setInternalErrorHandleHook: function(hook: Function) {
-        eth_local.internalErrorHandleHook = hook;
-    },
-
     /**
      * Create key store.
      * @param  {string} password
@@ -51,11 +46,7 @@ module.exports = {
      * 
      * 
      */
-    createKeyStore : function(password: string, privateKey: ?string, callback: ?Function) {
-        if(!callback) {
-            throw 'callback is required';
-        }  
-
+    createKeyStore : function(password: string, privateKey: ?string, callback: Function) {
         let keyObj = null;
         if(!privateKey) {
             keyObj = eth_local.create();
@@ -71,16 +62,23 @@ module.exports = {
     },
     
     modifyPassword: function(oldPassword: string, keyStoreObject: Object, newPassword: string, callback: Function) {
-        if(!callback) {
-            throw 'callback is required';
-        } 
-
         const self = this;
         
-        eth_local.recover(oldPassword, keyStoreObject, function(privateKeyBuffer) {
-            const privateKey = privateKeyBuffer.toString('hex');
+        eth_local.recover(oldPassword, keyStoreObject, function(privateKeyBuffer,error) {
+            if(error) {
+                callback(null, error);
+            } else {
+                const privateKey = privateKeyBuffer.toString('hex');
+                self.createKeyStore(newPassword, privateKey, callback);
+            }
+        });
+    },
 
-            self.createKeyStore(newPassword, privateKey, callback);
+    verifyPassword: function(password: string, keystore: Object, callback: Function) {
+        eth_local.recover(password, keystore, function(privateKeyBuffer, error) {
+            if(callback) {
+                callback(privateKeyBuffer !== null, error);
+            }
         });
     },
 
@@ -90,19 +88,18 @@ module.exports = {
      * @param  {Object} keyStoreObject
      * @param  {?Function} callback this callback returns the keystore object to the caller.
      */
-    importWithKeyStoreObject : function(password: string, keyStoreObject: Object, callback: ?Function) {
-        if(!callback) {
-            throw 'callback is required';
-        }  
-
+    importWithKeyStoreObject : function(password: string, keyStoreObject: Object, callback: Function) {
         const self = this;
 
-        eth_local.recover(password, keyStoreObject, function(privateKeyBuffer) {
-            const privateKey = privateKeyBuffer.toString('hex');
-
-            self.createKeyStore(password, privateKey, callback);
+        eth_local.recover(password, keyStoreObject, function(privateKeyBuffer, error) {
+            if(error) {
+                callback(null, error);
+            } else {
+                const privateKey = privateKeyBuffer.toString('hex');
+                
+                self.createKeyStore(password, privateKey, callback);
+            }
         });
-       
     },
 
     /**
@@ -111,21 +108,26 @@ module.exports = {
      * @param  {string} privateKey
      * @param  {?Function} callback this callback returns the keystore object to the caller. 
      */
-    importWithPrivateKey : function(password: string, privateKey: string, callback: ?Function) {
-        if(!callback) {
-            throw 'callback is required';
-        }  
-
+    importWithPrivateKey : function(password: string, privateKey: string, callback: Function) {
         const self = this;
-        this.createKeyStore(password, privateKey, function(keystore){
+        this.createKeyStore(password, privateKey, function(keystore, error) {
+            if(error) {
+                callback(null, error);
+                return;
+            }
 
             //validate if the import succeeds through recovering.
-            eth_local.recover(password, keystore, function(privateKeyBuffer){
+            eth_local.recover(password, keystore, function(privateKeyBuffer, error) {
+                if(error) {
+                    callback(null, error);
+                    return;
+                }
+
                 const recoveredPrivateKey = privateKeyBuffer.toString('hex');
                 if(privateKey !== recoveredPrivateKey) {
-                    callback(null);
+                    callback(null, 'private key mismatch');
                 } else {
-                    callback(keystore);
+                    callback(keystore, null);
                 }
             });
         });
@@ -137,15 +139,16 @@ module.exports = {
      * @param  {string} keyStoreObject
      * @param  {?Function} callback
      */
-    exportPrivateKey: function(password: string, keyStoreObject: Object, callback: ?Function) {   
-        if(!callback) {
-            throw 'callback is required';
-        }     
+    exportPrivateKey: function(password: string, keyStoreObject: Object, callback: Function) {   
+        eth_local.recover(password, keyStoreObject, function(privateKeyBuffer, error) {
+            if(error){
+                callback(null, error);
+                return;
+            }
 
-        eth_local.recover(password, keyStoreObject, function(privateKeyBuffer) {
             const privateKey = privateKeyBuffer.toString('hex');
             if(callback) {
-                callback(privateKey);
+                callback(privateKey, null);
             }
         });
     }

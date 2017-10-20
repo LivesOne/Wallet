@@ -92,10 +92,10 @@ class MXCrossTextInput extends Component {
             <View
                 style={[
                     Base.main,
-                    style,
                     theme.main,
                     rounded ? Base.rounded : null,
-                    !withUnderLine ? { borderBottomColor: 'transparent' } : null
+                    !withUnderLine ? { borderBottomColor: 'transparent' } : null,
+                    style,
                 ]}
             >
                 <View style={[Base.content]}>
