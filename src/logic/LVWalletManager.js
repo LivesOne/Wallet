@@ -9,6 +9,8 @@ import LVPersistent from './LVPersistent';
 import LVConfiguration from './LVConfiguration';
 import LVNotificationCenter from '../logic/LVNotificationCenter';
 import LVNotification from '../logic/LVNotification';
+import LVNetworking from './LVNetworking';
+import LVTransactionRecordManager from './LVTransactionRecordManager';
 
 const foundation = require('../foundation/wallet.js');
 const WalletsKey :string = '@Venus:WalletsInfo';
@@ -33,9 +35,6 @@ class WalletManager {
     constructor() {
         this.wallets = [];
         this.selectedIndex = 0;
-        foundation.setInternalErrorHandleHook((error)=>{
-            LVNotificationCenter.postNotification(LVNotification.foundationError, error);
-        });
     }
 
     /**
@@ -101,23 +100,42 @@ class WalletManager {
         return index === -1;
     }
 
+    async updateWalletBalance() {
+        const wallet = this.getSelectedWallet();
+        if (wallet) {
+            try {
+                const lvt = await LVNetworking.fetchBalance(wallet.address, 'lvt');
+                const eth = await LVNetworking.fetchBalance(wallet.address, 'eth');
+
+                wallet.lvt = (lvt ? parseFloat(lvt) : 0) - LVTransactionRecordManager.preUsedLvt;
+                wallet.eth = (eth ? parseFloat(eth) : 0) - LVTransactionRecordManager.preUsedEth;
+
+                await this.saveToDisk();
+
+                LVNotificationCenter.postNotification(LVNotification.balanceChanged);
+            } catch (error) {
+                console.log('error in refresh wallet datas : ' + error);
+            }
+        }
+    }
+
     /**
      * export the private key of current wallet.
      * @param  {string} password
      */
-    async exportPrivateKey(password : string) : Promise<?string> {
-        const selectedWallet = this.getSelectedWallet();
+    async exportPrivateKey(wallet: Object, password: string): Promise<string> {
         const promise = new Promise(function(resolve, reject){
-            if(!selectedWallet) {
-                resolve(null);
-            } else {
-                try {
-                    foundation.exportPrivateKey(password, selectedWallet.keystore,(p) => {
-                        resolve(p);
-                    });
-                } catch (e) {
-                    reject(e);
-                }
+            try {
+                foundation.exportPrivateKey(password, wallet.keystore,(privateKey,error) => {
+                    if(error) {
+                        reject(error);
+                    } else {
+                        resolve(privateKey);
+                    }
+                    
+                });
+            } catch (e) {
+                reject(e);
             }
         });
 
@@ -132,13 +150,13 @@ class WalletManager {
      */
     async createWallet(name : string, password : string) : Promise<Object> {
         const promise = new Promise(function(resolve, reject){
-            foundation.createKeyStore(password, null, function(keystore){
-                try {
-                    const walletInfo = createNewKeystore(name, password, keystore);
-                    resolve(walletInfo);
-                } catch (error) {
+            foundation.createKeyStore(password, null, function(keystore, error){
+                if(error) {
                     reject(error);
+                    return;
                 }
+                const walletInfo = createNewKeystore(name, password, keystore);
+                resolve(walletInfo);
             });
         });
         return promise;
@@ -213,7 +231,12 @@ class WalletManager {
     async importWalletWithPrivatekey(name: string, password : string, privateKey : string) {
         const promise = new Promise(function(resolve, reject){
             try {
-                foundation.importWithPrivateKey(password, privateKey, function(keystore){
+                foundation.importWithPrivateKey(password, privateKey, function(keystore, error){
+                    if(error){
+                        reject(error);
+                        return;
+                    }
+
                     const walletInfo = createNewKeystore(name, password, keystore);
                     resolve(walletInfo);
                 });
@@ -232,7 +255,12 @@ class WalletManager {
     async importWalletWithKeystore(name: string, password: string, keystore: Object) {
         const promise = new Promise(function(resolve, reject){
             try {
-                foundation.importWithKeyStoreObject(password, keystore, function(calcedKeystore) {
+                foundation.importWithKeyStoreObject(password, keystore, function(calcedKeystore, error) {
+                    if(error) {
+                        reject(error);
+                        return;
+                    }
+
                     const walletInfo = createNewKeystore(name, password, calcedKeystore)
                     resolve(walletInfo);
                 })
@@ -251,7 +279,12 @@ class WalletManager {
     async modifyPassword(wallet : Object, oldPassword : string, newPassword: string) {
         const promise = new Promise(function(resolve, reject) {
             try {
-                foundation.modifyPassword(oldPassword, wallet.keystore, newPassword, function(calcedKeystore){;
+                foundation.modifyPassword(oldPassword, wallet.keystore, newPassword, function(calcedKeystore, error){
+                    if(error){
+                        reject(error);
+                        return;
+                    }
+                    
                     wallet.keystore = calcedKeystore;
                     if(wallet.address !== calcedKeystore.address) {
                         reject({error: 'internal error, keystore addresses are different.'});
@@ -263,6 +296,24 @@ class WalletManager {
                 reject(e);
             }
         });
+        return promise;
+    }
+
+    async verifyPassword(password: string, keystore: Object): Promise<boolean> {
+        const promise = new Promise(function(resolve, reject) {
+            try {
+                foundation.verifyPassword(password, keystore, function(isMatched: boolean, error){
+                    if(error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(isMatched);
+                })
+            } catch (error) {
+                reject(error);
+            }
+        });
+
         return promise;
     }
 

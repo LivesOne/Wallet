@@ -23,18 +23,20 @@ class LVTransactionRecord {
     datetime: string = '';
     minnerFee: number;
     remarks: string;
-    completed: boolean;
+    state: string; // ok, failed, waiting
 
-    constructor(json: any, currentWalletAddress: string, completed: boolean = true) {
+    constructor(json: any, currentWalletAddress: string, state: string = 'ok') {
         this.block = json.block;
         this.hash = json.transactionHash;
-        this.type = json.to.toUpperCase().substr(2) == currentWalletAddress.toUpperCase() ? 'in' : 'out';
-        this.payer = json.from;
-        this.receiver = json.to;
+        this.type = this.isEqualAddress(json.to || '', currentWalletAddress) ? 'in' : 'out';
+        this.payer = this.pureAddress(json.from);
+        this.receiver = this.pureAddress(json.to);
         this.amount = Number(json.value) * Math.pow(10, -18);
-        this.completed = completed;
+        this.state = state;
 
-        if (completed === false) {
+        if (state === 'waiting') {
+            this.amount = json.lvt || 0;
+            this.minnerFee = json.eth || 0;
             this.timestamp = json.timestamp;
             this.datetime = Moment(this.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss');
         }
@@ -45,13 +47,29 @@ class LVTransactionRecord {
         this.datetime = Moment(this.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss');
         this.minnerFee = detailJson.gas * detailJson.gasPrice * Math.pow(10, -18);
     }
+
+    pureAddress(addr: string): string {
+        if (addr.substr(0, 2).toLowerCase() == '0x') {
+            return addr.substr(2);
+        } else {
+            return addr;
+        }
+    }
+
+    isEqualAddress(addr1: string, addr2: string): boolean {
+        return this.pureAddress(addr1).toLowerCase() == this.pureAddress(addr2).toLowerCase();
+    }
 }
 
+const LVTransactionFailedRecordList = '@Venus:TransactionFailedRecordList';
 const LVTransactionUnfinishedRecordList = '@Venus:TransactionUnfinishedRecordList';
 
 export default class LVTransactionRecordManager {
     static unfinishedRecords: Array<LVTransactionRecord> = [];
     static records: Array<LVTransactionRecord> = [];
+
+    static preUsedLvt: number;
+    static preUsedEth: number;
 
     constructor() {
         LVNotificationCenter.addObserver(
@@ -64,14 +82,20 @@ export default class LVTransactionRecordManager {
     async handleTransactionCreated(json: ?Object) {
         const wallet = LVWalletManager.getSelectedWallet();
         if (json && wallet) {
-            const record = new LVTransactionRecord(json, wallet.address, false);
+            const record = new LVTransactionRecord(json, wallet.address, 'waiting');
             LVTransactionRecordManager.unfinishedRecords.push(record);
             LVTransactionRecordManager.records.unshift(record);
+
+            LVTransactionRecordManager.preUsedLvt += record.amount;
+            LVTransactionRecordManager.preUsedEth += record.minnerFee;
+            wallet.lvt -= record.amount;
+            wallet.eth -= record.minnerFee;
 
             await LVPersistent.setObject(
                 LVTransactionUnfinishedRecordList + '_' + wallet.address,
                 LVTransactionRecordManager.unfinishedRecords
             );
+
             LVNotificationCenter.postNotification(LVNotification.transcationRecordsChanged);
         }
     }
@@ -93,6 +117,8 @@ export default class LVTransactionRecordManager {
             try {
                 const value = await LVNetworking.fetchTransactionHistory(wallet.address);
                 this.records = [];
+                this.preUsedLvt = 0;
+                this.preUsedEth = 0;
 
                 if (value && value.length > 0) {
                     const list = value.map(record => new LVTransactionRecord(record, wallet.address));
@@ -112,6 +138,9 @@ export default class LVTransactionRecordManager {
                     const found = this.records.findIndex(r => r.hash == unfinishedRecord.hash) != -1;
                     if (found) {
                         this.unfinishedRecords.pop();
+                    } else if (unfinishedRecord.state === 'waiting') {
+                        this.preUsedLvt += unfinishedRecord.amount;
+                        this.preUsedEth += unfinishedRecord.minnerFee;
                     }
                 }
 
