@@ -29,7 +29,6 @@ export class TransferHeader extends Component {
     render() {
         const { balance, eth } = this.props;
         const lvtValString = StringUtils.convertAmountToCurrencyString(balance, ',', 0);
-        const ethValString = StringUtils.convertAmountToCurrencyString(eth, ',', 8);
         return (
             <LVGradientPanel style = {[styles.container, this.props.style]}>
                 <View style={styles.nav}>
@@ -40,7 +39,6 @@ export class TransferHeader extends Component {
                 <View style= {styles.columnContainer}>
                     <Text style= {[styles.textCommon]}>{ LVStrings.transfer_purse_balance }</Text>
                     <Text style= {[styles.textCommon, {fontSize: 36}]}>{ lvtValString }</Text>
-                    <Text style= {[styles.textCommon]}>{ '≈￥' + ethValString}</Text>
                 </View>
             </LVGradientPanel>
         )
@@ -54,7 +52,7 @@ const Window = {
 
 const styles = StyleSheet.create({
     container: {
-        height: '25%',
+        height: '23%',
         backgroundColor: 'transparent'
     },
     nav: {
