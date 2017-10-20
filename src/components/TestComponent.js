@@ -16,6 +16,7 @@ import LVNetworking from '../logic/LVNetworking';
 import TransferLogic from '../views/Transfer/TransferLogic';
 import { isAddress } from '../utils/MXStringUtils';
 import WalletUtils from '../views/Wallet/WalletUtils';
+import TransferUtils from '../views/Transfer/TransferUtils';
 
 const eth_local = require('../foundation/ethlocal.js');
 const wallet = require('../foundation/wallet.js');
@@ -40,7 +41,7 @@ class TestComponent extends Component {
                 <MXButton
                     title={"hello"}
                     onPress = {() => {
-                        this.testWalletApi();
+                        this.testBN();
                     }}
                     themeStyle={"active"}
                 />
@@ -189,6 +190,10 @@ class TestComponent extends Component {
         this.log(''+ (isAddress(test1) ? 'true' : 'fasle'));
         this.log(isAddress(test2));
         this.log(isAddress(test3));
+    }
+
+    testBN() {
+        TransferUtils.testBN();
     }
 
     log(msg:any) {

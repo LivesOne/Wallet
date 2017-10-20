@@ -66,6 +66,7 @@ export class ModifyWalletPwd extends Component {
             return;
         }
 
+        WalletUtils.log('pwd=' + wallet.password);
         if (curPwd !== wallet.password) {
             this.setState({alertMessage:LVStrings.wallet_edit_cur_pwd_error });
             this.refs.alert.show();

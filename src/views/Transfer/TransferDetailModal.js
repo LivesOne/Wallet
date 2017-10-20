@@ -26,7 +26,7 @@ export class TransferDetailModal extends Component {
         onClosed: PropTypes.func,
         address: PropTypes.string,
         amount: PropTypes.number,
-        minerTips: PropTypes.number,
+        minerGap: PropTypes.number,
         remarks: PropTypes.string,
         onTransferConfirmed: PropTypes.func,
     };
@@ -43,7 +43,7 @@ export class TransferDetailModal extends Component {
     };
 
     render() {
-        const {isOpen, onClosed, address, amount, minerTips, remarks, onTransferConfirmed } = this.props;
+        const {isOpen, onClosed, address, amount, minerGap, remarks, onTransferConfirmed } = this.props;
         return (
             <Modal 
                 isOpen={isOpen}
@@ -63,7 +63,7 @@ export class TransferDetailModal extends Component {
                   </View>
                   <DetailItem leftText={LVStrings.transfer_address_in} rightText={address}></DetailItem>
                   <DetailItem leftText={LVStrings.transfer_amount} rightText={amount + ' LVT'}></DetailItem>
-                  <DetailItem leftText={LVStrings.transfer_miner_tips} rightText={minerTips + ' ETH'}></DetailItem>
+                  <DetailItem leftText={LVStrings.transfer_miner_tips} rightText={minerGap + ' ETH'}></DetailItem>
                   <DetailItem leftText={LVStrings.transfer_remarks} rightText={remarks}></DetailItem>
                 <MXButton title={LVStrings.transfer} rounded={true} style={styles.btn} onPress = {onTransferConfirmed}></MXButton>
                 </View>
