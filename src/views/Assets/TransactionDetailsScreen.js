@@ -29,7 +29,7 @@ export default class TransactionDetailsScreen extends Component {
 
     render() {
         const { transactionRecord } = this.props.navigation.state.params;
-        const { block, hash, type, amount, payer, receiver, minnerFee, datetime, completed } = transactionRecord;
+        const { block, hash, type, amount, payer, receiver, minnerFee, datetime, state } = transactionRecord;
 
         const is_failed = false;
         const symble = type === 'in' ? '+' : '-';
@@ -37,7 +37,10 @@ export default class TransactionDetailsScreen extends Component {
         const feeString = StringUtils.convertAmountToCurrencyString(minnerFee, ',', 8) + ' ETH';
         const remarks = transactionRecord.remarks || LVStrings.transaction_na;
 
-        const typeImg = is_failed ? failureImg : completed ? (symble === '+' ? receiptImg : transferImg) : waitingImg;
+        const typeImg = state === 'ok' ? (symble === '+' ? receiptImg : transferImg) : state === 'waiting' ? waitingImg : failureImg;
+
+        //console.log(receiver);
+        //9224A9f81Ac30F0E3B568553bf9a7372EE49548C
 
         return (
             <View style={styles.container}>
@@ -61,11 +64,11 @@ export default class TransactionDetailsScreen extends Component {
                             <LVSubTitleCell title={LVStrings.transaction_receiver} value={'0x' + receiver} />
                             <LVSubTitleCell title={LVStrings.transaction_minner_fee} value={minnerFee + ' ETH'} />
                             <LVSubTitleCell title={LVStrings.transaction_remarks} value={remarks} />
-                            {!is_failed || (
+                            {state === 'failed' && (
                                 <Text style={styles.failureText}>{LVStrings.transaction_failure_message}</Text>
                             )}
                         </View>
-                        {!is_failed && completed && (
+                        {state === 'ok' && (
                             <View style={{ width: '100%', paddingLeft: 15, paddingRight: 15, marginBottom: 10 }}>
                                 <LVRightDetailCell title={LVStrings.transaction_block_number} value={block} />
                                 <LVRightDetailCell
