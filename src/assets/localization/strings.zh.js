@@ -101,6 +101,7 @@ const localized_strings = {
     transaction_records_time: '时间',
     transaction_records_to: '至',
     transaction_waiting: '等待中',
+    transaction_failed: '交易失败',
     transaction_details: '交易详情',
     transaction_payer: '发款方',
     transaction_receiver: '收款方',

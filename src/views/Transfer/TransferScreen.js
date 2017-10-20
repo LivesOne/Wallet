@@ -143,24 +143,14 @@ class TransferScreen extends Component {
     }
 
     refreshWalletDatas = async () => {
+        await LVWalletManager.updateWalletBalance();
         const wallet = LVWalletManager.getSelectedWallet();
         if (wallet) {
-            try {
-                const lvt = await LVNetworking.fetchBalance(wallet.address, 'lvt');
-                const eth = await LVNetworking.fetchBalance(wallet.address, 'eth');
-
-                wallet.lvt = lvt ? parseFloat(lvt) : 0;
-                wallet.eth = eth ? parseFloat(eth) : 0;
-                this.setState({
-                    wallet: wallet,
-                    curETH: wallet.eth,
-                    balance: wallet.lvt,
-                });
-
-                LVWalletManager.saveToDisk();
-            } catch (error) {
-                console.log('error in refresh wallet datas : ' + error);
-            }
+            this.setState({
+                wallet: wallet,
+                curETH: wallet.eth,
+                balance: wallet.lvt,
+            });
         }
     }
 

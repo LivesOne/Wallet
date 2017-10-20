@@ -17,6 +17,7 @@ import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVT
 import LVUtils, { StringUtils } from '../../utils';
 
 const failureImg = require('../../assets/images/transaction_failure.png');
+const waitingImg = require('../../assets/images/transaction_wating.png');
 const receiptImg = require('../../assets/images/transaction_receipt.png');
 const transferImg = require('../../assets/images/transaction_transfer.png');
 
@@ -28,7 +29,7 @@ export default class TransactionDetailsScreen extends Component {
 
     render() {
         const { transactionRecord } = this.props.navigation.state.params;
-        const { block, hash, type, amount, payer, receiver, minnerFee, datetime } = transactionRecord;
+        const { block, hash, type, amount, payer, receiver, minnerFee, datetime, completed } = transactionRecord;
 
         const is_failed = false;
         const symble = type === 'in' ? '+' : '-';
@@ -36,7 +37,7 @@ export default class TransactionDetailsScreen extends Component {
         const feeString = StringUtils.convertAmountToCurrencyString(minnerFee, ',', 8) + ' ETH';
         const remarks = transactionRecord.remarks || LVStrings.transaction_na;
 
-        const typeImg = is_failed ? failureImg : symble === '+' ? receiptImg : transferImg;
+        const typeImg = is_failed ? failureImg : completed ? (symble === '+' ? receiptImg : transferImg) : waitingImg;
 
         return (
             <View style={styles.container}>
@@ -56,16 +57,21 @@ export default class TransactionDetailsScreen extends Component {
                     </View>
                     <View style={styles.details}>
                         <View style={{ width: '100%', paddingLeft: 15, paddingRight: 15 }}>
-                            <LVSubTitleCell title={LVStrings.transaction_payer} value={payer.substr(2)} />
-                            <LVSubTitleCell title={LVStrings.transaction_receiver} value={receiver.substr(2)} />
+                            <LVSubTitleCell title={LVStrings.transaction_payer} value={'0x' + payer} />
+                            <LVSubTitleCell title={LVStrings.transaction_receiver} value={'0x' + receiver} />
                             <LVSubTitleCell title={LVStrings.transaction_minner_fee} value={minnerFee + ' ETH'} />
                             <LVSubTitleCell title={LVStrings.transaction_remarks} value={remarks} />
-                            {!is_failed || <Text style={styles.failureText}>{LVStrings.transaction_failure_message}</Text>}
+                            {!is_failed || (
+                                <Text style={styles.failureText}>{LVStrings.transaction_failure_message}</Text>
+                            )}
                         </View>
-                        {is_failed || (
+                        {!is_failed && completed && (
                             <View style={{ width: '100%', paddingLeft: 15, paddingRight: 15, marginBottom: 10 }}>
                                 <LVRightDetailCell title={LVStrings.transaction_block_number} value={block} />
-                                <LVRightDetailCell title={LVStrings.transaction_hash} value={StringUtils.converAddressToDisplayableText(hash, 7, 7)} />
+                                <LVRightDetailCell
+                                    title={LVStrings.transaction_hash}
+                                    value={StringUtils.converAddressToDisplayableText(hash, 7, 7)}
+                                />
                                 <LVRightDetailCell title={LVStrings.transaction_time} value={datetime} />
                             </View>
                         )}
