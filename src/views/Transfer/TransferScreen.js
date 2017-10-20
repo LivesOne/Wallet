@@ -254,7 +254,8 @@ class TransferScreen extends Component {
                     transactionHash: rst.transactionHash,
                     from: wallet.address,
                     to: addressIn,
-                    value: 0,
+                    lvt: amount,
+                    eth: minerGap,
                     timestamp: Moment().format('X'),
                 });
             }
