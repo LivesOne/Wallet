@@ -6,26 +6,14 @@
 'use strict';
 
 import React, { Component } from 'react';
-import {
-    StyleSheet,
-    Dimensions,
-    Platform,
-    ViewPropTypes,
-    View,
-    Text,
-    Image,
-    ScrollView,
-    RefreshControl,
-    PanResponder
-} from 'react-native';
-import PropTypes from 'prop-types';
+import { StyleSheet, Dimensions, Platform, ViewPropTypes, View, Text, Image } from 'react-native';
 import { PullView } from 'react-native-rk-pull-to-refresh';
-import * as Progress from 'react-native-progress';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import LVDetailTextCell from '../Common/LVDetailTextCell';
+import LVRefreshIndicator from '../Common/LVRefreshIndicator';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 import MXTouchableImage from '../../components/MXTouchableImage';
 import LVMarketInfo from '../../logic/LVMarketInfo';
@@ -78,10 +66,17 @@ class AssetsScreen extends Component {
         LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.handleRecordsChanged);
         LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletChange);
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
+        this.refs.pull && this.refs.pull.beginRefresh();
     }
 
     componentWillUnmount() {
         LVNotificationCenter.removeObservers(this);
+    }
+
+    async onPullRelease() {
+        await this.refreshWalletDatas();
+        await this.refreshTransactionList();
+        this.refs.pull && this.refs.pull.resolveHandler();
     }
 
     refreshWalletDatas = async () => {
@@ -113,8 +108,7 @@ class AssetsScreen extends Component {
     };
 
     handleWalletChange = async () => {
-        await this.refreshWalletDatas();
-        await this.refreshTransactionList();
+        this.refs.pull && this.refs.pull.beginRefresh();
     };
 
     handleRecordsChanged = () => {
@@ -142,18 +136,18 @@ class AssetsScreen extends Component {
         });
     };
 
-    async onRefresh() {
-        await this.refreshWalletDatas();
-        await this.refreshTransactionList();
-        this.setState({ reloading: false });
-    }
-
     render() {
         const { transactionList, extEth, extLvt } = this.state;
         const wallet = this.state.wallet || {};
 
         return (
-            <LVAssetsContainer style={{ flex: 1, width: Window.width }} onRefresh={this.onRefresh.bind(this)}>
+            <PullView
+                ref={'pull'}
+                style={{ flex: 1, width: Window.width }}
+                onPullRelease={this.onPullRelease.bind(this)}
+                topIndicatorHeight={LVRefreshIndicator.indicatorHeight}
+                topIndicatorRender={() => <LVRefreshIndicator />}
+            >
                 <LVGradientPanel style={styles.topPanel}>
                     <View style={styles.nav}>
                         <View style={{ width: 27 }} />
@@ -182,69 +176,7 @@ class AssetsScreen extends Component {
                 </View>
 
                 <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
-            </LVAssetsContainer>
-        );
-    }
-}
-
-const topIndicatorHeight = 100;
-
-class LVAssetsContainer extends Component {
-    static propTypes = {
-        onRefresh: PropTypes.func
-    };
-
-    componentDidMount() {
-        this.pull && this.pull.beginRefresh()
-    }
-
-    onPullRelease = async () => {
-        await this.props.onRefresh();
-        this.pull && this.pull.resolveHandler();
-    };
-
-    render() {
-        if (Platform.OS === 'ios') {
-            return (
-                <PullView
-                    ref={c => (this.pull = c)}
-                    {...this.props}
-                    onPullRelease={this.onPullRelease.bind(this)}
-                    topIndicatorHeight={topIndicatorHeight}
-                    topIndicatorRender={this.topIndicatorRender.bind(this)}
-                >
-                    {this.props.children}
-                </PullView>
-            );
-        } else {
-            return (
-                <ScrollView
-                    {...this.props}
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={styles.container}
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.props.refreshing}
-                            onRefresh={this.props.onRefresh}
-                            tintColor="#fff"
-                            colors={[LVColor.primary]}
-                            progressBackgroundColor="#fff"
-                        />
-                    }
-                >
-                    {this.props.children}
-                </ScrollView>
-            );
-        }
-    }
-
-    topIndicatorRender() {
-        return (
-            <View style={indicatorStyles.container}>
-                <View style={indicatorStyles.circle}>
-                    <Progress.CircleSnail size={26} color={[LVColor.primary]} />
-                </View>
-            </View>
+            </PullView>
         );
     }
 }
@@ -303,28 +235,6 @@ const styles = StyleSheet.create({
     },
     list: {
         width: '100%',
-        backgroundColor: LVColor.white
-    }
-});
-
-const CIRCLE_SIZE = 36;
-
-var indicatorStyles = StyleSheet.create({
-    container: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: topIndicatorHeight
-    },
-    circle: {
-        width: CIRCLE_SIZE,
-        height: CIRCLE_SIZE,
-        borderRadius: CIRCLE_SIZE / 2,
-        shadowOffset: { width: 3, height: 3 },
-        shadowColor: '#ACBFE5',
-        shadowOpacity: 0.3,
-        shadowRadius: 3,
-        justifyContent: 'center',
-        alignItems: 'center',
         backgroundColor: LVColor.white
     }
 });
