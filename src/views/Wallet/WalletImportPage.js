@@ -76,16 +76,6 @@ const foundation = require('../../foundation/wallet.js');
       LVNotificationCenter.removeObserver(this);
     }
 
-    onImportError(errorObj: Object) {
-      console.log('error---> ' + JSON.stringify(errorObj));
-      setTimeout(()=> {this.refs.toast.dismiss();}, 100);
-      setTimeout(() => {
-        let error = WalletUtils.getInnerError(errorObj.error, LVStrings.wallet_import_fail);
-        this.setState({alertMessage: error });
-        this.refs.alert.show();
-      }, 500);
-    }
-
     _onHeaderPressed = (leftPressed: boolean) => {
       this.setState({ leftPressed: leftPressed })
     }
@@ -184,7 +174,7 @@ const foundation = require('../../foundation/wallet.js');
         return;
       }
 
-      if(!/(\d|\w){6,12}/i.test(this.state.keyStorePwd)) {
+      if(!WalletUtils.isPasswordValid(this.state.keyStorePwd)) {
         this.setState({alertMessage: LVStrings.wallet_import_private_password_hint });
         this.refs.alert.show();
         return;
