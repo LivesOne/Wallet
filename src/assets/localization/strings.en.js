@@ -71,6 +71,7 @@ const localized_strings = {
     wallet_backup_title_suffix: 'wallet backup',
     wallet_default_name_prefix: "default wallet ",
     wallet_backup_failed: 'Backup failed, please make sure you enter the correct password',
+    wallet_backuping: 'Backup wallet...',
     wallet_disclaimer: 'Disclaimer',
     wallet_disclaimer_content: 'Please make sure to keep your wallet backup safe. All losses due to wallet’s lost, stolen, and password forgotten have nothing to do with the platform.',
 
