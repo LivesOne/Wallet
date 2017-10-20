@@ -138,11 +138,18 @@ class ReceiveScreen extends Component {
             RNFS.writeFile(RNFS.CachesDirectoryPath+"/some-name.png", data, 'base64')
               .then((success) => {
                   return CameraRoll.saveToCameraRoll(RNFS.CachesDirectoryPath+"/some-name.png", 'photo')
+                  .then((data) => {
+                    //   Toast.show("data:"+data);
+                      Toast.show(LVStrings.receive_save_finish)
+
+                  }).catch((err) => {
+                      Toast.show("err"+err);
+                  });
                 // Toast.show("ok");
               })
               .then(() => {
                   this.setState({ busy: false, imageSaved: true  })
-                  Toast.show(LVStrings.receive_save_finish)
+                //   Toast.show(LVStrings.receive_save_finish)
               })
         })
    }
