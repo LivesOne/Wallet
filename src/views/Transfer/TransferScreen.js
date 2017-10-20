@@ -73,7 +73,7 @@ class TransferScreen extends Component {
             wallet: wallet,
             transactionParams: null,
             curETH: wallet != null ? wallet.eth: 0,
-            addressIn: '0xe094f69b5b9687b532867a0f29cd17c7d1acd2d65eae2d010755f896617cdbbd',
+            addressIn: '',
             amount: 0,
             balance: wallet != null ? wallet.lvt: 0,
             minerGap: 0,
