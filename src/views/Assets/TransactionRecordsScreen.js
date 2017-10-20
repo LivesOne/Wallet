@@ -99,13 +99,7 @@ class TransactionRecordsScreen extends Component {
             : null;
 
         return (
-            <PullView
-                ref={'pull'}
-                style={styles.container}
-                onPullRelease={this.onPullRelease.bind(this)}
-                topIndicatorHeight={LVRefreshIndicator.indicatorHeight}
-                topIndicatorRender={() => <LVRefreshIndicator />}
-            >
+            <View style={styles.container}>
                 <LVGradientPanel style={styles.gradient}>
                     <MXNavigatorHeader
                         title={LVStrings.transaction_records}
@@ -134,7 +128,7 @@ class TransactionRecordsScreen extends Component {
                 </View>
 
                 <TransactionRecordList style={styles.list} records={filteredList} onPressItem={this.onPressRecord} />
-            </PullView>
+            </View>
         );
     }
 }
