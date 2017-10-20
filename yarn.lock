@@ -4341,7 +4341,7 @@ react-native-randombytes@^3.0.0:
 
 react-native-rk-pull-to-refresh@^1.1.7:
   version "1.1.7"
-  resolved "https://registry.yarnpkg.com/react-native-rk-pull-to-refresh/-/react-native-rk-pull-to-refresh-1.1.7.tgz#4ee80a4cf5c2fd1271a94dc753eff804fd37b741"
+  resolved "http://registry.npm.taobao.org/react-native-rk-pull-to-refresh/download/react-native-rk-pull-to-refresh-1.1.7.tgz#4ee80a4cf5c2fd1271a94dc753eff804fd37b741"
 
 react-native-simple-toast@^0.0.7:
   version "0.0.7"
