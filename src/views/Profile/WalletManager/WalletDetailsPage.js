@@ -329,7 +329,7 @@ export class WalletDetailsPage extends Component {
                     onConfirm={this.onInputConfirm.bind(this)}
                 >
                     <MXCrossTextInput
-                        style={{height: 44, width: Dimensions.get('window').width * 0.8}}
+                        style={{width: 200, alignSelf: 'center'}}
                         secureTextEntry={true}
                         withUnderLine={true}
                         onTextChanged={newText => {

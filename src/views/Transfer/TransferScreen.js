@@ -126,7 +126,9 @@ class TransferScreen extends Component {
 
    async  onAddressChanged(address: string) {
         await this.setState({addressIn: address});
-        this.tryFetchParams();
+        setTimeout(() => {
+            this.tryFetchParams();
+        }, 100);
     }
 
     async onAmountChanged(newAmountText:string) {
@@ -138,7 +140,9 @@ class TransferScreen extends Component {
             return;
         } else {
             await this.setState({amount: parseInt(newAmountText)})
-            this.tryFetchParams();
+            setTimeout(() => {
+                this.tryFetchParams();
+            }, 100);
         }
     }
 
@@ -250,7 +254,8 @@ class TransferScreen extends Component {
                     transactionHash: rst.transactionHash,
                     from: wallet.address,
                     to: addressIn,
-                    value: 0,
+                    lvt: amount,
+                    eth: minerGap,
                     timestamp: Moment().format('X'),
                 });
             }
@@ -315,6 +320,7 @@ class TransferScreen extends Component {
                             placeholder={LVStrings.transfer_remarks}
                             onTextChanged={(newText) => {this.setState({remarks: newText})}}/>
                         <TransferMinerGapSetter 
+                            ref={'gapSetter'}
                             enable={this.state.transactionParams !== null}
                             minimumValue={this.state.minGap}
                             maximumValue={this.state.maxGap}
@@ -348,8 +354,8 @@ class TransferScreen extends Component {
                         title={LVStrings.wallet_create_password_required}
                         onConfirm={this.onPwdConfirmed.bind(this)}>
                         <MXCrossTextInput
+                            style={{width: 200, alignSelf: 'center'}}
                             secureTextEntry={true}
-                            withUnderLine={false}
                             onTextChanged={(newText)=>{this.setState({inputPwd: newText})}}
                             placeholder={LVStrings.wallet_create_password_required}/>
                     </LVConfirmDialog>
