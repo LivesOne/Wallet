@@ -2,7 +2,7 @@
 'use strict'
 
 import React, { Component } from 'react'
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Keyboard } from 'react-native';
 import MXNavigatorHeader from './../../../components/MXNavigatorHeader';
 const IconBack = require('../../../assets/images/back_grey.png');
 import LVStrings from '../../../assets/localization';
@@ -12,6 +12,7 @@ import LVWalletManager from '../../../logic/LVWalletManager';
 import LVNotificationCenter from '../../../logic/LVNotificationCenter';
 import LVNotification from '../../../logic/LVNotification';
 import LVDialog from '../../Common/LVDialog';
+import WalletUtils from '../../Wallet/WalletUtils';
 
 export class ModifyWalletName extends Component {
 
@@ -42,11 +43,20 @@ export class ModifyWalletName extends Component {
         })
     }
 
+    componentDidMount = () => {
+        const {params} = this.props.navigation.state
+        if (params !== null) {
+            this.refs.textinput.setText(params.wallet.name);
+        }
+    }
+    
+
     onTextChanged(newName: string) {
         this.setState({name: newName})
     }
 
     async onSavePressed() {
+        Keyboard.dismiss();
         const {name, wallet} = this.state;
         if (!wallet) {
             this.setState({alertMessage:LVStrings.wallet_edit_save_failed });
@@ -61,6 +71,12 @@ export class ModifyWalletName extends Component {
 
         if (name === wallet.name) {
             this.setState({alertMessage:LVStrings.wallet_edit_equal_to_old });
+            this.refs.alert.show();
+            return;
+        } 
+
+        if (!WalletUtils.isNameValid(name)) {
+            this.setState({alertMessage:LVStrings.wallet_name_invalid });
             this.refs.alert.show();
             return;
         } 
@@ -86,7 +102,10 @@ export class ModifyWalletName extends Component {
                     style={{backgroundColor:'#F8F9FB'}}
                     title={ LVStrings.profile_wallet_modify_name }
                     titleStyle={{color:'#6d798a'}}
-                    onLeftPress={ () => {this.props.navigation.goBack() }}
+                    onLeftPress={ () => {
+                        Keyboard.dismiss(); 
+                        this.props.navigation.goBack() 
+                        }}
                     right = { LVStrings.profile_wallet_save }
                     rightTextColor = { LVColor.primary }
                     onRightPress={this.onSavePressed.bind(this)}/>
@@ -95,10 +114,9 @@ export class ModifyWalletName extends Component {
                         { LVStrings.profile_wallet_name }</Text>
                         <MXCrossTextInput
                             ref={'textinput'}
-                            setFocusWhenMounted = {false}
+                            setFocusWhenMounted = {true}
                             style={styles.textInput}
-                            defaultValue={this.state.wallet.name}
-                            placeholder= { LVStrings.profile_wallet_new_name }
+                            placeholder= { LVStrings.wallet_name_hint }
                             onTextChanged={ this.onTextChanged.bind(this) }
                         />
                     </View>

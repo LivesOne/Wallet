@@ -73,10 +73,10 @@ const localized_strings = {
     wallet_disclaimer_content: '请确认已经导出的钱包备份的安全性，任何钱包的丢失、被盗、忘记密码等行为产生的所示均与平台无关',
 
 
-      // inner error
-      inner_common_error: '内部错误',
-      inner_error_password_required: '必须提供密码',
-      inner_error_password_mismatch: '密码不匹配',
+    // inner error
+    inner_common_error: '内部错误',
+    inner_error_password_required: '必须提供密码',
+    inner_error_password_mismatch: '密码不匹配',
 
     //wallet edit
     wallet_edit_save_failed: '保存失败',
@@ -92,6 +92,8 @@ const localized_strings = {
     wallet_delete_hint: '确认删除该钱包？',
     wallet_delete_success: '删除钱包成功',
     wallet_password_incorrect: '密码错误',
+    wallet_name_hint: '输入名称（少于20个字）',
+    wallet_name_invalid: '名称格式错误',
 
     // Assets
     assets_title: '我的资产',

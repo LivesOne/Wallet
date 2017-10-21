@@ -53,6 +53,8 @@ const localized_strings = {
     wallet_import_success: 'Import success!',
     wallet_import_fail: 'Import failed',
     wallet_password_incorrect: 'Password incorrect',
+    wallet_name_hint: 'Enter name (less than 40 alphanumeric groups)',
+    wallet_name_invalid: 'Name format incorrect',
 
     wallet_create_wallet: 'Create wallet',
     wallet_creating_wallet: 'Creating wallet...',

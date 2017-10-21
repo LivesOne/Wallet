@@ -54,6 +54,12 @@ export default class WalletCreatePage extends Component {
             return;
         }
 
+        if (!WalletUtils.isNameValid(this.state.name)) {
+            this.setState({alertMessage:LVStrings.wallet_name_invalid });
+            this.refs.alert.show();
+            return;
+        } 
+
         if(!LVWalletManager.isWalletNameAvailable(this.state.name)) {
             this.setState({alertMessage:LVStrings.wallet_create_name_unavailable });
             this.refs.alert.show();
@@ -119,7 +125,7 @@ export default class WalletCreatePage extends Component {
                 <View style={styles.content}>
                     <View style={styles.textInputContainer}>
                         <MXCrossTextInput
-                            placeholder={LVStrings.wallet_create_name}
+                            placeholder={LVStrings.wallet_name_hint}
                             style={ styles.textInput }
                             onTextChanged= {(text) => this.setState({name: text})}
                         />

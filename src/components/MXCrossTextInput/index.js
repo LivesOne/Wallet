@@ -14,7 +14,7 @@ class MXCrossTextInput extends Component {
     state: {
         text: ?string,
         defaultValue: string,
-        hasFocus: boolean
+        hasFocus: boolean,
     };
 
     constructor(props: any) {
@@ -22,10 +22,12 @@ class MXCrossTextInput extends Component {
         this.state = {
             defaultValue: props.defaultValue,
             text: props.value,
-            hasFocus: false
+            hasFocus: false,
         };
         this.onChangeText = this.onChangeText.bind(this);
     }
+
+    firstMounted = true;
 
     static propTypes = {
         placeholder: PropTypes.string,
@@ -77,9 +79,15 @@ class MXCrossTextInput extends Component {
         }
     }
 
+    componentDidUpdate() {
+        this.firstMounted = false;
+    }
+
     onPressClear() {
         this.setText('')
     }
+
+    
 
     render() {
         const { rounded, style, placeholder, secureTextEntry, withUnderLine, keyboardType } = this.props;
@@ -107,7 +115,7 @@ class MXCrossTextInput extends Component {
                             placeholderTextColor={LVColor.text.placeHolder}
                             defaultValue={this.state.defaultValue}
                             value={this.state.text}
-                            selectTextOnFocus={this.props.setFocusWhenMounted}
+                            selectTextOnFocus={this.firstMounted && this.props.setFocusWhenMounted}
                             tintColor={LVColor.primary}
                             keyboardType={keyboardType}
                             style={[Base.label, theme.label]}

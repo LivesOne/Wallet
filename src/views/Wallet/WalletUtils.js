@@ -100,6 +100,22 @@ export default class WalletUtils {
         return /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,12}$/i.test(password);
     }
 
+    static isNameValid(name: string) {
+      return name && this.getLength(name) <= 40;
+    }
+
+    static getLength(str: string) {  
+      var realLength = 0, len = str.length, charCode = -1;  
+      for ( var i = 0; i < len; i++) {  
+          charCode = str.charCodeAt(i);  
+          if (charCode >= 0 && charCode <= 128)  
+              realLength += 1;  
+          else  
+              realLength += 2;  
+      }  
+      return realLength;  
+    }
+
     static isPrivateKeyValid(privateKey: string) {
         return privateKey && privateKey.length === 64 && privateKey.match(/^[0-9a-f]+$/i);
     }
