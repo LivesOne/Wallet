@@ -20,7 +20,8 @@ import LVWalletImportNavigator from '../../Wallet/LVWalletImportNavigator';
 export class ModifyWalletPwd extends Component {
 
     static navigationOptions = {
-        header: null
+        header: null,
+        tabBarVisible: false
     };
 
     state: {
@@ -141,7 +142,9 @@ export class ModifyWalletPwd extends Component {
                     style={{backgroundColor:'#F8F9FB'}}
                     title={ LVStrings.profile_wallet_modify_password }
                     titleStyle={{color:'#6d798a'}}
-                    onLeftPress={ () => {this.props.navigation.goBack() }}
+                    onLeftPress={ () => {
+                        Keyboard.dismiss();
+                        this.props.navigation.goBack() }}
                     right = { LVStrings.profile_wallet_save }
                     rightTextColor = { LVColor.primary }
                     onRightPress={ this.onSavePressed.bind(this) }/>

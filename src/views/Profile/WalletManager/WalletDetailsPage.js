@@ -19,6 +19,7 @@ import Toast from 'react-native-simple-toast';
 import LVNotificationCenter from '../../../logic/LVNotificationCenter';
 import LVNotification from '../../../logic/LVNotification';
 import LVDialog, { LVConfirmDialog } from '../../Common/LVDialog';
+import console from 'console-browserify';
 
 const IconWalletModifyName = require('../../../assets/images/wallet_modify_name.png');
 const IconWalletModifyPwd = require('../../../assets/images/wallet_modify_pwd.png');
@@ -124,13 +125,12 @@ export class WalletDetailsPage extends Component {
         const wallet = this.state.wallet;
         try {
             let privateKey = await LVWalletManager.exportPrivateKey(wallet, password);
-            alert(privateKey);
             this.setState({ 
                 privateKey: privateKey,
                 showExportModal: true
             });
         } catch (error) {
-            alert(error);
+            console.log(error);
         }
     }
 

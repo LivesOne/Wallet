@@ -17,7 +17,8 @@ import WalletUtils from '../../Wallet/WalletUtils';
 export class ModifyWalletName extends Component {
 
     static navigationOptions = {
-        header: null
+        header: null,
+        tabBarVisible: false
     };
 
     state: {
@@ -80,6 +81,12 @@ export class ModifyWalletName extends Component {
             this.refs.alert.show();
             return;
         } 
+
+        if(!LVWalletManager.isWalletNameAvailable(name)) {
+            this.setState({alertMessage:LVStrings.wallet_create_name_unavailable });
+            this.refs.alert.show();
+            return;
+        }
         
         wallet.name = name;
         try {
