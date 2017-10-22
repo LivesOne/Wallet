@@ -14,6 +14,7 @@ export class LVPasswordDialog extends LVConfirmDialog {
     state: {
         inputPwd: string,
         verifying: boolean, 
+        cancel: boolean,
     }
 
     static propTypes = {
@@ -26,11 +27,12 @@ export class LVPasswordDialog extends LVConfirmDialog {
         this.state = {
             inputPwd: '',
             verifying: false,
+            cancel: false,
         }
     }
 
     show() {
-        this.setState({inputPwd: ''})
+        this.setState({inputPwd: '', cancel: false})
         this.refs.dialog.show();
     }
 
@@ -48,21 +50,31 @@ export class LVPasswordDialog extends LVConfirmDialog {
         if (inputPwd) {
             await this.setState({verifying: true})
             let vefirySuccess = await this.innertVerify();
+            const cancel = this.state.cancel;
             await this.setState({verifying: false})
             this.dismiss();
-            if (onVerifyResult) {
+            if (onVerifyResult && !cancel) {
                 setTimeout(function() {
-                    onVerifyResult(vefirySuccess, inputPwd)
+                    if (!cancel) {
+                        onVerifyResult(vefirySuccess, inputPwd)
+                    }
                 }, 100);
             }
         } else {
             this.dismiss();
-            if (onVerifyResult) {
+            const cancel = this.state.cancel;
+            if (onVerifyResult && !cancel) {
                 setTimeout(function() {
-                    onVerifyResult(false, inputPwd)
+                    if (!cancel) {
+                        onVerifyResult(false, inputPwd)
+                    }
                 }, 100);
             }
         }
+    }
+
+    onCancel() {
+        this.setState({cancel: true})
     }
 
     render() {
@@ -72,6 +84,7 @@ export class LVPasswordDialog extends LVConfirmDialog {
                 ref={'dialog'} {...this.props}
                 title={verifying ? LVStrings.password_verify_title : LVStrings.wallet_create_password_required}
                 onConfirm={this.onInputConfirm.bind(this)}
+                onCancel={this.onCancel.bind(this)}
                 dismissAfterConfirm={false}
                 enableConfirm={!verifying}
                 >

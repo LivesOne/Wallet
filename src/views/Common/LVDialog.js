@@ -96,6 +96,7 @@ export class LVConfirmDialog extends LVDialog {
         confirmTitle: PropTypes.string,
         cancelTitle: PropTypes.string,
         onConfirm: PropTypes.func,
+        onCancel: PropTypes.func,
         dismissAfterConfirm: PropTypes.bool,
         enableConfirm: PropTypes.bool,
     };
@@ -109,6 +110,9 @@ export class LVConfirmDialog extends LVDialog {
     }
 
     onPressCancel() {
+        if (this.props.onCancel) {
+            this.props.onCancel();
+        }
         this.dismiss();
     }
 
