@@ -6,9 +6,20 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Easing, Image, Animated } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    Easing,
+    Image,
+    Animated,
+    Platform,
+    ActivityIndicator
+} from 'react-native';
 import PropTypes from 'prop-types';
 import Modal from 'react-native-modalbox';
+import { isAbsolute } from 'path-browserify';
+import LVColor from '../../styles/LVColor';
 
 const RotationCircleImage = require('../../assets/images/loading.png');
 
@@ -32,6 +43,9 @@ export default class LVLoadingToast extends Component {
 
     show() {
         this.refs.dialog.open();
+        if (Platform.OS === 'ios') {
+            this.startAnimation();
+        }
     }
 
     dismiss() {
@@ -39,7 +53,7 @@ export default class LVLoadingToast extends Component {
     }
 
     componentDidMount() {
-        this.startAnimation();
+        //this.startAnimation();
     }
 
     startAnimation () {
@@ -56,6 +70,7 @@ export default class LVLoadingToast extends Component {
         
         const modalWidth = { width: this.props.width || '75%' };
         const modalHeight = { height: this.props.height || 175 };
+        const isAndroid = Platform.OS === 'android'
 
         return (
             <Modal
@@ -72,17 +87,25 @@ export default class LVLoadingToast extends Component {
             easing={Easing.elastic(0.75)}
         >
             <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems:'center'}}>
+                {!isAndroid && 
                 <Animated.Image source={RotationCircleImage} 
-                                style={{
-                                    transform: [
-                                        {
-                                            rotateZ: this.state.rotation.interpolate({
-                                                inputRange: [0, 1],
-                                                outputRange: ["0deg", "360deg"]
-                                            })
-                                        }
-                                    ]
-                                }}/>
+                    style={{
+                        transform: [
+                            {
+                                rotateZ: this.state.rotation.interpolate({
+                                    inputRange: [0, 1],
+                                    outputRange: ["0deg", "360deg"]
+                                })
+                            }
+                        ]
+                    }}/>}
+
+                {isAndroid && 
+                <ActivityIndicator
+                    style={[styles.centering, {transform: [{scale: 1.5}]}]}
+                    size={'large'}
+                    color={'#f6a81e'}
+                />}
                 <Text style={styles.title}>{title}</Text>
             </View>
         </Modal>
@@ -102,5 +125,10 @@ const styles = StyleSheet.create({
         marginTop: 15,
         fontSize: 15,
         color: '#677384'
-    }
+    },
+    centering: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 8,
+      },
 });
