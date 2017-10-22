@@ -107,6 +107,22 @@ class TransferScreen extends Component {
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
         LVNotificationCenter.addObserver(this, LVNotification.balanceChanged, this.handleWalletChange);
         this.refreshWalletDatas();
+        this.fixAndroidPaste();
+    }
+
+    fixAndroidPaste() {
+        // android 上首次进来无法粘贴，直到输入文字后可以，可能是平台的bug
+        // https://github.com/react-community/react-navigation/issues/1992
+        if (Platform.OS === 'android') {
+            this.refs.refAddressIn.setText('android');
+            this.refs.refAmount.setText('0');
+            this.refs.refRemarks.setText('android');
+            setTimeout(async () => {
+                this.refs.refAddressIn.onPressClear();
+                this.refs.refAmount.onPressClear();
+                this.refs.refRemarks.onPressClear();
+            }, 1);
+        }
     }
 
     async tryFetchParams() {

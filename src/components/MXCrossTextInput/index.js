@@ -107,7 +107,12 @@ class MXCrossTextInput extends Component {
                 ]}
             >
                 <View style={[Base.content]}>
-                    <TouchableOpacity style={[Base.textArea]} activeOpacity={1} onPress={() => this.refs.textinput.focus() } >
+                    <TouchableOpacity style={[Base.textArea]} activeOpacity={1} onPress={
+                        () => {
+                            this.setState({hasFocus: true})
+                            this.refs.textinput.focus()
+                        }
+                         } >
                         <TextInput
                             ref={'textinput'}
                             placeholder={placeholder}
