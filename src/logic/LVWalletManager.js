@@ -11,6 +11,7 @@ import LVNotificationCenter from '../logic/LVNotificationCenter';
 import LVNotification from '../logic/LVNotification';
 import LVNetworking from './LVNetworking';
 import LVTransactionRecordManager from './LVTransactionRecordManager';
+import WalletUtils from '../views/Wallet/WalletUtils';
 
 const foundation = require('../foundation/wallet.js');
 const WalletsKey :string = '@Venus:WalletsInfo';
@@ -20,7 +21,6 @@ function createNewKeystore(name: string, password: string, keystore: Object){
         name: name,
         keystore: keystore,
         address: keystore.address,
-        password: password,
         lvt: 0,
         eth: 0
     };
@@ -303,14 +303,12 @@ class WalletManager {
         const promise = new Promise(function(resolve, reject) {
             try {
                 foundation.verifyPassword(password, keystore, function(isMatched: boolean, error){
-                    if(error) {
-                        reject(error);
-                        return;
-                    }
+                    WalletUtils.log('no catch and isMatched = ' + isMatched);
                     resolve(isMatched);
                 })
             } catch (error) {
-                reject(error);
+                WalletUtils.log('catch ' + error);
+                reject(false);
             }
         });
 

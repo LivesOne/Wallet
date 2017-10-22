@@ -62,6 +62,7 @@ export default class LVDialog extends Component {
                 position={'center'}
                 coverScreen={true}
                 backButtonClose={true}
+                swipeToClose={false}
                 backdropOpacity={0.5}
                 animationDuration={300}
                 backdropPressToClose={false}
@@ -90,10 +91,13 @@ export default class LVDialog extends Component {
 }
 
 export class LVConfirmDialog extends LVDialog {
+
     static propTypes = {
         confirmTitle: PropTypes.string,
         cancelTitle: PropTypes.string,
-        onConfirm: PropTypes.func
+        onConfirm: PropTypes.func,
+        dismissAfterConfirm: PropTypes.bool,
+        enableConfirm: PropTypes.bool,
     };
 
     show() {
@@ -112,7 +116,9 @@ export class LVConfirmDialog extends LVDialog {
         if (this.props.onConfirm) {
             this.props.onConfirm();
         }
-        this.dismiss();
+        if (this.props.dismissAfterConfirm) {
+            this.dismiss();
+        }
     }
 
     render() {
@@ -150,6 +156,7 @@ export class LVConfirmDialog extends LVDialog {
                         <Separator insetLeft={0} tintColor={LVColor.separateLine} />
                         <View style={buttonPanelStyle}>
                             <TouchableOpacity
+                                enable={this.props.enableConfirm}
                                 activeOpacity={0.8}
                                 style={buttonStyle}
                                 onPress={this.onPressConfirm.bind(this)}

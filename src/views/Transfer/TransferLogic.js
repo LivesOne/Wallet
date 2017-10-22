@@ -17,12 +17,12 @@ export default class TransferLogic {
      * @param  {Object} wallet
      * @param  {string} value 值包括gas
      */
-    static async transaction(toAddress: string, value: number, 
+    static async transaction(toAddress: string, password: string, value: number, 
             nonce: string, gasLimit: string, gasPrice: string, token: string, chainId: string, wallet: Object) {
         return new Promise((resolve, reject) => {
             let timeout = setTimeout(() => {reject("time out error")}, 60000);
             try {
-                let result = this.innerTransaction(toAddress, value, nonce, gasLimit, gasPrice, token, chainId, wallet);
+                let result = this.innerTransaction(toAddress, password, value, nonce, gasLimit, gasPrice, token, chainId, wallet);
                 clearTimeout(timeout);
                 resolve(result);
             } catch(e) {
@@ -33,9 +33,9 @@ export default class TransferLogic {
             
     }
 
-    static async innerTransaction(toAddress: string, value: number, 
+    static async innerTransaction(toAddress: string, password: string, value: number, 
         nonce: string, gasLimit: string, gasPrice: string, token: string, chainId: string, wallet: Object) {
-            let privateKey = await this.getPrivateKey(wallet.password, wallet.keystore);
+            let privateKey = await this.getPrivateKey(password, wallet.keystore);
             let txData = await eth_local.generateTxData(
                 privateKey,
                 nonce,

@@ -33,6 +33,7 @@ import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import LVNotification from '../../logic/LVNotification';
 import LVLoadingToast from '../Common/LVLoadingToast';
 import Moment from 'moment';
+import { LVPasswordDialog } from '../Common/LVPasswordDialog';
 
 const addImg = require('../../assets/images/transfer_add_contracts.png');
 const scanImg = require('../../assets/images/transfer_scan.png');
@@ -48,6 +49,7 @@ class TransferScreen extends Component {
 
     state: {
         wallet: ?Object,
+        password: string,
         transactionParams: ?Object;
         curETH: number,
         addressIn: string,
@@ -71,6 +73,7 @@ class TransferScreen extends Component {
         console.log(JSON.stringify(wallet));
         this.state = {
             wallet: wallet,
+            password: '',
             transactionParams: null,
             curETH: wallet != null ? wallet.eth: 0,
             addressIn: '',
@@ -180,28 +183,11 @@ class TransferScreen extends Component {
         }
 
         if (balance < MIN_BALANCE_ALLOW_TO_TRANSFER || (wallet && wallet.eth < minerGap)) {
-            // this.setState({alertMessage:LVStrings.transfer_eth_insufficient });
-            // this.refs.alert.show();
             this.props.navigation.navigate("ReceiveTip")
             
             return;
         }
         this.refs.inputPwdDialog.show();
-    }
-
-    onPwdConfirmed() {
-        const {wallet, inputPwd} = this.state;
-        if (wallet && wallet.password !== inputPwd) {
-            setTimeout(() => {
-                this.setState({alertMessage:LVStrings.wallet_password_incorrect });
-                this.refs.alert.show();
-            }, 500);
-           
-            return;
-        }
-        setTimeout(() => {
-            this.setState({showModal: true})
-        }, 500);
     }
 
     onSelectedContact(address: string) {
@@ -228,7 +214,7 @@ class TransferScreen extends Component {
 
     async onTransfer() {
         this.setState({ showModal: false });
-        const {wallet, addressIn, amount, minerGap, balance, transactionParams, userHasSetGap} = this.state;
+        const {wallet, password, addressIn, amount, minerGap, balance, transactionParams, userHasSetGap} = this.state;
         if (!transactionParams) {
             TransferUtils.log('transaction params is null');
             this.setState({alertMessage:LVStrings.transfer_fail });
@@ -238,7 +224,7 @@ class TransferScreen extends Component {
         this.refs.loading.show();
         setTimeout(async ()=> {
             let gasPrice = userHasSetGap ? TransferUtils.getSetGasPriceHexStr(minerGap, transactionParams.gasLimit) : transactionParams.gasPrice;
-            let rst = await TransferLogic.transaction(addressIn, amount, transactionParams.nonce,
+            let rst = await TransferLogic.transaction(addressIn, password, amount, transactionParams.nonce,
                 transactionParams.gasLimit, gasPrice, transactionParams.token, transactionParams.chainID, wallet);
             this.refs.loading.dismiss();
             let success = rst && rst.result;
@@ -260,6 +246,27 @@ class TransferScreen extends Component {
                 this.resetStateAfterSuccesss();
             }, 500);
         },500);
+    }
+
+    async verifyPassword(inputPwd: string) {
+        return await LVWalletManager.verifyPassword(inputPwd, this.state.wallet.keystore);
+    }
+
+    onVerifyResult(success: boolean, password: string) {
+        if (success) {
+            this.setState({password: password});
+            setTimeout(() => {
+                this.setState({showModal: true})
+            }, 500);
+        } else {
+            setTimeout(() => {
+                this.setState({
+                    password: '',
+                    alertMessage: !password ? LVStrings.password_verify_required : LVStrings.inner_error_password_mismatch
+                });
+                this.refs.alert.show();
+            }, 500);
+        }
     }
 
     render() {
@@ -344,16 +351,11 @@ class TransferScreen extends Component {
                         onClosed={()=>{this.setState({openSelectWallet: false})}}
                     />
                     <LVLoadingToast ref={'loading'} title={LVStrings.transfer_processing}/>
-                    <LVConfirmDialog
+                    <LVPasswordDialog
                         ref={'inputPwdDialog'}
-                        title={LVStrings.wallet_create_password_required}
-                        onConfirm={this.onPwdConfirmed.bind(this)}>
-                        <MXCrossTextInput
-                            style={{width: 200, alignSelf: 'center'}}
-                            secureTextEntry={true}
-                            onTextChanged={(newText)=>{this.setState({inputPwd: newText})}}
-                            placeholder={LVStrings.wallet_create_password_required}/>
-                    </LVConfirmDialog>
+                        verify={this.verifyPassword.bind(this)}
+                        onVerifyResult={this.onVerifyResult.bind(this)} />
+
                 </TouchableOpacity>
             </ScrollView>
         )

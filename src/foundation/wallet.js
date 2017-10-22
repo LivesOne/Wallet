@@ -77,7 +77,11 @@ module.exports = {
     verifyPassword: function(password: string, keystore: Object, callback: Function) {
         eth_local.recover(password, keystore, function(privateKeyBuffer, error) {
             if(callback) {
-                callback(privateKeyBuffer !== null, error);
+                if(error) {
+                    callback(false, error);
+                } else {
+                    callback(privateKeyBuffer !== null, error);
+                }
             }
         });
     },

@@ -2,7 +2,18 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Dimensions, Image, Platform, ActionSheetIOS, Share } from 'react-native';
+import {
+    Text,
+    View,
+    StyleSheet,
+    Dimensions,
+    Image,
+    Platform,
+    ActionSheetIOS,
+    Share,
+    ActivityIndicator,
+    Keyboard
+} from 'react-native';
 import MXNavigatorHeader from './../../../components/MXNavigatorHeader';
 import WalletInfoView from '../../Assets/WalletInfoView';
 import LVSize from '../../../styles/LVFontSize';
@@ -13,13 +24,14 @@ import LVStrings from '../../../assets/localization';
 import { WalletExportModal } from './WalletExportModal';
 import LVWalletManager from '../../../logic/LVWalletManager';
 import { convertAmountToCurrencyString } from '../../../utils/MXStringUtils';
-import { backupWallet } from '../../../utils/MXUtils';
 import LVLoadingToast from '../../Common/LVLoadingToast';
 import Toast from 'react-native-simple-toast';
 import LVNotificationCenter from '../../../logic/LVNotificationCenter';
 import LVNotification from '../../../logic/LVNotification';
 import LVDialog, { LVConfirmDialog } from '../../Common/LVDialog';
 import console from 'console-browserify';
+import { LVPasswordDialog } from '../../Common/LVPasswordDialog';
+import WalletUtils from '../../Wallet/WalletUtils';
 
 const IconWalletModifyName = require('../../../assets/images/wallet_modify_name.png');
 const IconWalletModifyPwd = require('../../../assets/images/wallet_modify_pwd.png');
@@ -66,7 +78,6 @@ export class WalletDetailsPage extends Component {
         wallet: ?Object,
         walletTitle: string,
         showExportModal: boolean,
-        inputPwd: string,
         alertMessage: string,
         showInputFor: string
     };
@@ -83,7 +94,6 @@ export class WalletDetailsPage extends Component {
             privateKey: '',
             showExportModal: false,
             walletName: '',
-            inputPwd: '',
             alertMessage: '',
             showInputFor: ''
         };
@@ -121,22 +131,28 @@ export class WalletDetailsPage extends Component {
         LVNotificationCenter.removeObserver(this);
     }
 
-    async fetchPrivateKey(password:string) {
-        const wallet = this.state.wallet;
-        try {
-            let privateKey = await LVWalletManager.exportPrivateKey(wallet, password);
-            this.setState({ 
-                privateKey: privateKey,
-                showExportModal: true
-            });
-        } catch (error) {
-            console.log(error);
+    showExportModal(password:string) {
+        if (Platform.OS === 'android') {
+            this.refs.toast.show();
         }
-    }
-
-    async showExportModal(password:string) {
-        this.refs.toast.show();
-        await this.fetchPrivateKey(password);
+        setTimeout(async () => {
+            if (Platform.OS === 'ios') {
+                this.refs.toast.show();
+            }
+            const wallet = this.state.wallet;
+            try {
+                let privateKey = await LVWalletManager.exportPrivateKey(wallet, password);
+                this.refs.toast.dismiss();
+                setTimeout(() => {
+                    this.setState({ 
+                        privateKey: privateKey,
+                        showExportModal: true
+                    });
+                }, 500);
+            } catch (error) {
+                WalletUtils.log(error);
+            }
+        }, 500);
     }
 
     onExportModalClosed() {
@@ -165,11 +181,9 @@ export class WalletDetailsPage extends Component {
     onWalletBackup(password: string) {
         const wallet = this.state.wallet;
         if(wallet){
-            this.refs.toast.show();
             setTimeout(async ()=>{
                 try {
-                    await backupWallet(wallet, password);
-                    this.refs.toast.dismiss();
+                    await this.backupWallet(wallet, password);
                     this.refs.disclaimer.show();
                 } catch (error) {
                     this.refs.toast.dismiss();
@@ -188,26 +202,70 @@ export class WalletDetailsPage extends Component {
         }
     }
 
-    onInputConfirm() {
-        const { wallet, inputPwd, showInputFor } = this.state;
-        this.refs.passwordConfirm.dismiss();
+    async backupWallet(wallet: Object, password: string) {
+        const title: string = wallet.name;
+        const message: string = JSON.stringify(wallet.keystore);
+        const options = {
+            title: title,
+            message: message,
+            subject: title
+        };
 
-        switch (showInputFor) {
-            case SHOW_INPUT_FOR_EXPORT:
-                setTimeout(() => {
-                    this.showExportModal(inputPwd);
-                }, 500);
-                break;
-            case SHOW_INPUT_FOR_DELETE:
-                setTimeout(() => {
-                    this.onDeleteWallet();
-                }, 500);
-                break;
-            case SHOW_INPUT_FOR_BACKUP:
-                setTimeout(() => {
-                    this.onWalletBackup(inputPwd);
-                }, 500);
-                break;
+        if (Platform.OS === 'ios') {
+            const promise = new Promise(function(resolve, reject){
+                ActionSheetIOS.showShareActionSheetWithOptions(
+                options,
+                error => reject(error),
+                (success, activityType) => {
+                    if (success) {
+                        console.log('bakcup success');
+                        resolve(success);
+                    } else {
+                        reject('cancelled');
+                    }
+                }
+            );
+            });
+            return promise;
+        } else {
+            
+            let r =  await Share.share(options);
+            WalletUtils.log(JSON.stringify(r));
+        }
+    }
+
+
+    async verifyPassword(inputPwd: string) {
+        return await LVWalletManager.verifyPassword(inputPwd, this.state.wallet.keystore);
+    }
+
+    onVerifyResult(success: boolean, password: string) {
+        if (success) {
+            const { wallet, showInputFor } = this.state;
+            switch (showInputFor) {
+                case SHOW_INPUT_FOR_EXPORT:
+                    setTimeout(() => {
+                        this.showExportModal(password);
+                    }, 300);
+                    break;
+                case SHOW_INPUT_FOR_DELETE:
+                    setTimeout(() => {
+                        this.onDeleteWallet();
+                    }, 300);
+                    break;
+                case SHOW_INPUT_FOR_BACKUP:
+                    setTimeout(() => {
+                        this.onWalletBackup(password);
+                    }, 300);
+                    break;
+            }
+        } else {
+            setTimeout(() => {
+                this.setState({
+                    alertMessage: !password ? LVStrings.password_verify_required : LVStrings.inner_error_password_mismatch
+                });
+                this.refs.alert.show();
+            }, 500);
         }
     }
 
@@ -316,21 +374,11 @@ export class WalletDetailsPage extends Component {
                     message={this.state.alertMessage}
                     buttonTitle={LVStrings.alert_ok}
                 />
-                <LVConfirmDialog
+                <LVPasswordDialog
                     ref={'passwordConfirm'}
-                    title={LVStrings.wallet_create_password_required}
-                    onConfirm={this.onInputConfirm.bind(this)}
-                >
-                    <MXCrossTextInput
-                        style={{width: 200, alignSelf: 'center'}}
-                        secureTextEntry={true}
-                        withUnderLine={true}
-                        onTextChanged={newText => {
-                            this.setState({ inputPwd: newText });
-                        }}
-                        placeholder={LVStrings.wallet_create_password_required}
-                    />
-                </LVConfirmDialog>
+                    verify={this.verifyPassword.bind(this)}
+                    onVerifyResult={this.onVerifyResult.bind(this)}
+                />
             </View>
         );
     }

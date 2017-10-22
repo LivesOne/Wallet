@@ -16,6 +16,7 @@ import LVLoadingToast from '../../Common/LVLoadingToast';
 import LVDialog from '../../Common/LVDialog';
 import LVFullScreenModalView from '../../Common/LVFullScreenModalView';
 import LVWalletImportNavigator from '../../Wallet/LVWalletImportNavigator';
+import Toast from 'react-native-simple-toast';
 
 export class ModifyWalletPwd extends Component {
 
@@ -68,9 +69,8 @@ export class ModifyWalletPwd extends Component {
             return;
         }
 
-        WalletUtils.log('pwd=' + wallet.password);
-        if (curPwd !== wallet.password) {
-            this.setState({alertMessage:LVStrings.wallet_edit_cur_pwd_error });
+        if (!WalletUtils.isPasswordValid(curPwd)) {
+            this.setState({alertMessage:LVStrings.wallet_import_private_password_hint });
             this.refs.alert.show();
             return;
         }
@@ -93,27 +93,45 @@ export class ModifyWalletPwd extends Component {
             return;
         }
 
-        if (newConfirmPwd === wallet.password) {
-            this.setState({alertMessage:LVStrings.wallet_edit_password_same });
-            this.refs.alert.show();
-            return;
-        }
-
         this.refs.toast.show();
-        wallet.password = newPwd;
+
         setTimeout(async ()=> {
             try {
-                const newWallet = await LVWalletManager.modifyPassword(wallet, curPwd, newPwd);
-                await LVWalletManager.updateWallet(newWallet);
-                await LVWalletManager.saveToDisk();
-                this.refs.toast.dismiss();
-                LVNotificationCenter.postNotification(LVNotification.walletChanged);
-                this.props.navigation.goBack();
+                let isCurPwdValid = await LVWalletManager.verifyPassword(curPwd, wallet.keystore);
+                if (isCurPwdValid) {
+                    if (newConfirmPwd === curPwd) {
+                        this.refs.toast.dismiss();
+                        setTimeout(() => {
+                            this.setState({alertMessage:LVStrings.wallet_edit_password_same });
+                            this.refs.alert.show();
+                            return;
+                        }, 500);
+                    } else {
+                        const newWallet = await LVWalletManager.modifyPassword(wallet, curPwd, newPwd);
+                        await LVWalletManager.updateWallet(newWallet);
+                        await LVWalletManager.saveToDisk();
+                        setTimeout(() => {
+                            this.refs.toast.dismiss();
+                            Toast.show(LVStrings.wallet_edit_save_success, Toast.Long);
+                            LVNotificationCenter.postNotification(LVNotification.walletChanged);
+                            this.props.navigation.goBack();
+                        }, 1000);
+                    }
+                } else {
+                    this.refs.toast.dismiss();
+                    setTimeout(() => {
+                        this.setState({alertMessage:LVStrings.wallet_edit_cur_pwd_error });
+                        this.refs.alert.show();
+                        return;
+                    }, 500);
+                }
             } catch(e) {
                 this.refs.toast.dismiss();
-                this.setState({alertMessage:LVStrings.wallet_edit_save_failed });
-                this.refs.alert.show();
-                return;
+                setTimeout(() => {
+                    this.setState({alertMessage: WalletUtils.getInnerError(e.message, LVStrings.wallet_edit_save_failed)});
+                    this.refs.alert.show();
+                    return;
+                }, 500);
             }
         },500);
     }

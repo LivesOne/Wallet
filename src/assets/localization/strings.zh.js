@@ -80,6 +80,7 @@ const localized_strings = {
 
     //wallet edit
     wallet_edit_save_failed: '保存失败',
+    wallet_edit_save_success: '保存成功',
     wallet_edit_cur_pwd_required : '当前密码密码不能为空',
     wallet_edit_cur_pwd_error : '当前密码不正确',
     wallet_edit_new_pwd_required : '新密码不能为空',
@@ -94,6 +95,11 @@ const localized_strings = {
     wallet_password_incorrect: '密码错误',
     wallet_name_hint: '输入名称（少于20个字）',
     wallet_name_invalid: '名称格式错误',
+
+    //password verify
+    password_verify_title: '密码验证',
+    password_verifying: '密码验证中...',
+    password_verify_required: '密码不能为空',
 
     // Assets
     assets_title: '我的资产',

@@ -80,6 +80,7 @@ const localized_strings = {
 
     //wallet edit
     wallet_edit_save_failed: 'Save failed!',
+    wallet_edit_save_success: 'Save success!',
     wallet_edit_cur_pwd_required : 'current password required',
     wallet_edit_cur_pwd_error : 'current password error',
     wallet_edit_new_pwd_required : 'new password required',
@@ -91,6 +92,11 @@ const localized_strings = {
     wallet_export_private_key_copied_to_clipboard: 'The private key has been copied to the clipboard',
     wallet_delete_hint: 'Are your sure to delete the wallet?',
     wallet_delete_success: 'Delete success',
+
+    //password verify
+    password_verify_title: 'Password verify',
+    password_verifying: 'Password verifying...',
+    password_verify_required: 'Password is empty',
 
     // Assets
     assets_title: 'My assets',

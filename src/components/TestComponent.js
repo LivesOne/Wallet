@@ -17,6 +17,7 @@ import TransferLogic from '../views/Transfer/TransferLogic';
 import { isAddress } from '../utils/MXStringUtils';
 import WalletUtils from '../views/Wallet/WalletUtils';
 import TransferUtils from '../views/Transfer/TransferUtils';
+import { LVPasswordDialog } from '../views/Common/LVPasswordDialog';
 
 const eth_local = require('../foundation/ethlocal.js');
 const wallet = require('../foundation/wallet.js');
@@ -39,6 +40,11 @@ class TestComponent extends Component {
         }
     }
 
+    async fakeVerify() {
+        let wallet = LVWalletManager.getSelectedWallet();
+        return await LVWalletManager.verifyPassword('hello', wallet.keystore);
+    }
+
     render() {
         return (
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start'}} >
@@ -52,7 +58,8 @@ class TestComponent extends Component {
                 <MXButton
                     title={"hello"}
                     onPress = {() => {
-                        this.testWalletValidator();
+                        //this.testWalletValidator();
+                        this.refs.passwordDialog.show();
                     }}
                     themeStyle={"active"}
                 />
@@ -78,6 +85,12 @@ class TestComponent extends Component {
                 >
 
                 </ImageTextInput>
+                <LVPasswordDialog
+                    ref={'passwordDialog'}
+                    title={'input your password'}
+                    verify={this.fakeVerify.bind(this)}
+                    onVerifyResult={(result) => {alert(result)}}
+                />
             </View>
         )
     }
