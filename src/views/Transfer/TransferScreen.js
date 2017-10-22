@@ -6,7 +6,16 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Keyboard,TextInput } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    ScrollView,
+    TouchableOpacity,
+    Keyboard,
+    TextInput,
+    Platform
+} from 'react-native';
 import { TransferHeader } from './TransferHeader';
 import MXCrossTextInput from './../../components/MXCrossTextInput';
 import MXTouchableImage from '../../components/MXTouchableImage';
@@ -34,6 +43,7 @@ import LVNotification from '../../logic/LVNotification';
 import LVLoadingToast from '../Common/LVLoadingToast';
 import Moment from 'moment';
 import { LVPasswordDialog } from '../Common/LVPasswordDialog';
+import LVGradientPanel from '../Common/LVGradientPanel';
 
 const addImg = require('../../assets/images/transfer_add_contracts.png');
 const scanImg = require('../../assets/images/transfer_scan.png');
@@ -271,9 +281,17 @@ class TransferScreen extends Component {
 
     render() {
         return (
+            <View style={{flexDirection: 'column', flex: 1}}>
+                {
+                    <LVGradientPanel 
+                        height={22}>
+                        <Text style={{backgroundColor: 'transparent'}}></Text>
+                    </LVGradientPanel>
+                        }
             <ScrollView
                 keyboardShouldPersistTaps={'always'}
                 showsVerticalScrollIndicator = {false}
+                bounces={false}
                 contentContainerStyle={ styles.container }>
                 {this.state.showModal && <TransferDetailModal
                     isOpen= {this.state.showModal}
@@ -358,6 +376,7 @@ class TransferScreen extends Component {
 
                 </TouchableOpacity>
             </ScrollView>
+            </View>
         )
     }
 }
