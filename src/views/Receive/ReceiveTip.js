@@ -6,7 +6,7 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { StyleSheet,Share, View, Text,Image,ScrollView } from 'react-native';
+import { StyleSheet,Share, View, Text,Image,ScrollView,ActionSheetIOS,Platform } from 'react-native';
 
 
 import LVColor from '../../styles/LVColor';
@@ -50,7 +50,38 @@ class ReceiveTip extends Component {
         };
     }
 
-    
+    onWalletShare() {
+        const wallet = this.state.wallet;
+
+       if (wallet && wallet.address) {
+            const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
+            const message: string =  StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9);
+
+            const options = {
+                title: title,
+                message: message,
+                subject: title
+            };
+
+            if (Platform.OS === 'ios') {
+                ActionSheetIOS.showShareActionSheetWithOptions(
+                    options,
+                    error => console.log(error),
+                    (success, activityType) => {
+                        if (success) {
+                        } else {
+                            console.log('User did not share');
+                        }
+                    }
+                );
+            } else {
+                Share.share(options)
+                    // .then(this._shareResult.bind(this))
+                    .catch(error => console.log('share error'));
+            }
+        } 
+    }
+ 
     render() {
         return (
             <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor:LVColor.white }} contentContainerStyle={styles.contentContainer}>
@@ -90,18 +121,7 @@ class ReceiveTip extends Component {
                 {/* <Image source={receive_share} style={styles.share}></Image> */}
                 <MxImage source={receive_share}
                 onPress = { () => {
-                    Share.share({
-                        url: this.state.wallet.address,
-                        title: 'Share your wallet address ?',
-                        message: this.state.wallet.address,
-                      }, {
-                        // Android only:
-                        dialogTitle: 'Share your wallet address ',
-                        // iOS only:
-                        excludedActivityTypes: [
-                          'com.apple.UIKit.activity.PostToTwitter'
-                        ]
-                      })                       
+                        this.onWalletShare();                   
                 }
                 }
                ></MxImage>
