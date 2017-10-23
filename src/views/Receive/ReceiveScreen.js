@@ -136,7 +136,7 @@ class ReceiveScreen extends Component {
 
        if (wallet && wallet.address) {
             const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
-            const message: string = JSON.stringify(wallet.address);
+            const message: string =  StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9);
 
             const options = {
                 title: title,
@@ -236,7 +236,7 @@ class ReceiveScreen extends Component {
                     style={styles.button}
                     title={LVStrings.receive_copy}
                     onPress = {() => {
-                        Clipboard.setString(this.state.wallet.address);
+                        Clipboard.setString(StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9));
                         // alert(LVStrings.receive_save_finish);
                         Toast.show(LVStrings.common_done)
 
