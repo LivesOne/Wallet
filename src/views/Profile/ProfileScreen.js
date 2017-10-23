@@ -95,14 +95,6 @@ export default class ProfleScreen extends Component {
                         />
                         <Separator insetRight={15} tintColor="#eeeff2"/>
                         <ProfileCell
-                            title={LVStrings.profile_setting}
-                            accessory="DisclosureIndicator"
-                            onPress={() => alert(LVStrings.profile_setting)}
-                            disableImageResize
-                            image={<Image source={SettingImage} style={styles.tableViewImage}/>}
-                        />
-                        <Separator insetRight={15} tintColor="#eeeff2"/>
-                        <ProfileCell
                             title={LVStrings.profile_about}
                             accessory="DisclosureIndicator"
                             onPress={() => alert(LVStrings.profile_about)}
