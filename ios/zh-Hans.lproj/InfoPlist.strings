@@ -7,3 +7,5 @@
 */
 "CFBundleDisplayName" = "共生钱包";
 "CFBundleName" = "共生钱包";
+"NSCameraUsageDescription" = "共生钱包想访问您的相机是否允许此APP使用您的相机";
+"NSPhotoLibraryUsageDescription" = "共生钱包想访问您的相机是否允许此APP使用您的相机";
