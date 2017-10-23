@@ -34,6 +34,10 @@ export default class TransferUtils {
         return (parseInt(g.mul(gasLimit).toString()) /  Math.pow(10, 18));
     }
 
+    static convertToHexHeader(hexStr: string) {
+        return '0x' === hexStr.substr(0, 2) ? hexStr : '0x' + hexStr;
+    }
+
     static getSetGasPriceHexStr(setGasPrice: number, gasLimit: string) : string {
         // gasPrice = fee/gasLimit
         // 这里会去掉小数点

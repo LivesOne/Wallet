@@ -10,6 +10,7 @@ import { Animated, Easing, Platform } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
 import ProfileScreen from './ProfileScreen';
+import AboutScreen from './AboutScreen';
 import { WalletManagerScreen } from './WalletManager';
 import { WalletDetailsPage } from './WalletManager/WalletDetailsPage';
 import { ModifyWalletName } from './WalletManager/ModifyWalletName';
@@ -24,6 +25,7 @@ import TransactionDetailsScreen from '../Assets/TransactionDetailsScreen';
 const ProfileNavigator = StackNavigator(
     {
         Profile: { screen: ProfileScreen },
+        About: { screen: AboutScreen },
         WalletManager: { screen: WalletManagerScreen },
         WalletDetailsPage: { screen: WalletDetailsPage },
         ModifyWalletName: { screen: ModifyWalletName },

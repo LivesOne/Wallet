@@ -18,7 +18,9 @@ import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import LVNotification from '../../logic/LVNotification';
 import MXCrossTextInput from '../../components/MXCrossTextInput';
 import LVLoadingToast from '../Common/LVLoadingToast';
+import LVPasswordDialog from '../Common/LVPasswordDialog';
 import { backupWallet } from '../../utils/MXUtils';
+import LVWalletManager from '../../logic/LVWalletManager';
 
 export default class WalletCreateSuccessPage extends Component {
     static navigationOptions = {
@@ -26,33 +28,37 @@ export default class WalletCreateSuccessPage extends Component {
         tabBarVisible: false
     };
 
-    onInputConfirm: Function;
+    onVerifyResult: Function;
 
     constructor() {
         super();
 
         this.state = {
-            inputPwd: '',
             alertMessage: ''
         };
     }
 
     state: {
-        inputPwd: string,
         alertMessage: string
     };
 
-    onInputConfirm() {
+    onVerifyResult(success: boolean, password: string) {
+        if(!success) {
+            setTimeout(() => {
+                this.setState({
+                    alertMessage: !password ? LVStrings.password_verify_required : LVStrings.inner_error_password_mismatch
+                });
+                this.refs.alert.show();
+            }, 500);
+            return;
+        }
+        this.refs.passwordConfirm.dismiss();
         const wallet = this.props.navigation.state.params.wallet;
-        const { inputPwd } = this.state;
         setTimeout(async ()=>{
-            this.refs.toast.show();
             try {
-                await backupWallet(wallet, inputPwd);
-                this.refs.toast.dismiss();
+                await backupWallet(wallet, password);
                 this.refs.disclaimer.show();
             } catch (error) {
-                this.refs.toast.dismiss();
                 if(error === 'cancelled') {
                     return;
                 }
@@ -68,6 +74,11 @@ export default class WalletCreateSuccessPage extends Component {
 
     onPressWalletBackupButton() {
         this.refs.passwordConfirm.show();
+    }
+
+    async verifyPassword(inputPwd: string) {
+        const wallet = this.props.navigation.state.params.wallet;
+        return await LVWalletManager.verifyPassword(inputPwd, wallet.keystore);
     }
 
     _shareResult(result) {
@@ -107,22 +118,11 @@ export default class WalletCreateSuccessPage extends Component {
                     buttonTitle={LVStrings.common_confirm}
                     onPress={() => this.refs.disclaimer.dismiss()}
                 />
-                <LVConfirmDialog
+                <LVPasswordDialog
                     ref={'passwordConfirm'}
-                    title={LVStrings.wallet_create_password_required}
-                    onConfirm={this.onInputConfirm.bind(this)}
-                    >
-                    <MXCrossTextInput
-                        style={{width: 200, alignSelf: 'center'}}
-                        secureTextEntry={true}
-                        withUnderLine={true}
-                        onTextChanged={newText => {
-                            this.setState({ inputPwd: newText });
-                        }}
-                        placeholder={LVStrings.wallet_create_password_required}
-                    />
-                </LVConfirmDialog>
-                <LVLoadingToast ref={'toast'} title={LVStrings.wallet_backuping} />
+                    verify={this.verifyPassword.bind(this)}
+                    onVerifyResult={this.onVerifyResult.bind(this)}
+                />
                 <LVDialog
                     ref={'alert'}
                     title={LVStrings.alert_hint}

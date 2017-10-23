@@ -120,7 +120,7 @@ export class LVConfirmDialog extends LVDialog {
         if (this.props.onConfirm) {
             this.props.onConfirm();
         }
-        if (this.props.dismissAfterConfirm) {
+        if (this.props.dismissAfterConfirm != false) {
             this.dismiss();
         }
     }

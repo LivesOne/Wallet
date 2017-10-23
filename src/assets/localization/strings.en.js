@@ -138,6 +138,7 @@ const localized_strings = {
     profile_feedback: 'Feedback',
     profile_setting: 'System info',
     profile_about: 'About',
+    profile_version: 'Version',
 
     //Profile wallet manager
     profile_wallet_management: 'Wallet Management',

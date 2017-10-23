@@ -48,7 +48,6 @@ const localized_strings = {
     wallet_import_success: '导入成功！',
     wallet_import_fail: '导入失败！',
     
-    wallet_import_success: '',
     wallet_create_wallet: '创建钱包',
     wallet_creating_wallet: '创建钱包中...',
     wallet_create_name: '钱包名称',
@@ -141,6 +140,7 @@ const localized_strings = {
     profile_feedback: '问题反馈',
     profile_setting: '系统信息',
     profile_about: '关于我们',
+    profile_version: '当前版本',
 
     //Profile wallet manager
     profile_wallet_management: '钱包管理',
