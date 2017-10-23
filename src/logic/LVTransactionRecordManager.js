@@ -43,9 +43,19 @@ class LVTransactionRecord {
     }
 
     setRecordDetail(detailJson: any) {
-        this.timestamp = detailJson.timestamp;
-        this.datetime = Moment(this.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss');
-        this.minnerFee = detailJson.gas * detailJson.gasPrice * Math.pow(10, -18);
+        const error = detailJson.error || false;
+        const timestamp = detailJson.timestamp || 0;
+
+        if (error) {
+            this.state = 'failed';
+        } else if (timestamp === 0) {
+            this.state = 'waiting';
+        } else {
+            this.state = 'ok';
+            this.timestamp = timestamp;
+            this.datetime = Moment(this.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss');
+            this.minnerFee = detailJson.gas * detailJson.gasPrice * Math.pow(10, -18);
+        }
     }
 
     pureAddress(addr: string): string {
@@ -102,7 +112,6 @@ export default class LVTransactionRecordManager {
     static async reloadSavedUnfinishedTransactionRecords() {
         const wallet = LVWalletManager.getSelectedWallet();
         if (wallet) {
-            console.log(LVTransactionUnfinishedRecords + '_' + wallet.address);
             const unfinished = await LVPersistent.getObject(LVTransactionUnfinishedRecords + '_' + wallet.address);
             if (unfinished && unfinished.length > 0) {
                 LVTransactionRecordManager.unfinishedRecords = [];
@@ -115,12 +124,12 @@ export default class LVTransactionRecordManager {
         const wallet = LVWalletManager.getSelectedWallet();
         if (wallet) {
             try {
-                const value = await LVNetworking.fetchTransactionHistory(wallet.address);
                 this.records = [];
                 this.unfinishedRecords = [];
                 this.preUsedLvt = 0;
                 this.preUsedEth = 0;
 
+                const value = await LVNetworking.fetchTransactionHistory(wallet.address);
                 if (value && value.length > 0) {
                     const list = value.map(record => new LVTransactionRecord(record, wallet.address));
                     this.records.push(...list);
@@ -135,13 +144,18 @@ export default class LVTransactionRecordManager {
                 await this.reloadSavedUnfinishedTransactionRecords();
 
                 for (var index = this.unfinishedRecords.length - 1; index >= 0 ; index--) {
-                    var unfinishedRecord = this.unfinishedRecords[index];
-                    const found = this.records.findIndex(r => r.hash == unfinishedRecord.hash) != -1;
+                    var element = this.unfinishedRecords[index];
+                    const found = this.records.findIndex(r => r.hash == element.hash) != -1;
                     if (found) {
                         this.unfinishedRecords.pop();
-                    } else if (unfinishedRecord.state === 'waiting') {
-                        this.preUsedLvt += unfinishedRecord.amount;
-                        this.preUsedEth += unfinishedRecord.minnerFee;
+                    } else {
+                        const detail = await LVNetworking.fetchTransactionDetail(element.hash);
+                        element.setRecordDetail(detail);
+
+                        if (element.state === 'waiting') {
+                            this.preUsedLvt += element.amount;
+                            this.preUsedEth += element.minnerFee;
+                        }
                     }
                 }
 
