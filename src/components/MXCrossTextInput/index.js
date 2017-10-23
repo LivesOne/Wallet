@@ -5,7 +5,7 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Image, ViewPropTypes, Keyboard } from 'react-native';
-import { Base, DefaultStyles, LightStyles, WhiteStyles } from './styles';
+import { Base, DefaultStyles, LightStyles, WhiteStyles, TextAlignCenterStyles } from './styles';
 
 import LVColor from '../../styles/LVColor';
 import PropTypes from 'prop-types';
@@ -42,6 +42,7 @@ class MXCrossTextInput extends Component {
         withClearButton: PropTypes.bool,
         rightComponent: PropTypes.element,
         setFocusWhenMounted: PropTypes.bool,
+        textAlignCenter: PropTypes.bool,
         value: PropTypes.string
     };
 
@@ -90,11 +91,14 @@ class MXCrossTextInput extends Component {
     
 
     render() {
-        const { rounded, style, placeholder, secureTextEntry, withUnderLine, keyboardType } = this.props;
+        const { rounded, style, placeholder, secureTextEntry, withUnderLine, keyboardType, textAlignCenter } = this.props;
 
         const theme = this.getTheme();
 
         const lineHeight = withUnderLine ? StyleSheet.hairlineWidth : 0;
+
+        const textAreaStyle = textAlignCenter ? TextAlignCenterStyles.textArea : Base.textArea;
+        const buttonAreaStyle = textAlignCenter ? TextAlignCenterStyles.buttonArea : Base.buttonArea;
 
         return (
             <View
@@ -107,7 +111,7 @@ class MXCrossTextInput extends Component {
                 ]}
             >
                 <View style={[Base.content]}>
-                    <TouchableOpacity style={[Base.textArea]} activeOpacity={1} onPress={
+                    <TouchableOpacity style={[textAreaStyle]} activeOpacity={1} onPress={
                         () => {
                             this.setState({hasFocus: true})
                             this.refs.textinput.focus()
@@ -131,7 +135,7 @@ class MXCrossTextInput extends Component {
                         />
                     </TouchableOpacity>
 
-                    <View style={[Base.buttonArea]}>
+                    <View style={[buttonAreaStyle]}>
                         {this.props.withClearButton &&
                             this.state.text !== null &&
                             this.state.text !== '' && 

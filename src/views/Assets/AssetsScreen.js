@@ -53,7 +53,7 @@ class AssetsScreen extends Component {
             wallet: wallet,
             transactionList: null,
             openSelectWallet: false,
-            showIndicator: false,
+            showIndicator: true,
         };
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
