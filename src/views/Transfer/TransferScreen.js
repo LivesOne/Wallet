@@ -105,7 +105,7 @@ class TransferScreen extends Component {
 
     componentDidMount() {
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
-        LVNotificationCenter.addObserver(this, LVNotification.balanceChanged, this.handleWalletChange);
+        LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.refreshWalletDatas);
         this.refreshWalletDatas();
         this.fixAndroidPaste();
     }
@@ -255,8 +255,6 @@ class TransferScreen extends Component {
             this.refs.loading.dismiss();
             let success = rst && rst.result;
             if (success) {  
-                await this.refreshWalletDatas(); 
-                LVNotificationCenter.postNotification(LVNotification.balanceChanged);
                 LVNotificationCenter.postNotification(LVNotification.transcationCreated, {
                     transactionHash: rst.transactionHash,
                     from: wallet.address,
@@ -295,7 +293,10 @@ class TransferScreen extends Component {
         }
     }
 
+    num = 0;
+
     render() {
+        TransferUtils.log('render ---> ' + this.num++);
         return (
             <View style={{flexDirection: 'column', flex: 1}}>
                 {
