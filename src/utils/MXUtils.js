@@ -78,6 +78,37 @@ export const makeCancelable = (promise : Promise<any>) => {
   };
 };
 
+
+export async function backupWallet(wallet: Object, password: string) {
+  const title: string = wallet.name;
+  const message: string = JSON.stringify(wallet.keystore);
+  const options = {
+      title: title,
+      message: message,
+      subject: title
+  };
+
+  if (Platform.OS === 'ios') {
+      const promise = new Promise(function(resolve, reject){
+          ActionSheetIOS.showShareActionSheetWithOptions(
+          options,
+          error => reject(error),
+          (success, activityType) => {
+              if (success) {
+                  console.log('bakcup success');
+                  resolve(success);
+              } else {
+                  reject('cancelled');
+              }
+          }
+      );
+      });
+      return promise;
+  } else {
+      let r =  await Share.share(options);
+      WalletUtils.log(JSON.stringify(r));
+  }
+};
 // const PORTRAIT = 'PORTRAIT';
 // const LANDSCAPE = 'LANDSCAPE';
 //
