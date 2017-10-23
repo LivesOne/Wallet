@@ -22,7 +22,7 @@ export default class TransferLogic {
         return new Promise((resolve, reject) => {
             let timeout = setTimeout(() => {reject("time out error")}, 60000);
             try {
-                let result = this.innerTransaction(toAddress, password, value, nonce, gasLimit, gasPrice, token, chainId, wallet);
+                let result = this.innerTransaction(TransferUtils.convertToHexHeader(toAddress), password, value, nonce, gasLimit, gasPrice, token, chainId, wallet);
                 clearTimeout(timeout);
                 resolve(result);
             } catch(e) {

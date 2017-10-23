@@ -59,7 +59,8 @@ class TestComponent extends Component {
                     title={"hello"}
                     onPress = {() => {
                         //this.testWalletValidator();
-                        this.refs.passwordDialog.show();
+                        //this.refs.passwordDialog.show();
+                        this.test0x();
                     }}
                     themeStyle={"active"}
                 />
@@ -157,6 +158,13 @@ class TestComponent extends Component {
         // this.log('detail =' + JSON.stringify(result3));
         
         // await this.testTransaction(wallet);
+    }
+
+    test0x() {
+        TransferUtils.log('before = ' + '0x878uiui' + ' after = ' + TransferUtils.convertToHexHeader('0x878uiui'));
+        TransferUtils.log('before = ' + '878uiui' + ' after = ' + TransferUtils.convertToHexHeader('878uiui'));
+        TransferUtils.log('before = ' + '0xe' + ' after = ' + TransferUtils.convertToHexHeader('0xe'));
+
     }
 
     async testTransaction(wallet: Object) {
