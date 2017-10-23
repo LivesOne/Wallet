@@ -87,11 +87,12 @@ export class LVPasswordDialog extends LVConfirmDialog {
                 onCancel={this.onCancel.bind(this)}
                 dismissAfterConfirm={false}
                 enableConfirm={!verifying}
+                width={300}
                 >
                     <View>
                         {!verifying && 
                         <MXCrossTextInput
-                            style={{width: 200, alignSelf: 'center'}}
+                            style={{width: 240, alignSelf: 'center'}}
                             secureTextEntry={true}
                             withUnderLine={true}
                             onTextChanged={newText => {

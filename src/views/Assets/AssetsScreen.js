@@ -95,7 +95,7 @@ class AssetsScreen extends Component {
             // refresh
             const lastRefreshTime = await LVPersistent.getNumber(LVLastAssetsRefreshTimeKey);
             const currentTime = Moment().format('X');
-            if (currentTime - lastRefreshTime > 60) {
+            if (currentTime - lastRefreshTime > 120) {
                 this.refs.pull && this.refs.pull.beginRefresh();
             }
         }
