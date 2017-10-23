@@ -6,7 +6,7 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, StatusBar } from 'react-native';
 import MXButton from '../../components/MXButton';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
@@ -20,6 +20,10 @@ import LVWalletImportNavigator from './LVWalletImportNavigator';
 const createImage = require("../../assets/images/create_wallet.png");
 
 export default class WalletCreateOrImportPage extends Component {    
+    componentWillMount() {
+        StatusBar.setBarStyle('default', false);
+    }
+
     render() {
         return (
             <View style = {styles.container}>
