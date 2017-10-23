@@ -53,16 +53,13 @@ export default class WalletCreateSuccessPage extends Component {
             }, 500);
             return;
         }
-
+        this.refs.passwordConfirm.dismiss();
         const wallet = this.props.navigation.state.params.wallet;
         setTimeout(async ()=>{
-            this.refs.toast.show();
             try {
                 await backupWallet(wallet, password);
-                this.refs.toast.dismiss();
                 this.refs.disclaimer.show();
             } catch (error) {
-                this.refs.toast.dismiss();
                 if(error === 'cancelled') {
                     return;
                 }
@@ -127,7 +124,6 @@ export default class WalletCreateSuccessPage extends Component {
                     verify={this.verifyPassword.bind(this)}
                     onVerifyResult={this.onVerifyResult.bind(this)}
                 />
-                <LVLoadingToast ref={'toast'} title={LVStrings.wallet_backuping} />
                 <LVDialog
                     ref={'alert'}
                     title={LVStrings.alert_hint}
