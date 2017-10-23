@@ -141,6 +141,7 @@ const localized_strings = {
     profile_feedback: '问题反馈',
     profile_setting: '系统信息',
     profile_about: '关于我们',
+    profile_version: '当前版本',
 
     //Profile wallet manager
     profile_wallet_management: '钱包管理',

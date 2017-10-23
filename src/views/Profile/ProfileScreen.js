@@ -97,7 +97,7 @@ export default class ProfleScreen extends Component {
                         <ProfileCell
                             title={LVStrings.profile_about}
                             accessory="DisclosureIndicator"
-                            onPress={() => alert(LVStrings.profile_about)}
+                            onPress={() => this.props.navigation.navigate('About')}
                             disableImageResize
                             image={<Image source={AboutImage} style={styles.tableViewImage}/>}
                         />
