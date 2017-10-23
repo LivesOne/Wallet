@@ -25,6 +25,7 @@ import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVT
 
 import WalletInfoView from './WalletInfoView';
 import TransactionRecordList from './TransactionRecordList';
+import TransactionDetailsScreen from './TransactionDetailsScreen';
 
 class TransactionRecordsScreen extends Component {
     static navigationOptions = {
@@ -70,9 +71,12 @@ class TransactionRecordsScreen extends Component {
     };
 
     onPressRecord = (record: Object) => {
-        this.props.navigation.navigate('TransactionDetails', {
-            transactionRecord: record
-        });
+        if (TransactionDetailsScreen.lock == false) {
+            TransactionDetailsScreen.lock = true;
+            this.props.navigation.navigate('TransactionDetails', {
+                transactionRecord: record
+            });
+        }
     };
 
     async onPullRelease() {

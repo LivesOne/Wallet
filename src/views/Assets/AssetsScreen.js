@@ -28,6 +28,7 @@ import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVT
 import WalletInfoView from './WalletInfoView';
 import WalletBalanceView from './WalletBalanceView';
 import TransactionRecordList from './TransactionRecordList';
+import TransactionDetailsScreen from './TransactionDetailsScreen';
 
 const selectImg = require('../../assets/images/select_wallet.png');
 const LVLastAssetsRefreshTimeKey = '@Venus:LastAssetsRefreshTime';
@@ -131,9 +132,12 @@ class AssetsScreen extends Component {
     };
 
     onPressRecord = (record: Object) => {
-        this.props.navigation.navigate('TransactionDetails', {
-            transactionRecord: record
-        });
+        if (TransactionDetailsScreen.lock == false) {
+            TransactionDetailsScreen.lock = true;
+            this.props.navigation.navigate('TransactionDetails', {
+                transactionRecord: record
+            });
+        }
     };
 
     render() {
