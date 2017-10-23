@@ -6,8 +6,7 @@
  * @flow
  */
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Easing, BackHandler, Keyboard, Platform } from 'react-native';
-import Modal from 'react-native-modalbox';
+import { StyleSheet, View, Text, Easing, BackHandler, Keyboard, Platform,Modal } from 'react-native';;
 import PropTypes from 'prop-types';
 import WalletUtils from '../Wallet/WalletUtils';
 
@@ -15,20 +14,26 @@ export default class LVFullScreenModalView extends Component {
 
     state: {
         KeyboardShow: boolean,
+        modalVisible: boolean
     }
 
     constructor() {
         super();
         this.state = {
             KeyboardShow: false,
+            modalVisible: false
         }
     }
     show() {
-        this.refs.dialog.open();
+        this.setState({
+            modalVisible: true
+        });
     }
 
     dismiss() {
-        this.refs.dialog.close();
+        this.setState({
+            modalVisible: false
+        });
     }
 
     componentWillMount = () => {
@@ -66,18 +71,10 @@ export default class LVFullScreenModalView extends Component {
         return (
             <Modal
             ref={'dialog'}
-            isOpen={false}
+            animationType="slide"
+            transparent={false}
+            visible={this.state.modalVisible}
             style={{width: '100%', height:'100%'}}
-            entry={'bottom'}
-            position={'center'}
-            coverScreen={true}
-            backButtonClose={false}
-            backdropOpacity={0.5}
-            animationDuration={300}
-            swipeToClose={false}
-            backdropPressToClose={false}
-            keyboardTopOffset={0}
-            easing={Easing.elastic(0.75)}
         >
             {this.props.children}
         </Modal>
