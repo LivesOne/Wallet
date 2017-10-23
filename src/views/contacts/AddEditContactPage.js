@@ -6,7 +6,7 @@
  * @flow
  */
 import React, { Component } from 'react'
-import { TextInput, View, StyleSheet,ScrollView } from 'react-native';
+import { TextInput, View, StyleSheet, ScrollView, Keyboard } from 'react-native';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import MXCrossTextInput from '../../components/MXCrossTextInput';
 import {greyNavigationBackIcon} from '../../assets/LVIcons';
@@ -135,6 +135,7 @@ export default class AddEditContactPage extends Component {
     }
 
     onPressScan() {
+        Keyboard.dismiss();
         this.setState({
             showQrScanModal:true
         });
