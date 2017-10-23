@@ -39,6 +39,11 @@ export default class TransferUtils {
         return '0x' + v.toString(16);
     }
 
+    // 显示八位小数
+    static convertMinnerGap(value: number) {
+        return value.toFixed(8);
+    }
+
     static convertToHexHeader(hexStr: string) {
         return '0x' === hexStr.substr(0, 2) ? hexStr : '0x' + hexStr;
     }

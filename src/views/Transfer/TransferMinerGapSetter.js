@@ -22,6 +22,7 @@ export class TransferMinerGapSetter extends Component {
         enable: PropTypes.bool,
         minimumValue: PropTypes.number,
         maximumValue: PropTypes.number,
+        defaultValue: PropTypes.number,
         onGapChanged: PropTypes.func,
     }; 
 
@@ -30,15 +31,14 @@ export class TransferMinerGapSetter extends Component {
     constructor(props: any) {
         super(props);
         this.state = {
-            value: props.minimumValue,
+            value: props.defaultValue,
         }
         TransferUtils.log('default value = ' + props.minimumValue);
     }
 
     calculateValue() {
         if (this.props.enable) {
-            let value = this._beginEnable ? this.props.minimumValue : this.state.value;
-            return (value * 1).toFixed(8) + ' ETH';
+            return TransferUtils.convertMinnerGap(this.state.value) + ' ETH';
         } else {
             return '-- ETH'
         }
@@ -60,7 +60,7 @@ export class TransferMinerGapSetter extends Component {
     componentWillReceiveProps(nextProps: any) {
         if (this.props.enable !== nextProps.enable) {
             this.setState({
-                value: nextProps.enable ? (nextProps.maximumValue - nextProps.minimumValue) / 100 : 0,
+                value: nextProps.enable ? nextProps.defaultValue : 0,
             })
             this._beginEnable = nextProps.enable;
         }
@@ -68,7 +68,6 @@ export class TransferMinerGapSetter extends Component {
 
     componentDidUpdate(prevProps : any, prevState: any) {
         this._beginEnable = !prevProps.enable;
-        //TransferUtils.log('componentDidUpdate _beginEnable = ' + this._beginEnable);
     }
 
     render() {

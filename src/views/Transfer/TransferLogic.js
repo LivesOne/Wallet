@@ -27,7 +27,7 @@ export default class TransferLogic {
                 resolve(result);
             } catch(e) {
                 console.log(e.message);
-                reject('error')
+                resolve(false)
             }
         });
             
@@ -51,16 +51,20 @@ export default class TransferLogic {
             let params = {from: wallet.address, to: toAddress, value: TransferUtils.convert2BNHex(value), nonce: nonce, gasLimit: gasLimit, gasPrice: gasPrice, lvt: wallet.lvt, eth: wallet.eth};
             TransferUtils.log('transfer params = '+ JSON.stringify(params));
             let success = false;
-            let result = await LVNetworking.transaction(txData);
-            TransferUtils.log('transfer result = ' + JSON.stringify(result));
-            if (result && result.hasOwnProperty('transactionHash')) {
-                let transactionHash = result.transactionHash;
-                // let detail = await LVNetworking.fetchTransactionDetail(transactionHash);
-                // TransferUtils.log('transfer detail = ' + JSON.stringify(detail));
-                // success = detail && detail.hasOwnProperty('error') && !detail.error;
-                return {result: true, transactionHash: transactionHash};
+            try {
+                let result = await LVNetworking.transaction(txData);
+                TransferUtils.log('transfer result = ' + JSON.stringify(result));
+                if (result && result.hasOwnProperty('transactionHash')) {
+                    let transactionHash = result.transactionHash;
+                    // let detail = await LVNetworking.fetchTransactionDetail(transactionHash);
+                    // TransferUtils.log('transfer detail = ' + JSON.stringify(detail));
+                    // success = detail && detail.hasOwnProperty('error') && !detail.error;
+                    return {result: true, transactionHash: transactionHash};
+                }
+                return {result: success, transactionHash: null};
+            } catch (error) {
+                return {result: false, transactionHash: null};
             }
-            return {result: success, transactionHash: null};
     }
 
     static async testGetDetails(transactionHash: string) {

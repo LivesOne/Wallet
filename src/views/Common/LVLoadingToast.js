@@ -80,6 +80,7 @@ export default class LVLoadingToast extends Component {
             entry={'top'}
             position={'center'}
             coverScreen={true}
+            swipeToClose={false}
             backButtonClose={false}
             backdropOpacity={0.5}
             animationDuration={300}
