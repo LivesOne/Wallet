@@ -147,8 +147,9 @@ const styles = StyleSheet.create({
         
     },
     contentContainer: {
-        backgroundColor: LVColor.white,
-        // height:'100%',
+        backgroundColor: LVColor.navigationBar,
+
+        height:'100%',
     },
 
     topContainer:{
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
 
     mainContainerBackground:{
         padding:30,
-        backgroundColor: LVColor.navigationBar,
+        // backgroundColor: LVColor.navigationBar,
         
     },
 
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
         width:'90%',
         flexDirection:'column',
         alignItems: 'center',
-        backgroundColor: LVColor.navigationBar,
+        backgroundColor: LVColor.white,
         // backgroundColor:'black',
         elevation: 20,
         shadowOffset: {width: 0, height: 0},
