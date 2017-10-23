@@ -42,13 +42,13 @@ export default class TransferLogic {
                 token,
                 ' ',
                 toAddress,
-                '0x' + (value * Math.pow(10, 18)).toString(16),
+                TransferUtils.convert2BNHex(value),
                 gasPrice,
                 '0x186A0',
                 chainId
             );
             // let params = {to: toAddress, value: value, nonce: nonce, gasLimit: gasLimit, gasPrice: gasPrice, token: token, chainId: chainId, wallet: wallet};
-            let params = {from: wallet.address, to: toAddress, value: value, nonce: nonce, gasLimit: gasLimit, gasPrice: gasPrice, lvt: wallet.lvt, eth: wallet.eth};
+            let params = {from: wallet.address, to: toAddress, value: TransferUtils.convert2BNHex(value), nonce: nonce, gasLimit: gasLimit, gasPrice: gasPrice, lvt: wallet.lvt, eth: wallet.eth};
             TransferUtils.log('transfer params = '+ JSON.stringify(params));
             let success = false;
             let result = await LVNetworking.transaction(txData);
