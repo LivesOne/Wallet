@@ -93,12 +93,13 @@ const foundation = require('../../foundation/wallet.js');
       }
     }
 
-    exitWhenSuccess = () => {
+    exitWhenSuccess = (wallet: Object) => {
       const fromPage = this.state.fromPage;
       if (fromPage === WalletUtils.OPEN_IMPORT_FROM_LAUNCH) {
           LVNotificationCenter.postNotification(LVNotification.walletImported)
       } 
       LVNotificationCenter.postNotification(LVNotification.walletChanged);
+      LVNotificationCenter.postNotification(LVNotification.balanceChanged, wallet);
       if (this.props.screenProps.dismiss) {
         this.props.screenProps.dismiss();
       }
@@ -153,7 +154,7 @@ const foundation = require('../../foundation/wallet.js');
         LVWalletManager.saveToDisk();
         Toast.show(LVStrings.wallet_import_success);
         setTimeout(()=>{
-          this.exitWhenSuccess();
+          this.exitWhenSuccess(wallet);
         },500);
       } catch(e) {
         setTimeout(()=>{
@@ -196,9 +197,8 @@ const foundation = require('../../foundation/wallet.js');
             LVWalletManager.addWallet(wallet);
             LVWalletManager.saveToDisk();
             this.refs.toast.dismiss();
-            this.setState({alertMessage: LVStrings.wallet_import_success });
-            this.refs.alert.show();
-            setTimeout(()=>{this.exitWhenSuccess()},500);
+            Toast.show(LVStrings.wallet_import_success);
+            setTimeout(()=>{this.exitWhenSuccess(wallet)},500);
           }
         } catch(e) {
           setTimeout(()=>{
