@@ -39,7 +39,6 @@ export default class WalletCreateSuccessPage extends Component {
     }
 
     state: {
-        inputPwd: string,
         alertMessage: string
     };
 
