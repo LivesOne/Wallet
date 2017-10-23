@@ -32,6 +32,7 @@ import LVDialog, { LVConfirmDialog } from '../../Common/LVDialog';
 import console from 'console-browserify';
 import { LVPasswordDialog } from '../../Common/LVPasswordDialog';
 import WalletUtils from '../../Wallet/WalletUtils';
+import { backupWallet } from '../../../utils/MXUtils';
 
 const IconWalletModifyName = require('../../../assets/images/wallet_modify_name.png');
 const IconWalletModifyPwd = require('../../../assets/images/wallet_modify_pwd.png');
@@ -183,7 +184,7 @@ export class WalletDetailsPage extends Component {
         if(wallet){
             setTimeout(async ()=>{
                 try {
-                    await this.backupWallet(wallet, password);
+                    await backupWallet(wallet, password);
                     this.refs.disclaimer.show();
                 } catch (error) {
                     this.refs.toast.dismiss();
@@ -201,39 +202,6 @@ export class WalletDetailsPage extends Component {
             }, 500)
         }
     }
-
-    async backupWallet(wallet: Object, password: string) {
-        const title: string = wallet.name;
-        const message: string = JSON.stringify(wallet.keystore);
-        const options = {
-            title: title,
-            message: message,
-            subject: title
-        };
-
-        if (Platform.OS === 'ios') {
-            const promise = new Promise(function(resolve, reject){
-                ActionSheetIOS.showShareActionSheetWithOptions(
-                options,
-                error => reject(error),
-                (success, activityType) => {
-                    if (success) {
-                        console.log('bakcup success');
-                        resolve(success);
-                    } else {
-                        reject('cancelled');
-                    }
-                }
-            );
-            });
-            return promise;
-        } else {
-            
-            let r =  await Share.share(options);
-            WalletUtils.log(JSON.stringify(r));
-        }
-    }
-
 
     async verifyPassword(inputPwd: string) {
         return await LVWalletManager.verifyPassword(inputPwd, this.state.wallet.keystore);
