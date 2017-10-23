@@ -136,7 +136,8 @@ class ReceiveScreen extends Component {
 
        if (wallet && wallet.address) {
             const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
-            const message: string =  StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9);
+            const message: string =  "0x"+this.state.wallet.address;
+            // const message: string =  StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9);
 
             const options = {
                 title: title,
@@ -226,7 +227,7 @@ class ReceiveScreen extends Component {
                 <QRCode
                 getRef={(c) => (this.svg = c)}
                 style={styles.qrcode_pic}
-                value={this.state.wallet.address}
+                value={"0x"+this.state.wallet.address}
                 size={162}
                 bgColor='white'
                 fgColor='black'/>
@@ -236,7 +237,8 @@ class ReceiveScreen extends Component {
                     style={styles.button}
                     title={LVStrings.receive_copy}
                     onPress = {() => {
-                        Clipboard.setString(StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9));
+                        Clipboard.setString("0x"+this.state.wallet.address);
+                        // Clipboard.setString(StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9));
                         // alert(LVStrings.receive_save_finish);
                         Toast.show(LVStrings.common_done)
 
