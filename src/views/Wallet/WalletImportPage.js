@@ -23,6 +23,7 @@ import LVNotification from '../../logic/LVNotification';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import PropTypes from 'prop-types';
 import console from 'console-browserify';
+import Toast from 'react-native-simple-toast';
 const foundation = require('../../foundation/wallet.js');
 
  export default class AssetsImportPage extends Component {
@@ -150,8 +151,7 @@ const foundation = require('../../foundation/wallet.js');
         this.refs.toast.dismiss();
         LVWalletManager.addWallet(wallet);
         LVWalletManager.saveToDisk();
-        this.setState({alertMessage: LVStrings.wallet_import_success });
-        this.refs.alert.show();
+        Toast.show(LVStrings.wallet_import_success);
         setTimeout(()=>{
           this.exitWhenSuccess();
         },500);
