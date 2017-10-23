@@ -23,6 +23,7 @@ import LVWalletImportNavigator from '../../Wallet/LVWalletImportNavigator';
 import WalletUtils from '../../Wallet/WalletUtils';
 import LVNotificationCenter from '../../../logic/LVNotificationCenter';
 import LVNotification from '../../../logic/LVNotification';
+import LVNetworking from '../../../logic/LVNetworking';
 const WalletIcon = require('../../../assets/images/wallet_grey.png');
 const ShowDetailsIcon = require('../../../assets/images/show_detail_arrow.png');
 
@@ -52,7 +53,8 @@ export class WalletManagerScreen extends Component {
     }
 
     componentWillMount() {
-        LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange.bind(this))
+        LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange.bind(this));
+        LVNotificationCenter.addObserver(this, LVNotification.balanceChanged, this.handleBalanceChange.bind(this));
     }
 
 
@@ -76,6 +78,26 @@ export class WalletManagerScreen extends Component {
         this.setState({
             wallets: LVWalletManager.getWallets()
         });
+    }
+
+    handleBalanceChange(wallet: Object) {
+        setTimeout(async ()=> {
+            if (wallet) {
+                try {
+                    WalletUtils.log('balance wallet =  ' + JSON.stringify(wallet));
+                    const lvt = await LVNetworking.fetchBalance(wallet.address, 'lvt');
+                    const eth = await LVNetworking.fetchBalance(wallet.address, 'eth');
+                    wallet.lvt = (lvt ? parseFloat(lvt) : 0);
+                    wallet.eth = (eth ? parseFloat(eth) : 0);
+                    WalletUtils.log('after fetch balance wallet =  ' + JSON.stringify(wallet));
+                    await LVWalletManager.updateWallet(wallet);
+                    await LVWalletManager.saveToDisk();
+                    this.handleWalletChange();
+                } catch (error) {
+                    WalletUtils.log(error.message);
+                }
+            }
+        }, 300);
     }
 
     render() {
