@@ -48,7 +48,6 @@ const localized_strings = {
     wallet_import_success: '导入成功！',
     wallet_import_fail: '导入失败！',
     
-    wallet_import_success: '',
     wallet_create_wallet: '创建钱包',
     wallet_creating_wallet: '创建钱包中...',
     wallet_create_name: '钱包名称',
