@@ -155,10 +155,15 @@ export default class ContactsManagerPage extends Component {
                     titleStyle={styles.navTitle}
                     onLeftPress={ () => {this.props.navigation.goBack() }}
                     right={addIcon}
-                    onRightPress={ () => this.props.navigation.navigate('AddEditContactPage', {
+                    onRightPress={ () =>{
+                        if(!addIcon) {
+                            return;
+                        }
+                        this.props.navigation.navigate('AddEditContactPage', {
                             callback:()=> this.loadContacts(),
                             mode: 'add'
-                        }) }
+                        })
+                    }}
                 />
                 <View style={styles.listContainer}>
                     <FlatList

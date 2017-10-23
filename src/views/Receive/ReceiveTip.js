@@ -6,7 +6,7 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { StyleSheet,Share, View, Text,Image,ScrollView } from 'react-native';
+import { StyleSheet,Share, View, Text,Image,ScrollView,ActionSheetIOS,Platform } from 'react-native';
 
 
 import LVColor from '../../styles/LVColor';
@@ -50,7 +50,39 @@ class ReceiveTip extends Component {
         };
     }
 
-    
+    onWalletShare() {
+        const wallet = this.state.wallet;
+
+       if (wallet && wallet.address) {
+            const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
+            const message: string =  "0x"+this.state.wallet.address;
+            // const message: string =  StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9);
+
+            const options = {
+                title: title,
+                message: message,
+                subject: title
+            };
+
+            if (Platform.OS === 'ios') {
+                ActionSheetIOS.showShareActionSheetWithOptions(
+                    options,
+                    error => console.log(error),
+                    (success, activityType) => {
+                        if (success) {
+                        } else {
+                            console.log('User did not share');
+                        }
+                    }
+                );
+            } else {
+                Share.share(options)
+                    // .then(this._shareResult.bind(this))
+                    .catch(error => console.log('share error'));
+            }
+        } 
+    }
+ 
     render() {
         return (
             <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor:LVColor.white }} contentContainerStyle={styles.contentContainer}>
@@ -74,7 +106,7 @@ class ReceiveTip extends Component {
 
                 <QRCode
                 style={styles.qrcode_pic}
-                value={this.state.wallet.address}
+                value={"0x"+this.state.wallet.address}
                 size={162}
                 bgColor='white'
                 fgColor='black'/>
@@ -90,18 +122,7 @@ class ReceiveTip extends Component {
                 {/* <Image source={receive_share} style={styles.share}></Image> */}
                 <MxImage source={receive_share}
                 onPress = { () => {
-                    Share.share({
-                        url: this.state.wallet.address,
-                        title: 'Share your wallet address ?',
-                        message: this.state.wallet.address,
-                      }, {
-                        // Android only:
-                        dialogTitle: 'Share your wallet address ',
-                        // iOS only:
-                        excludedActivityTypes: [
-                          'com.apple.UIKit.activity.PostToTwitter'
-                        ]
-                      })                       
+                        this.onWalletShare();                   
                 }
                 }
                ></MxImage>
@@ -127,8 +148,9 @@ const styles = StyleSheet.create({
         
     },
     contentContainer: {
-        backgroundColor: LVColor.white,
-        // height:'100%',
+        backgroundColor: LVColor.navigationBar,
+
+        height:'100%',
     },
 
     topContainer:{
@@ -171,7 +193,7 @@ const styles = StyleSheet.create({
 
     mainContainerBackground:{
         padding:30,
-        backgroundColor: LVColor.navigationBar,
+        // backgroundColor: LVColor.navigationBar,
         
     },
 
@@ -180,7 +202,7 @@ const styles = StyleSheet.create({
         width:'90%',
         flexDirection:'column',
         alignItems: 'center',
-        backgroundColor: LVColor.navigationBar,
+        backgroundColor: LVColor.white,
         // backgroundColor:'black',
         elevation: 20,
         shadowOffset: {width: 0, height: 0},
