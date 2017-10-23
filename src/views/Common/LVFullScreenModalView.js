@@ -17,6 +17,9 @@ export default class LVFullScreenModalView extends Component {
         modalVisible: boolean
     }
 
+    keyboardDidShowListener: Object;
+    keyboardDidHideListener: Object;
+
     constructor() {
         super();
         this.state = {
@@ -36,16 +39,16 @@ export default class LVFullScreenModalView extends Component {
         });
     }
 
-    componentWillMount = () => {
+    componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.backHandler.bind(this));
-        Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
-        Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
     }
 
-    componentWillUnmount = () => {
+    componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", this.backHandler);
-        Keyboard.removeListener('keyboardDidShow');
-        Keyboard.removeListener('keyboardDidHide');
+        this.keyboardDidShowListener.remove();
+        this.keyboardDidHideListener.remove();
     }
 
     _keyboardDidShow () {
@@ -53,10 +56,10 @@ export default class LVFullScreenModalView extends Component {
         WalletUtils.log('Keyboard Shown');
       }
     
-      _keyboardDidHide () {
+    _keyboardDidHide () {
         this.setState({KeyboardShow: false});
         WalletUtils.log('Keyboard Hidden');
-      }
+    }
     
     backHandler() {
         if (Platform.OS === 'android') {
