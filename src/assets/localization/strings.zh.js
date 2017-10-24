@@ -124,6 +124,7 @@ const localized_strings = {
     transaction_failure_message: '该交易无人打包，已失败。矿工费退回原钱包。',
 
     // Transfer 转账
+    transfer_insufficient: '您的账户余额不足，请前往充值', 
     transfer_eth_insufficient: '您的钱包ETH不足，无法完成转账，请转账ETH至此钱包', 
     transfer_address_required: '收款人地址不能为空',
     transfer_address_invalid: '请输入有效的收款人地址',

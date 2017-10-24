@@ -49,8 +49,6 @@ import Toast from 'react-native-simple-toast';
 const addImg = require('../../assets/images/transfer_add_contracts.png');
 const scanImg = require('../../assets/images/transfer_scan.png');
 
-const MIN_BALANCE_ALLOW_TO_TRANSFER = 0.01;
-
 const isAndroid = Platform.OS === 'android';
 
 class TransferScreen extends Component {
@@ -110,7 +108,7 @@ class TransferScreen extends Component {
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
         LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.refreshWalletDatas);
         this.refreshWalletDatas();
-        //this.fixAndroidPaste();
+        this.fixAndroidPaste();
     }
 
     fixAndroidPaste() {
@@ -211,9 +209,8 @@ class TransferScreen extends Component {
             return;
         }
 
-        if (balance < MIN_BALANCE_ALLOW_TO_TRANSFER || (wallet && wallet.eth < this.minerGap)) {
-            this.props.navigation.navigate("ReceiveTip")
-            
+        if (balance < amount || (wallet && wallet.eth < this.minerGap)) {
+            this.refs.insufficientDialog.show();
             return;
         }
         this.refs.inputPwdDialog.show();
@@ -406,6 +403,11 @@ class TransferScreen extends Component {
                         ref={'inputPwdDialog'}
                         verify={this.verifyPassword.bind(this)}
                         onVerifyResult={this.onVerifyResult.bind(this)} />
+                    <LVConfirmDialog
+                        ref={'insufficientDialog'}
+                        title={LVStrings.alert_hint}  
+                        message={LVStrings.transfer_insufficient} 
+                        onConfirm={()=>{this.props.navigation.navigate("ReceiveTip")}} />
 
                 </TouchableOpacity>
             </ScrollView>
