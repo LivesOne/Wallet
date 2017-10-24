@@ -117,7 +117,7 @@ class LVTransactionRecordItem extends React.PureComponent {
 
         //const
         const t = DateUtils.getTimePastFromNow(datetime);
-        const timePast = t.years
+        const timePast = (t.avaiable === false) ? datetime : t.years
             ? t.years + ' ' + LVStrings.time_pass_years_ago
             : t.months
               ? t.months + ' ' + LVStrings.time_pass_months_ago

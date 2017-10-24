@@ -42,6 +42,7 @@ function getDateDiff(startTime: Date, endTime: Date): Object {
     d = new Date(d);
 
     const result = {
+        avaiable: d >= 0,
         years: d.getFullYear() - 1970,
         months: d.getMonth(),
         days: d.getDate() - 1,
