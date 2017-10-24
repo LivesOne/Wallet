@@ -45,6 +45,7 @@ import Moment from 'moment';
 import { LVPasswordDialog } from '../Common/LVPasswordDialog';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import Toast from 'react-native-simple-toast';
+import Transaction from 'ethereumjs-tx';
 
 const addImg = require('../../assets/images/transfer_add_contracts.png');
 const scanImg = require('../../assets/images/transfer_scan.png');
@@ -107,6 +108,7 @@ class TransferScreen extends Component {
     componentDidMount() {
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
         LVNotificationCenter.addObserver(this, LVNotification.balanceChanged, this.handlerBalanceChange);
+        LVNotificationCenter.addObserver(this, LVNotification.navigateToTransfer, this.handleToThisPage);
         LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.refreshWalletDatas);
         this.refreshWalletDatas();
         this.fixAndroidPaste();
@@ -145,6 +147,10 @@ class TransferScreen extends Component {
         } else {
             this.setState({transactionParams: null})
         }
+    }
+
+    handleToThisPage = () => {
+        this.refs.scrollView.scrollTo({y: 0, animated: false});
     }
 
     handleWalletChange = async () => {
@@ -336,6 +342,7 @@ class TransferScreen extends Component {
         return (
             <View style={{flexDirection: 'column', flex: 1}}>
             <ScrollView
+                ref={'scrollView'}
                 keyboardShouldPersistTaps={'always'}
                 showsVerticalScrollIndicator = {false}
                 bounces={false}

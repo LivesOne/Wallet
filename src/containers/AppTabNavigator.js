@@ -15,6 +15,8 @@ import AssetsNavigator from '../views/Assets/AssetsNavigator';
 import ReceiveNavigator from '../views/Receive/ReceiveNavigator';
 import ProfileNavigator from '../views/Profile/ProfileNavigator';
 import TransferNavigator from '../views/Transfer/TransferNavigator';
+import LVNotificationCenter from '../logic/LVNotificationCenter';
+import LVNotification from '../logic/LVNotification';
 
 const assetsIcon = require('../assets/images/tab_assets.png');
 const assetsFocusedIcon = require('../assets/images/tab_assets_h.png');
@@ -102,6 +104,9 @@ export default () => (
             const curScreen = getRouteName(currentState);
 
             if (preScreen !== curScreen) {
+                if (curScreen === 'Transfer') {
+                   LVNotificationCenter.postNotification(LVNotification.navigateToTransfer);
+                }
                 // set statusBarStyle to light in native
                 if (curScreen === 'Assets' || curScreen === 'TransactionRecords' || curScreen === 'Transfer') {
                     StatusBar.setBarStyle('light-content', true);
