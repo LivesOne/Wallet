@@ -6,7 +6,7 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { Dimensions, View, Text, Image, TextInput } from 'react-native';
+import { Dimensions, View, Text, Image, TextInput, Keyboard } from 'react-native';
 import MXButton from '../../components/MXButton';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
@@ -49,6 +49,8 @@ export default class WalletCreatePage extends Component {
     }
 
     async createWallet() {
+        Keyboard.dismiss();
+        
         if(!this.state.name) {
             this.setState({alertMessage:LVStrings.wallet_create_name_required });
             this.refs.alert.show();
