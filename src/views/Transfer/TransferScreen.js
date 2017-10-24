@@ -75,6 +75,7 @@ class TransferScreen extends Component {
         showQrScanModal: boolean,
         alertMessage: string,
         inputPwd: string,
+        balanceTip:string,
         //userHasSetGap: boolean, 
     }
 
@@ -98,6 +99,7 @@ class TransferScreen extends Component {
             showQrScanModal: false,
             alertMessage: '',
             inputPwd: '',
+            balanceTip:'',
         }
         this.onSelectedContact = this.onSelectedContact.bind(this);
     }
@@ -208,6 +210,18 @@ class TransferScreen extends Component {
         }
 
         if (balance < amount || (wallet && wallet.eth < this.minerGap)) {
+            if(balance < amount && (wallet && wallet.eth < this.minerGap)) {
+                // this.setState({balanceTip:'temt'});
+                this.setState({balanceTip:LVStrings.transfer_lvt_and_eth_insufficient});
+                alert("test"+this.state.balanceTip);
+            }else if(balance < amount) {
+                this.setState({balanceTip:LVStrings.transfer_lvt_insufficient});
+                alert("test1"+this.state.balanceTip);
+                
+            }else {
+                alert("test3");
+                this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
+            }
             this.refs.insufficientDialog.show();
             return;
         }
@@ -399,7 +413,7 @@ class TransferScreen extends Component {
                     <LVConfirmDialog
                         ref={'insufficientDialog'}
                         title={LVStrings.alert_hint}  
-                        message={LVStrings.transfer_insufficient} 
+                        message={this.state.balanceTip} 
                         onConfirm={()=>{this.props.navigation.navigate("ReceiveTip")}} />
 
                 </TouchableOpacity>
