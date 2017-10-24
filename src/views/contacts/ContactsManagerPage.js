@@ -6,7 +6,7 @@
  */
 
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Image,TouchableHighlight, FlatList } from 'react-native';
+import { Dimensions, Text, View, StyleSheet, Image,TouchableHighlight, FlatList } from 'react-native';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVStrings from '../../assets/localization';
 import LVColor from '../../styles/LVColor';
@@ -126,7 +126,7 @@ export default class ContactsManagerPage extends Component {
                         <View style={styles.cellLeftContentContainer}>
                             <Image source={AvatarIcon}/>
                             <View style={styles.cellLeftDetailsContainer}>
-                                <Text style={styles.nameTextStyle}>{item.name}</Text>
+                                <Text style={styles.nameTextStyle} numberOfLines={1}>{item.name}</Text>
                                 <Text style={styles.addressTextStyle}>{converAddressToDisplayableText(item.address,9,9)}</Text>
                             </View>
                         </View>
@@ -225,6 +225,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     nameTextStyle: {
+        width: Dimensions.get('window').width - 90,
         fontSize: 15,
         color: LVColor.text.grey1
     },
