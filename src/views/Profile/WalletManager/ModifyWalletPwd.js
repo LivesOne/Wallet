@@ -110,12 +110,13 @@ export class ModifyWalletPwd extends Component {
                         const newWallet = await LVWalletManager.modifyPassword(wallet, curPwd, newPwd);
                         await LVWalletManager.updateWallet(newWallet);
                         await LVWalletManager.saveToDisk();
+
+                        this.refs.toast.dismiss();
+                        LVNotificationCenter.postNotification(LVNotification.walletChanged);
+
                         setTimeout(() => {
-                            this.refs.toast.dismiss();
-                            Toast.show(LVStrings.wallet_edit_save_success, Toast.Long);
-                            LVNotificationCenter.postNotification(LVNotification.walletChanged);
-                            this.props.navigation.goBack();
-                        }, 1000);
+                            this.refs.doneTips.show();
+                        }, 500);
                     }
                 } else {
                     this.refs.toast.dismiss();
@@ -150,6 +151,13 @@ export class ModifyWalletPwd extends Component {
 
     onImportRightNow() {
         this.refs.importPage.show();
+    }
+
+    onDoneTipsPress() {
+        this.refs.doneTips.dismiss();
+        setTimeout(() => {
+            this.props.navigation.goBack();
+        }, 500);
     }
 
     render() {
@@ -202,6 +210,7 @@ export class ModifyWalletPwd extends Component {
                 </View>
                 <LVLoadingToast ref={'toast'} title={LVStrings.wallet_editing}/>
                 <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
+                <LVDialog ref={'doneTips'} title={LVStrings.alert_hint} message={LVStrings.wallet_edit_save_success} buttonTitle={LVStrings.alert_ok} onPress={this.onDoneTipsPress.bind(this)} />
                 <LVFullScreenModalView ref={'importPage'}>
                     <LVWalletImportNavigator screenProps={{dismiss: ()=> {
                         this.refs.importPage.dismiss()

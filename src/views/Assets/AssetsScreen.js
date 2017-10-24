@@ -90,7 +90,9 @@ class AssetsScreen extends Component {
 
         this.refs.pull && this.refs.pull.resolveHandler();
 
-        this.setState({showIndicator: false});
+        setTimeout(async ()=> {
+            this.setState({showIndicator: false});
+        }, 500);
     }
 
     handleAppStateChange = async (nextAppState: string) => {
