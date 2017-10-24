@@ -95,10 +95,13 @@ export class LVConfirmDialog extends LVDialog {
     static propTypes = {
         confirmTitle: PropTypes.string,
         cancelTitle: PropTypes.string,
+        confirmTitleStyle: PropTypes.any,
+        cancelTitleStyle: PropTypes.any,
         onConfirm: PropTypes.func,
         onCancel: PropTypes.func,
         dismissAfterConfirm: PropTypes.bool,
-        enableConfirm: PropTypes.bool,
+        disableConfirm: PropTypes.bool,
+        disableCancel: PropTypes.bool,
     };
 
     show() {
@@ -110,6 +113,10 @@ export class LVConfirmDialog extends LVDialog {
     }
 
     onPressCancel() {
+        if (this.props.disableCancel) {
+            return;
+        }
+
         if (this.props.onCancel) {
             this.props.onCancel();
         }
@@ -117,6 +124,10 @@ export class LVConfirmDialog extends LVDialog {
     }
 
     onPressConfirm() {
+        if (this.props.disableConfirm) {
+            return;
+        }
+
         if (this.props.onConfirm) {
             this.props.onConfirm();
         }
@@ -160,12 +171,11 @@ export class LVConfirmDialog extends LVDialog {
                         <Separator insetLeft={0} tintColor={LVColor.separateLine} />
                         <View style={buttonPanelStyle}>
                             <TouchableOpacity
-                                enable={this.props.enableConfirm}
                                 activeOpacity={0.8}
                                 style={buttonStyle}
                                 onPress={this.onPressConfirm.bind(this)}
                             >
-                                <Text style={buttonTitleStyle}>{confirmTitle}</Text>
+                                <Text style={[buttonTitleStyle, this.props.confirmTitleStyle]}>{confirmTitle}</Text>
                             </TouchableOpacity>
                             <View style={{ width: lineWidth, height: '100%', backgroundColor: lineColor }} />
                             <TouchableOpacity
@@ -173,7 +183,7 @@ export class LVConfirmDialog extends LVDialog {
                                 style={buttonStyle}
                                 onPress={this.onPressCancel.bind(this)}
                             >
-                                <Text style={buttonTitleStyle}>{cancelTitle}</Text>
+                                <Text style={[buttonTitleStyle, this.props.cancelTitleStyle]}>{cancelTitle}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

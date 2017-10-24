@@ -6,6 +6,7 @@ import { Text, View, ActivityIndicator, Keyboard } from 'react-native';
 import { LVConfirmDialog } from './LVDialog';
 import MXCrossTextInput from './../../components/MXCrossTextInput';
 import LVStrings from '../../assets/localization';
+import LVColor from '../../styles/LVColor';
 import PropTypes from 'prop-types';
 import WalletUtils from '../Wallet/WalletUtils';
 
@@ -88,7 +89,10 @@ export class LVPasswordDialog extends LVConfirmDialog {
                 onConfirm={this.onInputConfirm.bind(this)}
                 onCancel={this.onCancel.bind(this)}
                 dismissAfterConfirm={false}
-                enableConfirm={!verifying}
+                disableConfirm={verifying}
+                disableCancel={verifying}
+                confirmTitleStyle={verifying ? {color: LVColor.text.grey4} : null}
+                cancelTitleStyle={verifying ? {color: LVColor.text.grey4} : null}
                 width={300}
                 >
                     <View>
