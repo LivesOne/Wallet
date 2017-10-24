@@ -17,6 +17,7 @@ import LVDialog from '../../Common/LVDialog';
 import LVFullScreenModalView from '../../Common/LVFullScreenModalView';
 import LVWalletImportNavigator from '../../Wallet/LVWalletImportNavigator';
 import Toast from 'react-native-simple-toast';
+import { LVKeyboardDismissView } from '../../Common/LVKeyboardDismissView';
 
 export class ModifyWalletPwd extends Component {
 
@@ -162,7 +163,7 @@ export class ModifyWalletPwd extends Component {
 
     render() {
         return (
-            <View style={{ backgroundColor: 'white', flex: 1}}>
+            <LVKeyboardDismissView style={{ backgroundColor: 'white', flex: 1}}>
                 <MXNavigatorHeader
                     left={ IconBack }
                     style={{backgroundColor:'#F8F9FB'}}
@@ -217,7 +218,7 @@ export class ModifyWalletPwd extends Component {
                     } , from: WalletUtils.OPEN_IMPORT_FROM_MODIFY_PASSWORD
                 }}/>
                 </LVFullScreenModalView>
-            </View>
+            </LVKeyboardDismissView>
         )
     }
 }

@@ -14,6 +14,7 @@ import LVNotification from '../../../logic/LVNotification';
 import LVDialog from '../../Common/LVDialog';
 import WalletUtils from '../../Wallet/WalletUtils';
 import Toast from 'react-native-simple-toast';
+import { LVKeyboardDismissView } from '../../Common/LVKeyboardDismissView';
 
 export class ModifyWalletName extends Component {
 
@@ -106,7 +107,7 @@ export class ModifyWalletName extends Component {
     
     render() {
         return (
-            <View style={{ backgroundColor: 'white', flex: 1}}>
+            <LVKeyboardDismissView style={{ backgroundColor: 'white', flex: 1}}>
                 <MXNavigatorHeader
                     left={ IconBack }
                     style={{backgroundColor:'#F8F9FB'}}
@@ -134,7 +135,7 @@ export class ModifyWalletName extends Component {
                         title={LVStrings.alert_hint} 
                         message={this.state.alertMessage} 
                         buttonTitle={LVStrings.alert_ok}/>
-            </View>
+            </LVKeyboardDismissView>
         )
     }
 }

@@ -19,6 +19,7 @@ import MXCrossTextInput from '../../components/MXCrossTextInput';
 import LVWalletManager from '../../logic/LVWalletManager';
 import LVLoadingToast from '../Common/LVLoadingToast';
 import LVDialog from '../Common/LVDialog';
+import { LVKeyboardDismissView } from '../Common/LVKeyboardDismissView';
 const backImg = require('../../assets/images/back.png');
 
 export default class WalletCreatePage extends Component {
@@ -104,7 +105,7 @@ export default class WalletCreatePage extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <LVKeyboardDismissView style={styles.container}>
                 <LVGradientPanel style={styles.gradient}>
                     <View style={styles.nav}>
                         <MXTouchableImage 
@@ -159,7 +160,7 @@ export default class WalletCreatePage extends Component {
                 </View>
                 <LVLoadingToast ref={'toast'} title={LVStrings.wallet_creating_wallet}/>
                 <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
-            </View>
+            </LVKeyboardDismissView>
         )
     }
 }

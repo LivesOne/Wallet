@@ -24,6 +24,7 @@ import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import PropTypes from 'prop-types';
 import console from 'console-browserify';
 import Toast from 'react-native-simple-toast';
+import { LVKeyboardDismissView } from '../Common/LVKeyboardDismissView';
 const foundation = require('../../foundation/wallet.js');
 
  export default class AssetsImportPage extends Component {
@@ -213,7 +214,7 @@ const foundation = require('../../foundation/wallet.js');
 
     render() {
       return (
-        <View style = {styles.container}>
+        <LVKeyboardDismissView style = {styles.container}>
           <LVQrScanModal
               barcodeReceived={this.onBarcodeReceived.bind(this)}
               isOpen= {this.state.showModal}
@@ -241,7 +242,7 @@ const foundation = require('../../foundation/wallet.js');
             {!this.state.leftPressed && this._renderPrivateKey()}
             <LVLoadingToast ref={'toast'} title={LVStrings.wallet_import_header}/>
             <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
-        </View>
+        </LVKeyboardDismissView>
       )
     }
 
