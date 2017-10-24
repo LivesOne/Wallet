@@ -124,7 +124,7 @@ export class ModifyWalletName extends Component {
                         { LVStrings.profile_wallet_name }</Text>
                         <MXCrossTextInput
                             ref={'textinput'}
-                            setFocusWhenMounted = {true}
+                            //setFocusWhenMounted = {true}
                             style={styles.textInput}
                             placeholder= { LVStrings.wallet_name_hint }
                             onTextChanged={ this.onTextChanged.bind(this) }

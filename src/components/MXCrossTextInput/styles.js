@@ -63,6 +63,19 @@ const Base = LVStyleSheet.create({
 
 });
 
+const TextAlignCenterStyles = StyleSheet.create({
+  textArea: {
+    flex: 1,
+    justifyContent: 'center', 
+  },
+  buttonArea: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+});
+
 const DefaultStyles = StyleSheet.create({
   main: {
     backgroundColor: LVColor.white,
@@ -90,4 +103,4 @@ const LightStyles = StyleSheet.create({
   },
 });
 
-export { Base, DefaultStyles, LightStyles, WhiteStyles };
+export { Base, DefaultStyles, LightStyles, WhiteStyles, TextAlignCenterStyles };

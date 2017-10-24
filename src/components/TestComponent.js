@@ -161,10 +161,10 @@ class TestComponent extends Component {
     }
 
     test0x() {
-        TransferUtils.log('before = ' + '0x878uiui' + ' after = ' + TransferUtils.convertToHexHeader('0x878uiui'));
-        TransferUtils.log('before = ' + '878uiui' + ' after = ' + TransferUtils.convertToHexHeader('878uiui'));
-        TransferUtils.log('before = ' + '0xe' + ' after = ' + TransferUtils.convertToHexHeader('0xe'));
-
+        // TransferUtils.log('before = ' + '0x878uiui' + ' after = ' + TransferUtils.convertToHexHeader('0x878uiui'));
+        // TransferUtils.log('before = ' + '878uiui' + ' after = ' + TransferUtils.convertToHexHeader('878uiui'));
+        // TransferUtils.log('before = ' + '0xe' + ' after = ' + TransferUtils.convertToHexHeader('0xe'));
+            TransferUtils.log(TransferUtils.convert2BNHex(1000000));
     }
 
     async testTransaction(wallet: Object) {

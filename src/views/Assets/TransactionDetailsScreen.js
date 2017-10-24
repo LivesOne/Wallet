@@ -22,10 +22,16 @@ const receiptImg = require('../../assets/images/transaction_receipt.png');
 const transferImg = require('../../assets/images/transaction_transfer.png');
 
 export default class TransactionDetailsScreen extends Component {
+    static lock = false;
+
     static navigationOptions = {
         header: null,
         tabBarVisible: false
     };
+
+    componentWillUnmount() {
+        TransactionDetailsScreen.lock = false;
+    }
 
     render() {
         const { transactionRecord } = this.props.navigation.state.params;

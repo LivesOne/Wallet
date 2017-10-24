@@ -11,6 +11,7 @@ import * as MXUtils from './../../utils/MXUtils';
 import LVStrings from './../../assets/localization';
 import { LightStyles } from '../../components/MXCrossTextInput/styles';
 import MXTouchableImage from './../../components/MXTouchableImage';
+import TransferUtils from './TransferUtils';
 const CloseIcon = require('../../assets/images/close_modal.png');
 
 const DetailItem = ({leftText, rightText}) => 
@@ -63,7 +64,7 @@ export class TransferDetailModal extends Component {
                   </View>
                   <DetailItem leftText={LVStrings.transfer_address_in} rightText={address}></DetailItem>
                   <DetailItem leftText={LVStrings.transfer_amount} rightText={amount + ' LVT'}></DetailItem>
-                  <DetailItem leftText={LVStrings.transfer_miner_tips} rightText={minerGap + ' ETH'}></DetailItem>
+                  <DetailItem leftText={LVStrings.transfer_miner_tips} rightText={TransferUtils.convertMinnerGap(minerGap) + ' ETH'}></DetailItem>
                   <DetailItem leftText={LVStrings.transfer_remarks} rightText={remarks}></DetailItem>
                 <MXButton title={LVStrings.transfer} rounded={true} style={styles.btn} onPress = {onTransferConfirmed}></MXButton>
                 </View>

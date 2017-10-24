@@ -34,6 +34,16 @@ export default class TransferUtils {
         return (parseInt(g.mul(gasLimit).toString()) /  Math.pow(10, 18));
     }
 
+    static convert2BNHex(value: number) : string {
+        let v = new BN((value * Math.pow(10, 18)).toString(2), 2);
+        return '0x' + v.toString(16);
+    }
+
+    // 显示八位小数
+    static convertMinnerGap(value: number) {
+        return value.toFixed(8);
+    }
+
     static convertToHexHeader(hexStr: string) {
         return '0x' === hexStr.substr(0, 2) ? hexStr : '0x' + hexStr;
     }

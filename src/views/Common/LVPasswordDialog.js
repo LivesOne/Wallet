@@ -51,7 +51,7 @@ export class LVPasswordDialog extends LVConfirmDialog {
             await this.setState({verifying: true})
             let vefirySuccess = await this.innertVerify();
             const cancel = this.state.cancel;
-            await this.setState({verifying: false})
+            this.setState({verifying: false})
             this.dismiss();
             if (onVerifyResult && !cancel) {
                 setTimeout(function() {
@@ -61,7 +61,9 @@ export class LVPasswordDialog extends LVConfirmDialog {
                 }, 100);
             }
         } else {
-            this.dismiss();
+            await setTimeout(() => {
+                this.dismiss();
+            }, 100);
             const cancel = this.state.cancel;
             if (onVerifyResult && !cancel) {
                 setTimeout(function() {

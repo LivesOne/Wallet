@@ -11,6 +11,8 @@ import MXTouchableImage from '../../components/MXTouchableImage';
 import * as MXUtils from "../../utils/MXUtils";
 import LVGradientPanel from '../Common/LVGradientPanel';
 import { StringUtils } from '../../utils';
+import Transaction from 'ethereumjs-tx';
+import TransferUtils from './TransferUtils';
 
 export class TransferHeader extends Component {
 
@@ -26,7 +28,10 @@ export class TransferHeader extends Component {
         }
     };
 
+    num = 0;
+
     render() {
+        TransferUtils.log('num ---> = ' + this.num++);
         const { balance, eth } = this.props;
         const lvtValString = StringUtils.convertAmountToCurrencyString(balance, ',', 0);
         return (

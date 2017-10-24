@@ -25,6 +25,7 @@ import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVT
 
 import WalletInfoView from './WalletInfoView';
 import TransactionRecordList from './TransactionRecordList';
+import TransactionDetailsScreen from './TransactionDetailsScreen';
 
 class TransactionRecordsScreen extends Component {
     static navigationOptions = {
@@ -70,9 +71,12 @@ class TransactionRecordsScreen extends Component {
     };
 
     onPressRecord = (record: Object) => {
-        this.props.navigation.navigate('TransactionDetails', {
-            transactionRecord: record
-        });
+        if (TransactionDetailsScreen.lock == false) {
+            TransactionDetailsScreen.lock = true;
+            this.props.navigation.navigate('TransactionDetails', {
+                transactionRecord: record
+            });
+        }
     };
 
     async onPullRelease() {
@@ -119,11 +123,11 @@ class TransactionRecordsScreen extends Component {
                     </View>
 
                     <View style={styles.dateRight}>
-                        <LVDataPicker date={startDate} onDateChange={this.onStartDateChange} />
+                        <LVDataPicker date={startDate} min={null} max={endDate} onDateChange={this.onStartDateChange} />
                         <Text style={[styles.text, { marginLeft: 15, marginRight: 15 }]}>
                             {LVStrings.transaction_records_to}
                         </Text>
-                        <LVDataPicker date={endDate} onDateChange={this.onEndDateChange} />
+                        <LVDataPicker date={endDate} min={startDate} max={null} onDateChange={this.onEndDateChange} />
                     </View>
                 </View>
 
@@ -133,7 +137,7 @@ class TransactionRecordsScreen extends Component {
     }
 }
 
-const LVDataPicker = ({ date, onDateChange }) => {
+const LVDataPicker = ({ date, min, max, onDateChange }) => {
     return (
         <DatePicker
             style={{ width: 100 }}
@@ -141,8 +145,8 @@ const LVDataPicker = ({ date, onDateChange }) => {
             date={date}
             mode="date"
             format="YYYY-MM-DD"
-            minDate="2010-01-01"
-            maxDate={Moment().format('YYYY-MM-DD')}
+            minDate={min || "2010-01-01"}
+            maxDate={max || Moment().format('YYYY-MM-DD')}
             showIcon={false}
             confirmBtnText={LVStrings.common_confirm}
             cancelBtnText={LVStrings.common_cancel}

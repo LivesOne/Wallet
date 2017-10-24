@@ -28,6 +28,7 @@ import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVT
 import WalletInfoView from './WalletInfoView';
 import WalletBalanceView from './WalletBalanceView';
 import TransactionRecordList from './TransactionRecordList';
+import TransactionDetailsScreen from './TransactionDetailsScreen';
 
 const selectImg = require('../../assets/images/select_wallet.png');
 const LVLastAssetsRefreshTimeKey = '@Venus:LastAssetsRefreshTime';
@@ -41,7 +42,8 @@ class AssetsScreen extends Component {
         appState: string,
         wallet: ?Object,
         transactionList: ?Array<LVTransactionRecord>,
-        openSelectWallet: boolean
+        openSelectWallet: boolean,
+        showIndicator: boolean,
     };
 
     constructor(props: any) {
@@ -51,7 +53,8 @@ class AssetsScreen extends Component {
             appState: AppState.currentState || 'inactive',
             wallet: wallet,
             transactionList: null,
-            openSelectWallet: false
+            openSelectWallet: false,
+            showIndicator: true,
         };
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
@@ -86,6 +89,8 @@ class AssetsScreen extends Component {
         this.setState({ transactionList: LVTransactionRecordManager.records, wallet: wallet });
 
         this.refs.pull && this.refs.pull.resolveHandler();
+
+        this.setState({showIndicator: false});
     }
 
     handleAppStateChange = async (nextAppState: string) => {
@@ -95,7 +100,7 @@ class AssetsScreen extends Component {
             // refresh
             const lastRefreshTime = await LVPersistent.getNumber(LVLastAssetsRefreshTimeKey);
             const currentTime = Moment().format('X');
-            if (currentTime - lastRefreshTime > 60) {
+            if (currentTime - lastRefreshTime > 120) {
                 this.refs.pull && this.refs.pull.beginRefresh();
             }
         }
@@ -127,9 +132,12 @@ class AssetsScreen extends Component {
     };
 
     onPressRecord = (record: Object) => {
-        this.props.navigation.navigate('TransactionDetails', {
-            transactionRecord: record
-        });
+        if (TransactionDetailsScreen.lock == false) {
+            TransactionDetailsScreen.lock = true;
+            this.props.navigation.navigate('TransactionDetails', {
+                transactionRecord: record
+            });
+        }
     };
 
     render() {
@@ -144,7 +152,8 @@ class AssetsScreen extends Component {
                         style={styles.topPanel}
                         onPullRelease={this.onPullRelease.bind(this)}
                         topIndicatorHeight={LVRefreshIndicator.indicatorHeight}
-                        topIndicatorRender={() => <LVRefreshIndicator />}
+                        topIndicatorRender={this.topIndicatorRender.bind(this)}
+                        onPullStateChangeHeight={this.onPullStateChangeHeight.bind(this)}
                     >
                         <LVGradientPanel style={styles.gradient}>
                             <View style={styles.nav}>
@@ -182,6 +191,22 @@ class AssetsScreen extends Component {
                 <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
             </View>
         );
+    }
+
+    topIndicatorRender() {
+        return (
+            this.state.showIndicator ? <LVRefreshIndicator /> : null
+        )
+    }
+
+    onPullStateChangeHeight = (pulling: boolean, pullok: boolean, pullrelease: boolean, moveHeight: number) => {
+        if (pulling) {
+            if (this.state.showIndicator === false) {
+                this.setState({showIndicator: true});
+            }
+        } else if (pullok) {
+        } else if (pullrelease) {
+        }
     }
 }
 

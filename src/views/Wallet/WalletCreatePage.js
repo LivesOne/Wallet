@@ -127,17 +127,20 @@ export default class WalletCreatePage extends Component {
                         <MXCrossTextInput
                             placeholder={LVStrings.wallet_name_hint}
                             style={ styles.textInput }
+                            textAlignCenter={true}
                             onTextChanged= {(text) => this.setState({name: text})}
                         />
                         <MXCrossTextInput
                             placeholder={LVStrings.wallet_create_password}
                             style={ styles.textInput }
+                            textAlignCenter={true}
                             secureTextEntry
                             onTextChanged = {(text) => this.setState({password : text})}
                         />
                         <MXCrossTextInput
                             placeholder={LVStrings.wallet_create_password_verify}
                             style={ styles.textInput }
+                            textAlignCenter={true}
                             secureTextEntry
                             withUnderLine = {false}
                             onTextChanged = {(text) => this.setState({confirmPassword : text})}

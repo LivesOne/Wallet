@@ -6,8 +6,7 @@
  * @flow
  */
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Easing, BackHandler, Keyboard, Platform } from 'react-native';
-import Modal from 'react-native-modalbox';
+import { StyleSheet, View, Text, Easing, BackHandler, Keyboard, Platform,Modal } from 'react-native';;
 import PropTypes from 'prop-types';
 import WalletUtils from '../Wallet/WalletUtils';
 
@@ -15,32 +14,41 @@ export default class LVFullScreenModalView extends Component {
 
     state: {
         KeyboardShow: boolean,
+        modalVisible: boolean
     }
+
+    keyboardDidShowListener: Object;
+    keyboardDidHideListener: Object;
 
     constructor() {
         super();
         this.state = {
             KeyboardShow: false,
+            modalVisible: false
         }
     }
     show() {
-        this.refs.dialog.open();
+        this.setState({
+            modalVisible: true
+        });
     }
 
     dismiss() {
-        this.refs.dialog.close();
+        this.setState({
+            modalVisible: false
+        });
     }
 
-    componentWillMount = () => {
+    componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.backHandler.bind(this));
-        Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
-        Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
     }
 
-    componentWillUnmount = () => {
+    componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", this.backHandler);
-        Keyboard.removeListener('keyboardDidShow');
-        Keyboard.removeListener('keyboardDidHide');
+        this.keyboardDidShowListener.remove();
+        this.keyboardDidHideListener.remove();
     }
 
     _keyboardDidShow () {
@@ -48,10 +56,10 @@ export default class LVFullScreenModalView extends Component {
         WalletUtils.log('Keyboard Shown');
       }
     
-      _keyboardDidHide () {
+    _keyboardDidHide () {
         this.setState({KeyboardShow: false});
         WalletUtils.log('Keyboard Hidden');
-      }
+    }
     
     backHandler() {
         if (Platform.OS === 'android') {
@@ -66,18 +74,10 @@ export default class LVFullScreenModalView extends Component {
         return (
             <Modal
             ref={'dialog'}
-            isOpen={false}
+            animationType="slide"
+            transparent={false}
+            visible={this.state.modalVisible}
             style={{width: '100%', height:'100%'}}
-            entry={'bottom'}
-            position={'center'}
-            coverScreen={true}
-            backButtonClose={false}
-            backdropOpacity={0.5}
-            animationDuration={300}
-            swipeToClose={false}
-            backdropPressToClose={false}
-            keyboardTopOffset={0}
-            easing={Easing.elastic(0.75)}
         >
             {this.props.children}
         </Modal>
