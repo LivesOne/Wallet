@@ -3,6 +3,7 @@
  * File: src/logic/LVNetworking.js
  * @flow
  */
+import TransferUtils from '../views/Transfer/TransferUtils';
 'use strict';
 
 const HOST = 'http://office.metellica.cn:51515';
@@ -112,7 +113,7 @@ class LVNetworking {
     
     static async fetchTransactionParam(from: string, to: string, value: number) {
         return await LVFetch.GET(API.GET_TRANSACTION_PARAM 
-            + 'from=' + from + '&to=' + to + '&value=' + value);
+            + 'from=' + from + '&to=' + to + '&value=' + TransferUtils.convert2BNHex((value)));
     }
 
     static async transaction(txData: string) {
