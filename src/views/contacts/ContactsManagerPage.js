@@ -117,6 +117,7 @@ export default class ContactsManagerPage extends Component {
                             this.state.callback(item.address);
                             this.props.navigation.goBack();
                         } else {
+                            this.setState({toDeDeletedContactName: null});
                             this.props.navigation.navigate('AddEditContactPage', {
                                 callback:()=> this.loadContacts(),
                                 mode: 'edit', model: item})
@@ -159,6 +160,7 @@ export default class ContactsManagerPage extends Component {
                         if(!addIcon) {
                             return;
                         }
+                        this.setState({toDeDeletedContactName: null});
                         this.props.navigation.navigate('AddEditContactPage', {
                             callback:()=> this.loadContacts(),
                             mode: 'add'
