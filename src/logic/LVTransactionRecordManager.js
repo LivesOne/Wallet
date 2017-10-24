@@ -124,12 +124,13 @@ export default class LVTransactionRecordManager {
         const wallet = LVWalletManager.getSelectedWallet();
         if (wallet) {
             try {
+                const value = await LVNetworking.fetchTransactionHistory(wallet.address);
+                
                 this.records = [];
                 this.unfinishedRecords = [];
                 this.preUsedLvt = 0;
                 this.preUsedEth = 0;
 
-                const value = await LVNetworking.fetchTransactionHistory(wallet.address);
                 if (value && value.length > 0) {
                     const list = value.map(record => new LVTransactionRecord(record, wallet.address));
                     this.records.push(...list);
