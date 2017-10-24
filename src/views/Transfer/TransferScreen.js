@@ -308,12 +308,6 @@ class TransferScreen extends Component {
         const {transactionParams} = this.state;
         return (
             <View style={{flexDirection: 'column', flex: 1}}>
-                {
-                    <LVGradientPanel 
-                        height={22}>
-                        <Text style={{backgroundColor: 'transparent'}}></Text>
-                    </LVGradientPanel>
-                        }
             <ScrollView
                 keyboardShouldPersistTaps={'always'}
                 showsVerticalScrollIndicator = {false}

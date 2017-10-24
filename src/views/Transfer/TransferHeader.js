@@ -8,6 +8,7 @@ import LVColor from '../../styles/LVColor'
 import LVSize from '../../styles/LVFontSize';
 import LVStrings from '../../assets/localization';
 import MXTouchableImage from '../../components/MXTouchableImage';
+import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import * as MXUtils from "../../utils/MXUtils";
 import LVGradientPanel from '../Common/LVGradientPanel';
 import { StringUtils } from '../../utils';
@@ -36,11 +37,12 @@ export class TransferHeader extends Component {
         const lvtValString = StringUtils.convertAmountToCurrencyString(balance, ',', 0);
         return (
             <LVGradientPanel style = {[styles.container, this.props.style]}>
-                <View style={styles.nav}>
-                        <View style={{ width: 30 }} />
-                        <Text style={styles.navTitle}>{ LVStrings.transfer_title }</Text>
-                        <View style={{ width: 30 }} />
-                </View>
+                <MXNavigatorHeader
+                    style={{ backgroundColor: 'transparent' }}
+                    title={LVStrings.transfer_title}
+                    titleStyle={{color: '#ffffff', fontSize: LVSize.large}}
+                    hideLeft={true}
+                />
                 <View style= {styles.columnContainer}>
                     <Text style= {[styles.textCommon]}>{ LVStrings.transfer_purse_balance }</Text>
                     <Text style= {[styles.textCommon, {fontSize: 36}]}>{ lvtValString }</Text>
@@ -58,20 +60,7 @@ const Window = {
 const styles = StyleSheet.create({
     container: {
         height: '23%',
-        backgroundColor: 'transparent'
-    },
-    nav: {
-        width: Window.width,
-        height: 64,
-        paddingTop: Platform.OS === 'ios' ? 22 : 0,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    navTitle: {
-        fontSize: LVSize.large,
-        textAlign: 'center',
-        color: '#ffffff',
+        justifyContent: 'flex-start',
         backgroundColor: 'transparent'
     },
     columnContainer: {

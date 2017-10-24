@@ -64,7 +64,7 @@ const styles = LVStyleSheet.create({
     container: {
         paddingTop: Platform.OS === 'ios' ? 20 : 0,
         width: '100%',
-        height: Platform.OS === 'ios' ? 70 : 50,
+        height: Platform.OS === 'ios' ? 64 : 50,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
