@@ -5,7 +5,7 @@
  */
 
  import React, { Component } from 'react'
- import { Text, View, TouchableOpacity, TextInput } from 'react-native';
+ import { Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, ScrollView } from 'react-native';
 
 import * as LVStyleSheet from '../../styles/LVStyleSheet'
 import LVColor from '../../styles/LVColor'
@@ -281,35 +281,38 @@ const foundation = require('../../foundation/wallet.js');
 
     _renderPrivateKey = ()=> {
       return (
-        <View style={{ flex: 1}}>
-          <TextInput
-            textAlignVertical={'top'}
-            multiline= {true}
-            value={this.state.privateKey}
-            onChangeText={(newText)=>{this.setState({privateKey: newText})}}
-            placeholder={ LVStrings.wallet_import_plain_private_key_hint }
-            underlineColorAndroid = {'transparent'}
-            style={ styles.textInput }
-          />
-          <MXCrossTextInput
-            style={{marginTop: 15, marginBottom: 10}}
-            secureTextEntry={true}
-            onTextChanged={(newText)=>{this.setState({privateKeyPwd: newText})}}
-            placeholder={LVStrings.wallet_import_private_password_hint}
-          />
-          <MXCrossTextInput
-            style={{marginTop: 15, marginBottom: 35}}
-            secureTextEntry={true}
-            onTextChanged={(newText)=>{this.setState({privateKeyPwdAgain: newText})}}
-            placeholder={LVStrings.wallet_import_private_pwd_confirm_hint}
-          />
-          <MXButton
-            rounded
-            style={{alignSelf: 'center'}}
-            title={LVStrings.wallet_import}
-            onPress={ this.onPrivateImportPress.bind(this) }
-          />
-        </View>
+        <KeyboardAvoidingView behavior='padding'>
+          <ScrollView style={{ flex: 1}}>
+            <TextInput
+              textAlignVertical={'top'}
+              multiline= {true}
+              value={this.state.privateKey}
+              onChangeText={(newText)=>{this.setState({privateKey: newText})}}
+              placeholder={ LVStrings.wallet_import_plain_private_key_hint }
+              underlineColorAndroid = {'transparent'}
+              style={ styles.textInput }
+            />
+            <MXCrossTextInput
+              style={{marginTop: 15, marginBottom: 10}}
+              secureTextEntry={true}
+              returnKeyType={'next'}
+              onTextChanged={(newText)=>{this.setState({privateKeyPwd: newText})}}
+              placeholder={LVStrings.wallet_import_private_password_hint}
+            />
+            <MXCrossTextInput
+              style={{marginTop: 15, marginBottom: 35}}
+              secureTextEntry={true}
+              onTextChanged={(newText)=>{this.setState({privateKeyPwdAgain: newText})}}
+              placeholder={LVStrings.wallet_import_private_pwd_confirm_hint}
+            />
+            <MXButton
+              rounded
+              style={{alignSelf: 'center'}}
+              title={LVStrings.wallet_import}
+              onPress={ this.onPrivateImportPress.bind(this) }
+            />
+          </ScrollView>
+        </KeyboardAvoidingView>
       );
     }
 
