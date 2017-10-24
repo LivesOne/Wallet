@@ -203,6 +203,12 @@ class TransferScreen extends Component {
             return;
         }
 
+        if (TransferUtils.isSameAddress(addressIn, wallet.address)) {
+            this.setState({alertMessage:'the same' });
+            this.refs.alert.show();
+            return;
+        }
+
         if (!amount) {
             this.setState({alertMessage:LVStrings.transfer_amount_required });
             this.refs.alert.show();
