@@ -122,6 +122,7 @@ const localized_strings = {
     transaction_failure_message: 'No one packs the transaction so it was failed. Miner fee will be returned to the original wallet.',
     
     // Transfer 转账
+    transfer_insufficient: 'Your account balance is insufficient. Please recharge',
     transfer_eth_insufficient: 'The transfer failed due to insufficient amount of ETH in your wallet. Please transfer ETH to your wallet first.', 
     transfer_address_required: 'Address required',
     transfer_address_invalid: 'Invalid address',
