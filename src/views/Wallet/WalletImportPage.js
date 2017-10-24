@@ -151,7 +151,12 @@ const foundation = require('../../foundation/wallet.js');
         let defaultName = await WalletUtils.getDefaultName();
         let wallet = await LVWalletManager.importWalletWithPrivatekey(defaultName, privateKeyPwd, privateKey);
         this.refs.toast.dismiss();
-        LVWalletManager.addWallet(wallet);
+        
+        const success = LVWalletManager.addWallet(wallet);
+        if(!success) {
+          LVWalletManager.updateWallet(wallet);
+        }
+
         LVWalletManager.saveToDisk();
         Toast.show(LVStrings.wallet_import_success);
         setTimeout(()=>{
