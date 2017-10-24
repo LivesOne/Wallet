@@ -114,7 +114,7 @@ class ReceiveTip extends Component {
                 <Text 
                    style = {styles.eth_tip}
                 >
-                    {LVStrings.transfer_eth_insufficient} 
+                    {LVStrings.transfer_insufficient} 
                 </Text>
                 
                 </View>
