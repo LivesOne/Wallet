@@ -18,6 +18,10 @@ export default class TransferUtils {
         return isAddress(address);
     }
 
+    static isSameAddress(left: string, right: string) : bool {
+        return this.convertToHexHeader(left.trim()) === this.convertToHexHeader(right.trim());
+    }
+
     static isBlank(str: string) : bool {
         return (!str || /^\s*$/.test(str));
     }
