@@ -16,3 +16,6 @@ sed -i -e 's/com.peel.react.rnos/com.peel.react/g' ${rnos1}
 
 rnos2='node_modules/react-native-os/android/src/main/java/com/peel/react/RNOS.java';
 sed -i -e 's/com.peel.react.rnos/com.peel.react/g' ${rnos2}
+
+./node_modules/.bin/rn-nodeify --hack --install
+
