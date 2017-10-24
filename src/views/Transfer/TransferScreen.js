@@ -240,7 +240,7 @@ class TransferScreen extends Component {
     }
 
     async onTransfer() {
-        const {wallet, password, addressIn, amount, balance, transactionParams} = this.state;
+        const {wallet, password, addressIn, amount, balance, transactionParams, remarks} = this.state;
         if (!transactionParams) {
             TransferUtils.log('transaction params is null');
             this.setState({alertMessage:LVStrings.transfer_fail });
@@ -267,6 +267,7 @@ class TransferScreen extends Component {
                     lvt: amount,
                     eth: this.minerGap,
                     timestamp: Moment().format('X'),
+                    remarks: remarks
                 });
             }
             await this.refs.loading.dismiss();
