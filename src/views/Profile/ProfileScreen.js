@@ -87,14 +87,6 @@ export default class ProfleScreen extends Component {
                         hideSeparator
                     >
                         <ProfileCell
-                            title={LVStrings.profile_feedback}
-                            accessory="DisclosureIndicator"
-                            onPress={() => alert(LVStrings.profile_feedback)}
-                            disableImageResize
-                            image={<Image source={FeedbackImage} style={styles.tableViewImage}/>}
-                        />
-                        <Separator insetRight={15} tintColor="#eeeff2"/>
-                        <ProfileCell
                             title={LVStrings.profile_about}
                             accessory="DisclosureIndicator"
                             onPress={() => this.props.navigation.navigate('About')}
