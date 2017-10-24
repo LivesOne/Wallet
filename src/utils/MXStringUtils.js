@@ -22,9 +22,12 @@ export function convertAmountToCurrencyString(amount: number, thousandsSeparator
     result = num + result;
 
     if (arr.length === 2) {
-        result = result + '.' + decimal;
         if (keepZero === false) {
-            result = parseFloat(result).toString();
+            const val = parseFloat('0.' + decimal).toString();
+            const dec = val.split('.')[1] || '';
+            result = (val == '0') ? result : result + '.' + dec;
+        } else {
+            result = result + '.' + decimal;
         }
     }
 

@@ -45,8 +45,6 @@ export default class TransactionDetailsScreen extends Component {
 
         const typeImg = state === 'ok' ? (symble === '+' ? receiptImg : transferImg) : state === 'waiting' ? waitingImg : failureImg;
 
-        //console.log(receiver);
-        //9224A9f81Ac30F0E3B568553bf9a7372EE49548C
 
         return (
             <View style={styles.container}>

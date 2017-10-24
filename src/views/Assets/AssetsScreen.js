@@ -110,7 +110,10 @@ class AssetsScreen extends Component {
     };
 
     handleWalletChange = async () => {
-        this.refs.pull && this.refs.pull.beginRefresh();
+        this.setState({ showIndicator: true });
+        setTimeout(async () => {
+            this.refs.pull && this.refs.pull.beginRefresh();
+        }, 500);
     };
 
     handleRecordsChanged = () => {
