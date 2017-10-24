@@ -106,6 +106,7 @@ class TransferScreen extends Component {
 
     componentDidMount() {
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
+        LVNotificationCenter.addObserver(this, LVNotification.balanceChanged, this.handlerBalanceChange);
         LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.refreshWalletDatas);
         this.refreshWalletDatas();
         this.fixAndroidPaste();
@@ -148,6 +149,11 @@ class TransferScreen extends Component {
 
     handleWalletChange = async () => {
         await this.refreshWalletDatas();
+    } 
+
+    handlerBalanceChange = async () => {
+        TransferUtils.log('balance change');
+        await this.refreshWalletDatas(false)
     }
 
     componentWillUnmount() {
@@ -176,8 +182,10 @@ class TransferScreen extends Component {
         }
     }
 
-    refreshWalletDatas = async () => {
-        await LVWalletManager.updateWalletBalance();
+    refreshWalletDatas = async (needUpdateBalance: boolean = true) => {
+        if (needUpdateBalance) {
+            await LVWalletManager.updateWalletBalance();
+        }
         const wallet = LVWalletManager.getSelectedWallet();
         if (wallet) {
             this.setState({
