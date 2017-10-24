@@ -55,19 +55,17 @@ class TransactionRecordsScreen extends Component {
     }
 
     initFilterDate = async () => {
-        const startDate = await LVConfiguration.lastTransactionRecordsFilterStartDate();
-        const endDate = await LVConfiguration.lastTransactionRecordsFilterEndDate();
+        const startDate = Moment().add(-2, 'days').format('YYYY-MM-DD');
+        const endDate = Moment().format('YYYY-MM-DD');
         this.setState({ startDate: startDate, endDate: endDate });
     };
 
     onStartDateChange = (date: string) => {
         this.setState({ startDate: date });
-        LVConfiguration.setLastTransactionRecordsFilterStartDate(date);
     };
 
     onEndDateChange = (date: string) => {
         this.setState({ endDate: date });
-        LVConfiguration.setLastTransactionRecordsFilterEndDate(date);
     };
 
     onPressRecord = (record: Object) => {
