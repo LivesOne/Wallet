@@ -77,6 +77,7 @@ export default class LVFullScreenModalView extends Component {
             animationType="slide"
             transparent={false}
             visible={this.state.modalVisible}
+            onRequestClose={()=>{this.dismiss()}}
             style={{width: '100%', height:'100%'}}
         >
             {this.props.children}
