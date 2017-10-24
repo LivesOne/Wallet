@@ -90,7 +90,6 @@ class TransferScreen extends Component {
             addressIn: '',
             amount: 0,
             balance: wallet != null ? wallet.lvt: 0,
-            //minerGap: 0,
             minGap: 0,
             maxGap:0,
             remarks: '',
@@ -99,7 +98,6 @@ class TransferScreen extends Component {
             showQrScanModal: false,
             alertMessage: '',
             inputPwd: '',
-            //userHasSetGap: false,
         }
         this.onSelectedContact = this.onSelectedContact.bind(this);
     }

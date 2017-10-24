@@ -58,12 +58,9 @@ export class TransferMinerGapSetter extends Component {
     }
 
     componentWillReceiveProps(nextProps: any) {
-        if (this.props.enable !== nextProps.enable) {
-            this.setState({
-                value: nextProps.enable ? nextProps.defaultValue : 0,
-            })
-            this._beginEnable = nextProps.enable;
-        }
+        this.setState({
+            value: nextProps.enable && nextProps.defaultValue !== 0 ? nextProps.defaultValue : 0,
+        });
     }
 
     componentDidUpdate(prevProps : any, prevState: any) {
