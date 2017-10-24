@@ -10,18 +10,9 @@ import LVColor from '../../styles/LVColor'
 
 const Base = LVStyleSheet.create({
   main: {
-    phone: {
-      height: 46,
-      width: MXUtils.getDeviceWidth() - 17 * PixelRatio.get(),
-      backgroundColor: LVColor.white,
-    },
-    pad: {
-      height: 60,
-      borderRadius: 3,
-      paddingLeft: 18,
-      width:  MXUtils.getDeviceWidth() * 3 / 5,
-      paddingRight: 15,
-    }
+    height: 46,
+    width: MXUtils.getDeviceWidth() - 17 * PixelRatio.get(),
+    backgroundColor: LVColor.white,
   },
   content: {
     flex: 1,
