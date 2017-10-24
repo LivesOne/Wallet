@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { AppState, StyleSheet, Dimensions, Platform, View, Text, Image } from 'react-native';
+import { AppState, StyleSheet, Dimensions, Platform, View, Text } from 'react-native';
 import { PullView } from 'react-native-rk-pull-to-refresh';
 import Moment from 'moment';
 import LVSize from '../../styles/LVFontSize';
@@ -16,7 +16,7 @@ import LVGradientPanel from '../Common/LVGradientPanel';
 import LVDetailTextCell from '../Common/LVDetailTextCell';
 import LVRefreshIndicator from '../Common/LVRefreshIndicator';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
-import MXTouchableImage from '../../components/MXTouchableImage';
+import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVMarketInfo from '../../logic/LVMarketInfo';
 import LVNetworking from '../../logic/LVNetworking';
 import LVPersistent from '../../logic/LVPersistent';
@@ -43,7 +43,7 @@ class AssetsScreen extends Component {
         wallet: ?Object,
         transactionList: ?Array<LVTransactionRecord>,
         openSelectWallet: boolean,
-        showIndicator: boolean,
+        showIndicator: boolean
     };
 
     constructor(props: any) {
@@ -54,7 +54,7 @@ class AssetsScreen extends Component {
             wallet: wallet,
             transactionList: null,
             openSelectWallet: false,
-            showIndicator: true,
+            showIndicator: true
         };
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
@@ -90,8 +90,8 @@ class AssetsScreen extends Component {
 
         this.refs.pull && this.refs.pull.resolveHandler();
 
-        setTimeout(async ()=> {
-            this.setState({showIndicator: false});
+        setTimeout(async () => {
+            this.setState({ showIndicator: false });
         }, 500);
     }
 
@@ -158,15 +158,14 @@ class AssetsScreen extends Component {
                         onPullStateChangeHeight={this.onPullStateChangeHeight.bind(this)}
                     >
                         <LVGradientPanel style={styles.gradient}>
-                            <View style={styles.nav}>
-                                <View style={{ width: 27 }} />
-                                <Text style={styles.navTitle}>{LVStrings.assets_title}</Text>
-                                <MXTouchableImage
-                                    style={{ width: 27 }}
-                                    source={selectImg}
-                                    onPress={this.onPressSelectWallet}
-                                />
-                            </View>
+                            <MXNavigatorHeader
+                                style={{ backgroundColor: 'transparent' }}
+                                title={LVStrings.assets_title}
+                                titleStyle={{color: '#ffffff', fontSize: LVSize.large}}
+                                hideLeft={true}
+                                right={selectImg}
+                                onRightPress={this.onPressSelectWallet}
+                            />
                             <WalletInfoView style={styles.walletInfo} title={wallet.name} address={wallet.address} />
                             <WalletBalanceView style={styles.balance} lvt={wallet.lvt} eth={wallet.eth} />
                         </LVGradientPanel>
@@ -196,20 +195,18 @@ class AssetsScreen extends Component {
     }
 
     topIndicatorRender() {
-        return (
-            this.state.showIndicator ? <LVRefreshIndicator /> : null
-        )
+        return this.state.showIndicator ? <LVRefreshIndicator /> : null;
     }
 
     onPullStateChangeHeight = (pulling: boolean, pullok: boolean, pullrelease: boolean, moveHeight: number) => {
         if (pulling) {
             if (this.state.showIndicator === false) {
-                this.setState({showIndicator: true});
+                this.setState({ showIndicator: true });
             }
         } else if (pullok) {
         } else if (pullrelease) {
         }
-    }
+    };
 }
 
 const Window = {
@@ -231,20 +228,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'center'
-    },
-    nav: {
-        width: Window.width - 25,
-        height: 64,
-        paddingTop: Platform.OS === 'ios' ? 20 : 0,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    navTitle: {
-        fontSize: LVSize.large,
-        textAlign: 'center',
-        color: '#ffffff',
-        backgroundColor: 'transparent'
     },
     walletInfo: {
         width: Window.width - 25

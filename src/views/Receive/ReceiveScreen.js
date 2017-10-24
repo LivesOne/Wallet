@@ -10,11 +10,13 @@ import React, { Component } from 'react';
 import { StyleSheet,Share, View, Platform,Text,Image,ScrollView ,Clipboard,CameraRoll ,ActionSheetIOS} from 'react-native';
 
 import PropTypes from 'prop-types';
+import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 
 import MxImage from  './MxImage'
 import MXButton from '../../components/MXButton';
+import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 
 
@@ -54,19 +56,14 @@ class ReceiveHeader extends Component {
 
     render() {
         return (
-            <View style={styles.topContainer}>
-            <Text style={styles.change_wallet_container}></Text>
-            <Text style={styles.title}>
-                {LVStrings.receive_title}
-            </Text>
-            <View style={styles.change_wallet_container}>
-            <MxImage 
-                source={receive_change_wallet}  
-                style={styles.change_wallet}
-                onPress={this.onPressButton.bind(this)}               
-            ></MxImage>
-            </View>
-        </View>
+            <MXNavigatorHeader
+                style={{ backgroundColor: 'transparent' }}
+                title={LVStrings.receive_title}
+                titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
+                hideLeft={true}
+                right={receive_change_wallet}
+                onRightPress={this.onPressButton.bind(this)}
+            />
 
         );
     }
@@ -333,23 +330,6 @@ const styles = StyleSheet.create({
         justifyContent:'center',
     },
 
-    topContainer:{
-        flex:1,
-        flexDirection:'row',
-        alignItems: "center",
-        paddingTop:10,
-        paddingBottom:10,
-        justifyContent:'center',
-    },
-
-    title:{
-        flex:6,
-        fontSize:18,
-        color:LVColor.grey2,
-        alignItems: "center",
-        textAlign:'center',
-    },
-
     button:{
         marginTop:30,
         marginBottom:15,
@@ -394,6 +374,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 3,
         padding:30,
+        marginTop: 10,
      },
 
      mainContainer2:{
@@ -403,6 +384,7 @@ const styles = StyleSheet.create({
          alignItems: 'center', 
         //  backgroundColor:'red',
          justifyContent:'center',
+         marginTop: 10,
      },
 
     change_wallet_container: {
