@@ -135,6 +135,7 @@ const localized_strings = {
     transfer_processing: '正在转账中...',
     transfer_success: '转账成功',
     transfer_fail: '转账失败',
+    transfer_to_self_not_allowed: '不能给自己账户转账',
 
     // Profile
     profile_wallet_manager: '钱包管理',

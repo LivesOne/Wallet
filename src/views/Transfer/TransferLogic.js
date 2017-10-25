@@ -6,11 +6,17 @@ import console from 'console-browserify';
 const eth_local = require('../../foundation/ethlocal.js');
 const wallet = require('../../foundation/wallet.js');
 
-// 代币的合约地址，保持固定
-const TOKEN = '0xe6d97f5cb9e9C5c45025e67224fbA0a5f5A3751b';
-
 export default class TransferLogic {
+    
     constructor() {}
+
+    static async fetchTransactionParam(from: string, to: string, value: number) {
+        let f = TransferUtils.convertToHexHeader(from);
+        let t = TransferUtils.convertToHexHeader(to);
+        let v = TransferUtils.convert2BNHex(value);
+        TransferUtils.log('tryFetchParams request = ' + JSON.stringify({from: f, to: t, value: v}));
+        return await LVNetworking.fetchTransactionParam(f, t, v);
+    }
 
       /**
      * transaction
@@ -19,10 +25,15 @@ export default class TransferLogic {
      */
     static async transaction(toAddress: string, password: string, value: number, 
             nonce: string, gasLimit: string, gasPrice: string, token: string, chainId: string, wallet: Object) {
+        let to = TransferUtils.convertToHexHeader(toAddress);
+        let from = TransferUtils.convertToHexHeader(wallet.address);
+        let v = TransferUtils.convert2BNHex(value);
         return new Promise((resolve, reject) => {
             let timeout = setTimeout(() => {reject("time out error")}, 60000);
             try {
-                let result = this.innerTransaction(TransferUtils.convertToHexHeader(toAddress), password, value, nonce, gasLimit, gasPrice, token, chainId, wallet);
+                let params = {from: from, to: to, value: v, nonce: nonce, gasLimit: gasLimit, gasPrice: gasPrice, lvt: wallet.lvt, eth: wallet.eth};
+                TransferUtils.log('transfer params = '+ JSON.stringify(params));
+                let result = this.innerTransaction(to, password, v, nonce, gasLimit, gasPrice, token, chainId, wallet);
                 clearTimeout(timeout);
                 resolve(result);
             } catch(e) {
@@ -33,7 +44,7 @@ export default class TransferLogic {
             
     }
 
-    static async innerTransaction(toAddress: string, password: string, value: number, 
+    static async innerTransaction(toAddress: string, password: string, value: string, 
         nonce: string, gasLimit: string, gasPrice: string, token: string, chainId: string, wallet: Object) {
             let privateKey = await this.getPrivateKey(password, wallet.keystore);
             let txData = await eth_local.generateTxData(
@@ -42,14 +53,11 @@ export default class TransferLogic {
                 token,
                 ' ',
                 toAddress,
-                TransferUtils.convert2BNHex(value),
+                value,
                 gasPrice,
                 '0x186A0',
                 chainId
             );
-            // let params = {to: toAddress, value: value, nonce: nonce, gasLimit: gasLimit, gasPrice: gasPrice, token: token, chainId: chainId, wallet: wallet};
-            let params = {from: wallet.address, to: toAddress, value: TransferUtils.convert2BNHex(value), nonce: nonce, gasLimit: gasLimit, gasPrice: gasPrice, lvt: wallet.lvt, eth: wallet.eth};
-            TransferUtils.log('transfer params = '+ JSON.stringify(params));
             let success = false;
             try {
                 let result = await LVNetworking.transaction(txData);

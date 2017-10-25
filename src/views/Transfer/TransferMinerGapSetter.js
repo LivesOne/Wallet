@@ -16,6 +16,7 @@ export class TransferMinerGapSetter extends Component {
 
     state: {
         value: number,
+        userHasSet: boolean,
     }
 
     static propTypes = {
@@ -32,8 +33,9 @@ export class TransferMinerGapSetter extends Component {
         super(props);
         this.state = {
             value: props.defaultValue,
+            userHasSet: false,
         }
-        TransferUtils.log('default value = ' + props.minimumValue);
+        TransferUtils.log('default value = ' + props.defaultValue);
     }
 
     calculateValue() {
@@ -58,9 +60,11 @@ export class TransferMinerGapSetter extends Component {
     }
 
     componentWillReceiveProps(nextProps: any) {
-        this.setState({
-            value: nextProps.enable && nextProps.defaultValue !== 0 ? nextProps.defaultValue : 0,
-        });
+        if (this.props.enable !== nextProps.enable) {
+            this.setState({
+                value: nextProps.enable ? nextProps.defaultValue : 0,
+            });
+        }
     }
 
     componentDidUpdate(prevProps : any, prevState: any) {
@@ -87,6 +91,7 @@ export class TransferMinerGapSetter extends Component {
                         maximumValue={this.props.enable ? maximumValue : 100}
                         onValueChange={this.onValueChange.bind(this)}
                         trackStyle={styles.track}
+                        //onSlidingStart={this.setState({userHasSet: true})}
                         thumbStyle={[styles.thumb, {borderColor: this.props.enable ? '#f9903e' : '#DDDDDD',}]}
                         minimumTrackTintColor={LVColor.primary}
                     />

@@ -55,7 +55,6 @@ export default class TransferUtils {
     static getSetGasPriceHexStr(setGasPrice: number, gasLimit: string) : string {
         // gasPrice = fee/gasLimit
         // 这里会去掉小数点
-        // setGasPrice fixed num = 9
         return '0x' + parseInt(setGasPrice *  Math.pow(10, 18) / parseInt(gasLimit, 16)).toString(16);
     }
 

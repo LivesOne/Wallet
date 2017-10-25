@@ -59,12 +59,12 @@ const Window = {
 
 const styles = StyleSheet.create({
     container: {
-        height: '23%',
+        //height: '23%',
         justifyContent: 'flex-start',
         backgroundColor: 'transparent'
     },
     columnContainer: {
-        flex: 1, 
+        //flex: 1, 
         flexDirection: 'column',
         alignItems: 'flex-start',
         marginLeft: 30,

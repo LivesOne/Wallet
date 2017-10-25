@@ -133,6 +133,7 @@ const localized_strings = {
     transfer_processing: 'Transfer processing...',
     transfer_success: 'Transfer succeed',
     transfer_fail: 'Transfer failed',
+    transfer_to_self_not_allowed: 'transfer to self is not allowed',
     
     // Profile
     profile_wallet_manager: 'Wallet management',
