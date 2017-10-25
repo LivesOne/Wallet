@@ -57,7 +57,7 @@ class ReceiveHeader extends Component {
     render() {
         return (
             <MXNavigatorHeader
-                style={{ backgroundColor: 'transparent' }}
+                style={{ backgroundColor: LVColor.primaryBack }}
                 title={LVStrings.receive_title}
                 titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
                 hideLeft={true}
@@ -320,6 +320,7 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         alignItems: "center",
         // backgroundColor:'red',
+        backgroundColor:LVColor.primaryBack,
         
         
     },
@@ -367,7 +368,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent:'center',
         
-        backgroundColor: LVColor.navigationBar,
+        backgroundColor: LVColor.white,
         // backgroundColor:'black',
         elevation: 20,
         shadowOffset: {width: 0, height: 0},
@@ -383,7 +384,6 @@ const styles = StyleSheet.create({
          width:'100%',
          flexDirection:'column',
          alignItems: 'center', 
-        //  backgroundColor:'red',
          justifyContent:'center',
          marginTop: 10,
      },
