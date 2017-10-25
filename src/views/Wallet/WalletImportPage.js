@@ -5,7 +5,7 @@
  */
 
  import React, { Component } from 'react'
- import { Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, ScrollView } from 'react-native';
+ import { Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 
 import * as LVStyleSheet from '../../styles/LVStyleSheet'
 import LVColor from '../../styles/LVColor'
@@ -281,7 +281,7 @@ const foundation = require('../../foundation/wallet.js');
 
     _renderPrivateKey = ()=> {
       return (
-        <KeyboardAvoidingView behavior='padding'>
+        <LVKeyboardAvoidingView behavior='padding'>
           <ScrollView style={{ flex: 1}}>
             <TextInput
               textAlignVertical={'top'}
@@ -312,13 +312,15 @@ const foundation = require('../../foundation/wallet.js');
               onPress={ this.onPrivateImportPress.bind(this) }
             />
           </ScrollView>
-        </KeyboardAvoidingView>
+        </LVKeyboardAvoidingView>
       );
     }
 
 
 
  }
+
+ const LVKeyboardAvoidingView = (Platform.OS === 'ios') ? KeyboardAvoidingView : View;
 
   const styles = LVStyleSheet.create({
     container: {
