@@ -80,6 +80,10 @@ export class LVPasswordDialog extends LVConfirmDialog {
         this.setState({cancel: true})
     }
 
+    onPressContent() {
+        this.refs.textinput.focus();
+    }
+
     render() {
         const {inputPwd, verifying} = this.state;
         return (
@@ -88,6 +92,7 @@ export class LVPasswordDialog extends LVConfirmDialog {
                 title={verifying ? LVStrings.password_verify_title : LVStrings.wallet_create_password_required}
                 onConfirm={this.onInputConfirm.bind(this)}
                 onCancel={this.onCancel.bind(this)}
+                onPressContent={this.onPressContent.bind(this)}
                 dismissAfterConfirm={false}
                 disableConfirm={verifying}
                 disableCancel={verifying}
@@ -98,6 +103,7 @@ export class LVPasswordDialog extends LVConfirmDialog {
                     <View>
                         {!verifying && 
                         <MXCrossTextInput
+                            ref={'textinput'}
                             style={{width: 240, alignSelf: 'center'}}
                             secureTextEntry={true}
                             withUnderLine={true}
