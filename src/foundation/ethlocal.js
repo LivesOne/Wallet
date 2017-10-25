@@ -288,7 +288,7 @@ module.exports = {
               try {
                 cb({
                   error: null,
-                  derivedKey: Buffer.from(result)
+                  derivedKey: Buffer.from(result,'hex')
                 });
               } catch (error) {
                 cb({
