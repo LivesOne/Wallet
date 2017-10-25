@@ -12,6 +12,7 @@ import Moment from 'moment';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
+import LVDialog from '../Common/LVDialog';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import LVDetailTextCell from '../Common/LVDetailTextCell';
 import LVRefreshIndicator from '../Common/LVRefreshIndicator';
@@ -43,7 +44,8 @@ class AssetsScreen extends Component {
         wallet: ?Object,
         transactionList: ?Array<LVTransactionRecord>,
         openSelectWallet: boolean,
-        showIndicator: boolean
+        showIndicator: boolean,
+        alertMessage: string,
     };
 
     constructor(props: any) {
@@ -54,7 +56,8 @@ class AssetsScreen extends Component {
             wallet: wallet,
             transactionList: null,
             openSelectWallet: false,
-            showIndicator: true
+            showIndicator: true,
+            alertMessage: '',
         };
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
@@ -81,18 +84,25 @@ class AssetsScreen extends Component {
     }
 
     async onPullRelease() {
-        await LVTransactionRecordManager.refreshTransactionRecords();
-        await LVWalletManager.updateWalletBalance();
-        await LVPersistent.setNumber(LVLastAssetsRefreshTimeKey, Moment().format('X'));
+        try {
+            await LVTransactionRecordManager.refreshTransactionRecords();
+            await LVWalletManager.updateWalletBalance();
+            await LVPersistent.setNumber(LVLastAssetsRefreshTimeKey, Moment().format('X'));
 
-        const wallet = LVWalletManager.getSelectedWallet();
-        this.setState({ transactionList: LVTransactionRecordManager.records, wallet: wallet });
+            const wallet = LVWalletManager.getSelectedWallet();
+            this.setState({ transactionList: LVTransactionRecordManager.records, wallet: wallet });
+    
+            this.refs.pull && this.refs.pull.resolveHandler();
+    
+            setTimeout(async () => {
+                this.setState({ showIndicator: false });
+            }, 500);
 
-        this.refs.pull && this.refs.pull.resolveHandler();
-
-        setTimeout(async () => {
-            this.setState({ showIndicator: false });
-        }, 500);
+        } catch (error) {
+            this.refs.pull && this.refs.pull.resolveHandler();
+            this.setState({showIndicator: false, alertMessage: error.message});
+            this.refs.NetAlert.show();
+        }
     }
 
     handleAppStateChange = async (nextAppState: string) => {
@@ -110,7 +120,8 @@ class AssetsScreen extends Component {
     };
 
     handleWalletChange = async () => {
-        this.setState({ showIndicator: true });
+        const wallet = LVWalletManager.getSelectedWallet();
+        this.setState({ wallet: wallet, showIndicator: true });
         setTimeout(async () => {
             this.refs.pull && this.refs.pull.beginRefresh();
         }, 500);
@@ -193,6 +204,7 @@ class AssetsScreen extends Component {
                 </View>
 
                 <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
+                <LVDialog ref={'NetAlert'} width={300} height={120} title={LVStrings.alert_hint} message={this.state.alertMessage} tapToClose={true}/>
             </View>
         );
     }

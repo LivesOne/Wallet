@@ -219,7 +219,11 @@ const localized_strings = {
     contact_alert_name_exceeds_limit: '联系人名称超过20个字',
     contact_alert_remarks_exceeds_limit: '备注长度超过限制',
     contact_confirm_delete_contact: '确认删除联系人？',
-    contact_empty_list_demonstration: '您还未添加联系人'
+    contact_empty_list_demonstration: '您还未添加联系人',
+
+    // Network
+    network_error: '网络请求失败，请重试!',
+    network_error_network_lost: '网络未连接，请重试!',
 };
 
 export default localized_strings;

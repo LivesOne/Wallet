@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image, Easing, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions, View, Text, Image, Easing, FlatList, TouchableOpacity } from 'react-native';
 import { Separator } from 'react-native-tableview-simple';
 import PropTypes from 'prop-types';
 import Modal from 'react-native-modalbox';
@@ -137,7 +137,7 @@ class LVSelectWalletItem extends React.PureComponent {
             <TouchableOpacity style={itemStyles.container} activeOpacity={0.7} onPress={this._onPress.bind(this)}>
                 <View style={itemStyles.left}>
                     <Image source={selected ? walletSelected : walletUnselected} />
-                    <Text style={itemStyles.text}>{name}</Text>
+                    <Text numberOfLines={1} style={itemStyles.text}>{name}</Text>
                 </View>
                 <Image style={itemStyles.selected} source={selected ? itemSelected : itemUnselected} />
             </TouchableOpacity>
@@ -163,6 +163,7 @@ const itemStyles = StyleSheet.create({
         marginRight: 13.5
     },
     text: {
+        width: Dimensions.get('window').width - 100,
         marginLeft: 5,
         fontSize: 14,
         color: LVColor.text.grey1
