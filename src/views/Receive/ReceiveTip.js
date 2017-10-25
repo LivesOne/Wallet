@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     },
 
     eth_tip: {
-        paddingTop:60,
+        paddingTop:20,
         width:'90%',
     },
     qrcode_pic:{
