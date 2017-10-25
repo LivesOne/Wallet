@@ -182,6 +182,7 @@ export class WalletDetailsPage extends Component {
     onWalletBackup(password: string) {
         const wallet = this.state.wallet;
         if(wallet){
+            this.refs.passwordConfirm.dismiss();
             setTimeout(async ()=>{
                 try {
                     await backupWallet(wallet, password);
