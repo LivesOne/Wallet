@@ -55,7 +55,7 @@ class ReceiveTip extends Component {
 
        if (wallet && wallet.address) {
             const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
-            const message: string =  "0x"+this.state.wallet.address;
+            const message: string =  this.state.wallet.address;
             // const message: string =  StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9);
 
             const options = {
@@ -85,15 +85,15 @@ class ReceiveTip extends Component {
  
     render() {
         return (
-            <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor:LVColor.white }} contentContainerStyle={styles.contentContainer}>
-            <MXNavigatorHeader
+           
+            <View style={styles.container}>
+             <MXNavigatorHeader
                     left={ IconBack }
                     style={{backgroundColor:'#F8F9FB'}}
                     title={ ' ' }
                     titleStyle={{color:'#6d798a'}}
                     onLeftPress={ () => {this.props.navigation.goBack() }}
                     />
-            <View style={styles.container}>
             
                 <View style={styles.mainContainer}>
 
@@ -106,7 +106,7 @@ class ReceiveTip extends Component {
 
                 <QRCode
                 style={styles.qrcode_pic}
-                value={"0x"+this.state.wallet.address}
+                value={this.state.wallet.address}
                 size={162}
                 bgColor='white'
                 fgColor='black'/>
@@ -129,8 +129,7 @@ class ReceiveTip extends Component {
                 </View>
 
             </View>
-            </ScrollView>
-        );
+         );
     }
 }
 
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         alignItems: "center",
         paddingTop: 20,
-        // backgroundColor:'red',
+        backgroundColor:'#F8F9FB',
         
         
     },

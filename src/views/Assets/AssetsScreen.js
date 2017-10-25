@@ -110,7 +110,8 @@ class AssetsScreen extends Component {
     };
 
     handleWalletChange = async () => {
-        this.setState({ showIndicator: true });
+        const wallet = LVWalletManager.getSelectedWallet();
+        this.setState({ wallet: wallet, showIndicator: true });
         setTimeout(async () => {
             this.refs.pull && this.refs.pull.beginRefresh();
         }, 500);

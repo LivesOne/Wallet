@@ -57,7 +57,7 @@ class ReceiveHeader extends Component {
     render() {
         return (
             <MXNavigatorHeader
-                style={{ backgroundColor: 'transparent' }}
+                style={{ backgroundColor: LVColor.primaryBack }}
                 title={LVStrings.receive_title}
                 titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
                 hideLeft={true}
@@ -133,7 +133,7 @@ class ReceiveScreen extends Component {
 
        if (wallet && wallet.address) {
             const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
-            const message: string =  "0x"+this.state.wallet.address;
+            const message: string =  this.state.wallet.address;
             // const message: string =  StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9);
 
             const options = {
@@ -225,7 +225,7 @@ class ReceiveScreen extends Component {
                 <QRCode
                 getRef={(c) => (this.svg = c)}
                 style={styles.qrcode_pic}
-                value={"0x"+this.state.wallet.address}
+                value={this.state.wallet.address}
                 size={162}
                 bgColor='white'
                 fgColor='black'/>
@@ -235,9 +235,7 @@ class ReceiveScreen extends Component {
                     style={styles.button}
                     title={LVStrings.receive_copy}
                     onPress = {() => {
-                        Clipboard.setString("0x"+this.state.wallet.address);
-                        // Clipboard.setString(StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9));
-                        // alert(LVStrings.receive_save_finish);
+                        Clipboard.setString(this.state.wallet.address);
                         Toast.show(LVStrings.common_done)
 
                     }}
@@ -248,30 +246,14 @@ class ReceiveScreen extends Component {
                     title={LVStrings.receive_save}
                     style={styles.button_save}
                     onPress = {() => {
-                    // alert("button clicked");
-                    // this.props.navigation.navigate("ReceiveTip")
                     this.saveQrToDisk();
-                    // this.test2();
                     }}
                     themeStyle={"active"}
                 />
                 </View>
                 <View style={styles.share_container}>
-                {/* <Image source={receive_share} style={styles.share}></Image> */}
                 <MxImage source={receive_share}
                     onPress = { () => {
-                        // Share.share({
-                        //     url: this.state.wallet.address,
-                        //     title: 'Share your wallet address ?',
-                        //     message: this.state.wallet.address,
-                        //   }, {
-                        //     // Android only:
-                        //     dialogTitle: 'Share your wallet address ',
-                        //     // iOS only:
-                        //     excludedActivityTypes: [
-                        //       'com.apple.UIKit.activity.PostToTwitter'
-                        //     ]
-                        //   })                       
 
                         this.onWalletShare();
                     }
@@ -320,6 +302,7 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         alignItems: "center",
         // backgroundColor:'red',
+        backgroundColor:LVColor.primaryBack,
         
         
     },
@@ -367,7 +350,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent:'center',
         
-        backgroundColor: LVColor.navigationBar,
+        backgroundColor: LVColor.white,
         // backgroundColor:'black',
         elevation: 20,
         shadowOffset: {width: 0, height: 0},
@@ -383,7 +366,6 @@ const styles = StyleSheet.create({
          width:'100%',
          flexDirection:'column',
          alignItems: 'center', 
-        //  backgroundColor:'red',
          justifyContent:'center',
          marginTop: 10,
      },
