@@ -32,7 +32,6 @@ class LVTransactionRecord {
         this.payer = this.pureAddress(json.from);
         this.receiver = this.pureAddress(json.to);
         this.amount = Number(json.value) * Math.pow(10, -18);
-        this.remarks = json.remarks || '';
         this.state = state;
 
         if (state === 'waiting') {
@@ -51,7 +50,6 @@ class LVTransactionRecord {
             lvt: this.amount,
             eth: this.minnerFee,
             timestamp: this.timestamp,
-            remarks: this.remarks || '',
             state: this.state
         };
     }

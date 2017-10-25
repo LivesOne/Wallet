@@ -143,9 +143,6 @@ export default class ContactsManagerPage extends Component {
         const { params } = this.props.navigation.state;
 
         let addIcon = AddIcon;
-        if(this.state.readonly) {
-            addIcon = null;
-        }
 
         return (
             <View style={styles.rootContainer}>

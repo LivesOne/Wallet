@@ -13,8 +13,8 @@ import {greyNavigationBackIcon} from '../../assets/LVIcons';
 import LVStrings from '../../assets/localization';
 import LVColor from '../../styles/LVColor';
 import * as ContactLib from '../../logic/LVContactManager';
-import { isEmptyString } from '../../utils/MXUtils';
-import { isAddress } from '../../utils/MXStringUtils';
+import { isEmptyString, isNotEmptyString } from '../../utils/MXUtils';
+import { isAddress, getCharLength } from '../../utils/MXStringUtils';
 import LVDialog from '../Common/LVDialog';
 import LVQrScanModal from '../Common/LVQrScanModal';
 import LVLocalization from '../../assets/localization';
@@ -88,6 +88,11 @@ export default class AddEditContactPage extends Component {
             this.refs.alert.show();
             return;
         }
+        if(getCharLength(this.state.name) > 40) {
+            this.setState({alertMessage: LVLocalization.wallet_name_invalid});
+            this.refs.alert.show();
+            return;
+        }
         if(isEmptyString(this.state.address)) {
             this.setState({alertMessage: LVLocalization.contact_alert_address_required});
             this.refs.alert.show();
@@ -95,6 +100,11 @@ export default class AddEditContactPage extends Component {
         }
         if(!isAddress(this.state.address)) {
             this.setState({alertMessage: LVLocalization.contact_alert_address_invalid});
+            this.refs.alert.show();
+            return;
+        }
+        if(isNotEmptyString(this.state.remarks) && getCharLength(this.state.remarks) > 80) {
+            this.setState({alertMessage: LVLocalization.contact_alert_remarks_exceeds_limit});
             this.refs.alert.show();
             return;
         }

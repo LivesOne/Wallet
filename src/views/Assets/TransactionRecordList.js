@@ -113,7 +113,7 @@ class LVTransactionRecordItem extends React.PureComponent {
         const typeImage = type === 'in' ? inImg : outImg;
 
         const prefix = type === 'in' ? '+' : '-';
-        const amountString = prefix + StringUtils.convertAmountToCurrencyString(amount, ',', 8) + ' LVT';
+        const amountString = prefix + StringUtils.convertAmountToCurrencyString(amount, ',', 0) + ' LVT';
 
         //const
         const t = DateUtils.getTimePastFromNow(datetime);
