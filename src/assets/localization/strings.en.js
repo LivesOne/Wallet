@@ -59,7 +59,7 @@ const localized_strings = {
     wallet_create_wallet: 'Create wallet',
     wallet_creating_wallet: 'Creating wallet...',
     wallet_create_name: 'Wallet name',
-    wallet_create_password: 'Create a password (6~12 digit of letters + numbers)',
+    wallet_create_password: 'Create a password (6~12 letters/numbers)',
     wallet_create_password_verify: 'Confirm password',
     wallet_create_comment: 'The password is used to encrypt the wallet address, please try to make it complex',
     wallet_create: 'Create',
@@ -213,6 +213,7 @@ const localized_strings = {
     contact_alert_address_required: 'Wallet address is required',
     contact_alert_address_invalid: 'Incorrect wallet address format',
     contact_alert_contact_exists: 'Contact already exists',
+    contact_alert_remarks_exceeds_limit: 'Remark length exceeds limit',
     contact_confirm_delete_contact: 'Are you sure to delete this contact?',
     contact_empty_list_demonstration: 'You haven\'t added any contact yet'
 };
