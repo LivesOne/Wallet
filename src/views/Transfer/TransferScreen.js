@@ -231,15 +231,11 @@ class TransferScreen extends Component {
 
         if (balance < amount || (wallet && wallet.eth < this.minerGap)) {
             if(balance < amount && (wallet && wallet.eth < this.minerGap)) {
-                // this.setState({balanceTip:'temt'});
                 this.setState({balanceTip:LVStrings.transfer_lvt_and_eth_insufficient});
-                alert("test"+this.state.balanceTip);
             }else if(balance < amount) {
                 this.setState({balanceTip:LVStrings.transfer_lvt_insufficient});
-                alert("test1"+this.state.balanceTip);
                 
             }else {
-                alert("test3");
                 this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
             }
             this.refs.insufficientDialog.show();
