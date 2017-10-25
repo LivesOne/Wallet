@@ -2,7 +2,7 @@
 'use strict'
 
 import React, { Component } from 'react'
-import { Text, View, ActivityIndicator, Keyboard } from 'react-native';
+import { Text, View, ActivityIndicator, Keyboard, Platform } from 'react-native';
 import { LVConfirmDialog } from './LVDialog';
 import MXCrossTextInput from './../../components/MXCrossTextInput';
 import LVStrings from '../../assets/localization';
@@ -62,10 +62,8 @@ export class LVPasswordDialog extends LVConfirmDialog {
                 }, 100);
             }
         } else {
-            await setTimeout(() => {
-                this.dismiss();
-            }, 100);
             const cancel = this.state.cancel;
+            this.dismiss();
             if (onVerifyResult && !cancel) {
                 setTimeout(function() {
                     if (!cancel) {
@@ -78,6 +76,7 @@ export class LVPasswordDialog extends LVConfirmDialog {
 
     onCancel() {
         this.setState({cancel: true})
+        this.dismiss();
     }
 
     onPressContent() {
@@ -86,12 +85,24 @@ export class LVPasswordDialog extends LVConfirmDialog {
 
     render() {
         const {inputPwd, verifying} = this.state;
+        const onVerifyResult = this.props.onVerifyResult;
+        const isAndroid = Platform.OS === 'android';
         return (
             <LVConfirmDialog
                 ref={'dialog'} {...this.props}
                 title={verifying ? LVStrings.password_verify_title : LVStrings.wallet_create_password_required}
-                onConfirm={this.onInputConfirm.bind(this)}
-                onCancel={this.onCancel.bind(this)}
+                onConfirm={()=>{
+                    if (!this.state.inputPwd) {
+                        Keyboard.dismiss();
+                        onVerifyResult(false, inputPwd)
+                        this.dismiss();
+                    } else {
+                        Keyboard.dismiss();
+                    setTimeout(async ()=>{
+                        this.onInputConfirm();
+                    }, isAndroid ? 500 : 100)}
+                    }}
+                onCancel= {this.onCancel.bind(this)}
                 onPressContent={this.onPressContent.bind(this)}
                 dismissAfterConfirm={false}
                 disableConfirm={verifying}
