@@ -89,7 +89,7 @@ class ReceiveTip extends Component {
             <View style={styles.container}>
              <MXNavigatorHeader
                     left={ IconBack }
-                    style={{backgroundColor:'#F8F9FB'}}
+                    style={{backgroundColor:'#F8F9FB',paddingTop:0}}
                     title={ ' ' }
                     titleStyle={{color:'#6d798a'}}
                     onLeftPress={ () => {this.props.navigation.goBack() }}
