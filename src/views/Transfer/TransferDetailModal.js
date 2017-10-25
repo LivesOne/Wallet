@@ -28,7 +28,7 @@ export class TransferDetailModal extends Component {
         address: PropTypes.string,
         amount: PropTypes.number,
         minerGap: PropTypes.number,
-        remarks: PropTypes.string,
+        //remarks: PropTypes.string,
         onTransferConfirmed: PropTypes.func,
     };
 
@@ -65,7 +65,7 @@ export class TransferDetailModal extends Component {
                   <DetailItem leftText={LVStrings.transfer_address_in} rightText={address}></DetailItem>
                   <DetailItem leftText={LVStrings.transfer_amount} rightText={amount + ' LVT'}></DetailItem>
                   <DetailItem leftText={LVStrings.transfer_miner_tips} rightText={TransferUtils.convertMinnerGap(minerGap) + ' ETH'}></DetailItem>
-                  <DetailItem leftText={LVStrings.transfer_remarks} rightText={remarks}></DetailItem>
+                  {/* <DetailItem leftText={LVStrings.transfer_remarks} rightText={remarks}></DetailItem> */}
                 <MXButton title={LVStrings.transfer} rounded={true} style={styles.btn} onPress = {onTransferConfirmed}></MXButton>
                 </View>
             </Modal>

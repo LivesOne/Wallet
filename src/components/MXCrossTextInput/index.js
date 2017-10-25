@@ -4,7 +4,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, View, TextInput, TouchableOpacity, Image, ViewPropTypes, Keyboard } from 'react-native';
+import { StyleSheet, View, TextInput, TouchableOpacity, Image, ViewPropTypes, Keyboard, Platform } from 'react-native';
 import { Base, DefaultStyles, LightStyles, WhiteStyles, TextAlignCenterStyles } from './styles';
 
 import LVColor from '../../styles/LVColor';
@@ -21,7 +21,7 @@ class MXCrossTextInput extends Component {
         super(props);
         this.state = {
             defaultValue: props.defaultValue,
-            text: props.value,
+            text: props.value || props.defaultValue,
             hasFocus: false,
         };
         this.onChangeText = this.onChangeText.bind(this);
@@ -88,8 +88,6 @@ class MXCrossTextInput extends Component {
         this.setText('')
     }
 
-    
-
     render() {
         const { rounded, style, placeholder, secureTextEntry, withUnderLine, keyboardType, textAlignCenter } = this.props;
 
@@ -122,13 +120,13 @@ class MXCrossTextInput extends Component {
                             placeholder={placeholder}
                             underlineColorAndroid={'transparent'}
                             placeholderTextColor={LVColor.text.placeHolder}
-                            defaultValue={this.state.defaultValue}
                             value={this.state.text}
                             selectTextOnFocus={this.firstMounted && this.props.setFocusWhenMounted}
                             tintColor={LVColor.primary}
                             keyboardType={keyboardType}
                             style={[Base.label, theme.label]}
                             secureTextEntry={secureTextEntry}
+                            clearButtonMode={this.props.withClearButton ? 'while-editing' : 'never'}
                             onChangeText={this.onChangeText.bind(this)}
                             onFocus={() => this.setState({ hasFocus: true })}
                             onEndEditing={() => this.setState({ hasFocus: false })}
@@ -136,7 +134,8 @@ class MXCrossTextInput extends Component {
                     </TouchableOpacity>
 
                     <View style={[buttonAreaStyle]}>
-                        {this.props.withClearButton &&
+                        { (Platform.OS === 'android') && 
+                            this.props.withClearButton &&
                             this.state.text !== null &&
                             this.state.text !== '' && 
                             this.state.text !== undefined &&

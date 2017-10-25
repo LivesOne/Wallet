@@ -55,6 +55,7 @@ const localized_strings = {
     wallet_password_incorrect: 'Incorrect password',
     wallet_name_hint: 'Enter name (less than 40 digits)',
     wallet_name_invalid: 'Incorrect name format',
+    wallet_name_exceeds_limit: 'Wallet name is more than 40 digits',
 
     wallet_create_wallet: 'Create wallet',
     wallet_creating_wallet: 'Creating wallet...',
@@ -133,6 +134,7 @@ const localized_strings = {
     transfer_processing: 'Transfer processing...',
     transfer_success: 'Transfer succeed',
     transfer_fail: 'Transfer failed',
+    transfer_to_self_not_allowed: 'transfer to self is not allowed',
     
     // Profile
     profile_wallet_manager: 'Wallet management',
@@ -213,6 +215,7 @@ const localized_strings = {
     contact_alert_address_required: 'Wallet address is required',
     contact_alert_address_invalid: 'Incorrect wallet address format',
     contact_alert_contact_exists: 'Contact already exists',
+    contact_alert_name_exceeds_limit: 'Contact\'s name is more than 40 digits',
     contact_alert_remarks_exceeds_limit: 'Remark length exceeds limit',
     contact_confirm_delete_contact: 'Are you sure to delete this contact?',
     contact_empty_list_demonstration: 'You haven\'t added any contact yet'

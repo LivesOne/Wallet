@@ -111,9 +111,9 @@ class LVNetworking {
         return await LVFetch.GET(API.GET_TRANSACTION_DETAIL + '/' + transactionHash);
     }
     
-    static async fetchTransactionParam(from: string, to: string, value: number) {
+    static async fetchTransactionParam(from: string, to: string, value: string) {
         return await LVFetch.GET(API.GET_TRANSACTION_PARAM 
-            + 'from=' + from + '&to=' + to + '&value=' + TransferUtils.convert2BNHex((value)));
+            + 'from=' + from + '&to=' + to + '&value=' + value);
     }
 
     static async transaction(txData: string) {
