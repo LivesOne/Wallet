@@ -32,6 +32,7 @@ import Toast from 'react-native-simple-toast';
 
 // import QRCode from 'react-native-qrcode';
 const receive_share = require("../../assets/images/receive_share.png");
+const lvt = require("../../assets/images/lvt.png");
 const receive_change_wallet = require("../../assets/images/receive_change_wallet.png");
 const receive_wallet_blank = require("../../assets/images/wallet_blank.png");
 
@@ -227,6 +228,7 @@ class ReceiveScreen extends Component {
                 style={styles.qrcode_pic}
                 value={this.state.wallet.address}
                 size={162}
+                logo={lvt}
                 bgColor='white'
                 fgColor='black'/>
 

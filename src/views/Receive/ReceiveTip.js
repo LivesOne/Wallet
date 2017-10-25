@@ -27,7 +27,7 @@ import LVWalletManager from '../../logic/LVWalletManager';
 
 const IconBack = require('../../assets/images/back_grey.png');
 const receive_share = require("../../assets/images/receive_share.png");
-
+const lvt = require("../../assets/images/lvt.png");
 class ReceiveTip extends Component {
     static navigationOptions = {
         header: null
@@ -108,6 +108,7 @@ class ReceiveTip extends Component {
                 style={styles.qrcode_pic}
                 value={this.state.wallet.address}
                 size={162}
+                logo={lvt}
                 bgColor='white'
                 fgColor='black'/>
 
@@ -141,7 +142,6 @@ const styles = StyleSheet.create({
         width:'100%',
         justifyContent: "flex-start",
         alignItems: "center",
-        paddingTop: 20,
         backgroundColor:'#F8F9FB',
         
         

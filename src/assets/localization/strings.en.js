@@ -218,7 +218,11 @@ const localized_strings = {
     contact_alert_name_exceeds_limit: 'Contact\'s name is more than 40 digits',
     contact_alert_remarks_exceeds_limit: 'Remark length exceeds limit',
     contact_confirm_delete_contact: 'Are you sure to delete this contact?',
-    contact_empty_list_demonstration: 'You haven\'t added any contact yet'
+    contact_empty_list_demonstration: 'You haven\'t added any contact yet',
+
+    // Network
+    network_error: 'Network request failed, please try again!',
+    network_error_network_lost: 'Your network is not connected, please try again!',
 };
 
 export default localized_strings;

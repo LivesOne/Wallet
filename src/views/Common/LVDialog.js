@@ -24,6 +24,7 @@ export default class LVDialog extends Component {
         buttonTitle: PropTypes.string,
         onPress: PropTypes.func,
         onPressContent: PropTypes.func,
+        tapToClose: PropTypes.bool,
         width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         height: PropTypes.number
     };
@@ -66,7 +67,7 @@ export default class LVDialog extends Component {
                 swipeToClose={false}
                 backdropOpacity={0.5}
                 animationDuration={300}
-                backdropPressToClose={false}
+                backdropPressToClose={this.props.tapToClose === true}
                 easing={Easing.elastic(0.75)}
             >
                 <View style={styles.dialog}>
@@ -215,6 +216,7 @@ const styles = StyleSheet.create({
         paddingRight: 25,
         color: '#697485',
         fontSize: 16,
+        textAlign: 'center',
         lineHeight: 20
     },
     dialog: {
