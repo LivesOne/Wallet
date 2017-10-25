@@ -23,6 +23,7 @@ export default class LVDialog extends Component {
         messageStyle: PropTypes.any,
         buttonTitle: PropTypes.string,
         onPress: PropTypes.func,
+        onPressContent: PropTypes.func,
         width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         height: PropTypes.number
     };
@@ -72,7 +73,7 @@ export default class LVDialog extends Component {
                     <View style={styles.dialogTopPanel}>
                         <Text style={[styles.title, this.props.titleStyle]}>{this.props.title}</Text>
                     </View>
-                    <View style={styles.dialogContent}>
+                    <View style={styles.dialogContent} onPress={this.props.onPressContent}>
                         {message ? <Text style={[styles.message, this.props.messageStyle]}>{message}</Text> : null}
                         {this.props.children}
                         {buttonTitle ? (

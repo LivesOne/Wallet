@@ -213,8 +213,14 @@ export class ModifyWalletPwd extends Component {
                 <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
                 <LVDialog ref={'doneTips'} title={LVStrings.alert_hint} message={LVStrings.wallet_edit_save_success} buttonTitle={LVStrings.alert_ok} onPress={this.onDoneTipsPress.bind(this)} />
                 <LVFullScreenModalView ref={'importPage'}>
-                    <LVWalletImportNavigator screenProps={{dismiss: ()=> {
-                        this.refs.importPage.dismiss()
+                    <LVWalletImportNavigator screenProps={{dismiss: (state: string) => {
+                        this.refs.importPage.dismiss();
+                        if (state === 'success') {
+                            setTimeout(() => {
+                                this.setState({alertMessage:LVStrings.wallet_import_success });
+                                this.refs.alert.show();
+                            }, 500);
+                        }
                     } , from: WalletUtils.OPEN_IMPORT_FROM_MODIFY_PASSWORD
                 }}/>
                 </LVFullScreenModalView>
