@@ -6,7 +6,7 @@
 import TransferUtils from '../views/Transfer/TransferUtils';
 'use strict';
 
-const HOST = 'http://office.metellica.cn:51515';
+const HOST = 'http://api.lives.one';
 
 const API = {
     GET_BALANCE: HOST + '/wallet/balance',
