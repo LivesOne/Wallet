@@ -41,7 +41,7 @@ export default class TransactionDetailsScreen extends Component {
         const symble = type === 'in' ? '+' : '-';
         const amountString = symble + StringUtils.convertAmountToCurrencyString(amount, ',', 8);
         const feeString = StringUtils.convertAmountToCurrencyString(minnerFee, ',', 8) + ' ETH';
-        const remarks = transactionRecord.remarks || LVStrings.transaction_na;
+        //const remarks = transactionRecord.remarks || LVStrings.transaction_na;
 
         const typeImg = state === 'ok' ? (symble === '+' ? receiptImg : transferImg) : state === 'waiting' ? waitingImg : failureImg;
 
@@ -67,7 +67,6 @@ export default class TransactionDetailsScreen extends Component {
                             <LVSubTitleCell title={LVStrings.transaction_payer} value={'0x' + payer} />
                             <LVSubTitleCell title={LVStrings.transaction_receiver} value={'0x' + receiver} />
                             <LVSubTitleCell title={LVStrings.transaction_minner_fee} value={minnerFee + ' ETH'} />
-                            <LVSubTitleCell title={LVStrings.transaction_remarks} value={remarks} />
                             {state === 'failed' && (
                                 <Text style={styles.failureText}>{LVStrings.transaction_failure_message}</Text>
                             )}
