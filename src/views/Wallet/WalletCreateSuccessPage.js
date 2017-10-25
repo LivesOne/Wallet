@@ -43,6 +43,7 @@ export default class WalletCreateSuccessPage extends Component {
     };
 
     onVerifyResult(success: boolean, password: string) {
+        this.refs.passwordConfirm.dismiss();
         if(!success) {
             setTimeout(() => {
                 this.setState({
@@ -52,12 +53,13 @@ export default class WalletCreateSuccessPage extends Component {
             }, 500);
             return;
         }
-        this.refs.passwordConfirm.dismiss();
         const wallet = this.props.navigation.state.params.wallet;
         setTimeout(async ()=>{
             try {
                 await backupWallet(wallet, password);
-                this.refs.disclaimer.show();
+                setTimeout(() => {
+                    this.refs.disclaimer.show();
+                }, 600);
             } catch (error) {
                 if(error === 'cancelled') {
                     return;
