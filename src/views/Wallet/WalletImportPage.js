@@ -102,7 +102,7 @@ const foundation = require('../../foundation/wallet.js');
       LVNotificationCenter.postNotification(LVNotification.walletChanged);
       LVNotificationCenter.postNotification(LVNotification.balanceChanged, wallet);
       if (this.props.screenProps.dismiss) {
-        this.props.screenProps.dismiss();
+        this.props.screenProps.dismiss('success');
       }
     }
 
@@ -228,7 +228,7 @@ const foundation = require('../../foundation/wallet.js');
             title = {LVStrings.wallet_import_header}
             onLeftPress = {() => {
                 if(this.props.screenProps.dismiss) {
-                    this.props.screenProps.dismiss();
+                    this.props.screenProps.dismiss('canceled');
                 } else if(this.props.navigation){
                     this.props.navigation.goBack();
                 }

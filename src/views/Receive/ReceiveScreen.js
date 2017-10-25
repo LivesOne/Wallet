@@ -172,7 +172,8 @@ class ReceiveScreen extends Component {
                       Toast.show(LVStrings.receive_save_finish)
 
                   }).catch((err) => {
-                      Toast.show("err"+err);
+                      Toast.show(err.message);
+                    //   Toast.show(err.replace("Error:",""));
                   });
                 // Toast.show("ok");
               })
