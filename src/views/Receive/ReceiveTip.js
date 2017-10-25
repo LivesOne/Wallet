@@ -55,7 +55,7 @@ class ReceiveTip extends Component {
 
        if (wallet && wallet.address) {
             const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
-            const message: string =  "0x"+this.state.wallet.address;
+            const message: string =  this.state.wallet.address;
             // const message: string =  StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9);
 
             const options = {
@@ -106,7 +106,7 @@ class ReceiveTip extends Component {
 
                 <QRCode
                 style={styles.qrcode_pic}
-                value={"0x"+this.state.wallet.address}
+                value={this.state.wallet.address}
                 size={162}
                 bgColor='white'
                 fgColor='black'/>
