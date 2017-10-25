@@ -85,15 +85,15 @@ class ReceiveTip extends Component {
  
     render() {
         return (
-            <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor:LVColor.white }} contentContainerStyle={styles.contentContainer}>
-            <MXNavigatorHeader
+           
+            <View style={styles.container}>
+             <MXNavigatorHeader
                     left={ IconBack }
                     style={{backgroundColor:'#F8F9FB'}}
                     title={ ' ' }
                     titleStyle={{color:'#6d798a'}}
                     onLeftPress={ () => {this.props.navigation.goBack() }}
                     />
-            <View style={styles.container}>
             
                 <View style={styles.mainContainer}>
 
@@ -129,8 +129,7 @@ class ReceiveTip extends Component {
                 </View>
 
             </View>
-            </ScrollView>
-        );
+         );
     }
 }
 
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         alignItems: "center",
         paddingTop: 20,
-        // backgroundColor:'red',
+        backgroundColor:'#F8F9FB',
         
         
     },
