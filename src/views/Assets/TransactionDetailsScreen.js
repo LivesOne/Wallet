@@ -66,7 +66,7 @@ export default class TransactionDetailsScreen extends Component {
                         <View style={{ width: '100%', paddingLeft: 15, paddingRight: 15 }}>
                             <LVSubTitleCell title={LVStrings.transaction_payer} value={'0x' + payer} />
                             <LVSubTitleCell title={LVStrings.transaction_receiver} value={'0x' + receiver} />
-                            <LVSubTitleCell title={LVStrings.transaction_minner_fee} value={feeString + ' ETH'} />
+                            <LVSubTitleCell title={LVStrings.transaction_minner_fee} value={feeString} />
                             {state === 'failed' && (
                                 <Text style={styles.failureText}>{LVStrings.transaction_failure_message}</Text>
                             )}

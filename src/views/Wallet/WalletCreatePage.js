@@ -57,6 +57,12 @@ export default class WalletCreatePage extends Component {
             return;
         }
 
+        if (WalletUtils.getLength(this.state.name) > 40) {
+            this.setState({alertMessage:LVStrings.wallet_name_exceeds_limit });
+            this.refs.alert.show();
+            return;
+        }
+
         if (!WalletUtils.isNameValid(this.state.name)) {
             this.setState({alertMessage:LVStrings.wallet_name_invalid });
             this.refs.alert.show();

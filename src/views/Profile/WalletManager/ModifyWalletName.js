@@ -79,6 +79,12 @@ export class ModifyWalletName extends Component {
             return;
         } 
 
+        if (WalletUtils.getLength(name) > 40) {
+            this.setState({alertMessage:LVStrings.wallet_name_exceeds_limit });
+            this.refs.alert.show();
+            return;
+        }
+
         if (!WalletUtils.isNameValid(name)) {
             this.setState({alertMessage:LVStrings.wallet_name_invalid });
             this.refs.alert.show();

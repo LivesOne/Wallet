@@ -94,6 +94,7 @@ const localized_strings = {
     wallet_password_incorrect: '密码错误',
     wallet_name_hint: '输入名称（少于20个字）',
     wallet_name_invalid: '名称格式错误',
+    wallet_name_exceeds_limit: '钱包名称超过20个字',
 
     //password verify
     password_verify_title: '密码验证',
@@ -215,6 +216,7 @@ const localized_strings = {
     contact_alert_address_required: '钱包地址不能为空',
     contact_alert_address_invalid: '钱包地址格式错误',
     contact_alert_contact_exists: '联系人已存在',
+    contact_alert_name_exceeds_limit: '联系人名称超过20个字',
     contact_alert_remarks_exceeds_limit: '备注长度超过限制',
     contact_confirm_delete_contact: '确认删除联系人？',
     contact_empty_list_demonstration: '您还未添加联系人'

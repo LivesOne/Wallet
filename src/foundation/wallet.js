@@ -99,9 +99,7 @@ module.exports = {
             if(error) {
                 callback(null, error);
             } else {
-                const privateKey = privateKeyBuffer.toString('hex');
-                
-                self.createKeyStore(password, privateKey, callback);
+                callback(keyStoreObject, null);
             }
         });
     },
