@@ -14,7 +14,8 @@ import {
     TouchableOpacity,
     Keyboard,
     TextInput,
-    Platform
+    Platform,
+    PixelRatio
 } from 'react-native';
 import { TransferHeader } from './TransferHeader';
 import MXCrossTextInput from './../../components/MXCrossTextInput';
@@ -332,11 +333,11 @@ class TransferScreen extends Component {
     num = 0;
 
     render() {
-        TransferUtils.log('render ---> ' + this.num++);
+        //alert(PixelRatio.get());
         TransferUtils.log('minerGap = ' + this.minerGap + " userHasSet = " + this.userHasSetGap.toString());
         const {transactionParams} = this.state;
         return (
-            <View style={{flexDirection: 'column', flex: 1}}>
+            <View style={{flexDirection: 'column', flex: 1, justifyContent: 'space-between'}}>
             {/* <ScrollView
                 ref={'scrollView'}
                 keyboardShouldPersistTaps={'always'}
@@ -363,6 +364,7 @@ class TransferScreen extends Component {
                         isOpen= {this.state.showQrScanModal}
                         onClosed = {()=>{this.setState({ showQrScanModal: false })}}/>
                     <TransferHeader
+                        style={styles.header}
                         eth={this.state.curETH}
                         balance={this.state.balance}
                         onPressSelectWallet={()=>{this.setState({ openSelectWallet: true })}}
@@ -373,6 +375,7 @@ class TransferScreen extends Component {
                             style={styles.textInput} 
                             placeholder={LVStrings.transfer_payee_address}
                             defaultValue={this.state.addressIn}
+                            boarderLineHeight={1}
                             rightComponent={
                                 <View style={{flexDirection:'row', justifyContent: 'space-between', width: 55}}>
                                     <MXTouchableImage source={addImg} onPress={() => {this.props.navigation.navigate('ContactList',{readonly:true, callback:this.onSelectedContact})}}/>
@@ -385,6 +388,7 @@ class TransferScreen extends Component {
                             style= {styles.textInput} 
                             placeholder={LVStrings.transfer_amount}
                             keyboardType = {'numeric'}
+                            boarderLineHeight={Platform.OS === 'android' ? 1 : null}
                             onTextChanged={this.onAmountChanged.bind(this)}/>
                         {/* <MXCrossTextInput
                             ref={'refRemarks'} 
@@ -442,17 +446,21 @@ class TransferScreen extends Component {
     }
 }
 
+const pixelRatio = PixelRatio.get();
 const styles = StyleSheet.create({
     container: {
         height: MXUtils.getDeviceHeight(),
         backgroundColor: 'white',
     },
     textInput: {
-        marginTop: 20, 
+        marginTop: 5 * pixelRatio, 
         width: '100%',
     },
+    header: {
+        flex: 2,
+    },
     headerBelow: {
-        flex: 1,
+        flex: 7,
         marginHorizontal: 15,
     },
     setter: {
@@ -480,12 +488,15 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     btnContainer: {
-        marginTop: 30,
-        alignSelf:'center', 
+        flex: 1,
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        paddingBottom: 20* pixelRatio,
     },
     btn: {
+        alignSelf: 'center',
+        width: MXUtils.getDeviceWidth() * 2/ 3
     }
 });
 
