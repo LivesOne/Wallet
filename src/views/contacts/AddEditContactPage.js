@@ -89,7 +89,7 @@ export default class AddEditContactPage extends Component {
             return;
         }
         if(getCharLength(this.state.name) > 40) {
-            this.setState({alertMessage: LVLocalization.wallet_name_invalid});
+            this.setState({alertMessage: LVLocalization.contact_alert_name_exceeds_limit});
             this.refs.alert.show();
             return;
         }
