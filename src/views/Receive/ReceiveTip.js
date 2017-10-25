@@ -89,7 +89,7 @@ class ReceiveTip extends Component {
             <View style={styles.container}>
              <MXNavigatorHeader
                     left={ IconBack }
-                    style={{backgroundColor:'#F8F9FB',paddingTop:0}}
+                    style={{backgroundColor:'#F8F9FB'}}
                     title={ ' ' }
                     titleStyle={{color:'#6d798a'}}
                     onLeftPress={ () => {this.props.navigation.goBack() }}
@@ -142,7 +142,6 @@ const styles = StyleSheet.create({
         width:'100%',
         justifyContent: "flex-start",
         alignItems: "center",
-        paddingTop: 20,
         backgroundColor:'#F8F9FB',
         
         
