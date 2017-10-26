@@ -8,7 +8,6 @@
 import React, { Component } from 'react';
 import { AppState, StyleSheet, Dimensions, Platform, View, Text } from 'react-native';
 import { PullView } from 'react-native-rk-pull-to-refresh';
-import Toast from 'react-native-simple-toast';
 import Moment from 'moment';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
@@ -101,9 +100,8 @@ class AssetsScreen extends Component {
 
         } catch (error) {
             this.refs.pull && this.refs.pull.resolveHandler();
-            Toast.show(error.message, Toast.LONG);
-            //this.setState({showIndicator: false, alertMessage: error.message});
-            //this.refs.NetAlert.show();
+            this.setState({showIndicator: false, alertMessage: error.message});
+            this.refs.NetAlert.show();
         }
     }
 
