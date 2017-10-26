@@ -132,7 +132,8 @@ const localized_strings = {
     transfer_address_required: '收款人地址不能为空',
     transfer_address_invalid: '请输入有效的收款人地址',
     transfer_amount_required: '转账金额不能为空',
-    transfer_amount_format_hint: '转账金额必须为数字',
+    transfer_amount_format_hint: '转账金额必须为大于零的数字',
+    transfer_miner_gap_not_access: '未获取相应矿工费数值，请检查网络',
     transfer_processing: '正在转账中...',
     transfer_success: '转账成功',
     transfer_fail: '转账失败',
@@ -224,6 +225,7 @@ const localized_strings = {
     // Network
     network_error: '网络请求失败，请重试!',
     network_error_network_lost: '网络未连接，请重试!',
+    network_timeout: '网络超时',
 };
 
 export default localized_strings;

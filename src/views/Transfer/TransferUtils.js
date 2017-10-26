@@ -8,10 +8,14 @@ const BN = require('bn.js');
 export default class TransferUtils {
     constructor() {}
 
-    static isValidAmount(amount: string) : bool {
+    static isValidAmountStr(amount: string) : bool {
         let result = parseFloat(amount);
         console.log(result);
-        return !isNaN(result);
+        return !isNaN(result) && result > 0;
+    }
+
+    static isValidAmount(amount: number) : bool {
+        return !isNaN(amount) && amount > 0;
     }
 
     static isValidAddress(address: string) : bool {
