@@ -224,6 +224,7 @@ const localized_strings = {
     // Network
     network_error: 'Network request failed, please try again!',
     network_error_network_lost: 'Your network is not connected, please try again!',
+    network_timeout: 'Network timeout',
 };
 
 export default localized_strings;

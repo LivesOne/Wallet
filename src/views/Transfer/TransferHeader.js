@@ -43,7 +43,7 @@ export class TransferHeader extends Component {
     num = 0;
 
     render() {
-        TransferUtils.log('num ---> = ' + this.num++);
+        //TransferUtils.log('num ---> = ' + this.num++);
         const { balance, eth } = this.props;
         const lvtValString = StringUtils.convertAmountToCurrencyString(balance, ',', 0);
         return (

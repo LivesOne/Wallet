@@ -225,6 +225,7 @@ const localized_strings = {
     // Network
     network_error: '网络请求失败，请重试!',
     network_error_network_lost: '网络未连接，请重试!',
+    network_timeout: '网络超时',
 };
 
 export default localized_strings;

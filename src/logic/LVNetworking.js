@@ -62,7 +62,7 @@ class LVFetch {
                     });
                 });
             setTimeout(() => {
-                reject(new Error('Request Timeout'));
+                reject(new Error(LVStrings.network_timeout));
             }, LVFetch.timeout);
         });
     }
@@ -76,7 +76,13 @@ class LVFetch {
                 },
                 body: JSON.stringify(param)
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        reject(new Error(LVStrings.network_error));
+                    }
+                })
                 .then(json => {
                     if (json && json.code !== undefined) {
                         if (json.code === 0) {
@@ -94,7 +100,7 @@ class LVFetch {
                     });
                 });
             setTimeout(() => {
-                reject(new Error('Request Timeout'));
+                reject(new Error(LVStrings.network_timeout));
             }, LVFetch.timeout);
         });
     }

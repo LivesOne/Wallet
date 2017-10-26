@@ -15,7 +15,8 @@ import {
     Keyboard,
     TextInput,
     Platform,
-    PixelRatio
+    PixelRatio,
+    NetInfo
 } from 'react-native';
 import { TransferHeader } from './TransferHeader';
 import MXCrossTextInput from './../../components/MXCrossTextInput';
@@ -128,20 +129,28 @@ class TransferScreen extends Component {
     async tryFetchParams() {
         const {wallet, amount, addressIn} = this.state;
         if (wallet && amount && addressIn && TransferUtils.isValidAddress(addressIn)) {
-            let params = await TransferLogic.fetchTransactionParam(wallet.address, addressIn, amount);
-            let range = TransferUtils.getMinerGapRange(params);
-            TransferUtils.log('tryFetchParams result = ' + JSON.stringify(params)
-            + ' minGap = ' +  range.min
-            + ' maxGap = ' +  range.max);
-            this.minerGap = TransferUtils.convertHex2Eth(params.gasPrice, params.gasLimit),
-            this.userHasSetGap = false;
-            this.setState({
-                transactionParams : params,
-                minGap: range.min,
-                maxGap: range.max,
-            });
+            try {
+                let params = await TransferLogic.fetchTransactionParam(wallet.address, addressIn, amount);
+                let range = TransferUtils.getMinerGapRange(params);
+                TransferUtils.log('tryFetchParams result = ' + JSON.stringify(params)
+                + ' minGap = ' +  range.min
+                + ' maxGap = ' +  range.max);
+                this.minerGap = TransferUtils.convertHex2Eth(params.gasPrice, params.gasLimit),
+                this.userHasSetGap = false;
+                this.setState({
+                    transactionParams : params,
+                    minGap: range.min,
+                    maxGap: range.max,
+                });
+            } catch (error) {
+                this.setState({transactionParams: null})
+                this.minerGap = 0;
+                this.userHasSetGap = false;
+            }
         } else {
             this.setState({transactionParams: null})
+            this.minerGap = 0;
+            this.userHasSetGap = false;
         }
     }
 
@@ -207,7 +216,7 @@ class TransferScreen extends Component {
         }
     }
 
-    onTransferPresse() {
+    async onTransferPresse() {
         const { wallet, addressIn, amount, balance, amountText} = this.state;
 
         if (!addressIn) {
@@ -255,6 +264,14 @@ class TransferScreen extends Component {
                 this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
             }
             this.refs.insufficientDialog.show();
+            return;
+        }
+
+        let isConnected = await NetInfo.isConnected.fetch();
+        
+        if (!isConnected) {
+            this.setState({alertMessage:LVStrings.network_error_network_lost});
+            this.refs.alert.show();
             return;
         }
         this.refs.inputPwdDialog.show();
@@ -313,9 +330,9 @@ class TransferScreen extends Component {
                     eth: this.minerGap,
                     timestamp: Moment().format('X'),
                 });
+                await this.resetUIState();
             }
             await this.refs.loading.dismiss();
-            await this.resetUIState();
             setTimeout(() => {
                 this.setState({alertMessage: success ? LVStrings.transfer_success : LVStrings.transfer_fail });
                 Toast.show(success ? LVStrings.transfer_success : LVStrings.transfer_fail, Toast.Long);
@@ -347,7 +364,7 @@ class TransferScreen extends Component {
 
     render() {
         //alert(PixelRatio.get());
-        TransferUtils.log('minerGap = ' + this.minerGap + " userHasSet = " + this.userHasSetGap.toString());
+        //TransferUtils.log('minerGap = ' + this.minerGap + " userHasSet = " + this.userHasSetGap.toString());
         const {transactionParams} = this.state;
         return (
             <View style={{flexDirection: 'column', flex: 1, justifyContent: 'space-between'}}>
