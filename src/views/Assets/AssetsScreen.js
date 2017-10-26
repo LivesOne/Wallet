@@ -8,6 +8,7 @@
 import React, { Component } from 'react';
 import { AppState, StyleSheet, Dimensions, Platform, View, Text } from 'react-native';
 import { PullView } from 'react-native-rk-pull-to-refresh';
+import Toast from 'react-native-simple-toast';
 import Moment from 'moment';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
@@ -45,7 +46,6 @@ class AssetsScreen extends Component {
         transactionList: ?Array<LVTransactionRecord>,
         openSelectWallet: boolean,
         showIndicator: boolean,
-        alertMessage: string,
     };
 
     constructor(props: any) {
@@ -57,7 +57,6 @@ class AssetsScreen extends Component {
             transactionList: null,
             openSelectWallet: false,
             showIndicator: true,
-            alertMessage: '',
         };
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
@@ -86,7 +85,7 @@ class AssetsScreen extends Component {
     async onPullRelease() {
         try {
             await LVTransactionRecordManager.refreshTransactionRecords();
-            await LVWalletManager.updateWalletBalance();
+            //await LVWalletManager.updateWalletBalance();
             await LVPersistent.setNumber(LVLastAssetsRefreshTimeKey, Moment().format('X'));
 
             const wallet = LVWalletManager.getSelectedWallet();
@@ -100,8 +99,7 @@ class AssetsScreen extends Component {
 
         } catch (error) {
             this.refs.pull && this.refs.pull.resolveHandler();
-            this.setState({showIndicator: false, alertMessage: error.message});
-            this.refs.NetAlert.show();
+            Toast.show(error.message);
         }
     }
 
@@ -121,10 +119,16 @@ class AssetsScreen extends Component {
 
     handleWalletChange = async () => {
         const wallet = LVWalletManager.getSelectedWallet();
+        const newAddress = wallet ? wallet.address : '';
+        const curAddress = this.state.wallet ? this.state.wallet.address : '';
+
         this.setState({ wallet: wallet, showIndicator: true });
-        setTimeout(async () => {
-            this.refs.pull && this.refs.pull.beginRefresh();
-        }, 500);
+
+        if (curAddress != newAddress) {
+            setTimeout(async () => {
+                this.refs.pull && this.refs.pull.beginRefresh();
+            }, 500);
+        }
     };
 
     handleRecordsChanged = () => {
@@ -204,7 +208,6 @@ class AssetsScreen extends Component {
                 </View>
 
                 <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
-                <LVDialog ref={'NetAlert'} width={300} height={120} title={LVStrings.alert_hint} message={this.state.alertMessage} tapToClose={true}/>
             </View>
         );
     }
