@@ -380,9 +380,9 @@ class TransferScreen extends Component {
                 />}
                 <TouchableOpacity  style={ styles.container } activeOpacity={1} onPress={Keyboard.dismiss} >
                     <LVQrScanModal
-                        barcodeReceived={(event)=>{
-                            this.setState({addressIn: event.data});
-                            this.refs.refAddressIn.setText(event.data);
+                        barcodeReceived={(data)=>{
+                            this.setState({addressIn: data});
+                            this.refs.refAddressIn.setText(data);
                             }}
                         isOpen= {this.state.showQrScanModal}
                         onClosed = {()=>{this.setState({ showQrScanModal: false })}}/>

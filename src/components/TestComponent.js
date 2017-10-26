@@ -22,6 +22,8 @@ import { LVPasswordDialog } from '../views/Common/LVPasswordDialog';
 const eth_local = require('../foundation/ethlocal.js');
 const wallet = require('../foundation/wallet.js');
 
+const ICAP = require('ethereumjs-icap')
+
 class TestComponent extends Component {
 
     componentDidMount() {
@@ -60,7 +62,8 @@ class TestComponent extends Component {
                     onPress = {() => {
                         //this.testWalletValidator();
                         //this.refs.passwordDialog.show();
-                        this.test0x();
+                        //this.test0x();
+                        this.testStandardAddr();
                     }}
                     themeStyle={"active"}
                 />
@@ -177,6 +180,19 @@ class TestComponent extends Component {
         // } catch(e) {
         //     this.log(e.message);
         // }
+    }
+
+
+    testStandardAddr() {
+        let imToken1 = 'iban:XE79AQHS00IKTQ0H0QKP2K97ZULC2OT9CIX?amount=0&token=ETH';
+        let imToken2 = 'iban:XE79AQHS00IKTQ0H0QKP2K97ZULC2OT9CIX';
+        this.log('parse others1 = ' + TransferUtils.convertIban2Addr(imToken1));
+        this.log('parse others2 = ' + TransferUtils.convertIban2Addr(imToken2));
+
+        let inner1 = '0x00c5496aee77c1ba1f0854206a26dda82a81d6d8';
+        let inner2 = '00c5496aee77c1ba1f0854206a26dda82a81d6d8';
+        this.log('export inner1 = ' + TransferUtils.convertAddr2Iban(inner1));
+        this.log('export inner2 = ' + TransferUtils.convertAddr2Iban(inner2));
     }
 
 

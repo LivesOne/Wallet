@@ -86,11 +86,11 @@ const foundation = require('../../foundation/wallet.js');
       this.setState({ showModal: false })
     }
 
-    onBarcodeReceived(event: any) {
+    onBarcodeReceived(data: string) {
       if (this.state.leftPressed) {
-          this.setState({keyStore : event.data})
+          this.setState({keyStore : data})
       } else {
-          this.setState({privateKey: event.data});
+          this.setState({privateKey: data});
       }
     }
 

@@ -24,6 +24,7 @@ import QRCode from 'react-native-qrcode-svg';
 
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVWalletManager from '../../logic/LVWalletManager';
+import TransferUtils from '../Transfer/TransferUtils';
 
 const IconBack = require('../../assets/images/back_grey.png');
 const receive_share = require("../../assets/images/receive_share.png");
@@ -55,7 +56,7 @@ class ReceiveTip extends Component {
 
        if (wallet && wallet.address) {
             const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
-            const message: string =  this.state.wallet.address;
+            const message: string =  TransferUtils.convertToHexHeader(this.state.wallet.address);
             // const message: string =  StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9);
 
             const options = {
@@ -106,7 +107,7 @@ class ReceiveTip extends Component {
 
                 <QRCode
                 style={styles.qrcode_pic}
-                value={this.state.wallet.address}
+                value={TransferUtils.convertAddr2Iban(this.state.wallet.address)}
                 size={162}
                 logo={lvt}
                 bgColor='white'

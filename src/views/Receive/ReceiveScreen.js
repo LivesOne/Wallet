@@ -28,6 +28,7 @@ import { StringUtils } from '../../utils';
 import QRCode from 'react-native-qrcode-svg';
 import RNFS from "react-native-fs"
 import Toast from 'react-native-simple-toast';
+import TransferUtils from '../Transfer/TransferUtils';
 
 
 // import QRCode from 'react-native-qrcode';
@@ -204,10 +205,10 @@ class ReceiveScreen extends Component {
     render() {
 
         const { walletIsBlank } = this.state;
+        //TransferUtils.log(TransferUtils.convertAddr2Iban(this.state.wallet.address));
         if(walletIsBlank) {
 
          return (
-            
             <View style={styles.container}>
                 <ReceiveHeader callback={this.onPressSelectWallet}/>
 
@@ -226,7 +227,7 @@ class ReceiveScreen extends Component {
                 <QRCode
                 getRef={(c) => (this.svg = c)}
                 style={styles.qrcode_pic}
-                value={this.state.wallet.address}
+                value={TransferUtils.convertAddr2Iban(this.state.wallet.address)}
                 size={162}
                 logo={lvt}
                 bgColor='white'
@@ -237,7 +238,7 @@ class ReceiveScreen extends Component {
                     style={styles.button}
                     title={LVStrings.receive_copy}
                     onPress = {() => {
-                        Clipboard.setString(this.state.wallet.address);
+                        Clipboard.setString(TransferUtils.convertToHexHeader(this.state.wallet.address));
                         Toast.show(LVStrings.common_done)
 
                     }}

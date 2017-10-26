@@ -4,6 +4,9 @@
 
 import { isAddress } from '../../utils/MXStringUtils';
 const BN = require('bn.js');
+const ICAP = require('ethereumjs-icap')
+
+const EXPORT_ADDRESS_PREFIX = 'iban:';
 
 export default class TransferUtils {
     constructor() {}
@@ -20,6 +23,26 @@ export default class TransferUtils {
 
     static isValidAddress(address: string) : bool {
         return isAddress(address);
+    }
+
+    // 如果含有iban地址，转换成十六进制地址，否则返回原值
+    static getAddrFromIbanIfNeeded(data: string) {
+        if (data && data.trim().slice(0, 5) === EXPORT_ADDRESS_PREFIX) {
+            return this.convertIban2Addr(data);
+        } else {
+            return data;
+        }
+    }
+
+    static convertAddr2Iban(addr: string) {
+        let addrHex = this.convertToHexHeader(addr);
+        return EXPORT_ADDRESS_PREFIX + ICAP.encode(addrHex);
+    }
+
+    static convertIban2Addr(addrStr: string) {
+        let hasPrefix = EXPORT_ADDRESS_PREFIX === addrStr.substr(0, 5);
+        let iban = hasPrefix ? addrStr.slice(5, 40) : addrStr.slice(0, 35);
+        return ICAP.toAddress(iban);
     }
 
     static isSameAddress(left: string, right: string) : bool {
@@ -54,6 +77,10 @@ export default class TransferUtils {
 
     static convertToHexHeader(hexStr: string) {
         return '0x' === hexStr.substr(0, 2) ? hexStr : '0x' + hexStr;
+    }
+
+    static removeHexHeader(addr: string) {
+        return '0x' === addr.substr(0, 2) ? addr.slice(2) : addr;
     }
 
     static getSetGasPriceHexStr(setGasPrice: number, gasLimit: string) : string {

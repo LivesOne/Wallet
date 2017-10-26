@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     modal: {
         justifyContent: 'center',
         alignItems: 'center',
-        height: MXUtils.getDeviceHeight() * 3/5,
+        height: MXUtils.getDeviceHeight() / 2,
         width: '90%',
         borderRadius: 5,
       },
@@ -110,7 +110,9 @@ const styles = StyleSheet.create({
         fontWeight: '100',
     },
     btn: {
-        marginTop: 20
+        marginTop: 20,
+        height: 60,
+        width: MXUtils.getDeviceWidth() /2,
     }
 });
 
