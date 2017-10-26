@@ -67,18 +67,16 @@ class TransferScreen extends Component {
         curETH: number,
         addressIn: string,
         amount: number,
-        //minerGap: number,
         minGap: number,
         maxGap:number,
         balance: number,
-        //remarks: string,
         showModal: boolean,
         openSelectWallet: boolean,
         showQrScanModal: boolean,
         alertMessage: string,
         inputPwd: string,
         balanceTip:string,
-        //userHasSetGap: boolean, 
+        amountText: string,
     }
 
     constructor() {
@@ -92,10 +90,10 @@ class TransferScreen extends Component {
             curETH: wallet != null ? wallet.eth: 0,
             addressIn: '',
             amount: 0,
+            amountText: '',
             balance: wallet != null ? wallet.lvt: 0,
             minGap: 0,
             maxGap:0,
-            //remarks: '',
             showModal: false,
             openSelectWallet: false,
             showQrScanModal: false,
@@ -109,7 +107,6 @@ class TransferScreen extends Component {
     componentDidMount() {
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
         LVNotificationCenter.addObserver(this, LVNotification.balanceChanged, this.handlerBalanceChange);
-        LVNotificationCenter.addObserver(this, LVNotification.navigateToTransfer, this.handleToThisPage);
         LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.refreshWalletDatas);
         this.refreshWalletDatas();
         this.fixAndroidPaste();
@@ -120,12 +117,10 @@ class TransferScreen extends Component {
         // https://github.com/react-community/react-navigation/issues/1992
         if (Platform.OS === 'android') {
             this.refs.refAddressIn.setText('android');
-            this.refs.refAmount.setText('0');
-            //this.refs.refRemarks.setText('android');
+            this.refs.refAmount.setText('1');
             setTimeout(async () => {
                 this.refs.refAddressIn.onPressClear();
                 this.refs.refAmount.onPressClear();
-                //this.refs.refRemarks.onPressClear();
             }, 1);
         }
     }
@@ -150,13 +145,21 @@ class TransferScreen extends Component {
         }
     }
 
-    // handleToThisPage = () => {
-    //     this.refs.scrollView.scrollTo({y: 0, animated: false});
-    // }
-
     handleWalletChange = async () => {
+        this.resetUiWhenSelectWallet();
         await this.refreshWalletDatas();
-    } 
+    }
+    
+    resetUiWhenSelectWallet() {
+        const {wallet} = this.state;
+        let oldWallet = wallet;
+        const newWallet = LVWalletManager.getSelectedWallet();
+        const isSelect = oldWallet && newWallet && oldWallet.address !== newWallet.address;
+        if (isSelect) {
+            TransferUtils.log('wallet selected, new address = ' + newWallet.address);
+            this.resetUIState();
+        }
+    }
 
     handlerBalanceChange = async () => {
         TransferUtils.log('balance change');
@@ -175,17 +178,18 @@ class TransferScreen extends Component {
     }
 
     async onAmountChanged(newAmountText:string) {
-        if (!TransferUtils.isBlank(newAmountText) && !TransferUtils.isValidAmount(newAmountText)) {
-            this.setState({
-                alertMessage:LVStrings.transfer_amount_format_hint,
-             });
-            this.refs.alert.show();
-            return;
-        } else {
-            await this.setState({amount: parseInt(newAmountText)})
+        
+        await this.setState({
+            amountText: newAmountText,
+            amount: parseFloat(newAmountText)})
+        if (!TransferUtils.isBlank(newAmountText) && TransferUtils.isValidAmountStr(newAmountText)) {
             setTimeout(() => {
                 this.tryFetchParams();
             }, 100);
+        } else {
+            this.minerGap = 0;
+            this.userHasSetGap = false;
+            this.setState({transactionParams: null})
         }
     }
 
@@ -204,7 +208,7 @@ class TransferScreen extends Component {
     }
 
     onTransferPresse() {
-        const { wallet, addressIn, amount, balance} = this.state;
+        const { wallet, addressIn, amount, balance, amountText} = this.state;
 
         if (!addressIn) {
             this.setState({alertMessage:LVStrings.transfer_address_required });
@@ -224,8 +228,20 @@ class TransferScreen extends Component {
             return;
         }
 
-        if (!amount) {
+        if (!amountText) {
             this.setState({alertMessage:LVStrings.transfer_amount_required });
+            this.refs.alert.show();
+            return;
+        }
+
+        if (!TransferUtils.isValidAmount(amount)) {
+            this.setState({alertMessage:LVStrings.transfer_amount_format_hint });
+            this.refs.alert.show();
+            return;
+        }
+
+        if (this.minerGap === 0) {
+            this.setState({alertMessage:LVStrings.transfer_miner_gap_not_access });
             this.refs.alert.show();
             return;
         }
@@ -235,7 +251,6 @@ class TransferScreen extends Component {
                 this.setState({balanceTip:LVStrings.transfer_lvt_and_eth_insufficient});
             }else if(balance < amount) {
                 this.setState({balanceTip:LVStrings.transfer_lvt_insufficient});
-                
             }else {
                 this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
             }
@@ -259,10 +274,9 @@ class TransferScreen extends Component {
         }
     }
 
-    resetStateAfterSuccesss() {
+    resetUIState() {
         this.refs.refAddressIn.onPressClear();
         this.refs.refAmount.onPressClear();
-        //this.refs.refRemarks.onPressClear();
         this.minerGap = 0;
         this.userHasSetGap = false;
         this.setState({
@@ -298,11 +312,10 @@ class TransferScreen extends Component {
                     lvt: amount,
                     eth: this.minerGap,
                     timestamp: Moment().format('X'),
-                    //remarks: remarks
                 });
             }
             await this.refs.loading.dismiss();
-            await this.resetStateAfterSuccesss();
+            await this.resetUIState();
             setTimeout(() => {
                 this.setState({alertMessage: success ? LVStrings.transfer_success : LVStrings.transfer_fail });
                 Toast.show(success ? LVStrings.transfer_success : LVStrings.transfer_fail, Toast.Long);
@@ -338,18 +351,11 @@ class TransferScreen extends Component {
         const {transactionParams} = this.state;
         return (
             <View style={{flexDirection: 'column', flex: 1, justifyContent: 'space-between'}}>
-            {/* <ScrollView
-                ref={'scrollView'}
-                keyboardShouldPersistTaps={'always'}
-                showsVerticalScrollIndicator = {false}
-                bounces={false}
-                contentContainerStyle={ styles.container }> */}
                 {this.state.showModal && <TransferDetailModal
                     isOpen= {this.state.showModal}
                     address= {this.state.addressIn}
                     amount= {this.state.amount}
                     minerGap= {this.minerGap}
-                    //remarks= {this.state.remarks}
                     onClosed = {()=>{this.setState({ showModal: false })}}
                     onTransferConfirmed = {()=> {
                         this.setState({ showModal: false });
@@ -390,11 +396,6 @@ class TransferScreen extends Component {
                             keyboardType = {'numeric'}
                             boarderLineHeight={Platform.OS === 'android' ? 1 : null}
                             onTextChanged={this.onAmountChanged.bind(this)}/>
-                        {/* <MXCrossTextInput
-                            ref={'refRemarks'} 
-                            style= {styles.textInput} 
-                            placeholder={LVStrings.transfer_remarks}
-                            onTextChanged={(newText) => {this.setState({remarks: newText})}}/> */}
                         <TransferMinerGapSetter 
                             ref={'gapSetter'}
                             enable={this.state.transactionParams !== null}
@@ -440,7 +441,6 @@ class TransferScreen extends Component {
                         onConfirm={()=>{this.props.navigation.navigate("ReceiveTip")}} />
 
                 </TouchableOpacity>
-            {/* </ScrollView> */}
             </View>
         )
     }
