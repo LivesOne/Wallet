@@ -85,7 +85,7 @@ class AssetsScreen extends Component {
     async onPullRelease() {
         try {
             await LVTransactionRecordManager.refreshTransactionRecords();
-            //await LVWalletManager.updateWalletBalance();
+            await LVWalletManager.updateWalletBalance();
             await LVPersistent.setNumber(LVLastAssetsRefreshTimeKey, Moment().format('X'));
 
             const wallet = LVWalletManager.getSelectedWallet();
