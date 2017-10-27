@@ -89,8 +89,8 @@ export default class LVTransactionRecordManager {
     static unfinishedRecords: Array<LVTransactionRecord> = [];
     static records: Array<LVTransactionRecord> = [];
 
-    static preUsedLvt: number;
-    static preUsedEth: number;
+    static preUsedLvt: number = 0;
+    static preUsedEth: number = 0;
 
     constructor() {
         LVNotificationCenter.addObserver(
@@ -127,67 +127,72 @@ export default class LVTransactionRecordManager {
         }
     }
 
-    static async reloadSavedUnfinishedTransactionRecords() {
+    static async fetchSavedUnfinishedTransactionRecords() {
         const wallet = LVWalletManager.getSelectedWallet();
         if (wallet) {
             const uObjects = await LVPersistent.getObject(LVTransactionUnfinishedRecords + '_' + wallet.address);
             if (uObjects && uObjects.length > 0) {
-                LVTransactionRecordManager.unfinishedRecords = [];
                 const uRecords = uObjects.map(json => new LVTransactionRecord(json, wallet.address, json.state));
-                LVTransactionRecordManager.unfinishedRecords.push(...uRecords);
+                return uRecords;
             }
         }
+        return null;
     }
 
     static async refreshTransactionRecords() {
         const wallet = LVWalletManager.getSelectedWallet();
         if (wallet) {
-            try {
-                const fetchedList = await LVNetworking.fetchTransactionHistory(wallet.address);
+            let _finishedRecords = [];
+            let _unfinishedRecords = [];
+            let _preUsedLvt = 0;
+            let _preUsedEth = 0;
 
-                this.records = [];
-                this.unfinishedRecords = [];
-                this.preUsedLvt = 0;
-                this.preUsedEth = 0;
+            const value = await LVNetworking.fetchTransactionHistory(wallet.address);
 
-                if (fetchedList && fetchedList.length > 0) {
-                    const list = fetchedList.map(record => new LVTransactionRecord(record, wallet.address));
-                    this.records.push(...list);
+            if (value && value.length > 0) {
+                _finishedRecords = value.map(record => new LVTransactionRecord(record, wallet.address));
 
-                    for (var index = 0; index < list.length; index++) {
-                        var element = list[index];
-                        const detail = await LVNetworking.fetchTransactionDetail(element.hash);
-                        element.setRecordDetail(detail);
-                    }
+                for (var index = 0; index < _finishedRecords.length; index++) {
+                    var element = _finishedRecords[index];
+                    const detail = await LVNetworking.fetchTransactionDetail(element.hash);
+                    element.setRecordDetail(detail);
                 }
-
-                await this.reloadSavedUnfinishedTransactionRecords();
-
-                for (var index = this.unfinishedRecords.length - 1; index >= 0; index--) {
-                    var element = this.unfinishedRecords[index];
-                    const found = this.records.findIndex(r => r.hash == element.hash) != -1;
-                    if (found) {
-                        this.unfinishedRecords.pop();
-                    } else {
-                        const detail = await LVNetworking.fetchTransactionDetail(element.hash);
-                        element.setRecordDetail(detail);
-
-                        if (element.state === 'waiting') {
-                            this.preUsedLvt += element.amount;
-                            this.preUsedEth += element.minnerFee;
-                        }
-                    }
-                }
-
-                await this.saveUnfinishedTransactionRecords();
-
-                this.records.push(...this.unfinishedRecords);
-
-            } catch (error) {
-                console.log('error in refresh transaction list : ' + error);
-            } finally {
-                this.records.sort((a, b) => b.timestamp - a.timestamp);
             }
+
+            const uRecords = await this.fetchSavedUnfinishedTransactionRecords();
+            if (uRecords) {
+                _unfinishedRecords.push(...uRecords);
+            }
+
+            for (var index = _unfinishedRecords.length - 1; index >= 0; index--) {
+                var element = _unfinishedRecords[index];
+                const found = _finishedRecords.findIndex(r => r.hash == element.hash) != -1;
+                if (found) {
+                    _unfinishedRecords.pop();
+                } else {
+                    const detail = await LVNetworking.fetchTransactionDetail(element.hash);
+                    element.setRecordDetail(detail);
+
+                    if (element.state === 'waiting') {
+                        _preUsedLvt += element.amount;
+                        _preUsedEth += element.minnerFee;
+                    }
+                }
+            }
+
+            this.records = [];
+            this.unfinishedRecords = [];
+
+            this.records.push(..._finishedRecords);
+            this.unfinishedRecords.push(..._unfinishedRecords);
+
+            await this.saveUnfinishedTransactionRecords();
+
+            this.records.push(...this.unfinishedRecords);
+            this.records.sort((a, b) => b.timestamp - a.timestamp);
+
+            this.preUsedLvt = _preUsedLvt;
+            this.preUsedEth = _preUsedEth;
         }
     }
 }

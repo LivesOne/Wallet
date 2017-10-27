@@ -203,8 +203,8 @@ export default class AddEditContactPage extends Component {
                     </View>
                 </ScrollView>
                 <LVQrScanModal 
-                    barcodeReceived={(event)=>{
-                        this.refs.addressTextInput.setText(event.data);
+                    barcodeReceived={(data)=>{
+                        this.refs.addressTextInput.setText(data);
                     }} 
                     isOpen= {this.state.showQrScanModal}
                     onClosed = {()=>{this.setState({ showQrScanModal: false })}}/>

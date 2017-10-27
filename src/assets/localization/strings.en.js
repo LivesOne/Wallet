@@ -60,7 +60,7 @@ const localized_strings = {
     wallet_create_wallet: 'Create wallet',
     wallet_creating_wallet: 'Creating wallet...',
     wallet_create_name: 'Wallet name',
-    wallet_create_password: 'Create a password (6~12 letters/numbers)',
+    wallet_create_password: 'Create a password (6~12 letters + numbers)',
     wallet_create_password_verify: 'Confirm password',
     wallet_create_comment: 'The password is used to encrypt the wallet address, please try to make it complex',
     wallet_create: 'Create',
@@ -130,7 +130,8 @@ const localized_strings = {
     transfer_address_required: 'Address required',
     transfer_address_invalid: 'Invalid address',
     transfer_amount_required: 'Transfer amount is required',
-    transfer_amount_format_hint: 'Amount should be a number',
+    transfer_amount_format_hint: 'Amount should be a positive number',
+    transfer_miner_gap_not_access: 'Can\'t obtain exact value of miner fee, please check your network',
     transfer_processing: 'Transfer processing...',
     transfer_success: 'Transfer succeed',
     transfer_fail: 'Transfer failed',
@@ -218,7 +219,12 @@ const localized_strings = {
     contact_alert_name_exceeds_limit: 'Contact\'s name is more than 40 digits',
     contact_alert_remarks_exceeds_limit: 'Remark length exceeds limit',
     contact_confirm_delete_contact: 'Are you sure to delete this contact?',
-    contact_empty_list_demonstration: 'You haven\'t added any contact yet'
+    contact_empty_list_demonstration: 'You haven\'t added any contact yet',
+
+    // Network
+    network_error: 'Network request failed, please try again!',
+    network_error_network_lost: 'Your network is not connected, please try again!',
+    network_timeout: 'Network timeout',
 };
 
 export default localized_strings;

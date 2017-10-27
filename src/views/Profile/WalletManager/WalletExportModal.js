@@ -110,7 +110,8 @@ const styles = StyleSheet.create({
         fontWeight: '100',
     },
     btn: {
-        marginTop: 30
+        marginTop: 20,
+        width: MXUtils.getDeviceWidth() /2,
     }
 });
 

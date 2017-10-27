@@ -43,7 +43,8 @@ class MXCrossTextInput extends Component {
         rightComponent: PropTypes.element,
         setFocusWhenMounted: PropTypes.bool,
         textAlignCenter: PropTypes.bool,
-        value: PropTypes.string
+        value: PropTypes.string,
+        boarderLineHeight: PropTypes.number,
     };
 
     static defaultProps = {
@@ -89,11 +90,11 @@ class MXCrossTextInput extends Component {
     }
 
     render() {
-        const { rounded, style, placeholder, secureTextEntry, withUnderLine, keyboardType, textAlignCenter } = this.props;
+        const { rounded, style, placeholder, secureTextEntry, withUnderLine, keyboardType, textAlignCenter, boarderLineHeight } = this.props;
 
         const theme = this.getTheme();
 
-        const lineHeight = withUnderLine ? StyleSheet.hairlineWidth : 0;
+        const lineHeight = withUnderLine ? (boarderLineHeight ? boarderLineHeight : StyleSheet.hairlineWidth) : 0;
 
         const textAreaStyle = textAlignCenter ? TextAlignCenterStyles.textArea : Base.textArea;
         const buttonAreaStyle = textAlignCenter ? TextAlignCenterStyles.buttonArea : Base.buttonArea;

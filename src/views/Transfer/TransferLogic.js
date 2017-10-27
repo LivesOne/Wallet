@@ -3,6 +3,7 @@
 import LVNetworking from '../../logic/LVNetworking';
 import TransferUtils from './TransferUtils';
 import console from 'console-browserify';
+import Transaction from 'ethereumjs-tx';
 const eth_local = require('../../foundation/ethlocal.js');
 const wallet = require('../../foundation/wallet.js');
 
@@ -29,17 +30,10 @@ export default class TransferLogic {
         let from = TransferUtils.convertToHexHeader(wallet.address);
         let v = TransferUtils.convert2BNHex(value);
         return new Promise((resolve, reject) => {
-            let timeout = setTimeout(() => {reject("time out error")}, 60000);
-            try {
-                let params = {from: from, to: to, value: v, nonce: nonce, gasLimit: gasLimit, gasPrice: gasPrice, lvt: wallet.lvt, eth: wallet.eth};
-                TransferUtils.log('transfer params = '+ JSON.stringify(params));
-                let result = this.innerTransaction(to, password, v, nonce, gasLimit, gasPrice, token, chainId, wallet);
-                clearTimeout(timeout);
-                resolve(result);
-            } catch(e) {
-                console.log(e.message);
-                resolve(false)
-            }
+            let params = {from: from, to: to, value: v, nonce: nonce, gasLimit: gasLimit, gasPrice: gasPrice, lvt: wallet.lvt, eth: wallet.eth};
+            TransferUtils.log('transfer params = '+ JSON.stringify(params));
+            let result = this.innerTransaction(to, password, v, nonce, gasLimit, gasPrice, token, chainId, wallet);
+            resolve(result);
         });
             
     }
@@ -64,22 +58,13 @@ export default class TransferLogic {
                 TransferUtils.log('transfer result = ' + JSON.stringify(result));
                 if (result && result.hasOwnProperty('transactionHash')) {
                     let transactionHash = result.transactionHash;
-                    // let detail = await LVNetworking.fetchTransactionDetail(transactionHash);
-                    // TransferUtils.log('transfer detail = ' + JSON.stringify(detail));
-                    // success = detail && detail.hasOwnProperty('error') && !detail.error;
                     return {result: true, transactionHash: transactionHash};
                 }
-                return {result: success, transactionHash: null};
+                return {result: success, transactionHash: null, errorMsg: null};
             } catch (error) {
-                return {result: false, transactionHash: null};
+                TransferUtils.log('transaction error ' + error.message)
+                return {result: false, transactionHash: null, errorMsg: error.message};
             }
-    }
-
-    static async testGetDetails(transactionHash: string) {
-        setTimeout(function() {
-            let details = LVNetworking.fetchTransactionDetail(transactionHash);
-            TransferUtils.log('transfer details = ' + JSON.stringify(details));
-        }, 5000);
     }
 
     static async getPrivateKey(password: string, keystore: Object): Promise<?string> {

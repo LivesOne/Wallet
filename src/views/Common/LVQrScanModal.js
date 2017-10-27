@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import LVColor from './../../styles/LVColor';
 import LVStrings from './../../assets/localization';
 import QRCodeScanner from 'react-native-qrcode-scanner';
+import TransferUtils from '../Transfer/TransferUtils';
 
 
 const CAMERA_WIDTH = Dimensions.get('window').width * 0.6;
@@ -41,7 +42,7 @@ export class LVQrScanModal extends Component {
 
     onBarcodeReceived(event: any) {
         if (this.props.barcodeReceived) {
-            this.props.barcodeReceived(event);
+            this.props.barcodeReceived(TransferUtils.getAddrFromIbanIfNeeded(event.data));
         }
         this.onClosed();
     }

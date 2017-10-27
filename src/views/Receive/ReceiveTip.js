@@ -24,10 +24,11 @@ import QRCode from 'react-native-qrcode-svg';
 
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVWalletManager from '../../logic/LVWalletManager';
+import TransferUtils from '../Transfer/TransferUtils';
 
 const IconBack = require('../../assets/images/back_grey.png');
 const receive_share = require("../../assets/images/receive_share.png");
-
+const lvt = require("../../assets/images/lvt.png");
 class ReceiveTip extends Component {
     static navigationOptions = {
         header: null
@@ -55,7 +56,7 @@ class ReceiveTip extends Component {
 
        if (wallet && wallet.address) {
             const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
-            const message: string =  "0x"+this.state.wallet.address;
+            const message: string =  TransferUtils.convertToHexHeader(this.state.wallet.address);
             // const message: string =  StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9);
 
             const options = {
@@ -85,15 +86,15 @@ class ReceiveTip extends Component {
  
     render() {
         return (
-            <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor:LVColor.white }} contentContainerStyle={styles.contentContainer}>
-            <MXNavigatorHeader
+           
+            <View style={styles.container}>
+             <MXNavigatorHeader
                     left={ IconBack }
                     style={{backgroundColor:'#F8F9FB'}}
                     title={ ' ' }
                     titleStyle={{color:'#6d798a'}}
                     onLeftPress={ () => {this.props.navigation.goBack() }}
                     />
-            <View style={styles.container}>
             
                 <View style={styles.mainContainer}>
 
@@ -106,8 +107,9 @@ class ReceiveTip extends Component {
 
                 <QRCode
                 style={styles.qrcode_pic}
-                value={"0x"+this.state.wallet.address}
+                value={TransferUtils.convertAddr2Iban(this.state.wallet.address)}
                 size={162}
+                logo={lvt}
                 bgColor='white'
                 fgColor='black'/>
 
@@ -129,8 +131,7 @@ class ReceiveTip extends Component {
                 </View>
 
             </View>
-            </ScrollView>
-        );
+         );
     }
 }
 
@@ -142,8 +143,7 @@ const styles = StyleSheet.create({
         width:'100%',
         justifyContent: "flex-start",
         alignItems: "center",
-        paddingTop: 20,
-        // backgroundColor:'red',
+        backgroundColor:'#F8F9FB',
         
         
     },

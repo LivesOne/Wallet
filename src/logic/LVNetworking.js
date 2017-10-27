@@ -3,10 +3,12 @@
  * File: src/logic/LVNetworking.js
  * @flow
  */
-import TransferUtils from '../views/Transfer/TransferUtils';
 'use strict';
 
 const HOST = 'http://api.lives.one';
+import { NetInfo } from 'react-native';
+import LVStrings from '../assets/localization';
+import TransferUtils from '../views/Transfer/TransferUtils';
 
 const API = {
     GET_BALANCE: HOST + '/wallet/balance',
@@ -14,13 +16,10 @@ const API = {
     GET_TRANSACTION_HISTORY: HOST + '/wallet/history',
     GET_TRANSACTION_DETAIL: HOST + '/wallet/tx',
     GET_TRANSACTION_PARAM: HOST + '/wallet/param?',
-    POST_SIGNED_TRANSACTION: HOST + '/wallet/tx',
+    POST_SIGNED_TRANSACTION: HOST + '/wallet/tx'
 };
 
-const ErrorCodeMap: Map<number, string> = new Map([
-    [1, 'Request parameter error'],
-    [2, 'Server internal error'],
-]);
+const ErrorCodeMap: Map<number, string> = new Map([[1, 'Request parameter error'], [2, 'Server internal error']]);
 
 class LVFetch {
     constructor() {}
@@ -31,7 +30,7 @@ class LVFetch {
         if (ErrorCodeMap.has(code)) {
             return ErrorCodeMap.get(code);
         } else {
-            return 'Network Error';
+            return LVStrings.network_error;
         }
     }
 
@@ -42,7 +41,7 @@ class LVFetch {
                     if (response.ok) {
                         return response.json();
                     } else {
-                        reject(new Error('Network Error'));
+                        reject(new Error(LVStrings.network_error));
                     }
                 })
                 .then(json => {
@@ -53,24 +52,36 @@ class LVFetch {
                             reject(new Error(this.convertErrorCode(json.code)));
                         }
                     } else {
-                        reject(new Error('Network Error'));
+                        reject(new Error(LVStrings.network_error));
                     }
                 })
                 .catch(error => {
-                    reject(error);
+                    NetInfo.isConnected.fetch().done(isConnected => {
+                        reject(new Error(isConnected ? LVStrings.network_error : LVStrings.network_error_network_lost));
+                    });
                 });
             setTimeout(() => {
-                reject(new Error('Request Timeout'));
+                reject(new Error(LVStrings.network_timeout));
             }, LVFetch.timeout);
         });
     }
 
     static POST(url: string, param: Object) {
         return new Promise(async (resolve, reject) => {
-            fetch(url, { method: 'POST', headers: {
-                'Content-Type': 'application/json'
-              }, body: JSON.stringify(param) })
-                .then(response=>response.json())
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(param)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        reject(new Error(LVStrings.network_error));
+                    }
+                })
                 .then(json => {
                     if (json && json.code !== undefined) {
                         if (json.code === 0) {
@@ -79,14 +90,16 @@ class LVFetch {
                             reject(new Error(this.convertErrorCode(json.code)));
                         }
                     } else {
-                        reject(new Error('Network Error'));
+                        reject(new Error(LVStrings.network_error));
                     }
                 })
                 .catch(error => {
-                    reject(error);
+                    NetInfo.isConnected.fetch().done(isConnected => {
+                        reject(new Error(isConnected ? LVStrings.network_error : LVStrings.network_error_network_lost));
+                    });
                 });
             setTimeout(() => {
-                reject(new Error('Request Timeout'));
+                reject(new Error(LVStrings.network_timeout));
             }, LVFetch.timeout);
         });
     }
@@ -110,14 +123,13 @@ class LVNetworking {
     static async fetchTransactionDetail(transactionHash: string) {
         return await LVFetch.GET(API.GET_TRANSACTION_DETAIL + '/' + transactionHash);
     }
-    
+
     static async fetchTransactionParam(from: string, to: string, value: string) {
-        return await LVFetch.GET(API.GET_TRANSACTION_PARAM 
-            + 'from=' + from + '&to=' + to + '&value=' + value);
+        return await LVFetch.GET(API.GET_TRANSACTION_PARAM + 'from=' + from + '&to=' + to + '&value=' + value);
     }
 
     static async transaction(txData: string) {
-        return await LVFetch.POST(API.POST_SIGNED_TRANSACTION, {tx: txData});
+        return await LVFetch.POST(API.POST_SIGNED_TRANSACTION, { tx: txData });
     }
 }
 

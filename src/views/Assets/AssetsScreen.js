@@ -8,10 +8,12 @@
 import React, { Component } from 'react';
 import { AppState, StyleSheet, Dimensions, Platform, View, Text } from 'react-native';
 import { PullView } from 'react-native-rk-pull-to-refresh';
+import Toast from 'react-native-simple-toast';
 import Moment from 'moment';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
+import LVDialog from '../Common/LVDialog';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import LVDetailTextCell from '../Common/LVDetailTextCell';
 import LVRefreshIndicator from '../Common/LVRefreshIndicator';
@@ -43,7 +45,7 @@ class AssetsScreen extends Component {
         wallet: ?Object,
         transactionList: ?Array<LVTransactionRecord>,
         openSelectWallet: boolean,
-        showIndicator: boolean
+        showIndicator: boolean,
     };
 
     constructor(props: any) {
@@ -54,7 +56,7 @@ class AssetsScreen extends Component {
             wallet: wallet,
             transactionList: null,
             openSelectWallet: false,
-            showIndicator: true
+            showIndicator: true,
         };
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
@@ -81,18 +83,24 @@ class AssetsScreen extends Component {
     }
 
     async onPullRelease() {
-        await LVTransactionRecordManager.refreshTransactionRecords();
-        await LVWalletManager.updateWalletBalance();
-        await LVPersistent.setNumber(LVLastAssetsRefreshTimeKey, Moment().format('X'));
+        try {
+            await LVTransactionRecordManager.refreshTransactionRecords();
+            await LVWalletManager.updateWalletBalance();
+            await LVPersistent.setNumber(LVLastAssetsRefreshTimeKey, Moment().format('X'));
 
-        const wallet = LVWalletManager.getSelectedWallet();
-        this.setState({ transactionList: LVTransactionRecordManager.records, wallet: wallet });
+            const wallet = LVWalletManager.getSelectedWallet();
+            this.setState({ transactionList: LVTransactionRecordManager.records, wallet: wallet });
+    
+            this.refs.pull && this.refs.pull.resolveHandler();
+    
+            setTimeout(async () => {
+                this.setState({ showIndicator: false });
+            }, 500);
 
-        this.refs.pull && this.refs.pull.resolveHandler();
-
-        setTimeout(async () => {
-            this.setState({ showIndicator: false });
-        }, 500);
+        } catch (error) {
+            this.refs.pull && this.refs.pull.resolveHandler();
+            Toast.show(error.message);
+        }
     }
 
     handleAppStateChange = async (nextAppState: string) => {
@@ -110,10 +118,17 @@ class AssetsScreen extends Component {
     };
 
     handleWalletChange = async () => {
-        this.setState({ showIndicator: true });
-        setTimeout(async () => {
-            this.refs.pull && this.refs.pull.beginRefresh();
-        }, 500);
+        const wallet = LVWalletManager.getSelectedWallet();
+        const newAddress = wallet ? wallet.address : '';
+        const curAddress = this.state.wallet ? this.state.wallet.address : '';
+
+        this.setState({ wallet: wallet, showIndicator: true });
+
+        if (curAddress != newAddress) {
+            setTimeout(async () => {
+                this.refs.pull && this.refs.pull.beginRefresh();
+            }, 500);
+        }
     };
 
     handleRecordsChanged = () => {
