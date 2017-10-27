@@ -187,7 +187,7 @@ const localized_strings = {
     guide_button_title: '立即体验',
 
     // Transfer
-    transfer_title: '傲游LivesToken-转账',
+    transfer_title: '转账',
     transfer_purse_balance: '余额',
     transfer_payee_address: '收款人地址',
     transfer_amount: '转账金额',

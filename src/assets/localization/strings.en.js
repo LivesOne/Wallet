@@ -176,7 +176,7 @@ const localized_strings = {
     time_pass_yesterday: 'Yesterday',
 
     // Transfer
-    transfer_title: 'Maxthon LivesToken-Transfer',
+    transfer_title: 'Transfer',
     transfer_purse_balance: 'Balance',
     transfer_payee_address: 'Receiver’s wallet address',
     transfer_amount: 'Transfer amount',
