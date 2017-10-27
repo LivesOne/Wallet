@@ -53,7 +53,7 @@ class VenusApp extends Component {
             });
 
         this.appDidFinishLaunching();
-        NetInfo.isConnected.addEventListener('change', this._handleNetStatus);
+        NetInfo.isConnected.addEventListener('connectionChange', this._handleNetStatus);
     }
 
     _handleNetStatus = (isConnected) => {
@@ -73,7 +73,7 @@ class VenusApp extends Component {
     }
 
     componentWillUnmount() {
-        NetInfo.isConnected.removeEventListener('change', this._handleNetStatus);
+        NetInfo.isConnected.removeEventListener('connectionChange', this._handleNetStatus);
         LVNotificationCenter.removeObservers(this);
     }
 
