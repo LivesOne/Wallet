@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     },
 
     mainContainer:{
-        flex:2,
+        flex:6,
         width:'90%',
         flexDirection:'column',
         alignItems: 'center',
