@@ -100,6 +100,13 @@ export default class LVTransactionRecordManager {
         );
     }
 
+    static clear() {
+        this.unfinishedRecords = [];
+        this.records = [];
+        this.preUsedLvt = 0;
+        this.preUsedEth = 0;
+    }
+
     async handleTransactionCreated(json: ?Object) {
         const wallet = LVWalletManager.getSelectedWallet();
         if (json && wallet) {
