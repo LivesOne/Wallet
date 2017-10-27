@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image, StatusBar } from 'react-native';
+import { StyleSheet, View, Text, Image, StatusBar, NetInfo } from 'react-native';
 import LVStrings from './assets/localization';
 import LVConfiguration from './logic/LVConfiguration';
 import AppGuideScreen from './views/AppLaunch/AppGuideScreen';
@@ -16,6 +16,7 @@ import LVWalletManager from './logic/LVWalletManager';
 import LVNotification from './logic/LVNotification';
 import LVNotificationCenter from './logic/LVNotificationCenter';
 import SplashScreen from "react-native-splash-screen";
+import console from 'console-browserify';
 
 class VenusApp extends Component {
     state: {
@@ -52,7 +53,13 @@ class VenusApp extends Component {
             });
 
         this.appDidFinishLaunching();
+        NetInfo.isConnected.addEventListener('change', this._handleNetStatus);
     }
+
+    _handleNetStatus = (isConnected) => {
+        console.log('Network is ' + (isConnected ? 'online' : 'offline'));
+        LVNotificationCenter.postNotification(LVNotification.networkStatusChanged, isConnected);
+    };
 
     async appDidFinishLaunching() {
         // init wallets from local disk storage.
@@ -66,6 +73,7 @@ class VenusApp extends Component {
     }
 
     componentWillUnmount() {
+        NetInfo.isConnected.removeEventListener('change', this._handleNetStatus);
         LVNotificationCenter.removeObservers(this);
     }
 

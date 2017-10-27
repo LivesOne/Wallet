@@ -109,6 +109,7 @@ class TransferScreen extends Component {
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
         LVNotificationCenter.addObserver(this, LVNotification.balanceChanged, this.handlerBalanceChange);
         LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.refreshWalletDatas);
+        LVNotificationCenter.addObserver(this, LVNotification.networkStatusChanged, this.handleNeworkChange);
         this.refreshWalletDatas();
         this.fixAndroidPaste();
     }
@@ -157,6 +158,12 @@ class TransferScreen extends Component {
     handleWalletChange = async () => {
         this.resetUiWhenSelectWallet();
         await this.refreshWalletDatas();
+    }
+
+    handleNeworkChange = async (isConnected: boolean) => {
+        if (isConnected && !this.state.transactionParams) {
+            this.tryFetchParams();
+        }
     }
     
     resetUiWhenSelectWallet() {
