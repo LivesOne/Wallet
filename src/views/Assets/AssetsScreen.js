@@ -118,6 +118,8 @@ class AssetsScreen extends Component {
     };
 
     handleWalletChange = async () => {
+        await LVWalletManager.updateWalletBalance();
+
         const wallet = LVWalletManager.getSelectedWallet();
         const newAddress = wallet ? wallet.address : '';
         const curAddress = this.state.wallet ? this.state.wallet.address : '';
