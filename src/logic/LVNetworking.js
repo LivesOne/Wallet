@@ -5,12 +5,19 @@
  */
 'use strict';
 
-const HOST_TEST = 'http://office.metellica.cn:51515';
-const HOST_ONLINE = 'http://api.lives.one';
-const HOST = HOST_TEST;
-import { NetInfo } from 'react-native';
+import { NetInfo, Platform, NativeModules } from 'react-native';
 import LVStrings from '../assets/localization';
 import TransferUtils from '../views/Transfer/TransferUtils';
+
+const HOST_TEST = 'http://office.metellica.cn:51515';
+const HOST_ONLINE = 'http://api.lives.one';
+let HOST = HOST_TEST;
+
+if (Platform.OS === 'ios') {
+    if (NativeModules.LVReactExport.isAdHoc || NativeModules.LVReactExport.isAppStore) {
+        HOST = HOST_ONLINE;
+    }
+}
 
 const API = {
     GET_BALANCE: HOST + '/wallet/balance',
