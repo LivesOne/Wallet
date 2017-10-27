@@ -16,7 +16,7 @@ const localized_strings = {
     common_cancel: 'Cancel',
     common_close: 'Close',
     alert_warning: 'Warning',
-    alert_hint: 'hint',
+    alert_hint: 'Hint',
     alert_ok: 'Ok',
     common_done: 'Done',
     common_delete: 'Delete',
@@ -60,7 +60,7 @@ const localized_strings = {
     wallet_create_wallet: 'Create wallet',
     wallet_creating_wallet: 'Creating wallet...',
     wallet_create_name: 'Wallet name',
-    wallet_create_password: 'Create a password (6~12 letters + numbers)',
+    wallet_create_password: 'Password (6~12 letters/numbers)',
     wallet_create_password_verify: 'Confirm password',
     wallet_create_comment: 'The password is used to encrypt the wallet address, please try to make it complex',
     wallet_create: 'Create',
@@ -225,6 +225,10 @@ const localized_strings = {
     network_error: 'Network request failed, please try again!',
     network_error_network_lost: 'Your network is not connected, please try again!',
     network_timeout: 'Network timeout',
+
+    // exit
+    exit_app_prompt: "Exit App?",
+    exit: "Exit",
 };
 
 export default localized_strings;

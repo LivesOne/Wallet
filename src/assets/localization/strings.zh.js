@@ -226,6 +226,10 @@ const localized_strings = {
     network_error: '网络请求失败，请重试!',
     network_error_network_lost: '网络未连接，请重试!',
     network_timeout: '网络超时',
+
+    // exit
+    exit_app_prompt: "退出钱包？",
+    exit: "退出",
 };
 
 export default localized_strings;

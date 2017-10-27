@@ -6,7 +6,17 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image, StatusBar, NetInfo } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    Image,
+    StatusBar,
+    NetInfo,
+    Alert,
+    BackHandler,
+    Platform
+} from 'react-native';
 import LVStrings from './assets/localization';
 import LVConfiguration from './logic/LVConfiguration';
 import AppGuideScreen from './views/AppLaunch/AppGuideScreen';
@@ -17,6 +27,8 @@ import LVNotification from './logic/LVNotification';
 import LVNotificationCenter from './logic/LVNotificationCenter';
 import SplashScreen from "react-native-splash-screen";
 import console from 'console-browserify';
+import { LVConfirmDialog } from './views/Common/LVDialog';
+import { loadavg } from 'react-native-os';
 
 class VenusApp extends Component {
     state: {
@@ -42,6 +54,14 @@ class VenusApp extends Component {
         LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletImportOrCreateSuccess);
     }
 
+    handleBack = () => {
+        const { loading, needShowGuide, hasAnyWallets } = this.state;
+        if (!loading && !needShowGuide) {
+            this.refs.exitDialog.show();
+            return true;
+        }
+      };
+
     componentDidMount() {
         SplashScreen.hide();
         LVConfiguration.hasAppGuidesEverDisplayed()
@@ -54,6 +74,9 @@ class VenusApp extends Component {
 
         this.appDidFinishLaunching();
         NetInfo.isConnected.addEventListener('connectionChange', this._handleNetStatus);
+        if (Platform.OS === 'android') {
+            BackHandler.addEventListener("hardwareBackPress", this.handleBack.bind(this));
+        }
     }
 
     _handleNetStatus = (isConnected) => {
@@ -75,6 +98,9 @@ class VenusApp extends Component {
     componentWillUnmount() {
         NetInfo.isConnected.removeEventListener('connectionChange', this._handleNetStatus);
         LVNotificationCenter.removeObservers(this);
+        if (Platform.OS === 'android') {
+            BackHandler.removeEventListener("hardwareBackPress", this.handleBack);
+        }
     }
 
     handleAppGuideCallback = () => {
@@ -89,13 +115,29 @@ class VenusApp extends Component {
 
     render() {
         const { loading, needShowGuide, hasAnyWallets } = this.state;
+        return Platform.OS === 'android' ? 
+            this.getAndroidMainScreen() : this.getMainScreen();
+    }
 
+    getAndroidMainScreen() {
+        return <View style={{flex: 1}}>
+                <LVConfirmDialog
+                    ref={'exitDialog'}
+                    title={LVStrings.alert_hint}  
+                    message={LVStrings.exit_app_prompt} 
+                    onConfirm={()=> {BackHandler.exitApp()}} />
+                    {this.getMainScreen()}
+            </View>
+    }
+
+    getMainScreen() {
+        const { loading, needShowGuide, hasAnyWallets } = this.state;
         if (needShowGuide) {
             return <AppGuideScreen callback={this.handleAppGuideCallback} />;
         } else if (loading) {
             return <LVAppLoadingView />;
         } else if (hasAnyWallets) {
-            return <AppTabNavigator />;
+            return <AppTabNavigator/>
         } else {
             return <WalletCreateOrImportPage />;
         }
