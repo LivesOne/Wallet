@@ -69,7 +69,7 @@ const localized_strings = {
     wallet_default_name_prefix: "默认钱包",
 
     wallet_disclaimer: '免责声明',
-    wallet_disclaimer_content: '请确认已经导出的钱包备份的安全性，任何钱包的丢失、被盗、忘记密码等行为产生的所示均与平台无关',
+    wallet_disclaimer_content: '请确认已经导出的钱包备份的安全性，任何钱包的丢失、被盗、忘记密码等行为产生的损失均与平台无关',
 
 
     // inner error
