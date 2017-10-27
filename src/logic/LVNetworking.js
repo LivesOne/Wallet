@@ -5,7 +5,9 @@
  */
 'use strict';
 
-const HOST = 'http://office.metellica.cn:51515';
+const HOST_TEST = 'http://office.metellica.cn:51515';
+const HOST_ONLINE = 'http://api.lives.one';
+const HOST = HOST_TEST;
 import { NetInfo } from 'react-native';
 import LVStrings from '../assets/localization';
 import TransferUtils from '../views/Transfer/TransferUtils';
