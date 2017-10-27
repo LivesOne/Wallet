@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, ViewPropTypes, Dimensions, View, Image, Text, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions, View, Image, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Separator } from 'react-native-tableview-simple';
 import PropTypes from 'prop-types';
 import LVSize from '../../styles/LVFontSize';
@@ -22,11 +22,21 @@ const outImg = require('../../assets/images/transfer_out.png');
 
 export default class TransactionRecordList extends React.PureComponent {
     static propTypes = {
+        loading: PropTypes.bool,
         records: PropTypes.arrayOf(PropTypes.object),
         onPressItem: PropTypes.func
     };
 
-    state = { selected: (new Map(): Map<string, boolean>) };
+    state: {
+        selected: Map<string, boolean>
+    };
+
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            selected: (new Map(): Map<string, boolean>)
+        };
+    }
 
     _keyExtractor = (item, index) => index.toString();
 
@@ -61,22 +71,26 @@ export default class TransactionRecordList extends React.PureComponent {
     };
 
     render() {
-        const { records, style } = this.props;
+        const { loading, records, style } = this.props;
 
-        return (
-            <FlatList
-                ref={'list'}
-                style={style}
-                data={records}
-                extraData={this.state}
-                keyExtractor={this._keyExtractor}
-                renderItem={this._renderItem}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                ItemSeparatorComponent={() => <Separator insetRight={15} tintColor={LVColor.separateLine} />}
-                ListEmptyComponent={() => <LVEmptyListComponent />}
-            />
-        );
+        if (loading === true) {
+            return <LVLoadingComponent />;
+        } else {
+            return (
+                <FlatList
+                    ref={'list'}
+                    style={style}
+                    data={records}
+                    extraData={this.state}
+                    keyExtractor={this._keyExtractor}
+                    renderItem={this._renderItem}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    ItemSeparatorComponent={() => <Separator insetRight={15} tintColor={LVColor.separateLine} />}
+                    ListEmptyComponent={() => <LVEmptyListComponent />}
+                />
+            );
+        }
     }
 }
 
@@ -94,6 +108,14 @@ const LVEmptyListComponent = () => {
             <Text style={{ marginTop: sep, fontSize: font, color: LVColor.text.grey1 }}>
                 {LVStrings.transaction_records_no_data}
             </Text>
+        </View>
+    );
+};
+
+const LVLoadingComponent = () => {
+    return (
+        <View style={{ flex: 1, width: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+            <ActivityIndicator size='small' />
         </View>
     );
 };
@@ -117,15 +139,20 @@ class LVTransactionRecordItem extends React.PureComponent {
 
         //const
         const t = DateUtils.getTimePastFromNow(datetime);
-        const timePast = (t.avaiable === false) ? datetime : t.years
-            ? t.years + ' ' + LVStrings.time_pass_years_ago
-            : t.months
-              ? t.months + ' ' + LVStrings.time_pass_months_ago
-              : t.days
-                ? t.days === 1 ? LVStrings.time_pass_yesterday : t.days + ' ' + LVStrings.time_pass_days_ago
-                : t.hours
-                  ? t.hours + ' ' + LVStrings.time_pass_hours_ago
-                  : t.minutes ? t.minutes + ' ' + LVStrings.time_pass_minutes_ago : LVStrings.time_pass_a_moment_ago;
+        const timePast =
+            t.avaiable === false
+                ? datetime
+                : t.years
+                  ? t.years + ' ' + LVStrings.time_pass_years_ago
+                  : t.months
+                    ? t.months + ' ' + LVStrings.time_pass_months_ago
+                    : t.days
+                      ? t.days === 1 ? LVStrings.time_pass_yesterday : t.days + ' ' + LVStrings.time_pass_days_ago
+                      : t.hours
+                        ? t.hours + ' ' + LVStrings.time_pass_hours_ago
+                        : t.minutes
+                          ? t.minutes + ' ' + LVStrings.time_pass_minutes_ago
+                          : LVStrings.time_pass_a_moment_ago;
 
         return (
             <TouchableOpacity style={[styles.record]} activeOpacity={0.7} onPress={this.props.onPressItem}>

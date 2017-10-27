@@ -44,6 +44,7 @@ class AssetsScreen extends Component {
         appState: string,
         wallet: ?Object,
         transactionList: ?Array<LVTransactionRecord>,
+        loadingTransactions: boolean,
         openSelectWallet: boolean,
         showIndicator: boolean,
     };
@@ -55,6 +56,7 @@ class AssetsScreen extends Component {
             appState: AppState.currentState || 'inactive',
             wallet: wallet,
             transactionList: null,
+            loadingTransactions: false,
             openSelectWallet: false,
             showIndicator: true,
         };
@@ -83,6 +85,7 @@ class AssetsScreen extends Component {
     }
 
     async onPullRelease() {
+        this.setState({loadingTransactions: true});
         try {
             await LVTransactionRecordManager.refreshTransactionRecords();
             await LVWalletManager.updateWalletBalance();
@@ -92,6 +95,7 @@ class AssetsScreen extends Component {
             this.setState({ transactionList: LVTransactionRecordManager.records, wallet: wallet });
     
             this.refs.pull && this.refs.pull.resolveHandler();
+            this.setState({loadingTransactions: false});
     
             setTimeout(async () => {
                 this.setState({ showIndicator: false });
@@ -99,6 +103,7 @@ class AssetsScreen extends Component {
 
         } catch (error) {
             this.refs.pull && this.refs.pull.resolveHandler();
+            this.setState({loadingTransactions: false});
             Toast.show(error.message);
         }
     }
@@ -163,7 +168,7 @@ class AssetsScreen extends Component {
     };
 
     render() {
-        const { transactionList } = this.state;
+        const { transactionList, loadingTransactions } = this.state;
         const wallet = this.state.wallet || {};
 
         return (
@@ -204,6 +209,7 @@ class AssetsScreen extends Component {
 
                     <TransactionRecordList
                         style={styles.list}
+                        loading={loadingTransactions}
                         records={transactionList}
                         onPressItem={this.onPressRecord}
                     />
