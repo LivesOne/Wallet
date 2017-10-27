@@ -194,6 +194,22 @@ const foundation = require('../../foundation/wallet.js');
       }
 
       this.refs.toast.show();
+
+      let isPwdCorrect = false;
+      try {
+        isPwdCorrect = await LVWalletManager.verifyPassword(keyStorePwd, JSON.parse(keyStore));
+      } catch (error) {
+      }
+
+      if (isPwdCorrect == false) {
+        this.refs.toast.dismiss();
+        setTimeout(() => {
+          this.setState({alertMessage: LVStrings.inner_error_password_mismatch });
+          this.refs.alert.show();
+        }, 500);
+        return;
+      }
+
       setTimeout(async ()=> {
         try {
           let defaultName = await WalletUtils.getDefaultName();
