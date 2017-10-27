@@ -5,7 +5,18 @@
  */
 
  import React, { Component } from 'react'
- import { Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+ import {
+    Text,
+    View,
+    TouchableOpacity,
+    TextInput,
+    KeyboardAvoidingView,
+    ScrollView,
+    Platform,
+    Keyboard
+} from 'react-native';
+
+import type {ViewLayout, ViewLayoutEvent} from 'ViewPropTypes';
 
 import * as LVStyleSheet from '../../styles/LVStyleSheet'
 import LVColor from '../../styles/LVColor'
@@ -47,6 +58,7 @@ const foundation = require('../../foundation/wallet.js');
       keyStorePwd: string,
       alertMessage: ?string,
       fromPage: string,
+      keyboardHeight: number,
     }
 
     constructor() {
@@ -61,9 +73,13 @@ const foundation = require('../../foundation/wallet.js');
         keyStorePwd: '',
         alertMessage: '',
         fromPage: WalletUtils.OPEN_IMPORT_FROM_LAUNCH,
+        keyboardHeight: 0,
       }
       this.exitWhenSuccess = this.exitWhenSuccess.bind(this);
     }
+
+    keyboardDidShowListener: Object;
+    keyboardDidHideListener: Object;
 
     componentWillMount = () => {
       let fromPage = WalletUtils.OPEN_IMPORT_FROM_LAUNCH;
@@ -72,10 +88,31 @@ const foundation = require('../../foundation/wallet.js');
       } 
       console.log('from = ' + fromPage);
       this.setState({fromPage: fromPage});
+      if (Platform.OS === 'android') {
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.onKeyboardShow.bind(this));
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.onKeyboardHide.bind(this));
+      }
     }
 
     componentWillUnmount() {
       LVNotificationCenter.removeObserver(this);
+      this.keyboardDidShowListener.remove();
+      this.keyboardDidHideListener.remove();
+    }
+
+    onKeyboardHide(event: any) {
+      this.setState({keyboardHeight: 0})
+    }
+    
+    onKeyboardShow(event: any) {
+      if (!event) {
+        this.setState({keyboardHeight: 0})
+        return;
+      }
+  
+      const {endCoordinates} = event;
+      WalletUtils.log('height = '+ endCoordinates.height);
+      this.setState({keyboardHeight: endCoordinates.height});
     }
 
     _onHeaderPressed = (leftPressed: boolean) => {
@@ -234,8 +271,10 @@ const foundation = require('../../foundation/wallet.js');
     }
 
     render() {
+      const {keyboardHeight} = this.state;
       return (
-        <LVKeyboardDismissView style = {styles.container}>
+        <KeyboardDismissView style = {[styles.container, 
+        {marginTop: Platform.OS === 'android' ? (-keyboardHeight/2) : 0}]}>
           <LVQrScanModal
               barcodeReceived={this.onBarcodeReceived.bind(this)}
               isOpen= {this.state.showModal}
@@ -263,7 +302,7 @@ const foundation = require('../../foundation/wallet.js');
             {!this.state.leftPressed && this._renderPrivateKey()}
             <LVLoadingToast ref={'toast'} title={LVStrings.wallet_import_header}/>
             <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
-        </LVKeyboardDismissView>
+        </KeyboardDismissView>
       )
     }
 
@@ -337,6 +376,7 @@ const foundation = require('../../foundation/wallet.js');
  }
 
  const LVKeyboardAvoidingView = (Platform.OS === 'ios') ? KeyboardAvoidingView : View;
+ const KeyboardDismissView = (Platform.OS === 'ios') ? LVKeyboardDismissView : View;
 
   const styles = LVStyleSheet.create({
     container: {
