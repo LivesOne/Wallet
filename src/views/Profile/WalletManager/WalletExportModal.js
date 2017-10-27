@@ -111,7 +111,6 @@ const styles = StyleSheet.create({
     },
     btn: {
         marginTop: 20,
-        height: 60,
         width: MXUtils.getDeviceWidth() /2,
     }
 });
