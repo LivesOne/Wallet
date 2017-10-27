@@ -60,7 +60,7 @@ const localized_strings = {
     wallet_create_wallet: 'Create wallet',
     wallet_creating_wallet: 'Creating wallet...',
     wallet_create_name: 'Wallet name',
-    wallet_create_password: 'Create a password (6~12 letters + numbers)',
+    wallet_create_password: 'Password (6~12 letters/numbers)',
     wallet_create_password_verify: 'Confirm password',
     wallet_create_comment: 'The password is used to encrypt the wallet address, please try to make it complex',
     wallet_create: 'Create',

@@ -75,4 +75,42 @@ RCT_EXPORT_METHOD(libscrypt:(NSString *)password
   callback(@[result]);
 }
 
+- (NSDictionary *)constantsToExport
+{
+  return @{
+           @"isAdHoc": @([self isAdHoc]),
+           @"isAppStore" : @([self isAppStore]),
+           @"isDebug": @([self isDebug]),
+           @"isRelease": @([self isRelease])
+           };
+}
+
+- (BOOL)isAdHoc {
+#ifdef ADHOC
+  return YES;
+#else
+  return NO;
+#endif
+}
+
+- (BOOL)isAppStore {
+#ifdef APPSTORE
+  return YES;
+#else
+  return NO;
+#endif
+}
+
+- (BOOL)isDebug {
+#ifdef DEBUG
+  return YES;
+#else
+  return NO;
+#endif
+}
+
+- (BOOL)isRelease {
+  return !([self isDebug] || [self isAdHoc] || [self isAppStore]);
+}
+
 @end
