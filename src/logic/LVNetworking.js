@@ -19,7 +19,6 @@ if (Platform.OS === 'ios') {
     }
 } else { 
     HOST = NativeModules.LVReactExport.isRelease ? HOST_ONLINE : HOST_TEST;
-    alert(HOST);
 }
 
 const API = {
