@@ -18,8 +18,10 @@ rnos2='node_modules/react-native-os/android/src/main/java/com/peel/react/RNOS.ja
 sed -i -e 's/com.peel.react.rnos/com.peel.react/g' ${rnos2}
 
 qrcode_file='node_modules/react-native-qrcode-svg/src/index.js';
-sed -i -e 's/- 2/- 0/g' $qrcode_file 
-sed -i -e "s/ecl: 'M'/ecl: 'H'/g" $qrcode_file
+# sed -i -e 's/- 2/- 0/g' $qrcode_file 
+# sed -i -e "s/ecl: 'M'/ecl: 'H'/g" $qrcode_file
+
+cp svg.js $qrcode_file
 
 ./node_modules/.bin/rn-nodeify --hack --install
 
