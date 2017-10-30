@@ -131,16 +131,16 @@ export default class QRCode extends PureComponent {
 
     return (
       <View>
-        <Svg ref={getRef} width={size*2} height={size*2}>
+        <Svg ref={getRef} width={size+30} height={size+30}>
           <Rect
             x={this._cellSize}
             y={this._cellSize}
-            width={size * 2 } 
-            height={size * 2}
+            width={size +30 } 
+            height={size +30}
             fill={backgroundColor}
           />
           <G 
-            translate={size/2,size/2}
+            translate={15,15}
             >
           <Path
             d={this._path}
