@@ -6,7 +6,13 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.venus.BuildConfig;
 import com.venus.CryptoUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by tlrkboy on 27/09/2017.
@@ -21,6 +27,14 @@ public class LVExportModule extends ReactContextBaseJavaModule {
     @Override
     public String getName() {
         return "LVReactExport";
+    }
+
+    @Nullable
+    @Override
+    public Map<String, Object> getConstants() {
+        HashMap<String, Object> constants = new HashMap<String, Object>();
+        constants.put("isRelease", BuildConfig.IS_RELEASE);
+        return constants;
     }
 
     @ReactMethod
@@ -39,5 +53,4 @@ public class LVExportModule extends ReactContextBaseJavaModule {
         String res = CryptoUtils.scrypt(password, saltHexStr, n, r, p, dkLen);
         callback.invoke(res);
     }
-
 }
