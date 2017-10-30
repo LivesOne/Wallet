@@ -11,7 +11,7 @@ import TransferUtils from '../views/Transfer/TransferUtils';
 
 const HOST_TEST = 'http://office.metellica.cn:51515';
 const HOST_ONLINE = 'http://api.lives.one';
-let HOST = HOST_TEST;
+let HOST = HOST_ONLINE;
 
 if (Platform.OS === 'ios') {
     if (NativeModules.LVReactExport.isAdHoc || NativeModules.LVReactExport.isAppStore) {
