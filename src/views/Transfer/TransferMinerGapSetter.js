@@ -2,7 +2,7 @@
 'use strict'
 
 import React, { Component } from 'react'
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Platform } from 'react-native';
 import Slider from "react-native-slider";
 
 import PropTypes from 'prop-types';
@@ -11,12 +11,12 @@ import LVSize from '../../styles/LVFontSize';
 import LVStrings from '../../assets/localization';
 import * as MXUtils from '../../utils/MXUtils'
 import TransferUtils from './TransferUtils';
+var DeviceInfo = require('react-native-device-info');
 
 export class TransferMinerGapSetter extends Component {
 
     state: {
         value: number,
-        userHasSet: boolean,
     }
 
     static propTypes = {
@@ -33,7 +33,6 @@ export class TransferMinerGapSetter extends Component {
         super(props);
         this.state = {
             value: props.defaultValue,
-            userHasSet: false,
         }
         TransferUtils.log('default value = ' + props.defaultValue);
     }
@@ -71,6 +70,17 @@ export class TransferMinerGapSetter extends Component {
         this._beginEnable = !prevProps.enable;
     }
 
+    isBadAndroidDevices() {
+        if (Platform.OS === 'android') {
+            const al = DeviceInfo.getAPILevel();
+            TransferUtils.log('api level = ' + al);
+            if (al === 19) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     render() {
         const {maximumValue, minimumValue} = this.props;
         return (
@@ -91,8 +101,8 @@ export class TransferMinerGapSetter extends Component {
                         maximumValue={this.props.enable ? maximumValue : 100}
                         onValueChange={this.onValueChange.bind(this)}
                         trackStyle={styles.track}
-                        //onSlidingStart={this.setState({userHasSet: true})}
-                        thumbStyle={[styles.thumb, {borderColor: this.props.enable ? '#f9903e' : '#DDDDDD',}]}
+                        thumbStyle={[styles.thumb, {borderColor: this.props.enable ? '#f9903e' : '#DDDDDD', 
+                        backgroundColor: this.isBadAndroidDevices() ? 'transparent' : 'white',}]}
                         minimumTrackTintColor={LVColor.primary}
                     />
                 </View>
@@ -151,7 +161,6 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         borderRadius: 30 / 2,
-        backgroundColor: 'white',
         borderWidth: 9,
       }
   });

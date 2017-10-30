@@ -19,3 +19,4 @@ sed -i -e 's/com.peel.react.rnos/com.peel.react/g' ${rnos2}
 
 ./node_modules/.bin/rn-nodeify --hack --install
 
+yarn add https://github.com/rebeccahughes/react-native-device-info.git
