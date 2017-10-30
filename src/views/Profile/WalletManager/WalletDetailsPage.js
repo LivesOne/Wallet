@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
     },
     walletInfo: {
         width: Window.width,
-        height: 115,
+        height: Window.width < 500 ? 96 : 115,
         paddingHorizontal: 12.5,
         backgroundColor: 'white'
     },

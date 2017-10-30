@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { View, Share, Image, Text, NativeModules, Platform, ActionSheetIOS } from 'react-native';
+import { Dimensions, View, Share, Image, Text, NativeModules, Platform, ActionSheetIOS } from 'react-native';
 import MXButton from '../../components/MXButton';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
@@ -136,6 +136,11 @@ export default class WalletCreateSuccessPage extends Component {
     }
 }
 
+const Window = {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height
+};
+
 const styles = LVStyleSheet.create({
     container: {
         flex: 1,
@@ -144,7 +149,7 @@ const styles = LVStyleSheet.create({
         backgroundColor: LVColor.white
     },
     image: {
-        marginTop: 50,
+        marginTop: Window.width < 500 ? 36 : 50,
         width: 145,
         height: 145
     },
@@ -156,7 +161,7 @@ const styles = LVStyleSheet.create({
     detailText: {
         fontSize: 12,
         color: '#667383',
-        marginTop: 55,
+        marginTop: Window.width < 500 ? 20 : 55,
         marginLeft: 34,
         marginRight: 34,
         lineHeight: 20
