@@ -6,7 +6,7 @@
  * @flow
  */
 import React, { Component } from 'react'
-import { TextInput, View, StyleSheet, ScrollView, Keyboard } from 'react-native';
+import { TextInput, View, StyleSheet, ScrollView, Keyboard, Platform } from 'react-native';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import MXCrossTextInput from '../../components/MXCrossTextInput';
 import {greyNavigationBackIcon} from '../../assets/LVIcons';
@@ -183,7 +183,12 @@ export default class AddEditContactPage extends Component {
                             placeholder={LVStrings.contact_add_place_holder_address}
                             withClearButton={true}
                             defaultValue={this.state.address}
-                            rightComponent={<MXTouchableImage source={scanImg} onPress={this.onPressScan.bind(this)} />}
+                            rightComponent={<MXTouchableImage source={scanImg} onPress={ async () => {
+                                if (Platform.OS === 'android') {
+                                    await Keyboard.dismiss();
+                                }
+                                this.onPressScan();
+                                }} />}
                             onTextChanged= {(text) => this.setState({address: text})}/>
                         <MXCrossTextInput style={styles.textInputStyle} 
                             placeholder={LVStrings.contact_add_place_holder_cellphone}

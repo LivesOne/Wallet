@@ -409,7 +409,12 @@ class TransferScreen extends Component {
                             rightComponent={
                                 <View style={{flexDirection:'row', justifyContent: 'space-between', width: 55}}>
                                     <MXTouchableImage source={addImg} onPress={() => {this.props.navigation.navigate('ContactList',{readonly:true, callback:this.onSelectedContact})}}/>
-                                    <MXTouchableImage source={scanImg} onPress={() => {this.setState({ showQrScanModal: true })}}/>
+                                    <MXTouchableImage source={scanImg} onPress={async() => {
+                                        if (Platform.OS === 'android') {
+                                            await Keyboard.dismiss();
+                                        }
+                                        this.setState({ showQrScanModal: true 
+                                        })}}/>
                                 </View>
                             }
                             onTextChanged= {this.onAddressChanged.bind(this)}/>
