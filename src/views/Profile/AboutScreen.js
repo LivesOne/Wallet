@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, Text } from 'react-native';
+import { StyleSheet, View, Image, Text, Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import LVColors from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
@@ -19,6 +19,14 @@ export default class PLAboutPage extends Component {
         header: null,
         tabBarVisible: false
     };
+
+    getVersion() {
+        if (Platform.OS === 'android') {
+            return DeviceInfo.getVersion();
+        } else {
+            return DeviceInfo.getReadableVersion();
+        }
+    }
 
     render() {
         return (
@@ -36,7 +44,7 @@ export default class PLAboutPage extends Component {
                 <View style={{ flex: 1, justifyContent: 'space-between', alignItems: 'center' }}>
                     <Image source={require('../../assets/images/logo.png')} style={styles.img} />
                     <Text style={{ fontSize: 15, color: LVColors.text.grey2, marginBottom: 40 }}>
-                        {LVStrings.profile_version + ' ' + DeviceInfo.getReadableVersion()}
+                        {LVStrings.profile_version + ' ' + this.getVersion()}
                     </Text>
                 </View>
             </View>
