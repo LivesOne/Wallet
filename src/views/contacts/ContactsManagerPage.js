@@ -18,6 +18,7 @@ import { Separator } from 'react-native-tableview-simple';
 import { converAddressToDisplayableText} from '../../utils/MXStringUtils';
 import { LVConfirmDialog } from '../Common/LVDialog';
 import LVLocalization from '../../assets/localization';
+import TransferUtils from '../Transfer/TransferUtils';
 
 const AddIcon = require('../../assets/images/add_contact.png');
 const AvatarIcon = require('../../assets/images/contact_avatar.png');
@@ -128,7 +129,7 @@ export default class ContactsManagerPage extends Component {
                             <Image source={AvatarIcon}/>
                             <View style={styles.cellLeftDetailsContainer}>
                                 <Text style={styles.nameTextStyle} numberOfLines={1}>{item.name}</Text>
-                                <Text style={styles.addressTextStyle}>{converAddressToDisplayableText(item.address,9,9)}</Text>
+                                <Text style={styles.addressTextStyle}>{converAddressToDisplayableText(TransferUtils.removeHexHeader(item.address),9,9)}</Text>
                             </View>
                         </View>
                         {!this.state.readonly && <Image source={ShowDetailsIcon}/>}
