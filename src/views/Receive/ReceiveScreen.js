@@ -238,8 +238,7 @@ class ReceiveScreen extends Component {
                     style={styles.button}
                     title={LVStrings.receive_copy}
                     onPress = {() => {
-                        // Clipboard.setString(TransferUtils.convertToHexHeader(this.state.wallet.address));
-                        Clipboard.setString(this.state.wallet.address);
+                        Clipboard.setString(TransferUtils.convertToHexHeader(this.state.wallet.address));
                         Toast.show(LVStrings.common_done)
 
                     }}
