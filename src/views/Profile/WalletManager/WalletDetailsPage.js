@@ -23,7 +23,7 @@ import MXCrossTextInput from '../../../components/MXCrossTextInput';
 import LVStrings from '../../../assets/localization';
 import { WalletExportModal } from './WalletExportModal';
 import LVWalletManager from '../../../logic/LVWalletManager';
-import { convertAmountToCurrencyString } from '../../../utils/MXStringUtils';
+import {  adjust } from '../../../utils/MXStringUtils';
 import LVLoadingToast from '../../Common/LVLoadingToast';
 import Toast from 'react-native-simple-toast';
 import LVNotificationCenter from '../../../logic/LVNotificationCenter';
@@ -110,7 +110,7 @@ export class WalletDetailsPage extends Component {
         const wallet = params.wallet;
         this.setState({
             wallet: wallet,
-            displayTitle: convertAmountToCurrencyString(wallet.lvt, ',', 0),
+            displayTitle: adjust(wallet.lvt, wallet.eth),
             walletAddress: wallet.address,
             walletName: wallet.name
         });
@@ -122,7 +122,7 @@ export class WalletDetailsPage extends Component {
             console.log('new wallet = ' + JSON.stringify(wallet));
             this.setState({
                 wallet: wallet,
-                displayTitle: convertAmountToCurrencyString(wallet.lvt, ',', 0),
+                displayTitle: adjust(wallet.lvt, wallet.eth),
                 walletName: wallet.name
             });
         }
@@ -263,7 +263,6 @@ export class WalletDetailsPage extends Component {
                     titleStyle={styles.walletTitle}
                     addressStyle={styles.walletAddress}
                     walletIcon={IconWallet}
-                    showLVT
                 />
                 <TableView>
                     <Section

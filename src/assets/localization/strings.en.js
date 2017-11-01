@@ -125,6 +125,7 @@ const localized_strings = {
     // Transfer 转账
     transfer_lvt_insufficient:'Your LVT balance is insufficient. Please recharge.',
     transfer_lvt_and_eth_insufficient:'Your LVT and ETH balance are insufficient. Please recharge.',
+    transfer_amount_insufficient: 'Your balance is insufficient. Please recharge',
     transfer_eth_insufficient:'Your ETH balance is insufficient. Please recharge.',
     transfer_insufficient: 'The transaction failed due to insufficient balance in your wallet. Please transfer to your wallet first.', 
     transfer_address_required: 'Address required',

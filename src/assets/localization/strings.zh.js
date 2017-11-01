@@ -128,6 +128,7 @@ const localized_strings = {
     transfer_lvt_insufficient:'您的LVT余额不足，请充值！',
     transfer_lvt_and_eth_insufficient:'您的LVT、ETH均不足，请充值！',
     transfer_eth_insufficient:'您的ETH余额不足，请充值！',
+    transfer_amount_insufficient: '您的余额不足，请充值',
     transfer_insufficient: '您的钱包余额不足，无法完成转账，请转账至此钱包', 
     transfer_address_required: '收款人地址不能为空',
     transfer_address_invalid: '请输入有效的收款人地址',

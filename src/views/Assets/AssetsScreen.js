@@ -170,10 +170,10 @@ class AssetsScreen extends Component {
 
         return (
             <View style={styles.container}>
-                <View style={styles.topPanel}>
+                <View style={[styles.topPanel, {height: wallet.lvt > 0 ? 315 : 250}]}>
                     <PullView
                         ref={'pull'}
-                        style={styles.topPanel}
+                        style={[styles.topPanel, {height: wallet.lvt > 0 ? 315 : 250}]}
                         onPullRelease={this.onPullRelease.bind(this)}
                         topIndicatorHeight={LVRefreshIndicator.indicatorHeight}
                         topIndicatorRender={this.topIndicatorRender.bind(this)}
@@ -189,7 +189,7 @@ class AssetsScreen extends Component {
                                 onRightPress={this.onPressSelectWallet}
                             />
                             <WalletInfoView style={styles.walletInfo} title={wallet.name} address={wallet.address} />
-                            <WalletBalanceView style={styles.balance} lvt={wallet.lvt} eth={wallet.eth} />
+                            <WalletBalanceView style={[styles.balance, {height: wallet.lvt > 0 ? 150 : 150/2,}]} lvt={wallet.lvt} eth={wallet.eth} />
                         </LVGradientPanel>
                     </PullView>
                 </View>
@@ -256,7 +256,6 @@ const styles = StyleSheet.create({
     },
     balance: {
         width: Window.width - 25,
-        height: 150,
         marginTop: 15
     },
     bottomPanel: {
