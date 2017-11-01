@@ -98,7 +98,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -121,10 +121,14 @@ android {
         }
     }
     buildTypes {
+        debug {
+            buildConfigField "boolean", "IS_RELEASE", Boolean.toString(getBranchName() == 'release_android')
+        }
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
+            buildConfigField "boolean", "IS_RELEASE", Boolean.toString(getBranchName() == 'release_android')
         }
     }
     // applicationVariants are e.g. debug, release
@@ -173,4 +177,9 @@ dependencies {
 task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
+}
+
+
+def getBranchName() {
+    return 'git symbolic-ref --short -q HEAD'.execute().text.trim()
 }

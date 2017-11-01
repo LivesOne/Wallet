@@ -229,7 +229,7 @@ class ReceiveScreen extends Component {
                 style={styles.qrcode_pic}
                 value={TransferUtils.convertAddr2Iban(this.state.wallet.address)}
                 size={162}
-                logo={lvt}
+                /* logo={lvt} */
                 bgColor='white'
                 fgColor='black'/>
 
@@ -238,8 +238,7 @@ class ReceiveScreen extends Component {
                     style={styles.button}
                     title={LVStrings.receive_copy}
                     onPress = {() => {
-                        // Clipboard.setString(TransferUtils.convertToHexHeader(this.state.wallet.address));
-                        Clipboard.setString(this.state.wallet.address);
+                        Clipboard.setString(TransferUtils.convertToHexHeader(this.state.wallet.address));
                         Toast.show(LVStrings.common_done)
 
                     }}

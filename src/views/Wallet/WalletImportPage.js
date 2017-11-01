@@ -96,8 +96,10 @@ const foundation = require('../../foundation/wallet.js');
 
     componentWillUnmount() {
       LVNotificationCenter.removeObserver(this);
-      this.keyboardDidShowListener.remove();
-      this.keyboardDidHideListener.remove();
+      if (Platform.OS === 'android') {
+        this.keyboardDidShowListener.remove();
+        this.keyboardDidHideListener.remove();
+      }
     }
 
     onKeyboardHide(event: any) {
@@ -290,7 +292,7 @@ const foundation = require('../../foundation/wallet.js');
             }}
             right={ require("../../assets/images/qrScan.png") }
             onRightPress = {
-              () => { this.setState({showModal: true}) }
+              () => { Keyboard.dismiss(); this.setState({showModal: true}) }
             }
             />
             <MXSwitchTab
