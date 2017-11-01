@@ -34,6 +34,15 @@ export function convertAmountToCurrencyString(amount: number, thousandsSeparator
     return result;
 }
 
+// lvt 为0，显示 eth 否则显示 lvt
+export function adjust(lvtAmount: number, ethAmount: number) {
+    if (lvtAmount === 0) {
+        return convertAmountToCurrencyString(ethAmount, ',', 0) + " ETH";
+    } else {
+        return convertAmountToCurrencyString(lvtAmount, ',', 0) + " LVT";
+    }
+}
+
 /**
  * convert string of address to specific format like '0x1D3..123'
  * @param  {string} address

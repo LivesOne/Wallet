@@ -13,7 +13,7 @@ import LVStrings from '../../../assets/localization';
 import LVColor from '../../../styles/LVColor';
 import LVFontSize from '../../../styles/LVFontSize';
 import LVGradientPanel from '../../../views/Common/LVGradientPanel';
-import { converAddressToDisplayableText,convertAmountToCurrencyString } from '../../../utils/MXStringUtils';
+import { converAddressToDisplayableText,adjust } from '../../../utils/MXStringUtils';
 import LVFullScreenModalView from '../../Common/LVFullScreenModalView';
 import LVWalletCreationNavigator from '../../Wallet/LVWalletCreationNavigator';
 import WalletImportPage from '../../Wallet/WalletImportPage';
@@ -141,8 +141,7 @@ export class WalletManagerScreen extends Component {
                                             <View style={styles.cellRightSeparatorStyle}/>
                                             <View style={styles.cellRightBottomPanelStyle}>
                                                 <View style={styles.cellRightBottomContainerStyle}>
-                                                    <Text style={styles.cellRightBottomNumberStyle}>{convertAmountToCurrencyString(item.lvt, ',', 0)}</Text>
-                                                    <Text style={styles.cellRightBottomCoinTypeStyle}>LVT</Text>
+                                                    <Text style={styles.cellRightBottomNumberStyle}>{adjust(item.lvt, item.eth)}</Text>
                                                 </View>
                                             </View>
                                         </View>

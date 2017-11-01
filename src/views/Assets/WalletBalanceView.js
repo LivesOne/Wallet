@@ -26,10 +26,10 @@ export default class WalletBalanceView extends Component {
         const { lvt, eth } = this.props;
         return (
             <View style={[styles.container, this.props.style]}>
-                <View style={styles.rows}>
+                {lvt > 0 && <View style={styles.rows}>
                     <BalanceItemHeader icon={lvtIcon} title="LVT" />
                     <BalanceValueView value={lvt} num={0} keepZero={false} />
-                </View>
+                </View>}
                 <View
                     style={{ width: '90%', height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }}
                 />

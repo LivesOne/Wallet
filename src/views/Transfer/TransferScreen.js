@@ -199,6 +199,13 @@ class TransferScreen extends Component {
             amountText: newAmountText,
             amount: parseFloat(newAmountText)})
         if (!TransferUtils.isBlank(newAmountText) && TransferUtils.isValidAmountStr(newAmountText)) {
+            let amount = parseFloat(newAmountText);
+            const wallet = this.state.wallet;
+            if (wallet && amount > wallet.lvt) {
+                this.setState({alertMessage:LVStrings.transfer_amount_insufficient });
+                this.refs.alert.show();
+                return;
+            }
             setTimeout(() => {
                 this.tryFetchParams();
             }, 100);
