@@ -507,7 +507,7 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         borderColor: 'transparent', 
         borderBottomColor: LVColor.border.editTextBottomBoarder, 
-        borderWidth:0.5, 
+        borderWidth:StyleSheet.hairlineWidth, 
         marginTop:10
     },
     text: {

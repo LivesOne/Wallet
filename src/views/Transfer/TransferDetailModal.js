@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between', 
         height: 50, 
         alignItems: 'center', 
-        borderWidth: 0.5,  
+        borderWidth: StyleSheet.hairlineWidth,  
         borderColor: 'transparent', 
         borderBottomColor: LVColor.border.editTextBottomBoarder
     },
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
         height: 50, 
         justifyContent: 'space-between', 
         alignItems: 'center', 
-        borderWidth: 0.5, 
+        borderWidth: StyleSheet.hairlineWidth, 
         borderColor: 'transparent', 
         borderBottomColor: LVColor.border.editTextBottomBoarder,
         marginHorizontal: 20,
