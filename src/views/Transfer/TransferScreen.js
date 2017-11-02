@@ -204,6 +204,7 @@ class TransferScreen extends Component {
             if (wallet && amount > wallet.lvt) {
                 this.setState({alertMessage:LVStrings.transfer_amount_insufficient });
                 this.refs.alert.show();
+                Keyboard.dismiss();
                 return;
             }
             setTimeout(() => {
