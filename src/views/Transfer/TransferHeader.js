@@ -14,12 +14,12 @@ import LVGradientPanel from '../Common/LVGradientPanel';
 import { StringUtils } from '../../utils';
 import Transaction from 'ethereumjs-tx';
 import TransferUtils from './TransferUtils';
+import { LVBalanceShowView } from '../Common/LVBalanceShowView';
 
 export class TransferHeader extends Component {
 
     static propTypes = {
-        eth: PropTypes.number,
-        balance: PropTypes.number,
+        balance: PropTypes.object,
         onPressSelectWallet: PropTypes.func,
     };
 
@@ -44,7 +44,7 @@ export class TransferHeader extends Component {
 
     render() {
         //TransferUtils.log('num ---> = ' + this.num++);
-        const { balance, eth } = this.props;
+        const { balance } = this.props;
         const lvtValString = StringUtils.convertAmountToCurrencyString(balance, ',', 0);
         return (
             <LVGradientPanel style = {[styles.container, this.props.style]}>
@@ -56,7 +56,10 @@ export class TransferHeader extends Component {
                 />
                 <View style= {styles.columnContainer}>
                     <Text style= {[styles.textCommon,]}>{ LVStrings.transfer_purse_balance }</Text>
-                    <Text style= {[styles.textCommon, {fontSize: this.getBalanceSize(), fontWeight: '600'}]}>{ lvtValString }</Text>
+                    <LVBalanceShowView 
+                        balance = {balance}
+                        textStyle= {[styles.textCommon, {fontSize: this.getBalanceSize(), fontWeight: '600'}]}>
+                    </LVBalanceShowView>
                 </View>
             </LVGradientPanel>
         )

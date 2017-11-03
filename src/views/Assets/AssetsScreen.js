@@ -168,9 +168,9 @@ class AssetsScreen extends Component {
 
     shouldAdjustForIOS() {
         const wallet = this.state.wallet || {};
-        var b = isIOS && wallet.lvt === 0;
+        var b = isIOS && wallet.lvt.eq(0);
         console.log('should adjust = ' + wallet.lvt);
-        return isIOS  && wallet.lvt === 0;
+        return isIOS  && wallet.lvt.eq(0);
     }
 
     render() {
@@ -198,7 +198,9 @@ class AssetsScreen extends Component {
                                 onRightPress={this.onPressSelectWallet}
                             />
                             <WalletInfoView style={styles.walletInfo} title={wallet.name} address={wallet.address} />
-                            <WalletBalanceView style={[styles.balance, {height: this.shouldAdjustForIOS() ? 150 /2 : 150,}]} lvt={wallet.lvt} eth={wallet.eth} />
+                            <WalletBalanceView 
+                                style={[styles.balance, {height: this.shouldAdjustForIOS() ? 150 /2 : 150,}]} 
+                                lvt={wallet.lvt} eth={wallet.eth} />
                         </LVGradientPanel>
                     </PullView>
                 </View>

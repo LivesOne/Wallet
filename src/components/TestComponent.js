@@ -19,6 +19,7 @@ import WalletUtils from '../views/Wallet/WalletUtils';
 import TransferUtils from '../views/Transfer/TransferUtils';
 import { LVPasswordDialog } from '../views/Common/LVPasswordDialog';
 import { LVBalanceShowView } from '../views/Common/LVBalanceShowView';
+var Big = require('big.js');
 
 const eth_local = require('../foundation/ethlocal.js');
 const wallet = require('../foundation/wallet.js');
@@ -66,8 +67,8 @@ class TestComponent extends Component {
                     onPress = {() => {
                         //this.testWalletValidator();
                         //this.refs.passwordDialog.show();
-                        //this.test0x();
-                        this.testWalletApi();
+                        this.test0x();
+                        //this.testWalletApi();
                     }}
                     themeStyle={"active"}
                 />
@@ -231,7 +232,12 @@ class TestComponent extends Component {
         // TransferUtils.log('before = ' + '0x878uiui' + ' after = ' + TransferUtils.convertToHexHeader('0x878uiui'));
         // TransferUtils.log('before = ' + '878uiui' + ' after = ' + TransferUtils.convertToHexHeader('878uiui'));
         // TransferUtils.log('before = ' + '0xe' + ' after = ' + TransferUtils.convertToHexHeader('0xe'));
-            TransferUtils.log(TransferUtils.convert2BNHex(1000000));
+            //TransferUtils.log(TransferUtils.convert2BNHex(1000000));
+            //alert('begin');
+        var x = new Big('123.4567');
+        var y = new Big('2');
+        //alert('x = ' + x.toFixed(5));
+        alert('x * y = ' + x.times(y).toString());
     }
 
     async testTransaction(wallet: Object) {

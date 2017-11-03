@@ -1,11 +1,16 @@
 // @flow
 import { Platform } from 'react-native';
+import Big from 'big.js';
 var sha3 = require('crypto-js/sha3');
 
 /**
 * Convert the number like 20000 into '20,000' this form of the amount of the string.
 * The fraction digits will be retained if precision is not set, eg: 2000.050 -> '2,000.050'
 */
+
+const MAX_BALANCE_LENGTH_LIMIT = 13;
+const FRAGMENT_LENGTH = 2;
+
 export function convertAmountToCurrencyString(amount: number, thousandsSeparator: ?string, precision: ?number, keepZero: boolean = false): string {
     const amounts = amount || 0;
     const sep = thousandsSeparator || ',';
@@ -35,16 +40,60 @@ export function convertAmountToCurrencyString(amount: number, thousandsSeparator
     return result;
 }
 
-// lvt 为0，显示 eth 否则显示 lvt
-export function adjust(lvtAmount: number, ethAmount: number) {
-    if (Platform.OS === 'ios') {
-        if (lvtAmount === 0) {
-            return convertAmountToCurrencyString(ethAmount, ',', 0) + " ETH";
+export function beautifyBalanceShow(balance: Big, unit: string) {
+    const original = balance.toString();
+    let result = '';
+    console.log('origin = ' + original);
+    const arr = original.split('.');
+    let totalLength = 0;
+    let hasShrink = false;
+    for (var i = 0; i < arr.length; i++) {
+        totalLength += arr[i].length;
+    }
+    if (totalLength <= MAX_BALANCE_LENGTH_LIMIT) {
+        result = original;
+    } else {
+        if (arr.length > 1) {
+            const num = arr[0];
+            const decimal = arr[1];
+            if (num.length < MAX_BALANCE_LENGTH_LIMIT) {
+                if (num.length === MAX_BALANCE_LENGTH_LIMIT - 1) {
+                    result =  num;
+                } else {
+                    hasShrink = true;
+                    result =  num + '.' + decimal.slice(0, MAX_BALANCE_LENGTH_LIMIT - num.length - 1);
+                }
+            } else {
+                hasShrink = true;
+                const numHead = num.slice(0, FRAGMENT_LENGTH);
+                const numTail = num.slice(num.length - FRAGMENT_LENGTH + 1);
+                let leftLength = MAX_BALANCE_LENGTH_LIMIT - 2 - 2 * FRAGMENT_LENGTH;
+                leftLength = Math.min(decimal.length, leftLength);
+                const decimalPart = decimal.slice(0, leftLength + 1);
+                result =  [numHead, '...', numTail, '.', decimalPart].join('');
+            }
         } else {
-            return convertAmountToCurrencyString(lvtAmount, ',', 0) + " LVT";
+            hasShrink = true;
+            const sepLength = (MAX_BALANCE_LENGTH_LIMIT - 2) / 2;
+            const num = original;
+            const numHead = num.slice(0, sepLength);
+            const numTail = num.slice(num.length - sepLength + 1);
+            result =  [numHead, '...', numTail].join('');
+        }
+    }
+    return {result : result + (unit ? (' ' + unit) : ''), hasShrink: hasShrink};
+}
+
+// lvt 为0，显示 eth 否则显示 lvt
+export function adjust(lvtAmount: Big, ethAmount: Big) {
+    if (Platform.OS === 'ios') {
+        if (lvtAmount.eq(0)) {
+            return beautifyBalanceShow(ethAmount, 'ETH').result;
+        } else {
+            return beautifyBalanceShow(lvtAmount, 'LVT').result;
         }
     } else {
-        return convertAmountToCurrencyString(lvtAmount, ',', 0) + " LVT";
+        return beautifyBalanceShow(lvtAmount, 'LVT').result;
     }
 }
 

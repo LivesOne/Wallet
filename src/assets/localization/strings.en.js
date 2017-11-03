@@ -104,6 +104,9 @@ const localized_strings = {
     recent_records: 'Recent transaction records',
     view_all_records: 'All records',
 
+    // total amount
+    total_amount: 'Total amount',
+
     // Transaction record
     transaction_records: 'Transaction records',
     transaction_records_no_data: 'No transactions',

@@ -101,6 +101,9 @@ const localized_strings = {
     password_verifying: '密码验证中...',
     password_verify_required: '密码不能为空',
 
+    // total amount
+    total_amount: '总金额',
+
     // Assets
     assets_title: '我的资产',
     recent_records: '最近交易记录',

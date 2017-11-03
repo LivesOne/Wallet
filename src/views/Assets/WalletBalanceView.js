@@ -21,8 +21,8 @@ const isIOS = Platform.OS === 'ios';
 export default class WalletBalanceView extends Component {
     static propTypes = {
         style: ViewPropTypes.style,
-        lvt: PropTypes.number,
-        eth: PropTypes.number
+        lvt: PropTypes.object,
+        eth: PropTypes.object
     };
 
     render() {
@@ -53,11 +53,11 @@ const BalanceItemHeader = ({ icon, title }) => (
 );
 
 const BalanceValueView = ({ value, num, keepZero }) => {
-    const valueString = StringUtils.convertAmountToCurrencyString(value, ',', num, keepZero);
+    //const valueString = StringUtils.convertAmountToCurrencyString(value, ',', num, keepZero);
     return (
         <View>
             <LVBalanceShowView 
-                balanceStr={value}
+                balance={value}
                 textStyle={{ fontSize: 24, textAlign: 'right', fontWeight: '600', color: LVColor.text.grey1 }}>
             </LVBalanceShowView>
         </View>
