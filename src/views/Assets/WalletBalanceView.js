@@ -6,14 +6,17 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, ViewPropTypes, View, Text, Image } from 'react-native';
+import { StyleSheet, ViewPropTypes, View, Text, Image, Platform } from 'react-native';
 import PropTypes from 'prop-types';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import { StringUtils } from '../../utils';
+import { LVBalanceShowView } from '../Common/LVBalanceShowView';
 
 const lvtIcon = require('../../assets/images/lvt.png');
 const ethIcon = require('../../assets/images/eth.png');
+
+const isIOS = Platform.OS === 'ios';
 
 export default class WalletBalanceView extends Component {
     static propTypes = {
@@ -26,7 +29,7 @@ export default class WalletBalanceView extends Component {
         const { lvt, eth } = this.props;
         return (
             <View style={[styles.container, this.props.style]}>
-                {lvt > 0 && <View style={styles.rows}>
+                {((isIOS &&  lvt > 0) || !isIOS) && <View style={styles.rows}>
                     <BalanceItemHeader icon={lvtIcon} title="LVT" />
                     <BalanceValueView value={lvt} num={0} keepZero={false} />
                 </View>}
@@ -53,9 +56,10 @@ const BalanceValueView = ({ value, num, keepZero }) => {
     const valueString = StringUtils.convertAmountToCurrencyString(value, ',', num, keepZero);
     return (
         <View>
-            <Text style={{ fontSize: 24, textAlign: 'right', fontWeight: '600', color: LVColor.text.grey1 }}>
-                {valueString}
-            </Text>
+            <LVBalanceShowView 
+                balanceStr={value}
+                textStyle={{ fontSize: 24, textAlign: 'right', fontWeight: '600', color: LVColor.text.grey1 }}>
+            </LVBalanceShowView>
         </View>
     );
 };

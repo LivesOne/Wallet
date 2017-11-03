@@ -16,19 +16,22 @@ import PropTypes from 'prop-types';
 import LVDialog from './LVDialog';
 import LVStrings from './../../assets/localization';
 import LVColor from '../../styles/LVColor';
+import console from 'console-browserify';
 
 const MAX_BALANCE_LENGTH_LIMIT = 13;
+const FRAGMENT_LENGTH = 2;
 
-export class LVBalancePriview extends Component {
+export class LVBalanceShowView extends Component {
 
     static propTypes = {
         style: ViewPropTypes.style,
-        textStyle: ViewPropTypes.style,
-        balanceStr: PropTypes.string.isRequired,
+        textStyle: Text.propTypes.style,
+        balanceStr: PropTypes.number.isRequired,
     };
 
     convertBalance() {
-        const original = this.props.balanceStr;
+        const original = this.props.balanceStr + '';
+        console.log('origin = ' + original);
         const arr = original.split('.');
         let totalLength = 0;
         for (var i = 0; i < arr.length; i++) {
@@ -37,7 +40,6 @@ export class LVBalancePriview extends Component {
         if (totalLength <= MAX_BALANCE_LENGTH_LIMIT) {
             return original;
         } else {
-            const fragmentLength = MAX_BALANCE_LENGTH_LIMIT / 4;
             if (arr.length > 1) {
                 const num = arr[0];
                 const decimal = arr[1];
@@ -48,17 +50,18 @@ export class LVBalancePriview extends Component {
                         return num + '.' + decimal.slice(0, MAX_BALANCE_LENGTH_LIMIT - num.length - 1);
                     }
                 } else {
-                    const numHead = num.slice(0, fragmentLength);
-                    const numTail = num.slice(num.length - fragmentLength + 1);
-                    let leftLength = MAX_BALANCE_LENGTH_LIMIT - 4 - 2 * fragmentLength;
+                    const numHead = num.slice(0, FRAGMENT_LENGTH);
+                    const numTail = num.slice(num.length - FRAGMENT_LENGTH + 1);
+                    let leftLength = MAX_BALANCE_LENGTH_LIMIT - 2 - 2 * FRAGMENT_LENGTH;
                     leftLength = Math.min(decimal.length, leftLength);
                     const decimalPart = decimal.slice(0, leftLength + 1);
                     return [numHead, '...', numTail, '.', decimalPart].join('');
                 }
             } else {
+                const sepLength = (MAX_BALANCE_LENGTH_LIMIT - 2) / 2;
                 const num = original;
-                const numHead = num.slice(0, fragmentLength);
-                const numTail = num.slice(num.length - fragmentLength + 1);
+                const numHead = num.slice(0, sepLength);
+                const numTail = num.slice(num.length - sepLength + 1);
                 return [numHead, '...', numTail].join('');
             }
         }
@@ -106,4 +109,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default LVBalancePriview
+export default LVBalanceShowView

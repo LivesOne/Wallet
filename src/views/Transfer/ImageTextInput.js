@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row', 
         height: 50,
         width: '100%',
-        borderWidth: 0.5,
+        borderWidth: StyleSheet.hairlineWidth,
         backgroundColor: 'white',
         borderColor : "transparent",
         justifyContent:'center',

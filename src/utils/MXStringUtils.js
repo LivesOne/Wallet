@@ -1,4 +1,5 @@
 // @flow
+import { Platform } from 'react-native';
 var sha3 = require('crypto-js/sha3');
 
 /**
@@ -36,8 +37,12 @@ export function convertAmountToCurrencyString(amount: number, thousandsSeparator
 
 // lvt 为0，显示 eth 否则显示 lvt
 export function adjust(lvtAmount: number, ethAmount: number) {
-    if (lvtAmount === 0) {
-        return convertAmountToCurrencyString(ethAmount, ',', 0) + " ETH";
+    if (Platform.OS === 'ios') {
+        if (lvtAmount === 0) {
+            return convertAmountToCurrencyString(ethAmount, ',', 0) + " ETH";
+        } else {
+            return convertAmountToCurrencyString(lvtAmount, ',', 0) + " LVT";
+        }
     } else {
         return convertAmountToCurrencyString(lvtAmount, ',', 0) + " LVT";
     }

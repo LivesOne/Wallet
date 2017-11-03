@@ -18,7 +18,7 @@ import { isAddress } from '../utils/MXStringUtils';
 import WalletUtils from '../views/Wallet/WalletUtils';
 import TransferUtils from '../views/Transfer/TransferUtils';
 import { LVPasswordDialog } from '../views/Common/LVPasswordDialog';
-import { LVBalancePriview } from '../views/Common/LVBalancePreview';
+import { LVBalanceShowView } from '../views/Common/LVBalanceShowView';
 
 const eth_local = require('../foundation/ethlocal.js');
 const wallet = require('../foundation/wallet.js');
@@ -67,16 +67,16 @@ class TestComponent extends Component {
                         //this.testWalletValidator();
                         //this.refs.passwordDialog.show();
                         //this.test0x();
-                        this.testBalance();
+                        this.testWalletApi();
                     }}
                     themeStyle={"active"}
                 />
 
-                <LVBalancePriview
+                {/* <LVBalanceShowView
                     balanceStr={"37834690.99999999461031936"}
                 >
 
-                </LVBalancePriview>
+                </LVBalanceShowView> */}
                 
                 <MXCrossTextInput
                     withUnderLine = {true}
@@ -179,7 +179,7 @@ class TestComponent extends Component {
           };
 
           WalletUtils.log('begin history');
-        const result1 = await LVNetworking.fetchTransactionHistory(wallet.address);
+        const result1 = await LVNetworking.fetchBalance(wallet.address);
         WalletUtils.log('history =' + JSON.stringify(result1));
 
         // const result2 = await LVNetworking.fetchTransactionParam(wallet.address, '0x0233C1dd7fbE6DaB8C233Bf017F4B1F3BAfEc0B3', 10000000000000000000);

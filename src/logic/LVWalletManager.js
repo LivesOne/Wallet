@@ -12,6 +12,8 @@ import LVNotification from '../logic/LVNotification';
 import LVNetworking from './LVNetworking';
 import LVTransactionRecordManager from './LVTransactionRecordManager';
 import WalletUtils from '../views/Wallet/WalletUtils';
+import console from 'console-browserify';
+const BN = require('bn.js');
 
 const foundation = require('../foundation/wallet.js');
 const WalletsKey :string = '@Venus:WalletsInfo';
@@ -106,10 +108,13 @@ class WalletManager {
             try {
                 const lvt = await LVNetworking.fetchBalance(wallet.address, 'lvt');
                 const eth = await LVNetworking.fetchBalance(wallet.address, 'eth');
+                var bnLvt = new BN(lvt);
+                var bnEth = new BN(eth);
+                WalletUtils.log('bn lvt = ' + bnLvt.toString() + ' eth = ' + bnEth.toString());
 
                 wallet.lvt = (lvt ? parseFloat(lvt) : 0) - LVTransactionRecordManager.preUsedLvt;
                 wallet.eth = (eth ? parseFloat(eth) : 0) - LVTransactionRecordManager.preUsedEth;
-
+                WalletUtils.log(' --- > ---- lvt = ' +  parseFloat(lvt) + ' eth = ' +  wallet.eth);
                 await this.saveToDisk();
 
                 LVNotificationCenter.postNotification(LVNotification.balanceChanged);

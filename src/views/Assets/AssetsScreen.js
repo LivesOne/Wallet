@@ -35,6 +35,8 @@ import TransactionDetailsScreen from './TransactionDetailsScreen';
 const selectImg = require('../../assets/images/select_wallet.png');
 const LVLastAssetsRefreshTimeKey = '@Venus:LastAssetsRefreshTime';
 
+const isIOS = Platform.OS === 'ios';
+
 class AssetsScreen extends Component {
     static navigationOptions = {
         header: null
@@ -164,16 +166,23 @@ class AssetsScreen extends Component {
         }
     };
 
+    shouldAdjustForIOS() {
+        const wallet = this.state.wallet || {};
+        var b = isIOS && wallet.lvt === 0;
+        console.log('should adjust = ' + wallet.lvt);
+        return isIOS  && wallet.lvt === 0;
+    }
+
     render() {
         const { transactionList } = this.state;
         const wallet = this.state.wallet || {};
 
         return (
             <View style={styles.container}>
-                <View style={[styles.topPanel, {height: wallet.lvt > 0 ? 315 : 250}]}>
+                <View style={[styles.topPanel, {height: this.shouldAdjustForIOS() ? 250 : 315  }]}>
                     <PullView
                         ref={'pull'}
-                        style={[styles.topPanel, {height: wallet.lvt > 0 ? 315 : 250}]}
+                        style={[styles.topPanel, {height: this.shouldAdjustForIOS() ? 250 : 315}]}
                         onPullRelease={this.onPullRelease.bind(this)}
                         topIndicatorHeight={LVRefreshIndicator.indicatorHeight}
                         topIndicatorRender={this.topIndicatorRender.bind(this)}
@@ -189,7 +198,7 @@ class AssetsScreen extends Component {
                                 onRightPress={this.onPressSelectWallet}
                             />
                             <WalletInfoView style={styles.walletInfo} title={wallet.name} address={wallet.address} />
-                            <WalletBalanceView style={[styles.balance, {height: wallet.lvt > 0 ? 150 : 150/2,}]} lvt={wallet.lvt} eth={wallet.eth} />
+                            <WalletBalanceView style={[styles.balance, {height: this.shouldAdjustForIOS() ? 150 /2 : 150,}]} lvt={wallet.lvt} eth={wallet.eth} />
                         </LVGradientPanel>
                     </PullView>
                 </View>
