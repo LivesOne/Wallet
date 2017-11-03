@@ -16,6 +16,8 @@ let HOST = HOST_ONLINE;
 if (Platform.OS === 'ios') {
     if (NativeModules.LVReactExport.isAdHoc || NativeModules.LVReactExport.isAppStore) {
         HOST = HOST_ONLINE;
+    } else {
+        HOST = HOST_TEST;
     }
 } else { 
     HOST = NativeModules.LVReactExport.isRelease ? HOST_ONLINE : HOST_TEST;
