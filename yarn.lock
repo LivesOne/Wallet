@@ -3979,6 +3979,13 @@ path-type@^2.0.0:
   dependencies:
     pify "^2.0.0"
 
+path@^0.12.7:
+  version "0.12.7"
+  resolved "https://registry.yarnpkg.com/path/-/path-0.12.7.tgz#d4dc2a506c4ce2197eb481ebfcd5b36c0140b10f"
+  dependencies:
+    process "^0.11.1"
+    util "^0.10.3"
+
 pause@0.1.0:
   version "0.1.0"
   resolved "http://registry.npm.taobao.org/pause/download/pause-0.1.0.tgz#ebc8a4a8619ff0b8a81ac1513c3434ff469fdb74"
@@ -4019,7 +4026,7 @@ pinkie@^2.0.0:
   version "2.0.4"
   resolved "http://registry.npm.taobao.org/pinkie/download/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
 
-plist@2.0.1:
+plist@2.0.1, plist@^2.0.1:
   version "2.0.1"
   resolved "http://registry.npm.taobao.org/plist/download/plist-2.0.1.tgz#0a32ca9481b1c364e92e18dc55c876de9d01da8b"
   dependencies:
@@ -4086,7 +4093,7 @@ process-nextick-args@~1.0.6:
   version "1.0.7"
   resolved "http://registry.npm.taobao.org/process-nextick-args/download/process-nextick-args-1.0.7.tgz#150e20b756590ad3f91093f25a4f2ad8bff30ba3"
 
-process@^0.11.10, process@^0.11.9, process@~0.11.0:
+process@^0.11.1, process@^0.11.10, process@^0.11.9, process@~0.11.0:
   version "0.11.10"
   resolved "http://registry.npm.taobao.org/process/download/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
 
@@ -4357,6 +4364,17 @@ react-native-randombytes@^3.0.0:
 react-native-rk-pull-to-refresh@^1.1.7:
   version "1.1.7"
   resolved "http://registry.npm.taobao.org/react-native-rk-pull-to-refresh/download/react-native-rk-pull-to-refresh-1.1.7.tgz#4ee80a4cf5c2fd1271a94dc753eff804fd37b741"
+
+react-native-schemes-manager@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-schemes-manager/-/react-native-schemes-manager-1.0.1.tgz#2de2d166b9ae59046bb005d43b8493094752705d"
+  dependencies:
+    chalk "^1.1.3"
+    glob "^7.1.1"
+    path "^0.12.7"
+    plist "^2.0.1"
+    xcode "^0.9.1"
+    yargs "^6.6.0"
 
 react-native-simple-toast@^0.0.7:
   version "0.0.7"
@@ -5709,7 +5727,7 @@ yargs-parser@^7.0.0:
   dependencies:
     camelcase "^4.1.0"
 
-yargs@^6.4.0:
+yargs@^6.4.0, yargs@^6.6.0:
   version "6.6.0"
   resolved "http://registry.npm.taobao.org/yargs/download/yargs-6.6.0.tgz#782ec21ef403345f830a808ca3d513af56065208"
   dependencies:
