@@ -19,6 +19,7 @@ import LVDialog from '../Common/LVDialog';
 import LVQrScanModal from '../Common/LVQrScanModal';
 import LVLocalization from '../../assets/localization';
 import MXTouchableImage from '../../components/MXTouchableImage';
+import TransferUtils from '../Transfer/TransferUtils';
 
 const scanImg = require('../../assets/images/transfer_scan.png');
 const navButtonEnableColor = '#FFAE1F';
@@ -117,7 +118,7 @@ export default class AddEditContactPage extends Component {
             }
 
             const contact = ContactLib.LVContactManager.createContact(this.state.name,
-                this.state.address,
+                TransferUtils.convertToHexHeader(this.state.address),
                 this.state.cellPhone,
                 this.state.email,
                 this.state.remarks);
