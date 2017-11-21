@@ -135,7 +135,7 @@ class ReceiveScreen extends Component {
 
        if (wallet && wallet.address) {
             const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
-            const message: string =  this.state.wallet.address;
+            const message: string =  TransferUtils.convertToHexHeader(this.state.wallet.address);
             // const message: string =  StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9);
 
             const options = {
