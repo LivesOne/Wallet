@@ -50,7 +50,7 @@ export class LVBalanceShowView extends Component {
                         multiline= {true}
                         editable={false} 
                         selectTextOnFocus={false}
-                        style={ [styles.textInput, {paddingHorizontal: 20}] }>{ this.props.balance.toString() }
+                        style={ [styles.textInput, {paddingHorizontal: 20, alignSelf: 'center'}] }>{ this.props.balance.toFixed() }
                     </TextInput>
 
                 </LVDialog>
