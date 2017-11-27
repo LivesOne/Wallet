@@ -25,6 +25,7 @@ const FRAGMENT_LENGTH = 2;
 export class LVBalanceShowView extends Component {
 
     static propTypes = {
+        symble: PropTypes.string,
         unit: PropTypes.string,
         style: ViewPropTypes.style,
         textStyle: Text.propTypes.style,
@@ -32,7 +33,9 @@ export class LVBalanceShowView extends Component {
     };
 
     render() {
-        let v = beautifyBalanceShow(this.props.balance, this.props.unit)
+        let v = beautifyBalanceShow(this.props.balance, this.props.unit);
+        const {symble} = this.props;
+        const values = symble ? symble + v.result : v.result; 
         return (
             <TouchableOpacity style = {this.props.style} activeOpacity={0.8} onPress = {()=>{
                 if (v.hasShrink) {
@@ -54,7 +57,7 @@ export class LVBalanceShowView extends Component {
                     </TextInput>
 
                 </LVDialog>
-                <Text style={[styles.text, this.props.textStyle]}> { v.result } </Text>
+                <Text style={[styles.text, this.props.textStyle]}> { values } </Text>
             </TouchableOpacity>
         )
     }
