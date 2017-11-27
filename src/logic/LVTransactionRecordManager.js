@@ -34,7 +34,6 @@ class LVTransactionRecord {
         this.payer = this.pureAddress(json.from);
         this.receiver = this.pureAddress(json.to);
         //this.amount = Number(json.value) * Math.pow(10, -18);
-        this.amount = new Big(json.value).times(new Big(10).pow(-18));
         this.state = state;
 
         if (state === 'waiting') {
@@ -42,6 +41,8 @@ class LVTransactionRecord {
             this.minnerFee = json.eth ? new Big(json.eth) : LVBig.getInitBig();
             this.timestamp = json.timestamp;
             this.datetime = Moment(this.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss');
+        } else {
+            this.amount = new Big(json.value).times(new Big(10).pow(-18));
         }
     }
 

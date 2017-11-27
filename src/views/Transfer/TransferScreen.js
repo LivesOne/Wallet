@@ -48,6 +48,7 @@ import { LVPasswordDialog } from '../Common/LVPasswordDialog';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import Toast from 'react-native-simple-toast';
 import Transaction from 'ethereumjs-tx';
+var Big = require('big.js');
 
 const addImg = require('../../assets/images/transfer_add_contracts.png');
 const scanImg = require('../../assets/images/transfer_scan.png');
