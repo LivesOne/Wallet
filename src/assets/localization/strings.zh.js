@@ -240,6 +240,9 @@ const localized_strings = {
      total_eth: 'ETH 总额',
      show_detail_amount: '交易金额',
      show_LVT_balance: 'LVT 余额',
+
+     // over 18 limit
+     over_limit_hint: '转账金额仅支持小数点后18位',
 };
 
 export default localized_strings;

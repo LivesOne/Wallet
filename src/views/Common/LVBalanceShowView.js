@@ -37,7 +37,7 @@ export class LVBalanceShowView extends Component {
     };
 
     render() {
-        let v = beautifyBalanceShow(this.props.balance,);
+        let v = beautifyBalanceShow(this.props.balance);
         const {symble, title, unit} = this.props;
         const values = symble ? symble + v.result : v.result; 
         return (
@@ -50,7 +50,7 @@ export class LVBalanceShowView extends Component {
                     ref={'alert'} 
                     {...this.props}
                     isOpen={false}
-                    style={{width:'90%', height:'30%', borderRadius: 5, justifyContent: 'center', alignItems: 'center'}}
+                    style={{width:'80%', height:'25%', borderRadius: 5, justifyContent: 'center', alignItems: 'center'}}
                     entry={'top'}
                     position={'center'}
                     coverScreen={true}
@@ -64,14 +64,13 @@ export class LVBalanceShowView extends Component {
                                 alignItems: 'center'}} onPress={()=>{this.refs.alert.close()}}>
                             <Image style={{}} source={CloseIcon}></Image>
                         </TouchableOpacity>
-                        <Text style={{fontSize: 20,  color: LVColor.text.grey2, marginBottom: 10, }}>{title}</Text>
+                        <Text style={{fontSize: 18,  color: LVColor.text.grey2, marginBottom: 10, marginTop: -15}}>{title}</Text>
                         <TextInput  
-                            textAlign={'center'}             
                             underlineColorAndroid = {'transparent'}
                             multiline= {true}
                             editable={false} 
                             selectTextOnFocus={false}
-                            style={ [styles.textInput, {padding: 20, alignSelf: 'center'}] }>{ this.props.balance.toFixed() + " " + unit}
+                            style={ [styles.textInput, {padding: 20}] }>{ this.props.balance.toFixed() + " " + unit}
                         </TextInput>
                     </View>
 
@@ -91,8 +90,9 @@ const styles = StyleSheet.create({
         width: Window.width * 0.7,
         height: '100%',
         flex: 1,
+        marginTop: 10,
         marginBottom: 30,
-        fontSize: 18,
+        fontSize: 16,
         color: LVColor.text.grey2,
         borderRadius: 3,
     },

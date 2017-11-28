@@ -239,6 +239,9 @@ const localized_strings = {
     total_eth: 'Total ETH Amount',
     show_detail_amount: 'Transaction Amount',
     show_LVT_balance: 'LVT Balance',
+
+    // over 18 limit
+    over_limit_hint: 'Transfer Amount Only Support 18 Decimal Places',
 };
 
 export default localized_strings;

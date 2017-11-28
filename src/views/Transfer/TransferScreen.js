@@ -208,6 +208,11 @@ class TransferScreen extends Component {
                 this.refs.alert.show();
                 return;
             }
+            if (TransferUtils.isAmountOverLimit(newAmountText)) {
+                this.setState({alertMessage:LVStrings.over_limit_hint });
+                this.refs.alert.show();
+                return;
+            }
             setTimeout(() => {
                 this.tryFetchParams();
             }, 100);

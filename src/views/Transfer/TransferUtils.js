@@ -36,6 +36,17 @@ export default class TransferUtils {
         return isAddress(address);
     }
 
+    static isAmountOverLimit(amountStr: string) : bool {
+        if (amountStr) {
+            let arr = amountStr.split('.');
+            if (arr && arr.length === 2) {
+                let decimalLen = arr[1].length;
+                return decimalLen > 18;
+            }
+        }
+        return false;
+    }
+
     // 如果含有iban地址，转换成十六进制地址，否则返回原值
     static getAddrFromIbanIfNeeded(data: string) {
         if (data && data.trim().slice(0, 5) === EXPORT_ADDRESS_PREFIX) {
