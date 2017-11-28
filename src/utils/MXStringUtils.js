@@ -68,9 +68,9 @@ export function beautifyBalanceShow(balance: Big, unit: string) {
                 hasShrink = true;
                 const numHead = num.slice(0, FRAGMENT_LENGTH);
                 const numTail = num.slice(num.length - FRAGMENT_LENGTH);
-                let leftLength = MAX_BALANCE_LENGTH_LIMIT - 2 - 2 * FRAGMENT_LENGTH;
+                let leftLength = MAX_BALANCE_LENGTH_LIMIT - 2 - 2 * FRAGMENT_LENGTH - 1;
                 leftLength = Math.min(decimal.length, leftLength);
-                const decimalPart = decimal.slice(0, leftLength + 1);
+                const decimalPart = decimal.slice(0, leftLength);
                 result =  [numHead, '...', numTail, '.', decimalPart].join('');
             }
         } else {

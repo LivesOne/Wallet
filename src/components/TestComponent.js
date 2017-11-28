@@ -140,9 +140,6 @@ class TestComponent extends Component {
         '390.99999999461031936'];
 
         // const testcases = [
-        //     '6433478828372.99999999461031936',
-        //     '433478828372.99999999461031936',
-        //     '64334784828372.99999999461031936',
         // '3783469098783433478828372.99999999461031936'];
         for (var i = 0; i< testcases.length; i++) {
             console.log('old=' + testcases[i] + ' new = ' + beautifyBalanceShow(new Big(testcases[i]), 'LVT').result);
