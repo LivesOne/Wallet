@@ -13,6 +13,7 @@ import LVNotificationCenter from './LVNotificationCenter';
 import Moment from 'moment';
 var Big = require('big.js');
 import LVBig from './LVBig';
+import TransferUtils from '../views/Transfer/TransferUtils';
 
 class LVTransactionRecord {
     block: number;
@@ -35,14 +36,17 @@ class LVTransactionRecord {
         this.receiver = this.pureAddress(json.to);
         //this.amount = Number(json.value) * Math.pow(10, -18);
         this.state = state;
-
         if (state === 'waiting') {
             this.amount = json.lvt ? new Big(json.lvt) : LVBig.getInitBig();
             this.minnerFee = json.eth ? new Big(json.eth) : LVBig.getInitBig();
             this.timestamp = json.timestamp;
             this.datetime = Moment(this.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss');
-        } else {
-            this.amount = new Big(json.value).times(new Big(10).pow(-18));
+        } else if (state !== 'failed'){
+            try {
+                this.amount = new Big(json.value).times(new Big(10).pow(-18));
+            } catch (e) {
+                TransferUtils.log('error = ' + e.message + " value = " + json.value);
+            }
         }
     }
 
