@@ -63,6 +63,8 @@ export default class TransactionDetailsScreen extends Component {
                     <View style={styles.header}>
                         <Image style={styles.image} source={typeImg} />
                         <LVBalanceShowView 
+                            unit={'LVT'}
+                            title={LVStrings.show_detail_amount}
                             symble={symble}
                             balance={amount}
                             textStyle={[styles.amount, { marginLeft: hasShrink ? 10 : 46}]}/>

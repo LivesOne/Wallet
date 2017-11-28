@@ -233,6 +233,12 @@ const localized_strings = {
     // exit
     exit_app_prompt: "Exit App?",
     exit: "Exit",
+
+    // total title
+    total_lvt: 'Total LVT Amount',
+    total_eth: 'Total ETH Amount',
+    show_detail_amount: 'Transaction Amount',
+    show_LVT_balance: 'LVT Balance',
 };
 
 export default localized_strings;

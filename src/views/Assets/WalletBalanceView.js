@@ -12,6 +12,7 @@ import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import { StringUtils } from '../../utils';
 import { LVBalanceShowView } from '../Common/LVBalanceShowView';
+import LVStrings from '../../assets/localization';
 
 const lvtIcon = require('../../assets/images/lvt.png');
 const ethIcon = require('../../assets/images/eth.png');
@@ -29,16 +30,16 @@ export default class WalletBalanceView extends Component {
         const { lvt, eth } = this.props;
         return (
             <View style={[styles.container, this.props.style]}>
-                {((isIOS &&  lvt > 0) || !isIOS) && <View style={styles.rows}>
+                {((isIOS &&  lvt.gt(0)) || !isIOS) && <View style={styles.rows}>
                     <BalanceItemHeader icon={lvtIcon} title="LVT" />
-                    <BalanceValueView value={lvt} num={0} keepZero={false} />
+                    <BalanceValueView value={lvt} num={0} keepZero={false} unit="LVT" />
                 </View>}
                 <View
                     style={{ width: '90%', height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }}
                 />
                 <View style={styles.rows}>
                     <BalanceItemHeader icon={ethIcon} title="ETH" />
-                    <BalanceValueView value={eth} num={8} keepZero={true} />
+                    <BalanceValueView value={eth} num={8} keepZero={true} unit="ETH"/>
                 </View>
             </View>
         );
@@ -52,11 +53,13 @@ const BalanceItemHeader = ({ icon, title }) => (
     </View>
 );
 
-const BalanceValueView = ({ value, num, keepZero }) => {
+const BalanceValueView = ({ value, num, keepZero, unit }) => {
     //const valueString = StringUtils.convertAmountToCurrencyString(value, ',', num, keepZero);
     return (
         <View>
             <LVBalanceShowView 
+                title = {unit==='LVT' ? LVStrings.total_lvt : LVStrings.total_eth}
+                unit={unit}
                 balance={value}
                 textStyle={{ fontSize: 24, textAlign: 'right', fontWeight: '600', color: LVColor.text.grey1 }}>
             </LVBalanceShowView>

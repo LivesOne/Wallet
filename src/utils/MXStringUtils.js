@@ -40,7 +40,7 @@ export function convertAmountToCurrencyString(amount: number, thousandsSeparator
     return result;
 }
 
-export function beautifyBalanceShow(balance: Big, unit: string) {
+export function beautifyBalanceShow(balance: Big, unit: ?string) {
     const original = balance.toFixed();
     let result = '';
     //console.log('origin = ' + original);
