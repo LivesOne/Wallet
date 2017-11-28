@@ -68,7 +68,7 @@ class TestComponent extends Component {
                     onPress = {() => {
                         //this.testWalletValidator();
                         //this.refs.passwordDialog.show();
-                        this.testBalance();
+                        this.testBN();
                         //this.testWalletApi();
                     }}
                     themeStyle={"active"}
