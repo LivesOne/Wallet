@@ -48,6 +48,8 @@ import { LVPasswordDialog } from '../Common/LVPasswordDialog';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import Toast from 'react-native-simple-toast';
 import Transaction from 'ethereumjs-tx';
+var Big = require('big.js');
+import LVBig from '../../logic/LVBig';
 
 const addImg = require('../../assets/images/transfer_add_contracts.png');
 const scanImg = require('../../assets/images/transfer_scan.png');
@@ -67,10 +69,10 @@ class TransferScreen extends Component {
         transactionParams: ?Object;
         curETH: number,
         addressIn: string,
-        amount: number,
+        amount: Big,
         minGap: number,
         maxGap:number,
-        balance: number,
+        balance: Big,
         showModal: boolean,
         openSelectWallet: boolean,
         showQrScanModal: boolean,
@@ -90,7 +92,7 @@ class TransferScreen extends Component {
             transactionParams: null,
             curETH: wallet != null ? wallet.eth: 0,
             addressIn: '',
-            amount: 0,
+            amount: LVBig.getInitBig(),
             amountText: '',
             balance: wallet != null ? wallet.lvt: 0,
             minGap: 0,
@@ -119,7 +121,7 @@ class TransferScreen extends Component {
         // https://github.com/react-community/react-navigation/issues/1992
         if (Platform.OS === 'android') {
             this.refs.refAddressIn.setText('android');
-            this.refs.refAmount.setText('1');
+            this.refs.refAmount.setText('test');
             setTimeout(async () => {
                 this.refs.refAddressIn.onPressClear();
                 this.refs.refAmount.onPressClear();
@@ -129,7 +131,7 @@ class TransferScreen extends Component {
 
     async tryFetchParams() {
         const {wallet, amount, addressIn} = this.state;
-        if (wallet && amount && addressIn && TransferUtils.isValidAddress(addressIn)) {
+        if (wallet && amount.gt(0) && addressIn && TransferUtils.isValidAddress(addressIn)) {
             try {
                 let params = await TransferLogic.fetchTransactionParam(wallet.address, addressIn, amount);
                 let range = TransferUtils.getMinerGapRange(params);
@@ -196,15 +198,22 @@ class TransferScreen extends Component {
     async onAmountChanged(newAmountText:string) {
         
         await this.setState({
-            amountText: newAmountText,
-            amount: parseFloat(newAmountText)})
+            amountText: newAmountText})
         if (!TransferUtils.isBlank(newAmountText) && TransferUtils.isValidAmountStr(newAmountText)) {
-            let amount = parseFloat(newAmountText);
+            let amount = new Big(newAmountText);
+            this.setState({amount: amount})
             const wallet = this.state.wallet;
-            if (wallet && amount > wallet.lvt) {
+            if (wallet && amount.gt(wallet.lvt) && Platform.OS === 'ios') {
                 this.setState({alertMessage:LVStrings.transfer_amount_insufficient });
+                this.refs.refAmount.clearFocus();
                 this.refs.alert.show();
-                Keyboard.dismiss();
+                return;
+            }
+            if (TransferUtils.isAmountOverLimit(newAmountText)) {
+                this.setState({alertMessage:LVStrings.over_limit_hint,
+                transactionParams: null });
+                this.refs.refAmount.clearFocus();
+                this.refs.alert.show();
                 return;
             }
             setTimeout(() => {
@@ -264,16 +273,22 @@ class TransferScreen extends Component {
             return;
         }
 
+        if (TransferUtils.isAmountOverLimit(amountText)) {
+            this.setState({alertMessage:LVStrings.over_limit_hint });
+            this.refs.alert.show();
+            return;
+        }
+
         if (this.minerGap === 0) {
             this.setState({alertMessage:LVStrings.transfer_miner_gap_not_access });
             this.refs.alert.show();
             return;
         }
 
-        if (balance < amount || (wallet && wallet.eth < this.minerGap)) {
-            if(balance < amount && (wallet && wallet.eth < this.minerGap)) {
+        if (balance.lt(amount) || (wallet && wallet.eth.lt(this.minerGap))) {
+            if(balance.lt(amount) && (wallet && wallet.eth.lt(this.minerGap))) {
                 this.setState({balanceTip:LVStrings.transfer_lvt_and_eth_insufficient});
-            }else if(balance < amount) {
+            }else if(balance.lt(amount)) {
                 this.setState({balanceTip:LVStrings.transfer_lvt_insufficient});
             }else {
                 this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
@@ -386,7 +401,7 @@ class TransferScreen extends Component {
                 {this.state.showModal && <TransferDetailModal
                     isOpen= {this.state.showModal}
                     address= {this.state.addressIn}
-                    amount= {this.state.amount}
+                    amount= {parseFloat(this.state.amount.toFixed())}
                     minerGap= {this.minerGap}
                     onClosed = {()=>{this.setState({ showModal: false })}}
                     onTransferConfirmed = {()=> {
@@ -508,7 +523,7 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         borderColor: 'transparent', 
         borderBottomColor: LVColor.border.editTextBottomBoarder, 
-        borderWidth:StyleSheet.hairlineWidth, 
+        borderWidth: StyleSheet.hairlineWidth, 
         marginTop:10
     },
     text: {

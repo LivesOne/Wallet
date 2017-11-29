@@ -1025,6 +1025,10 @@ big-integer@^1.6.7:
   version "1.6.25"
   resolved "http://registry.npm.taobao.org/big-integer/download/big-integer-1.6.25.tgz#1de45a9f57542ac20121c682f8d642220a34e823"
 
+big.js@^5.0.3:
+  version "5.0.3"
+  resolved "http://registry.npm.taobao.org/big.js/download/big.js-5.0.3.tgz#9679fb0a3599a7d3df397f855e89c4dba016960e"
+
 bindings@^1.2.1:
   version "1.3.0"
   resolved "http://registry.npm.taobao.org/bindings/download/bindings-1.3.0.tgz#b346f6ecf6a95f5a815c5839fc7cdb22502f1ed7"

@@ -18,11 +18,17 @@ import { isAddress } from '../utils/MXStringUtils';
 import WalletUtils from '../views/Wallet/WalletUtils';
 import TransferUtils from '../views/Transfer/TransferUtils';
 import { LVPasswordDialog } from '../views/Common/LVPasswordDialog';
+import { LVBalanceShowView } from '../views/Common/LVBalanceShowView';
+var Big = require('big.js');
+import {  beautifyBalanceShow } from '../utils/MXStringUtils';
 
 const eth_local = require('../foundation/ethlocal.js');
 const wallet = require('../foundation/wallet.js');
 
 const ICAP = require('ethereumjs-icap')
+
+const MAX_BALANCE_LENGTH_LIMIT = 13;
+
 
 class TestComponent extends Component {
 
@@ -62,11 +68,17 @@ class TestComponent extends Component {
                     onPress = {() => {
                         //this.testWalletValidator();
                         //this.refs.passwordDialog.show();
-                        //this.test0x();
-                        this.testWalletApi();
+                        this.testBN();
+                        //this.testWalletApi();
                     }}
                     themeStyle={"active"}
                 />
+
+                {/* <LVBalanceShowView
+                    balanceStr={"37834690.99999999461031936"}
+                >
+
+                </LVBalanceShowView> */}
                 
                 <MXCrossTextInput
                     withUnderLine = {true}
@@ -114,6 +126,26 @@ class TestComponent extends Component {
         });
     }
 
+    testBalance() {
+        const testcases = ['37834690', 
+        '3783469098783433478828372323232',
+        '37834690.99999999461031936',
+        '3783469098783433478828372.99999999461031936',
+        '1234567891234.99999999461031936',
+        '123456789123.99999999461031936',
+        '12345678912.99999999461031936',
+        '1234567891.99999999461031936',
+        '0.234223432',
+        '0.8984932483249382984938298493829',
+        '390.99999999461031936'];
+
+        // const testcases = [
+        // '3783469098783433478828372.99999999461031936'];
+        for (var i = 0; i< testcases.length; i++) {
+            console.log('old=' + testcases[i] + ' new = ' + beautifyBalanceShow(new Big(testcases[i]), 'LVT').result);
+        }
+    }
+
     // const walletInfo = {
     //     name: name,
     //     keystore: keystore,
@@ -152,7 +184,7 @@ class TestComponent extends Component {
           };
 
           WalletUtils.log('begin history');
-        const result1 = await LVNetworking.fetchTransactionHistory(wallet.address);
+        const result1 = await LVNetworking.fetchBalance(wallet.address);
         WalletUtils.log('history =' + JSON.stringify(result1));
 
         // const result2 = await LVNetworking.fetchTransactionParam(wallet.address, '0x0233C1dd7fbE6DaB8C233Bf017F4B1F3BAfEc0B3', 10000000000000000000);
@@ -164,11 +196,52 @@ class TestComponent extends Component {
         // await this.testTransaction(wallet);
     }
 
+    convertBalance(original :string) {
+        const arr = original.split('.');
+        let totalLength = 0;
+        for (var i = 0; i < arr.length; i++) {
+            totalLength += arr[i].length;
+        }
+        if (totalLength <= MAX_BALANCE_LENGTH_LIMIT) {
+            return original;
+        } else {
+            const fragmentLength = MAX_BALANCE_LENGTH_LIMIT / 4;
+            if (arr.length > 1) {
+                const num = arr[0];
+                const decimal = arr[1];
+                if (num.length < MAX_BALANCE_LENGTH_LIMIT) {
+                    if (num.length === MAX_BALANCE_LENGTH_LIMIT - 1) {
+                        return num;
+                    } else {
+                        return num + '.' + decimal.slice(0, MAX_BALANCE_LENGTH_LIMIT - num.length - 1);
+                    }
+                } else {
+                    const numHead = num.slice(0, fragmentLength);
+                    const numTail = num.slice(num.length - fragmentLength + 1);
+                    let leftLength = MAX_BALANCE_LENGTH_LIMIT - 4 - 2 * fragmentLength;
+                    leftLength = Math.min(decimal.length, leftLength);
+                    const decimalPart = decimal.slice(0, leftLength + 1);
+                    return [numHead, '...', numTail, '.', decimalPart].join('');
+                }
+            } else {
+                const num = original;
+                const numHead = num.slice(0, fragmentLength);
+                const numTail = num.slice(num.length - fragmentLength + 1);
+                return [numHead, '...', numTail].join('');
+            }
+        }
+    }
+
     test0x() {
         // TransferUtils.log('before = ' + '0x878uiui' + ' after = ' + TransferUtils.convertToHexHeader('0x878uiui'));
         // TransferUtils.log('before = ' + '878uiui' + ' after = ' + TransferUtils.convertToHexHeader('878uiui'));
         // TransferUtils.log('before = ' + '0xe' + ' after = ' + TransferUtils.convertToHexHeader('0xe'));
-            TransferUtils.log(TransferUtils.convert2BNHex(1000000));
+            //TransferUtils.log(TransferUtils.convert2BNHex(1000000));
+            //alert('begin');
+        var x = new Big('123.4567');
+        var y = new Big('2');
+        //alert('x = ' + x.toFixed(5));
+        alert('x * y = ' + x.times(y).toString());
     }
 
     async testTransaction(wallet: Object) {

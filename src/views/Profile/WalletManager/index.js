@@ -24,6 +24,7 @@ import WalletUtils from '../../Wallet/WalletUtils';
 import LVNotificationCenter from '../../../logic/LVNotificationCenter';
 import LVNotification from '../../../logic/LVNotification';
 import LVNetworking from '../../../logic/LVNetworking';
+import LVBig from '../../../logic/LVBig';
 const WalletIcon = require('../../../assets/images/wallet_grey.png');
 const ShowDetailsIcon = require('../../../assets/images/show_detail_arrow.png');
 
@@ -87,9 +88,8 @@ export class WalletManagerScreen extends Component {
                     WalletUtils.log('balance wallet =  ' + JSON.stringify(wallet));
                     const lvt = await LVNetworking.fetchBalance(wallet.address, 'lvt');
                     const eth = await LVNetworking.fetchBalance(wallet.address, 'eth');
-                    wallet.lvt = (lvt ? parseFloat(lvt) : 0);
-                    wallet.eth = (eth ? parseFloat(eth) : 0);
-                    WalletUtils.log('after fetch balance wallet =  ' + JSON.stringify(wallet));
+                    wallet.lvt = LVBig.convert2Big(lvt);
+                    wallet.eth = LVBig.convert2Big(eth);
                     await LVWalletManager.updateWallet(wallet);
                     await LVWalletManager.saveToDisk();
                     this.handleWalletChange();

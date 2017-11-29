@@ -12,6 +12,8 @@ import LVNotification from '../logic/LVNotification';
 import LVNetworking from './LVNetworking';
 import LVTransactionRecordManager from './LVTransactionRecordManager';
 import WalletUtils from '../views/Wallet/WalletUtils';
+import console from 'console-browserify';
+import LVBig from './LVBig';
 
 const foundation = require('../foundation/wallet.js');
 const WalletsKey :string = '@Venus:WalletsInfo';
@@ -21,8 +23,8 @@ function createNewKeystore(name: string, password: string, keystore: Object){
         name: name,
         keystore: keystore,
         address: keystore.address,
-        lvt: 0,
-        eth: 0
+        lvt: LVBig.getInitBig(),
+        eth: LVBig.getInitBig()
     };
 }
 
@@ -44,7 +46,13 @@ class WalletManager {
         const walletsInfo = await LVPersistent.getObject(WalletsKey);
         if(walletsInfo) {
             console.log(walletsInfo);
-            this.wallets = walletsInfo.wallets;
+            const wallets = walletsInfo.wallets;
+            let tmpWallets = JSON.parse(JSON.stringify(wallets));
+            for (var i = 0;i < wallets.length; i++) {
+                tmpWallets[i].lvt = LVBig.convert2Big(wallets[i].lvt)
+                tmpWallets[i].eth = LVBig.convert2Big(wallets[i].eth)
+            }
+            this.wallets = tmpWallets;
             this.selectedIndex = Math.max(0,Math.min(this.wallets.length - 1, walletsInfo.selectedIndex));
         }
     }
@@ -94,7 +102,9 @@ class WalletManager {
     }
 
     isWalletNameAvailable(name : string) : bool {
-        const index = this.wallets.findIndex((w) => {
+        const index =
+        
+        this.wallets.findIndex((w) => {
             return w.name === name;
         });
         return index === -1;
@@ -107,11 +117,14 @@ class WalletManager {
                 const lvt = await LVNetworking.fetchBalance(wallet.address, 'lvt');
                 const eth = await LVNetworking.fetchBalance(wallet.address, 'eth');
 
-                wallet.lvt = (lvt ? parseFloat(lvt) : 0) - LVTransactionRecordManager.preUsedLvt;
-                wallet.eth = (eth ? parseFloat(eth) : 0) - LVTransactionRecordManager.preUsedEth;
+                var bigLvt = LVBig.convert2Big(lvt);
+                var bigEth = LVBig.convert2Big(eth);
+                WalletUtils.log('bn lvt = ' + bigLvt.toString() + ' eth = ' + bigEth.toString());
 
+                wallet.lvt = (lvt ? bigLvt : LVBig.getInitBig()).minus(LVBig.convert2Big(LVTransactionRecordManager.preUsedLvt));
+                wallet.eth = (eth ? bigEth : LVBig.getInitBig()).minus(LVBig.convert2Big(LVTransactionRecordManager.preUsedEth));
+                WalletUtils.log('lvt = ' +  typeof wallet.lvt);
                 await this.saveToDisk();
-
                 LVNotificationCenter.postNotification(LVNotification.balanceChanged);
             } catch (error) {
                 console.log('error in refresh wallet datas : ' + error);
@@ -321,8 +334,17 @@ class WalletManager {
             selectedIndex: this.selectedIndex
         };
 
+        const walletInfoCopy = JSON.parse(JSON.stringify(walletInfo));
+        WalletUtils.log(JSON.stringify(walletInfoCopy))
+        for (var i = 0; i < walletInfo.wallets.length; i++) {
+            var wallet = walletInfoCopy.wallets[i];
+            var originalWallet = walletInfo.wallets[i];
+            wallet.lvt = originalWallet.lvt.toString();
+            wallet.eth = originalWallet.eth.toString();
+        }
+
         await LVConfiguration.setAnyWalletAvailable(this.wallets.length > 0);
-        await LVPersistent.setObject(WalletsKey, walletInfo);
+        await LVPersistent.setObject(WalletsKey, walletInfoCopy);
     }
 }
 

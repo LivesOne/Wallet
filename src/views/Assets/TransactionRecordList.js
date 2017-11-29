@@ -123,7 +123,7 @@ const LVLoadingComponent = () => {
 class LVTransactionRecordItem extends React.PureComponent {
     static propTypes = {
         type: PropTypes.string.isRequired,
-        amount: PropTypes.number.isRequired,
+        amount: PropTypes.object.isRequired,
         address: PropTypes.string.isRequired,
         datetime: PropTypes.string,
         state: PropTypes.string,
@@ -135,7 +135,8 @@ class LVTransactionRecordItem extends React.PureComponent {
         const typeImage = type === 'in' ? inImg : outImg;
 
         const prefix = type === 'in' ? '+' : '-';
-        const amountString = prefix + StringUtils.convertAmountToCurrencyString(amount, ',', 0) + ' LVT';
+        //const amountString = prefix + StringUtils.convertAmountToCurrencyString(amount, ',', 0) + ' LVT';
+        const amountString = prefix + StringUtils.beautifyBalanceShow(amount, 'LVT').result;
 
         //const
         const t = DateUtils.getTimePastFromNow(datetime);
