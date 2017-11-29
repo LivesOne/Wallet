@@ -205,12 +205,14 @@ class TransferScreen extends Component {
             const wallet = this.state.wallet;
             if (wallet && amount.gt(wallet.lvt) && Platform.OS === 'ios') {
                 this.setState({alertMessage:LVStrings.transfer_amount_insufficient });
+                this.refs.refAmount.clearFocus();
                 this.refs.alert.show();
                 return;
             }
             if (TransferUtils.isAmountOverLimit(newAmountText)) {
                 this.setState({alertMessage:LVStrings.over_limit_hint,
                 transactionParams: null });
+                this.refs.refAmount.clearFocus();
                 this.refs.alert.show();
                 return;
             }
