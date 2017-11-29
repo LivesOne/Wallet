@@ -51,7 +51,7 @@ export class LVBalanceShowView extends Component {
                     ref={'alert'} 
                     {...this.props}
                     isOpen={false}
-                    style={{width:'80%', height: Platform.OS === 'android' ?  '25%' : '30%', borderRadius: 5, justifyContent: 'center', alignItems: 'center'}}
+                    style={{width:'80%', height: Platform.OS === 'ios' ?  '25%' : '30%', borderRadius: 5, justifyContent: 'center', alignItems: 'center'}}
                     entry={'top'}
                     position={'center'}
                     coverScreen={true}
