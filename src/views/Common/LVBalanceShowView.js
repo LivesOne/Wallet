@@ -11,7 +11,8 @@ import {
     TextInput,
     StyleSheet,
     Image,
-    Dimensions
+    Dimensions,
+    Platform
 } from 'react-native';
 import PropTypes from 'prop-types';
 import LVDialog from './LVDialog';
@@ -50,7 +51,7 @@ export class LVBalanceShowView extends Component {
                     ref={'alert'} 
                     {...this.props}
                     isOpen={false}
-                    style={{width:'80%', height:'30%', borderRadius: 5, justifyContent: 'center', alignItems: 'center'}}
+                    style={{width:'80%', height: Platform.OS === 'android' ?  '25%' : '30%', borderRadius: 5, justifyContent: 'center', alignItems: 'center'}}
                     entry={'top'}
                     position={'center'}
                     coverScreen={true}

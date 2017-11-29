@@ -209,7 +209,8 @@ class TransferScreen extends Component {
                 return;
             }
             if (TransferUtils.isAmountOverLimit(newAmountText)) {
-                this.setState({alertMessage:LVStrings.over_limit_hint });
+                this.setState({alertMessage:LVStrings.over_limit_hint,
+                transactionParams: null });
                 this.refs.alert.show();
                 return;
             }
@@ -266,6 +267,12 @@ class TransferScreen extends Component {
 
         if (!TransferUtils.isValidAmount(amount)) {
             this.setState({alertMessage:LVStrings.transfer_amount_format_hint });
+            this.refs.alert.show();
+            return;
+        }
+
+        if (TransferUtils.isAmountOverLimit(amountText)) {
+            this.setState({alertMessage:LVStrings.over_limit_hint });
             this.refs.alert.show();
             return;
         }
