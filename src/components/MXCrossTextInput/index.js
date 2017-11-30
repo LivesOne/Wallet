@@ -85,6 +85,10 @@ class MXCrossTextInput extends Component {
         this.firstMounted = false;
     }
 
+    clearFocus() {
+        this.refs.textinput.blur();
+    }
+
     onPressClear() {
         this.setText('')
     }

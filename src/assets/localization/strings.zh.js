@@ -234,6 +234,15 @@ const localized_strings = {
     // exit
     exit_app_prompt: "退出钱包？",
     exit: "退出",
+
+     // total title
+     total_lvt: 'LVT 总额',
+     total_eth: 'ETH 总额',
+     show_detail_amount: '交易金额',
+     show_LVT_balance: 'LVT 余额',
+
+     // over 18 limit
+     over_limit_hint: '转账金额仅支持小数点后18位',
 };
 
 export default localized_strings;

@@ -6,12 +6,13 @@ import console from 'console-browserify';
 import Transaction from 'ethereumjs-tx';
 const eth_local = require('../../foundation/ethlocal.js');
 const wallet = require('../../foundation/wallet.js');
+var Big = require('big.js');
 
 export default class TransferLogic {
     
     constructor() {}
 
-    static async fetchTransactionParam(from: string, to: string, value: number) {
+    static async fetchTransactionParam(from: string, to: string, value: Object) {
         let f = TransferUtils.convertToHexHeader(from);
         let t = TransferUtils.convertToHexHeader(to);
         let v = TransferUtils.convert2BNHex(value);
@@ -24,7 +25,7 @@ export default class TransferLogic {
      * @param  {Object} wallet
      * @param  {string} value 值包括gas
      */
-    static async transaction(toAddress: string, password: string, value: number, 
+    static async transaction(toAddress: string, password: string, value: Big, 
             nonce: string, gasLimit: string, gasPrice: string, token: string, chainId: string, wallet: Object) {
         let to = TransferUtils.convertToHexHeader(toAddress);
         let from = TransferUtils.convertToHexHeader(wallet.address);

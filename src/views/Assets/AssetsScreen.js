@@ -151,10 +151,20 @@ class AssetsScreen extends Component {
         this.setState({ openSelectWallet: false });
     };
 
+    _processing_showall_pressed = false;
     onPressShowAll = () => {
+        if (this._processing_showall_pressed) {
+            return;
+        }
+        this._processing_showall_pressed = true;
+
         if (this.state.wallet) {
             this.props.navigation.navigate('TransactionRecords');
         }
+
+        setTimeout(async () => {
+            this._processing_showall_pressed = false;
+        }, 200);
     };
 
     onPressRecord = (record: Object) => {

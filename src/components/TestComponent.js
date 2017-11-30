@@ -20,6 +20,7 @@ import TransferUtils from '../views/Transfer/TransferUtils';
 import { LVPasswordDialog } from '../views/Common/LVPasswordDialog';
 import { LVBalanceShowView } from '../views/Common/LVBalanceShowView';
 var Big = require('big.js');
+import {  beautifyBalanceShow } from '../utils/MXStringUtils';
 
 const eth_local = require('../foundation/ethlocal.js');
 const wallet = require('../foundation/wallet.js');
@@ -67,7 +68,7 @@ class TestComponent extends Component {
                     onPress = {() => {
                         //this.testWalletValidator();
                         //this.refs.passwordDialog.show();
-                        this.test0x();
+                        this.testBN();
                         //this.testWalletApi();
                     }}
                     themeStyle={"active"}
@@ -126,7 +127,8 @@ class TestComponent extends Component {
     }
 
     testBalance() {
-        const testcases = ['37834690', '3783469098783433478828372323232',
+        const testcases = ['37834690', 
+        '3783469098783433478828372323232',
         '37834690.99999999461031936',
         '3783469098783433478828372.99999999461031936',
         '1234567891234.99999999461031936',
@@ -137,8 +139,10 @@ class TestComponent extends Component {
         '0.8984932483249382984938298493829',
         '390.99999999461031936'];
 
+        // const testcases = [
+        // '3783469098783433478828372.99999999461031936'];
         for (var i = 0; i< testcases.length; i++) {
-            console.log('old=' + testcases[i] + ' new = ' + this.convertBalance(testcases[i]));
+            console.log('old=' + testcases[i] + ' new = ' + beautifyBalanceShow(new Big(testcases[i]), 'LVT').result);
         }
     }
 

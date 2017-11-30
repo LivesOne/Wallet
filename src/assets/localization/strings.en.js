@@ -233,6 +233,15 @@ const localized_strings = {
     // exit
     exit_app_prompt: "Exit App?",
     exit: "Exit",
+
+    // total title
+    total_lvt: 'Total LVT Amount',
+    total_eth: 'Total ETH Amount',
+    show_detail_amount: 'Transaction Amount',
+    show_LVT_balance: 'LVT Balance',
+
+    // over 18 limit
+    over_limit_hint: 'Transfer Amount Only Support 18 Decimal Places',
 };
 
 export default localized_strings;

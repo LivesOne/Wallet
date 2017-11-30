@@ -4,25 +4,47 @@
 
 import { isAddress } from '../../utils/MXStringUtils';
 const BN = require('bn.js');
-const ICAP = require('ethereumjs-icap')
+const ICAP = require('ethereumjs-icap');
+var Big = require('big.js');
 
 const EXPORT_ADDRESS_PREFIX = 'iban:';
 
 export default class TransferUtils {
     constructor() {}
 
-    static isValidAmountStr(amount: string) : bool {
-        let result = parseFloat(amount);
+    static isValidAmountStr(amountStr: string) : bool {
+        let result = parseFloat(amountStr);
         console.log(result);
-        return !isNaN(result) && result > 0;
+        let isPositive = !isNaN(result) && result > 0;
+        if (!isPositive) {
+            return false;
+        } else {
+            try {
+                let test = new Big(amountStr);
+                return true;
+            } catch (e){
+                return false;
+            }
+        }
     }
 
-    static isValidAmount(amount: number) : bool {
-        return !isNaN(amount) && amount > 0;
+    static isValidAmount(amount: Big) : bool {
+        return amount && amount.gt(0);
     }
 
     static isValidAddress(address: string) : bool {
         return isAddress(address);
+    }
+
+    static isAmountOverLimit(amountStr: string) : bool {
+        if (amountStr) {
+            let arr = amountStr.split('.');
+            if (arr && arr.length === 2) {
+                let decimalLen = arr[1].length;
+                return decimalLen > 18;
+            }
+        }
+        return false;
     }
 
     // 如果含有iban地址，转换成十六进制地址，否则返回原值
@@ -65,9 +87,10 @@ export default class TransferUtils {
         return (parseInt(g.mul(gasLimit).toString()) /  Math.pow(10, 18));
     }
 
-    static convert2BNHex(value: number) : string {
-        let v = new BN((value * Math.pow(10, 18)).toString(2), 2);
-        return '0x' + v.toString(16);
+    // value : Big Object 
+    static convert2BNHex(value: Object) : string {
+        let r = new BN(value.times(new Big(10).pow(18)).toFixed());
+        return '0x' + r.toString(16);
     }
 
     // 显示八位小数
@@ -96,15 +119,26 @@ export default class TransferUtils {
     }
 
     static testBN() {
-        // 乘法需要去掉 0x
-        var a = new BN('23.4', 10);
-        var b = new BN('3', 10);
-        var res = a.mul(b);
-        var div = a.div(b);
-        this.log('res = ' + res.toString(10));
-        this.log('div = ' + div.toString(10));
-        // var res1 = a.mul(b);
-        // this.log('res1 = ' + res1.toString(10));
+        var testcase = [
+            1.082323,
+            0.122343242,
+            1000.3423432543432,
+            2.9002349324,
+            8.009809343400000000000000001,
+        ];
+        for(var i = 0; i < testcase.length; i++) {
+            this.test(testcase[i]);
+        }
+    }
+
+    static test(value: number) {
+        var a = new Big(value);
+        var b = new Big(10);
+        var div = a.times(b.pow(18))
+        var bn = new BN(div.toFixed());
+        this.log('origin = ' + div.toFixed());
+        this.log('result = ' + bn.toString(16));
+        this.log('hex = ' + this.convert2BNHex(value))
     }
 
 }

@@ -15,6 +15,7 @@ import LVStrings from '../../assets/localization';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVTransactionRecordManager';
 import LVUtils, { StringUtils } from '../../utils';
+import { LVBalanceShowView } from '../Common/LVBalanceShowView';
 
 const failureImg = require('../../assets/images/transaction_failure.png');
 const waitingImg = require('../../assets/images/transaction_wating.png');
@@ -39,8 +40,9 @@ export default class TransactionDetailsScreen extends Component {
 
         const is_failed = false;
         const symble = type === 'in' ? '+' : '-';
-        const amountString = symble + StringUtils.convertAmountToCurrencyString(amount, ',', 0);
-        const feeString = StringUtils.convertAmountToCurrencyString(minnerFee, ',', 8) + ' ETH';
+        //const amountString = symble + StringUtils.convertAmountToCurrencyString(amount, ',', 0);
+        const feeString = StringUtils.beautifyBalanceShow(minnerFee, 'ETH').result;
+        const hasShrink = StringUtils.beautifyBalanceShow(amount, "LVT").hasShrink;
         //const remarks = transactionRecord.remarks || LVStrings.transaction_na;
 
         const typeImg = state === 'ok' ? (symble === '+' ? receiptImg : transferImg) : state === 'waiting' ? waitingImg : failureImg;
@@ -60,7 +62,12 @@ export default class TransactionDetailsScreen extends Component {
                 <View style={styles.content}>
                     <View style={styles.header}>
                         <Image style={styles.image} source={typeImg} />
-                        <Text style={styles.amount}>{amountString}</Text>
+                        <LVBalanceShowView 
+                            unit={'LVT'}
+                            title={LVStrings.show_detail_amount}
+                            symble={symble}
+                            balance={amount}
+                            textStyle={[styles.amount, { marginLeft: hasShrink ? 10 : 46}]}/>
                     </View>
                     <View style={styles.details}>
                         <View style={{ width: '100%', paddingLeft: 15, paddingRight: 15 }}>
@@ -134,7 +141,6 @@ const styles = StyleSheet.create({
         marginLeft: 15
     },
     amount: {
-        marginLeft: 46,
         fontSize: LVSize.xxlarge,
         textAlign: 'right',
         fontWeight: '600',

@@ -4,7 +4,17 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "fix-xcode": "react-native-schemes-manager all",
+    "postinstall": "react-native-schemes-manager all"
+  },
+  "xcodeSchemes": {
+    "Debug": [],
+    "Release": [
+      "AppStore",
+      "Adhoc"
+    ],
+    "projectDirectory": "ios"
   },
   "dependencies": {
     "assert": "^1.4.1",
@@ -77,6 +87,7 @@
     "babel-jest": "21.0.2",
     "babel-preset-react-native": "4.0.0",
     "jest": "21.1.0",
+    "react-native-schemes-manager": "^1.0.1",
     "react-test-renderer": "16.0.0-alpha.12",
     "rn-nodeify": "mvayngrib/rn-nodeify"
   },

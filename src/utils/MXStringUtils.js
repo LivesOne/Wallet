@@ -9,7 +9,7 @@ var sha3 = require('crypto-js/sha3');
 */
 
 const MAX_BALANCE_LENGTH_LIMIT = 13;
-const FRAGMENT_LENGTH = 2;
+const FRAGMENT_LENGTH = 3;
 
 export function convertAmountToCurrencyString(amount: number, thousandsSeparator: ?string, precision: ?number, keepZero: boolean = false): string {
     const amounts = amount || 0;
@@ -40,16 +40,17 @@ export function convertAmountToCurrencyString(amount: number, thousandsSeparator
     return result;
 }
 
-export function beautifyBalanceShow(balance: Big, unit: string) {
-    const original = balance.toString();
+export function beautifyBalanceShow(balance: Big, unit: ?string) {
+    const original = balance.toFixed();
     let result = '';
-    console.log('origin = ' + original);
+    //console.log('origin = ' + original);
     const arr = original.split('.');
     let totalLength = 0;
     let hasShrink = false;
     for (var i = 0; i < arr.length; i++) {
         totalLength += arr[i].length;
     }
+    //alert(totalLength);
     if (totalLength <= MAX_BALANCE_LENGTH_LIMIT) {
         result = original;
     } else {
@@ -66,17 +67,18 @@ export function beautifyBalanceShow(balance: Big, unit: string) {
             } else {
                 hasShrink = true;
                 const numHead = num.slice(0, FRAGMENT_LENGTH);
-                const numTail = num.slice(num.length - FRAGMENT_LENGTH + 1);
-                let leftLength = MAX_BALANCE_LENGTH_LIMIT - 2 - 2 * FRAGMENT_LENGTH;
+                const numTail = num.slice(num.length - FRAGMENT_LENGTH);
+                let leftLength = MAX_BALANCE_LENGTH_LIMIT - 2 - 2 * FRAGMENT_LENGTH - 1;
                 leftLength = Math.min(decimal.length, leftLength);
-                const decimalPart = decimal.slice(0, leftLength + 1);
+                const decimalPart = decimal.slice(0, leftLength);
                 result =  [numHead, '...', numTail, '.', decimalPart].join('');
             }
         } else {
             hasShrink = true;
             const sepLength = (MAX_BALANCE_LENGTH_LIMIT - 2) / 2;
+            const leftLength = MAX_BALANCE_LENGTH_LIMIT - 2 - sepLength;
             const num = original;
-            const numHead = num.slice(0, sepLength);
+            const numHead = num.slice(0, leftLength + 1);
             const numTail = num.slice(num.length - sepLength + 1);
             result =  [numHead, '...', numTail].join('');
         }
