@@ -10,7 +10,8 @@ import knownFoundationErrors from './knownFoundationErrors';
 
 const lvExport = NativeModules.LVReactExport;
 
-var crypto = require("crypto");
+import '../../shim.js';
+import crypto from 'crypto';
 var sjcl = require("sjcl");
 var uuid = require("uuid");
 var secp256k1 = require("secp256k1/elliptic");

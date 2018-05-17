@@ -16,7 +16,7 @@ import LVLoadingToast from '../../Common/LVLoadingToast';
 import LVDialog from '../../Common/LVDialog';
 import LVFullScreenModalView from '../../Common/LVFullScreenModalView';
 import LVWalletImportNavigator from '../../Wallet/LVWalletImportNavigator';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-root-toast';
 import { LVKeyboardDismissView } from '../../Common/LVKeyboardDismissView';
 
 export class ModifyWalletPwd extends Component {

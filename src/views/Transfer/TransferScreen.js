@@ -46,7 +46,7 @@ import LVLoadingToast from '../Common/LVLoadingToast';
 import Moment from 'moment';
 import { LVPasswordDialog } from '../Common/LVPasswordDialog';
 import LVGradientPanel from '../Common/LVGradientPanel';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-root-toast';
 import Transaction from 'ethereumjs-tx';
 var Big = require('big.js');
 import LVBig from '../../logic/LVBig';
@@ -365,7 +365,7 @@ class TransferScreen extends Component {
             await this.refs.loading.dismiss();
             setTimeout(() => {
                 this.setState({alertMessage: success ? LVStrings.transfer_success : LVStrings.transfer_fail });
-                Toast.show(success ? LVStrings.transfer_success : LVStrings.transfer_fail, Toast.Long);
+                Toast.show(success ? LVStrings.transfer_success : LVStrings.transfer_fail, { duration: Toast.durations.LONG });
             }, 500);
         },500);
     }

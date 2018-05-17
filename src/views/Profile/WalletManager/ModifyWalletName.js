@@ -13,7 +13,7 @@ import LVNotificationCenter from '../../../logic/LVNotificationCenter';
 import LVNotification from '../../../logic/LVNotification';
 import LVDialog from '../../Common/LVDialog';
 import WalletUtils from '../../Wallet/WalletUtils';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-root-toast';
 import { LVKeyboardDismissView } from '../../Common/LVKeyboardDismissView';
 
 export class ModifyWalletName extends Component {
@@ -101,7 +101,7 @@ export class ModifyWalletName extends Component {
         try {
             await LVWalletManager.updateWallet(wallet);
             await LVWalletManager.saveToDisk();
-            Toast.show(LVStrings.wallet_edit_save_success, Toast.Long);
+            Toast.show(LVStrings.wallet_edit_save_success, { duration: Toast.durations.LONG });
             LVNotificationCenter.postNotification(LVNotification.walletChanged);
             this.props.navigation.goBack();
         } catch(e) {

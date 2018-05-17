@@ -8,7 +8,7 @@
 import React, { Component } from 'react';
 import { AppState, StyleSheet, Dimensions, Platform, View, Text } from 'react-native';
 import { PullView } from 'react-native-rk-pull-to-refresh';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-root-toast';
 import Moment from 'moment';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
@@ -76,7 +76,7 @@ class AssetsScreen extends Component {
         LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletChange);
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
 
-        this.refs.pull && this.refs.pull.beginRefresh();
+        this.refs.pull && this.refs.pull.startRefresh();
     }
 
     componentWillUnmount() {
@@ -93,14 +93,14 @@ class AssetsScreen extends Component {
             const wallet = LVWalletManager.getSelectedWallet();
             this.setState({ transactionList: LVTransactionRecordManager.records, wallet: wallet });
     
-            this.refs.pull && this.refs.pull.resolveHandler();
+            this.refs.pull && this.refs.pull.finishRefresh();
     
             setTimeout(async () => {
                 this.setState({ showIndicator: false });
             }, 500);
 
         } catch (error) {
-            this.refs.pull && this.refs.pull.resolveHandler();
+            this.refs.pull && this.refs.pull.finishRefresh();
             Toast.show(error.message);
         }
     }
@@ -113,7 +113,7 @@ class AssetsScreen extends Component {
             const lastRefreshTime = await LVPersistent.getNumber(LVLastAssetsRefreshTimeKey);
             const currentTime = Moment().format('X');
             if (currentTime - lastRefreshTime > 120) {
-                this.refs.pull && this.refs.pull.beginRefresh();
+                this.refs.pull && this.refs.pull.startRefresh();
             }
         }
         this.setState({ appState: nextAppState });
@@ -132,7 +132,7 @@ class AssetsScreen extends Component {
             LVTransactionRecordManager.clear();
             this.setState({ transactionList: LVTransactionRecordManager.records });
             setTimeout(async () => {
-                this.refs.pull && this.refs.pull.beginRefresh();
+                this.refs.pull && this.refs.pull.startRefresh();
             }, 500);
         }
     };
