@@ -50,7 +50,7 @@ export default class TransferLogic {
                 toAddress,
                 value,
                 gasPrice,
-                '0x186A0',
+                gasLimit,
                 chainId
             );
             let success = false;
