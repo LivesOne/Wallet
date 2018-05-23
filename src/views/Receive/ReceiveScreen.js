@@ -27,7 +27,7 @@ import { StringUtils } from '../../utils';
 
 import QRCode from 'react-native-qrcode-svg';
 import RNFS from "react-native-fs"
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-root-toast';
 import TransferUtils from '../Transfer/TransferUtils';
 
 

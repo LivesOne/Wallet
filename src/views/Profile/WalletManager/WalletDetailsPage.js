@@ -25,7 +25,7 @@ import { WalletExportModal } from './WalletExportModal';
 import LVWalletManager from '../../../logic/LVWalletManager';
 import {  adjust } from '../../../utils/MXStringUtils';
 import LVLoadingToast from '../../Common/LVLoadingToast';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-root-toast';
 import LVNotificationCenter from '../../../logic/LVNotificationCenter';
 import LVNotification from '../../../logic/LVNotification';
 import LVDialog, { LVConfirmDialog } from '../../Common/LVDialog';

@@ -34,7 +34,7 @@ import LVNotification from '../../logic/LVNotification';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import PropTypes from 'prop-types';
 import console from 'console-browserify';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-root-toast';
 import { LVKeyboardDismissView } from '../Common/LVKeyboardDismissView';
 const foundation = require('../../foundation/wallet.js');
 

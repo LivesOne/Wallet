@@ -22,7 +22,9 @@ const waitingImg = require('../../assets/images/transaction_wating.png');
 const receiptImg = require('../../assets/images/transaction_receipt.png');
 const transferImg = require('../../assets/images/transaction_transfer.png');
 
-export default class TransactionDetailsScreen extends Component {
+type Props = { navigation: Object };
+
+export default class TransactionDetailsScreen extends Component<Props> {
     static lock = false;
 
     static navigationOptions = {

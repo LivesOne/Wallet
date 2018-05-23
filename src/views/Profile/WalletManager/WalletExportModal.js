@@ -9,7 +9,7 @@ import MXButton from './../../../components/MXButton';
 import LVColor from './../../../styles/LVColor';
 import * as MXUtils from './../../../utils/MXUtils';
 import LVStrings from './../../../assets/localization';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-root-toast';
 
 export class WalletExportModal extends Component {
     static propTypes = {

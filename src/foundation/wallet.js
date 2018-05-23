@@ -8,7 +8,7 @@ import WalletUtils from '../views/Wallet/WalletUtils';
 
 const eth_local = require('./ethlocal.js');
 const ethUtil = require('ethereumjs-util');
-const crypto = require("crypto");
+import crypto from 'crypto';
 
 module.exports = {
     defaultOptions : {

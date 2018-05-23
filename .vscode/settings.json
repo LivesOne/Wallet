@@ -4,6 +4,7 @@
     "javascript.validate.enable": false,
     "prettier.singleQuote": true,
     "flow.enabled": true,
+    "flow.useNPMPackagedFlow": true,
     "fileHeaderCommentHelper.languageConfigs": {
         "language_javascript": {
             "template": [
