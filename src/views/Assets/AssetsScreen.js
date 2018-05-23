@@ -14,7 +14,6 @@ import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import LVDialog from '../Common/LVDialog';
-import LVGradientPanel from '../Common/LVGradientPanel';
 import LVDetailTextCell from '../Common/LVDetailTextCell';
 import LVRefreshIndicator from '../Common/LVRefreshIndicator';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
@@ -37,17 +36,18 @@ const LVLastAssetsRefreshTimeKey = '@Venus:LastAssetsRefreshTime';
 
 const isIOS = Platform.OS === 'ios';
 
-class AssetsScreen extends Component {
+type Props = { navigation: Object };
+type State = {
+    appState: string,
+    wallet: ?Object,
+    transactionList: ?Array<LVTransactionRecord>,
+    openSelectWallet: boolean,
+    showIndicator: boolean,
+};
+
+class AssetsScreen extends Component<Props, State> {
     static navigationOptions = {
         header: null
-    };
-
-    state: {
-        appState: string,
-        wallet: ?Object,
-        transactionList: ?Array<LVTransactionRecord>,
-        openSelectWallet: boolean,
-        showIndicator: boolean,
     };
 
     constructor(props: any) {
@@ -198,7 +198,7 @@ class AssetsScreen extends Component {
                         topIndicatorRender={this.topIndicatorRender.bind(this)}
                         onPullStateChangeHeight={this.onPullStateChangeHeight.bind(this)}
                     >
-                        <LVGradientPanel style={styles.gradient}>
+                        <View style={styles.gradient}>
                             <MXNavigatorHeader
                                 style={{ backgroundColor: 'transparent' }}
                                 title={LVStrings.assets_title}
@@ -211,7 +211,7 @@ class AssetsScreen extends Component {
                             <WalletBalanceView 
                                 style={[styles.balance, {height: this.shouldAdjustForIOS() ? 150 /2 : 150,}]} 
                                 lvt={wallet.lvt} eth={wallet.eth} />
-                        </LVGradientPanel>
+                        </View>
                     </PullView>
                 </View>
 
@@ -270,7 +270,8 @@ const styles = StyleSheet.create({
     gradient: {
         flex: 1,
         justifyContent: 'flex-start',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: LVColor.primary
     },
     walletInfo: {
         width: Window.width - 25

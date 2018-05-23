@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions, View, Image, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, Dimensions, View, ViewPropTypes, Image, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Separator } from 'react-native-tableview-simple';
 import PropTypes from 'prop-types';
 import LVSize from '../../styles/LVFontSize';
@@ -20,16 +20,17 @@ const windowHeight = Dimensions.get('window').height;
 const inImg = require('../../assets/images/transfer_in.png');
 const outImg = require('../../assets/images/transfer_out.png');
 
-export default class TransactionRecordList extends React.PureComponent {
-    static propTypes = {
-        loading: PropTypes.bool,
-        records: PropTypes.arrayOf(PropTypes.object),
-        onPressItem: PropTypes.func
-    };
+type Props = {
+    style: ViewPropTypes.style,
+    loading?: bool,
+    records: ?Array<Object>,
+    onPressItem: Function,
+};
+type State = {
+    selected: Map<string, boolean>
+};
 
-    state: {
-        selected: Map<string, boolean>
-    };
+export default class TransactionRecordList extends React.PureComponent<Props, State> {
 
     constructor(props: any) {
         super(props);
@@ -120,15 +121,16 @@ const LVLoadingComponent = () => {
     );
 };
 
-class LVTransactionRecordItem extends React.PureComponent {
-    static propTypes = {
-        type: PropTypes.string.isRequired,
-        amount: PropTypes.object.isRequired,
-        address: PropTypes.string.isRequired,
-        datetime: PropTypes.string,
-        state: PropTypes.string,
-        onPressItem: PropTypes.func
-    };
+type ItemProps = {
+    type: string,
+    amount: Object,
+    address: string,
+    datetime: string,
+    state: ?string,
+    onPressItem: ?Function
+};
+
+class LVTransactionRecordItem extends React.PureComponent<ItemProps> {
 
     render() {
         const { type, amount, address, datetime, state } = this.props;

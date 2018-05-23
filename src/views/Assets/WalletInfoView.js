@@ -13,24 +13,24 @@ import { StringUtils } from '../../utils';
 
 const walletIcon = require('../../assets/images/assets_wallet.png');
 
-export default class WalletInfoView extends Component {
-    static propTypes = {
-        style: ViewPropTypes.style,
-        title: PropTypes.string,
-        titleStyle: Text.propTypes.style,
-        address: PropTypes.string,
-        addressStyle: Text.propTypes.style,
-        walletIcon: PropTypes.any,
-        showLVT: PropTypes.bool
-    };
+type Props = {
+    style: ViewPropTypes.style,
+    title: ?string,
+    titleStyle?: Text.propTypes.style,
+    address: ?string,
+    addressStyle?: Text.propTypes.style,
+    walletIcon?: any,
+    showLVT: bool
+};
 
+export default class WalletInfoView extends Component<Props> {
     static defaultProps = {
-        showLVT: false,
-     };
+        showLVT: false
+    };
 
     render() {
         let lvtText = null;
-        if(this.props.showLVT) {
+        if (this.props.showLVT) {
             lvtText = <Text style={styles.lvt}>{' LVT'}</Text>;
         }
 
@@ -38,15 +38,23 @@ export default class WalletInfoView extends Component {
             <View style={[styles.container, this.props.style]}>
                 <Image source={this.props.walletIcon || walletIcon} />
                 <View style={{ flex: 1, marginLeft: 10 }}>
-                    <View style={{flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
-                        <Text style={[styles.text, styles.walletTitle, this.props.titleStyle]} numberOfLines={1} ellipsizeMode="middle">
-                        {this.props.title}
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
+                        <Text
+                            style={[styles.text, styles.walletTitle, this.props.titleStyle]}
+                            numberOfLines={1}
+                            ellipsizeMode="middle"
+                        >
+                            {this.props.title}
                         </Text>
                         {lvtText}
                     </View>
-                    
-                    <Text style={[styles.text, styles.walletAddress, this.props.addressStyle]} numberOfLines={1} ellipsizeMode="middle">
-                        {StringUtils.converAddressToDisplayableText(this.props.address, 9, 9)}
+
+                    <Text
+                        style={[styles.text, styles.walletAddress, this.props.addressStyle]}
+                        numberOfLines={1}
+                        ellipsizeMode="middle"
+                    >
+                        {StringUtils.converAddressToDisplayableText(this.props.address || '', 9, 9)}
                     </Text>
                 </View>
             </View>
@@ -75,7 +83,7 @@ const styles = StyleSheet.create({
         fontSize: LVSize.xsmall
     },
     lvt: {
-        fontSize:LVSize.xxsmall,
+        fontSize: LVSize.xxsmall,
         color: '#6d798a'
     }
 });

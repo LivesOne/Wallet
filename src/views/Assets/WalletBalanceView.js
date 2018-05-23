@@ -19,12 +19,13 @@ const ethIcon = require('../../assets/images/eth.png');
 
 const isIOS = Platform.OS === 'ios';
 
-export default class WalletBalanceView extends Component {
-    static propTypes = {
-        style: ViewPropTypes.style,
-        lvt: PropTypes.object,
-        eth: PropTypes.object
-    };
+type Props = { 
+    style: ViewPropTypes.style,
+    lvt: Object,
+    eth: Object
+ };
+
+export default class WalletBalanceView extends Component<Props> {
 
     render() {
         const { lvt, eth } = this.props;

@@ -27,16 +27,17 @@ import WalletInfoView from './WalletInfoView';
 import TransactionRecordList from './TransactionRecordList';
 import TransactionDetailsScreen from './TransactionDetailsScreen';
 
-class TransactionRecordsScreen extends Component {
+type Props = { navigation: Object };
+type State = {
+    startDate: string,
+    endDate: string,
+    transactionList: ?Array<LVTransactionRecord>
+};
+
+class TransactionRecordsScreen extends Component<Props, State> {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
-    };
-
-    state: {
-        startDate: string,
-        endDate: string,
-        transactionList: ?Array<LVTransactionRecord>
     };
 
     constructor(props: any) {
