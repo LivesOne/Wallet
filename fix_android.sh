@@ -29,3 +29,4 @@ cp svg.js $qrcode_file
 
 ./node_modules/.bin/rn-nodeify --hack --install
 
+
