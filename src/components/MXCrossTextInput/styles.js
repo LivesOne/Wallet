@@ -35,6 +35,7 @@ const Base = LVStyleSheet.create({
 
   label: {
     fontSize: 15,
+    fontWeight: '500'
   },
 
   buttonArea: {
@@ -72,7 +73,7 @@ const DefaultStyles = StyleSheet.create({
     backgroundColor: LVColor.white,
   },
   label: {
-    color: LVColor.text.editTextContent,
+    color: LVColor.text.editTextPrimary,
   },
 });
 
@@ -81,7 +82,7 @@ const WhiteStyles = StyleSheet.create({
     backgroundColor: LVColor.white,
   },
   label: {
-    color: LVColor.text.editTextContent,
+    color: LVColor.text.editTextPrimary,
   },
 });
 
@@ -90,7 +91,7 @@ const LightStyles = StyleSheet.create({
     backgroundColor: LVColor.white,
   },
   label: {
-    color: LVColor.text.editTextContent,
+    color: LVColor.text.editTextPrimary,
   },
 });
 

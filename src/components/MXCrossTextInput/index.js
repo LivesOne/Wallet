@@ -8,14 +8,31 @@ import { StyleSheet, View, TextInput, TouchableOpacity, Image, ViewPropTypes, Ke
 import { Base, DefaultStyles, LightStyles, WhiteStyles, TextAlignCenterStyles } from './styles';
 
 import LVColor from '../../styles/LVColor';
-import PropTypes from 'prop-types';
 
-class MXCrossTextInput extends Component {
-    state: {
-        text: ?string,
-        defaultValue: string,
-        hasFocus: boolean,
-    };
+type State = {
+    text: ?string,
+    defaultValue: string,
+    hasFocus: boolean,
+};
+
+type Props = {
+    placeholder?: string,
+    rounded?: boolean,
+    themeStyle?: string,
+    style?: any,
+    defaultValue?: string,
+    secureTextEntry?: boolean,
+    onTextChanged?: any,
+    withUnderLine?: boolean,
+    keyboardType?: string,
+    withClearButton?: boolean,
+    rightComponent?: any,
+    setFocusWhenMounted?: boolean,
+    textAlignCenter?: boolean,
+    value?: string,
+    boarderLineHeight?: number,
+};
+class MXCrossTextInput extends Component<Props,State> {
 
     constructor(props: any) {
         super(props);
@@ -29,23 +46,6 @@ class MXCrossTextInput extends Component {
 
     firstMounted = true;
 
-    static propTypes = {
-        placeholder: PropTypes.string,
-        rounded: PropTypes.bool,
-        themeStyle: PropTypes.string,
-        style: ViewPropTypes.style,
-        defaultValue: PropTypes.string,
-        secureTextEntry: PropTypes.bool,
-        onTextChanged: PropTypes.func,
-        withUnderLine: PropTypes.bool,
-        KeyboardType: PropTypes.string,
-        withClearButton: PropTypes.bool,
-        rightComponent: PropTypes.element,
-        setFocusWhenMounted: PropTypes.bool,
-        textAlignCenter: PropTypes.bool,
-        value: PropTypes.string,
-        boarderLineHeight: PropTypes.number,
-    };
 
     static defaultProps = {
         withUnderLine: true,
