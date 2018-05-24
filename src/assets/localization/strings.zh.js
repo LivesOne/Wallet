@@ -225,6 +225,7 @@ const localized_strings = {
     contact_alert_remarks_exceeds_limit: '备注长度超过限制',
     contact_confirm_delete_contact: '确认删除联系人？',
     contact_empty_list_demonstration: '您还未添加联系人',
+    contact_add_nav_right: '添加',
 
     // Network
     network_error: '网络请求失败，请重试!',
