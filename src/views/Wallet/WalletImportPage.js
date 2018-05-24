@@ -38,28 +38,30 @@ import Toast from 'react-native-root-toast';
 import { LVKeyboardDismissView } from '../Common/LVKeyboardDismissView';
 const foundation = require('../../foundation/wallet.js');
 
- export default class AssetsImportPage extends Component {
-    static propTypes = {
-      dismissCallback: PropTypes.func
-    };
+type Props = {
+  navigation: Object,
+  dismissCallback: Function,
+  screenProps: Object
+};
 
+type State = {
+  leftPressed: boolean,
+  showModal: boolean,
+  privateKey: string,
+  privateKeyPwd: string,
+  privateKeyPwdAgain: string,
+  keyStore: string,
+  keyStorePwd: string,
+  alertMessage: ?string,
+  fromPage: string,
+  keyboardHeight: number
+};
+
+export default class AssetsImportPage extends Component<Props, State> {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
     };
-
-    state: {
-      leftPressed: boolean,
-      showModal: boolean,
-      privateKey: string,
-      privateKeyPwd: string,
-      privateKeyPwdAgain: string,
-      keyStore: string,
-      keyStorePwd: string,
-      alertMessage: ?string,
-      fromPage: string,
-      keyboardHeight: number,
-    }
 
     constructor() {
       super();

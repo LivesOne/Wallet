@@ -16,12 +16,21 @@ import PropTypes from 'prop-types';
 const AddContractsIcon = require('../../assets/images/transfer_add_contracts.png');
 const QrScanIcon = require('../../assets/images/transfer_scan.png');
 
-export class ImageTextInput extends Component {
+type Props = {
+    placeholder: string,
+    style: ViewPropTypes.style,
+    onTextChanged: Function,
+    onAddClicked: Function,
+    onScanClicked: Function,
+    keyboardType: string,
+    value: string,
+};
 
-    state: {
-        text: ?string,
-      }
-    
+type State = {
+    text: ?string
+};
+
+export class ImageTextInput extends Component<Props, State> {    
     constructor(props: any) {
         super(props);
         this.state = { text: null};
@@ -33,18 +42,8 @@ export class ImageTextInput extends Component {
         this.props.onTextChanged && this.props.onTextChanged(newText);
     }
 
-    static propTypes = {
-        placeholder: PropTypes.string,
-        style: ViewPropTypes.style,
-        onTextChanged: PropTypes.func,
-        onAddClicked: PropTypes.func,
-        onScanClicked: PropTypes.func,
-        KeyboardType: PropTypes.string,
-        value: PropTypes.string,
-    };
-
     render() {
-        const { style, placeholder, secureTextEntry, keyboardType, onAddClicked, onScanClicked, value} = this.props;
+        const { style, placeholder, keyboardType, onAddClicked, onScanClicked, value} = this.props;
         return (
             <View style={[styles.container, style]}>
                 <TextInput style={styles.textInput}

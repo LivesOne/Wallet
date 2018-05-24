@@ -21,16 +21,17 @@ const DetailItem = ({leftText, rightText}) =>
     <Text style={[styles.right, leftText === LVStrings.transfer_address_in ? {width: '50%'} : null]}>{rightText}</Text>
 </View>);
 
-export class TransferDetailModal extends Component {
-    static propTypes = {
-        isOpen: PropTypes.bool,
-        onClosed: PropTypes.func,
-        address: PropTypes.string,
-        amount: PropTypes.number,
-        minerGap: PropTypes.number,
-        //remarks: PropTypes.string,
-        onTransferConfirmed: PropTypes.func,
-    };
+type Props = {
+    isOpen: bool,
+    onClosed: Function,
+    address: string,
+    amount: number,
+    minerGap: number,
+    //remarks: PropTypes.string,
+    onTransferConfirmed: Function,
+};
+
+export class TransferDetailModal extends Component<Props> {
 
     constructor(props: any) {
         super(props);
@@ -44,7 +45,7 @@ export class TransferDetailModal extends Component {
     };
 
     render() {
-        const {isOpen, onClosed, address, amount, minerGap, remarks, onTransferConfirmed } = this.props;
+        const {isOpen, onClosed, address, amount, minerGap, onTransferConfirmed } = this.props;
         return (
             <Modal 
                 isOpen={isOpen}
