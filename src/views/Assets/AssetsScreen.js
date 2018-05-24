@@ -7,7 +7,7 @@
 
 import React, { Component } from 'react';
 import { AppState, StyleSheet, Dimensions, Platform, View, Text } from 'react-native';
-import { PullView } from 'react-native-rk-pull-to-refresh';
+// import { PullView } from 'react-native-rk-pull-to-refresh';
 import Toast from 'react-native-root-toast';
 import Moment from 'moment';
 import LVSize from '../../styles/LVFontSize';
@@ -190,14 +190,14 @@ class AssetsScreen extends Component<Props, State> {
         return (
             <View style={styles.container}>
                 <View style={[styles.topPanel, {height: this.shouldAdjustForIOS() ? 250 : 315  }]}>
-                    <PullView
+                    {/* <PullView
                         ref={'pull'}
                         style={[styles.topPanel, {height: this.shouldAdjustForIOS() ? 250 : 315}]}
                         onPullRelease={this.onPullRelease.bind(this)}
                         topIndicatorHeight={LVRefreshIndicator.indicatorHeight}
                         topIndicatorRender={this.topIndicatorRender.bind(this)}
                         onPullStateChangeHeight={this.onPullStateChangeHeight.bind(this)}
-                    >
+                    > */}
                         <View style={styles.gradient}>
                             <MXNavigatorHeader
                                 style={{ backgroundColor: 'transparent' }}
@@ -212,7 +212,7 @@ class AssetsScreen extends Component<Props, State> {
                                 style={[styles.balance, {height: this.shouldAdjustForIOS() ? 150 /2 : 150,}]} 
                                 lvt={wallet.lvt} eth={wallet.eth} />
                         </View>
-                    </PullView>
+                    {/* </PullView> */}
                 </View>
 
                 <View style={styles.bottomPanel}>

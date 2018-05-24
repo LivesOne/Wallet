@@ -4926,11 +4926,10 @@ react-native-barcodescanner@^3.1.1:
   version "3.1.1"
   resolved "https://registry.npmjs.org/react-native-barcodescanner/-/react-native-barcodescanner-3.1.1.tgz#99cdc4e89caac8ac6d5fd844fb6b72b9c4485928"
 
-react-native-camera@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.npmjs.org/react-native-camera/-/react-native-camera-1.1.2.tgz#a93c389c522c8909c564f04c4a86072909259d07"
+react-native-camera@^0.10.0:
+  version "0.10.0"
+  resolved "http://registry.npm.taobao.org/react-native-camera/download/react-native-camera-0.10.0.tgz#5d973c9a8aab95f68aede395ba310eae0c3cecdd"
   dependencies:
-    lodash "^4.17.4"
     prop-types "^15.5.10"
 
 react-native-crypto@^2.1.2:
@@ -5053,8 +5052,8 @@ react-native-randombytes@^3.1.0:
     sjcl "^1.0.3"
 
 react-native-rk-pull-to-refresh@^1.1.9:
-  version "1.1.9"
-  resolved "https://registry.npmjs.org/react-native-rk-pull-to-refresh/-/react-native-rk-pull-to-refresh-1.1.9.tgz#fac290c774f35c4310b1959d37c1fc91d0075582"
+  version "1.2.1"
+  resolved "http://registry.npm.taobao.org/react-native-rk-pull-to-refresh/download/react-native-rk-pull-to-refresh-1.2.1.tgz#8f88c98aca72dca1a58cbfe21b0cb6aceffe31de"
 
 react-native-root-siblings@^3.0.0:
   version "3.1.0"
@@ -5101,9 +5100,9 @@ react-native-slider@^0.11.0:
   dependencies:
     prop-types "^15.5.6"
 
-react-native-splash-screen@^3.0.6:
-  version "3.0.6"
-  resolved "https://registry.npmjs.org/react-native-splash-screen/-/react-native-splash-screen-3.0.6.tgz#c0bbf2c8ae40a313c4c7044f55e569414ff68332"
+react-native-splash-screen@^2.1.0:
+  version "2.1.0"
+  resolved "http://registry.npm.taobao.org/react-native-splash-screen/download/react-native-splash-screen-2.1.0.tgz#4e0a5e4e8c32974fe7a3cdb4d9a226d06d9daf4f"
 
 react-native-svg@^6.3.1:
   version "6.3.1"
