@@ -56,6 +56,7 @@ const localized_strings = {
     wallet_name_hint: 'Enter name (less than 40 digits)',
     wallet_name_invalid: 'Incorrect name format',
     wallet_name_exceeds_limit: 'Wallet name is more than 40 digits',
+    wallet_import_tip_keystore_password : "Keystore password",
 
     wallet_create_wallet: 'Create wallet',
     wallet_creating_wallet: 'Creating wallet...',
