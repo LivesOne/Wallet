@@ -38,7 +38,8 @@ const LVColor = {
         grey4: '#c3c8d3',
         red: '#f25656',
         editTextContent: '#27347D',
-        placeHolder: '#bfc5d1'
+        placeHolder: '#bfc5d1',
+        editTextPrimary: '#27347D'
     },
     // 背景色
     background: {

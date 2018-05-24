@@ -50,7 +50,7 @@ export default class MXNavigatorHeader extends Component {
                     {right && (
                         <View style={{}}>
                             {rightIsString && (
-                                <Text style={{ width: 50, fontSize: 16, color: rightTextColor || LVColor.white }}>{right}</Text>
+                                <Text style={{ width: 50, fontSize: 15, color: rightTextColor || LVColor.white }}>{right}</Text>
                             )}
                             {!rightIsString && <Image source={right} />}
                         </View>

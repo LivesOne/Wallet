@@ -19,7 +19,9 @@ import LVWalletImportNavigator from './LVWalletImportNavigator';
 
 const createImage = require("../../assets/images/create_wallet.png");
 
-export default class WalletCreateOrImportPage extends Component {    
+type Props = {};
+
+export default class WalletCreateOrImportPage extends Component<Props> {    
     componentWillMount() {
         StatusBar.setBarStyle('default', false);
     }

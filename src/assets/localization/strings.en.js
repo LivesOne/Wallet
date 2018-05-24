@@ -224,6 +224,12 @@ const localized_strings = {
     contact_alert_remarks_exceeds_limit: 'Remark length exceeds limit',
     contact_confirm_delete_contact: 'Are you sure to delete this contact?',
     contact_empty_list_demonstration: 'You haven\'t added any contact yet',
+    contact_add_nav_right: 'Add',
+    contact_add_place_nickname: 'Nik Name',
+    contact_add_place_address: 'Wallet address',
+    contact_add_place_cellphone: 'Phone number',
+    contact_add_place_email: 'Email address',
+    contact_add_remarks: 'Remarks',
 
     // Network
     network_error: 'Network request failed, please try again!',
