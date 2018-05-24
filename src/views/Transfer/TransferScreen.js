@@ -56,31 +56,35 @@ const scanImg = require('../../assets/images/transfer_scan.png');
 
 const isAndroid = Platform.OS === 'android';
 
-class TransferScreen extends Component {
+type Props = {
+    
+};
+
+type State = {
+    wallet: ?Object,
+    password: string,
+    transactionParams: ?Object;
+    curETH: number,
+    addressIn: string,
+    amount: Big,
+    minGap: number,
+    maxGap:number,
+    balance: Big,
+    showModal: boolean,
+    openSelectWallet: boolean,
+    showQrScanModal: boolean,
+    alertMessage: string,
+    inputPwd: string,
+    balanceTip:string,
+    amountText: string,
+};
+
+class TransferScreen extends Component<Props, State> {
     static navigationOptions = {
         header: null
     };
 
     onSelectedContact: Function;
-
-    state: {
-        wallet: ?Object,
-        password: string,
-        transactionParams: ?Object;
-        curETH: number,
-        addressIn: string,
-        amount: Big,
-        minGap: number,
-        maxGap:number,
-        balance: Big,
-        showModal: boolean,
-        openSelectWallet: boolean,
-        showQrScanModal: boolean,
-        alertMessage: string,
-        inputPwd: string,
-        balanceTip:string,
-        amountText: string,
-    }
 
     constructor() {
         super();
