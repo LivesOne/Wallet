@@ -2,7 +2,7 @@
 'use strict'
 
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Platform } from 'react-native';
+import { Text, View, StyleSheet, Platform, ViewPropTypes} from 'react-native';
 import Slider from "react-native-slider";
 
 import PropTypes from 'prop-types';
@@ -13,12 +13,20 @@ import * as MXUtils from '../../utils/MXUtils'
 import TransferUtils from './TransferUtils';
 var DeviceInfo = require('react-native-device-info');
 
-export class TransferMinerGapSetter extends Component {
+type Props = {
+    enable: bool,
+    minimumValue: number,
+    maximumValue: number,
+    defaultValue: number,
+    onGapChanged: Function,
+    style: ViewPropTypes.style
+};
 
-    state: {
-        value: number,
-    }
+type State = {
+    value: number
+};
 
+export class TransferMinerGapSetter extends Component<Props, State> {
     static propTypes = {
         enable: PropTypes.bool,
         minimumValue: PropTypes.number,

@@ -2,7 +2,7 @@
 'use strict'
 
 import React, { Component } from 'react'
-import { Text, View, Image, StyleSheet, Dimensions, Platform, PixelRatio } from 'react-native';
+import { Text, View, Image, StyleSheet, Dimensions, Platform, PixelRatio,ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
 import LVColor from '../../styles/LVColor'
 import LVSize from '../../styles/LVFontSize';
@@ -16,13 +16,13 @@ import Transaction from 'ethereumjs-tx';
 import TransferUtils from './TransferUtils';
 import { LVBalanceShowView } from '../Common/LVBalanceShowView';
 
-export class TransferHeader extends Component {
+type Props = {
+    balance: number,
+    onPressSelectWallet: Function,
+    style: ViewPropTypes.style
+};
 
-    static propTypes = {
-        balance: PropTypes.object,
-        onPressSelectWallet: PropTypes.func,
-    };
-
+export class TransferHeader extends Component<Props> {
     onPressSelectPurse = () => {
         if (this.props.onPressSelectWallet) {
             this.props.onPressSelectWallet();

@@ -30,13 +30,16 @@ import console from 'console-browserify';
 import { LVConfirmDialog } from './views/Common/LVDialog';
 import { loadavg } from 'react-native-os';
 
-class VenusApp extends Component {
-    state: {
-        loading: boolean,
-        needShowGuide: boolean,
-        hasAnyWallets: boolean
-    };
+type State = {
+    loading: boolean,
+    needShowGuide: boolean,
+    hasAnyWallets: boolean
+};
 
+type Props = {
+};
+
+class VenusApp extends Component<Props, State> {
     constructor() {
         super();
         this.state = {

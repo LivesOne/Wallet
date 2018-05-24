@@ -22,20 +22,24 @@ import LVDialog from '../Common/LVDialog';
 import { LVKeyboardDismissView } from '../Common/LVKeyboardDismissView';
 const backImg = require('../../assets/images/back.png');
 
-export default class WalletCreatePage extends Component {
+type Props = {
+    navigation: Object,
+    screenProps: Object
+};
+type State = {
+    name : ?string,
+    password: ?string,
+    confirmPassword: ?string,
+    alertMessage: ?string
+};
+
+export default class WalletCreatePage extends Component<Props,State> {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
     };
 
     createWallet : Function;
-
-    state : {
-        name : ?string,
-        password: ?string,
-        confirmPassword: ?string,
-        alertMessage: ?string
-    }
 
     constructor() {
         super();
