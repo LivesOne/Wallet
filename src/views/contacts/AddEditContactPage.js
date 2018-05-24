@@ -25,24 +25,26 @@ const scanImg = require('../../assets/images/transfer_scan.png');
 const navButtonEnableColor = '#FFAE1F';
 const navButtonDisableColor = '#c3c8d3';
 
-export default class AddEditContactPage extends Component {
+type Props = {navigation: Object};
+
+type State =  {
+    name: string,
+    address: string,
+    cellPhone: string,
+    email: string,
+    remarks: string,
+    alertMessage: string,
+    navTitle: string,
+    mode: string,
+    editModel: ?Object,
+    showQrScanModal: boolean
+};
+
+export default class AddEditContactPage extends Component<Props, State> {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
     };
-
-    state: {
-        name: string,
-        address: string,
-        cellPhone: string,
-        email: string,
-        remarks: string,
-        alertMessage: string,
-        navTitle: string,
-        mode: string,
-        editModel: ?Object,
-        showQrScanModal: boolean
-    }
 
     onAddingDone : Function;
 
