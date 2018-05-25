@@ -17,14 +17,15 @@ type Props = {
     title: string,
     rounded: boolean,
 	disabled?: boolean,
-	isEmptyButtonType:boolean,
+	isEmptyButtonType?:boolean,
     style: ViewPropTypes.style,
     onPress: Function
 };
 
 class MXButton extends Component<Props,State> {
 	static defaultProps = {
-		disabled: false, // ...but we have a default prop for foo.
+    disabled: false, // ...but we have a default prop for foo.
+    isEmptyButtonType: false,
 	};
 
 	constructor(props: any) {

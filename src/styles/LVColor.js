@@ -18,7 +18,8 @@ const LVColor = {
     // Tab Bar
     tabBar: {
         background: '#fff',
-        tintColor: '#FF892E'
+        tintColor: '#667283',
+        shadowColor:'#6B7A9F',
     },
     // 分隔线
     separateLine: '#D8D8D8',
