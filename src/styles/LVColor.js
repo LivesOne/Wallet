@@ -56,7 +56,7 @@ const LVColor = {
         editTextBottomBoarder: '#bfc5d1',
     },
     //profile nav background color
-    profileNavBack: '#F8F9FB',
+    profileNavBack: '#FFFFFF',
     profileNavTitleColor: '#6d798a'
 };
 
