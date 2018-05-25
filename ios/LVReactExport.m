@@ -12,7 +12,7 @@
 
 @implementation LVReactExport
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(LVReactExport);
 
 + (BOOL)requiresMainQueueSetup {
   return YES;
