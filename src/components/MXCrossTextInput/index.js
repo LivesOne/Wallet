@@ -113,10 +113,12 @@ class MXCrossTextInput extends Component<Props,State> {
                     !withUnderLine ? { borderBottomColor: 'transparent' } : null,
                     style,
                 ]}
-            >   
-                <Text style = {Base.titleLabel}>
-                    {titleText}
-                </Text>
+            >  
+                {this.props.titleText && (
+                    <Text style = {Base.titleLabel}>
+                        {titleText}
+                    </Text>
+                )}
                 <View style={[Base.content]}>
                     <TouchableOpacity style={[textAreaStyle]} activeOpacity={1} onPress={
                         () => {
