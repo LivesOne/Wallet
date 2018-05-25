@@ -10,12 +10,12 @@ import LVColor from '../../styles/LVColor'
 
 const Base = LVStyleSheet.create({
   main: {
-    height: 46,
-    width: MXUtils.getDeviceWidth() - 17 * PixelRatio.get(),
+    height: 80,
+    width: MXUtils.getDeviceWidth() - 18 * PixelRatio.get(),
     backgroundColor: LVColor.white,
   },
   content: {
-    flex: 1,
+    marginTop: 10,
     flexDirection: 'row',
   },
   rounded: {
@@ -25,6 +25,12 @@ const Base = LVStyleSheet.create({
     pad: {
       borderRadius: 35,
     }
+  },
+
+  titleLabel: {
+      fontSize: 12,
+      color: LVColor.text.grey2,
+      marginTop: 18,
   },
 
   textArea: {

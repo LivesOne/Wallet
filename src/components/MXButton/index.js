@@ -9,21 +9,21 @@ import { TouchableHighlight, View, ViewPropTypes, Image, Text } from 'react-nati
 import LVColor from '../../styles/LVColor'
 import PropTypes from 'prop-types';
 
-class MXButton extends Component {
-
-  state: {
+type State = {
     pressStatus: boolean,
-  }
+};
 
-  static propTypes = {
-    title: PropTypes.string.isRequired,
-    rounded: PropTypes.bool,
-    disabled: PropTypes.bool,
+type Props = {
+	title: string,
+    rounded: boolean,
+    disabled: boolean,
     style: ViewPropTypes.style,
-    onPress: PropTypes.func,
-  };
+    onPress: Function,
+};
 
-  constructor(props: any) {
+class MXButton extends Component<Props,State> {
+
+	constructor(props: any) {
     super(props);
     this.state = { 
       pressStatus: false,

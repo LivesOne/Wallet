@@ -6,7 +6,7 @@
  * @flow
  */
 import React, { Component } from 'react'
-import { TextInput, View, StyleSheet, ScrollView, Keyboard, Platform ,Text} from 'react-native';
+import { TextInput, View, StyleSheet, ScrollView, Keyboard, Platform } from 'react-native';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import MXCrossTextInput from '../../components/MXCrossTextInput';
 import {greyNavigationBackIcon} from '../../assets/LVIcons';
@@ -176,70 +176,47 @@ export default class AddEditContactPage extends Component<Props, State> {
                 />
                 <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
                     <View style={styles.container}>
-                        <View style = {styles.cellContainer}>
-                            <Text style = {styles.cellTitle}>
-                            {LVStrings.contact_add_place_nickname}
-                            </Text>
-                            <MXCrossTextInput style={styles.textInputStyle} 
-                                placeholder={LVStrings.contact_add_place_holder_nickname}
-                                withClearButton
-                                defaultValue={this.state.name}
-                                withUnderLine = {false}
-                                onTextChanged= {(text) => this.setState({name: text})}/>
-                        </View>
-                        <View style = {styles.cellContainer}>
-                            <Text style = {styles.cellTitle}>
-                            {LVStrings.contact_add_place_address}
-                            </Text>
-                            <MXCrossTextInput ref={'addressTextInput'}
-                                style={styles.textInputStyle} 
-                                placeholder={LVStrings.contact_add_place_holder_address}
-                                withClearButton={true}
-                                defaultValue={this.state.address}
-                                withUnderLine = {false}
-                                rightComponent={<MXTouchableImage source={scanImg} onPress={ async () => {
-                                    if (Platform.OS === 'android') {
-                                        await Keyboard.dismiss();
-                                    }
-                                    this.onPressScan();
-                                    }} />}
-                                onTextChanged= {(text) => this.setState({address: text})}/>
-                            </View>
-                        <View style = {styles.cellContainer}>
-                            <Text style = {styles.cellTitle}>
-                            {LVStrings.contact_add_place_cellphone}
-                            </Text>
-                            <MXCrossTextInput style={styles.textInputStyle} 
-                                placeholder={LVStrings.contact_add_place_holder_cellphone}
-                                withClearButton
-                                defaultValue={this.state.cellPhone}
-                                withUnderLine = {false}
-                                onTextChanged= {(text) => this.setState({cellPhone: text})}/>
-                        </View>
-                        <View style = {styles.cellContainer}>
-                            <Text style = {styles.cellTitle}>
-                            {LVStrings.contact_add_place_email}
-                            </Text>
-                            <MXCrossTextInput style={styles.textInputStyle} 
-                                placeholder={LVStrings.contact_add_place_holder_email}
-                                withClearButton
-                                defaultValue={this.state.email}
-                                withUnderLine = {false}
-                                onTextChanged= {(text) => this.setState({email: text})}/>
-                        </View>
-                        <View style = {styles.cellContainer}>
-                            <Text style = {styles.cellTitle}>
-                            {LVStrings.contact_add_remarks}
-                            </Text>
-                            <MXCrossTextInput style={styles.textInputStyle}
-                                placeholder={LVStrings.contact_add_place_holder_remarks}
-                                withClearButton
-                                defaultValue={this.state.remarks}
-                                withUnderLine = {false}
-                                onTextChanged= {(text) => this.setState({remarks: text})}/>
-                        </View>
-                        <View style = {styles.bottomLine}>
-                        </View>
+                        <MXCrossTextInput style={styles.textInputStyle} 
+                            placeholder={LVStrings.contact_add_place_holder_nickname}
+                            withClearButton
+                            defaultValue={this.state.name}
+                            withUnderLine = {false}
+                            titleText={LVStrings.contact_add_place_nickname}
+                            onTextChanged= {(text) => this.setState({name: text})}/>
+                        <MXCrossTextInput ref={'addressTextInput'}
+                            style={styles.textInputStyle} 
+                            placeholder={LVStrings.contact_add_place_holder_address}
+                            withClearButton={true}
+                            defaultValue={this.state.address}
+                            withUnderLine = {false}
+                            titleText={LVStrings.contact_add_place_address}
+                            rightComponent={<MXTouchableImage source={scanImg} onPress={ async () => {
+                                if (Platform.OS === 'android') {
+                                    await Keyboard.dismiss();
+                                }
+                                this.onPressScan();
+                                }} />}
+                            onTextChanged= {(text) => this.setState({address: text})}/>
+                        <MXCrossTextInput style={styles.textInputStyle} 
+                            placeholder={LVStrings.contact_add_place_holder_cellphone}
+                            withClearButton
+                            defaultValue={this.state.cellPhone}
+                            withUnderLine = {false}
+                            titleText={LVStrings.contact_add_place_cellphone}
+                            onTextChanged= {(text) => this.setState({cellPhone: text})}/>
+                        <MXCrossTextInput style={styles.textInputStyle} 
+                            placeholder={LVStrings.contact_add_place_holder_email}
+                            withClearButton
+                            defaultValue={this.state.email}
+                            withUnderLine = {false}
+                            titleText={LVStrings.contact_add_place_email}
+                            onTextChanged= {(text) => this.setState({email: text})}/>
+                        <MXCrossTextInput style={styles.textInputStyle}
+                             placeholder={LVStrings.contact_add_place_holder_remarks}
+                             withClearButton
+                             defaultValue={this.state.remarks}
+                             titleText={LVStrings.contact_add_remarks}
+                             onTextChanged= {(text) => this.setState({remarks: text})}/>
                     </View>
                 </ScrollView>
                 <LVQrScanModal 
@@ -271,31 +248,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center'
     },
-    cellContainer: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        height: 80
-    },
-    cellTitle: {
-        marginTop:18,
-        marginLeft:15,
-        fontSize: 12,
-        color: LVColor.text.grey2
-    },
     textInputStyle: {
-        height: 30,
-        marginTop:6,
-        marginLeft:15,
-        marginRight:15,
-    },
-    bottomLine: {
-        marginTop:10,
-        height: StyleSheet.hairlineWidth,
-        backgroundColor: LVColor.separateLine,
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-    },
+        height: 80
+    }
 });
