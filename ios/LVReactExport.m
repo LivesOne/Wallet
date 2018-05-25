@@ -14,6 +14,10 @@
 
 RCT_EXPORT_MODULE()
 
++ (BOOL)requiresMainQueueSetup {
+  return YES;
+}
+
 RCT_EXPORT_METHOD(helloWorld:(NSString *)name) {
   NSLog(@"%@", name);
 }
