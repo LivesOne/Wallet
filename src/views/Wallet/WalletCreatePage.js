@@ -124,9 +124,7 @@ export default class WalletCreatePage extends Component<Props,State> {
             <LVKeyboardDismissView style={styles.container}>
                 <MXNavigatorHeader
                     left={ greyNavigationBackIcon }
-                    style={styles.nav}
                     title={ LVStrings.wallet_create_wallet }
-                    titleStyle={styles.navTitle}
                     onLeftPress={ () => {
                         if(this.props.screenProps.dismiss) {
                             this.props.screenProps.dismiss();
@@ -194,13 +192,6 @@ const styles = LVStyleSheet.create({
         height: 170,
         justifyContent: 'flex-start',
         alignItems: 'center',
-    },
-    nav: {
-        backgroundColor : LVColor.profileNavBack
-    },
-    navTitle: {
-        color : '#6d798a',
-        fontSize: LVFontSize.large
     },
     navBack: {
         paddingLeft: 12.5,

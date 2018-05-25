@@ -119,7 +119,7 @@ const styles = LVStyleSheet.create({
 
     pressedText: {
         fontSize: 14,
-        color: "#667383"
+        color: "#FFAE1F"
     }
   });
 
