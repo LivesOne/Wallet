@@ -15,7 +15,8 @@ YellowBox.ignoreWarnings([
     'Module RCTCameraManager requires main queue setup',
     'Module RNRandomBytes requires main queue setup',
     'Required dispatch_sync to load constants for RNDeviceInfo',
-    'Remote debugger is in a background tab which may cause apps to perform slowly'
+    'Remote debugger is in a background tab which may cause apps to perform slowly',
+    'Class RCTCxxModule'
 ]);
 
 AppRegistry.registerComponent('Venus', () => VenusApp);
