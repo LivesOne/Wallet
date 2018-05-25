@@ -11,7 +11,8 @@ import LVColor from '../../styles/LVColor';
 import LVFontSize from '../../styles/LVFontSize';
 let LVStyleSheet = require('../../styles/LVStyleSheet');
 
-const defaultBackIcon = require('../../assets/images/back.png');
+const whiteBackIcon = require('../../assets/images/back.png');
+const defaultBackIcon = require('../../assets/images/back_grey.png')
 
 export default class MXNavigatorHeader extends Component {
     static propTypes = {

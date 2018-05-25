@@ -36,11 +36,12 @@ const Base = LVStyleSheet.create({
   textArea: {
     flex: 1,
     justifyContent: 'flex-end', 
-    paddingBottom: 6
   },
 
   label: {
     fontSize: 15,
+    textAlign:'left',
+    paddingLeft: 0,
     fontWeight: '500'
   },
 

@@ -21,7 +21,7 @@ const LVColor = {
         tintColor: '#FF892E'
     },
     // 分隔线
-    separateLine: '#EBEDF7',
+    separateLine: '#D8D8D8',
     // Progress Bar
     progressBar: {
         fill: '#7dcd40',
@@ -37,7 +37,7 @@ const LVColor = {
         grey3: '#bec4d0',
         grey4: '#c3c8d3',
         red: '#f25656',
-        editTextContent: '#677384',
+        editTextContent: '#27347D',
         placeHolder: '#bfc5d1',
         editTextPrimary: '#27347D'
     },
