@@ -171,7 +171,7 @@ export default class WalletCreatePage extends Component<Props,State> {
                     />
                 </View>
                 <LVLoadingToast ref={'toast'} title={LVStrings.wallet_creating_wallet}/>
-                <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
+                <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage || ''} buttonTitle={LVStrings.alert_ok}/>
             </LVKeyboardDismissView>
         )
     }

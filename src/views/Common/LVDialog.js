@@ -5,29 +5,35 @@
  */
 'use strict';
 
-import React, { Component } from 'react';
+import * as React from 'react';
 import { StyleSheet, Dimensions, View, ViewPropTypes, Text, Easing, TouchableOpacity } from 'react-native';
 import { Separator } from 'react-native-tableview-simple';
 import Modal from 'react-native-modalbox';
-import PropTypes from 'prop-types';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import MXButton from '../../components/MXButton';
 import MXCrossTextInput from '../../components/MXCrossTextInput';
 
-export default class LVDialog extends Component {
-    static propTypes = {
-        title: PropTypes.string.isRequired,
-        titleStyle: PropTypes.any,
-        message: PropTypes.string,
-        messageStyle: PropTypes.any,
-        buttonTitle: PropTypes.string,
-        onPress: PropTypes.func,
-        onPressContent: PropTypes.func,
-        tapToClose: PropTypes.bool,
-        width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        height: PropTypes.number
-    };
+type Props = {
+    style?: ViewPropTypes.style,
+    title: string,
+    titleStyle?: Text.propTypes.style,
+    message?: string,
+    messageStyle?: Text.propTypes.style,
+    buttonTitle?: string,
+    onPress?: Function,
+    onPressContent?: Function,
+    tapToClose: boolean,
+    width?: any,
+    height?: number,
+    children?: React.Element<any>,
+};
+
+export default class LVDialog extends React.Component<Props> {
+    static defaultProps = {
+        message: '',
+        tapToClose: false,
+    }
 
     show() {
         this.refs.dialog.open();
@@ -92,19 +98,29 @@ export default class LVDialog extends Component {
     }
 }
 
-export class LVConfirmDialog extends LVDialog {
 
-    static propTypes = {
-        confirmTitle: PropTypes.string,
-        cancelTitle: PropTypes.string,
-        confirmTitleStyle: PropTypes.any,
-        cancelTitleStyle: PropTypes.any,
-        onConfirm: PropTypes.func,
-        onCancel: PropTypes.func,
-        dismissAfterConfirm: PropTypes.bool,
-        disableConfirm: PropTypes.bool,
-        disableCancel: PropTypes.bool,
-    };
+type ConfirmDialogProps = Props & {
+    confirmTitle: string,
+    cancelTitle: string,
+    confirmTitleStyle?: Text.propTypes.style,
+    cancelTitleStyle?: Text.propTypes.style,
+    onConfirm: Function,
+    onCancel?: Function,
+    dismissAfterConfirm: boolean,
+    disableConfirm: boolean,
+    disableCancel: boolean
+};
+
+export class LVConfirmDialog extends React.Component<ConfirmDialogProps> {
+
+    static defaultProps = {
+        confirmTitle: LVStrings.common_confirm,
+        cancelTitle: LVStrings.common_cancel,
+        dismissAfterConfirm: false,
+        disableConfirm: false,
+        disableCancel: false,
+        tapToClose: false,
+    }
 
     show() {
         this.refs.dialog.show();
@@ -158,8 +174,7 @@ export class LVConfirmDialog extends LVDialog {
         const lineWidth = StyleSheet.hairlineWidth;
         const lineColor = LVColor.separateLine;
 
-        const confirmTitle = this.props.confirmTitle || LVStrings.common_confirm;
-        const cancelTitle = this.props.cancelTitle || LVStrings.common_cancel;
+        const { confirmTitle, cancelTitle } = this.props;
 
         const childrenHeight = this.props.children ? ( this.props.children.props.height || 64) : 0;
         const modalHeight = 50 + childrenHeight;

@@ -7,20 +7,20 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, ViewPropTypes, View } from 'react-native';
-import PropTypes from 'prop-types';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import MXDetailTextCell from '../../components/MXDetailTextCell';
 
 const arrowImg = require('../../assets/images/show_detail_arrow.png');
 
-export default class LVDetailTextCell extends Component {
-    static propTypes = {
-        style: ViewPropTypes.style,
-        text: PropTypes.string.isRequired,
-        detailText: PropTypes.string,
-        onPress: PropTypes.func
-    };
+type Props = {
+    style: ViewPropTypes.style,
+    text: string,
+    detailText: string,
+    onPress: ?Function
+};
+
+export default class LVDetailTextCell extends Component<Props> {
 
     render() {
         const { style, text, detailText, onPress } = this.props;

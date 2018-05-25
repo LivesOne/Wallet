@@ -7,21 +7,19 @@ import { LVConfirmDialog } from './LVDialog';
 import MXCrossTextInput from './../../components/MXCrossTextInput';
 import LVStrings from '../../assets/localization';
 import LVColor from '../../styles/LVColor';
-import PropTypes from 'prop-types';
 import WalletUtils from '../Wallet/WalletUtils';
 
-export class LVPasswordDialog extends LVConfirmDialog {
+type Props = {
+    verify: Function,
+    onVerifyResult: Function
+};
+type State = {
+    inputPwd: string,
+    verifying: boolean, 
+    cancel: boolean,
+}
 
-    state: {
-        inputPwd: string,
-        verifying: boolean, 
-        cancel: boolean,
-    }
-
-    static propTypes = {
-        verify: PropTypes.func.isRequired,
-        onVerifyResult: PropTypes.func
-    };
+export class LVPasswordDialog extends React.Component<Props, State> {
 
     constructor() {
         super();

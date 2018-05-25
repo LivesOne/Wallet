@@ -4,26 +4,25 @@
 import React, { Component } from 'react'
 import { Text, View, StyleSheet, Easing, TextInput, Platform, Dimensions } from 'react-native';
 import Modal from 'react-native-modalbox';
-import PropTypes from 'prop-types';
 import LVColor from './../../styles/LVColor';
 import LVStrings from './../../assets/localization';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import TransferUtils from '../Transfer/TransferUtils';
 
-
 const CAMERA_WIDTH = Dimensions.get('window').width * 0.6;
 
-export class LVQrScanModal extends Component {
-    
-    static propTypes = {
-        barcodeReceived: PropTypes.func,
-        onClosed: PropTypes.func,
-    };
+type Props = {
+    isOpen: boolean,
+    barcodeReceived: Function,
+    onClosed: Function
+};
 
-    state: {
-        torchMode: string,
-        cameraType: string
-    }
+type State = {
+    torchMode: string,
+    cameraType: string
+}
+
+export class LVQrScanModal extends React.Component<Props, State> {
 
     constructor(props: any) {
         super(props);
