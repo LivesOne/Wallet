@@ -1,7 +1,7 @@
 /**
  * @flow
  */
-'use strict'
+'use strict';
 
 import React, { Component } from 'react'
 import { Base, ActiveStyles, InActiveStyles, NormalStyles ,ActiveEmptyStyles ,NormalEmptyStyles} from './styles'
@@ -10,16 +10,16 @@ import LVColor from '../../styles/LVColor'
 import PropTypes from 'prop-types';
 
 type State = {
-    pressStatus: boolean,
+    pressStatus: boolean
 };
 
 type Props = {
-	title: string,
+    title: string,
     rounded: boolean,
-	disabled: boolean,
+	disabled?: boolean,
 	isEmptyButtonType:boolean,
     style: ViewPropTypes.style,
-    onPress: Function,
+    onPress: Function
 };
 
 class MXButton extends Component<Props,State> {
@@ -34,7 +34,7 @@ class MXButton extends Component<Props,State> {
 	};
   }
 
-  getTheme(disabled: boolean) {
+  getTheme(disabled:?boolean) {
     if (disabled) {
       return InActiveStyles;
     } else {

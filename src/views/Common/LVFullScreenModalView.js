@@ -5,17 +5,19 @@
  * Author: Charles Liu
  * @flow
  */
-import React, { Component } from 'react';
+import * as React from 'react';
 import { StyleSheet, View, Text, Easing, BackHandler, Keyboard, Platform,Modal } from 'react-native';;
-import PropTypes from 'prop-types';
 import WalletUtils from '../Wallet/WalletUtils';
 
-export default class LVFullScreenModalView extends Component {
+type Props = {
+    children?: React.Node,
+};
+type State = {
+    KeyboardShow: boolean,
+    modalVisible: boolean
+}
 
-    state: {
-        KeyboardShow: boolean,
-        modalVisible: boolean
-    }
+export default class LVFullScreenModalView extends React.Component<Props, State> {
 
     keyboardDidShowListener: Object;
     keyboardDidHideListener: Object;

@@ -8,7 +8,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Dimensions, View, Text, Image, Easing, FlatList, TouchableOpacity } from 'react-native';
 import { Separator } from 'react-native-tableview-simple';
-import PropTypes from 'prop-types';
 import Modal from 'react-native-modalbox';
 import LVColor from '../../styles/LVColor';
 import MXTouchableImage from '../../components/MXTouchableImage';
@@ -22,12 +21,13 @@ const itemUnselected = require('../../assets/images/list_item_unselected.png');
 const walletSelected = require('../../assets/images/wallet_selected.png');
 const walletUnselected = require('../../assets/images/wallet_unselected.png');
 
-export default class LVSelectWalletModal extends Component {
-    static propTypes = {
-        isOpen: PropTypes.bool,
-        onClosed: PropTypes.func,
-        onSelected: PropTypes.func
-    };
+type Props = {
+    isOpen: boolean,
+    onClosed?: Function,
+    onSelected?: Function,
+};
+
+export default class LVSelectWalletModal extends React.Component<Props> {
 
     constructor(props: any) {
         super(props);
@@ -118,13 +118,14 @@ const styles = StyleSheet.create({
     }
 });
 
-class LVSelectWalletItem extends React.PureComponent {
-    static propTypes = {
-        name: PropTypes.string.isRequired,
-        address: PropTypes.string.isRequired,
-        selected: PropTypes.bool.isRequired,
-        onPressItem: PropTypes.func
-    };
+type LVSWItemProps = {
+    name: string,
+    address: string,
+    selected: boolean,
+    onPressItem: Function,
+};
+
+class LVSelectWalletItem extends React.PureComponent<LVSWItemProps> {
 
     _onPress = () => {
         this.props.onPressItem(this.props.address);

@@ -14,7 +14,6 @@ import {
     Dimensions,
     Platform
 } from 'react-native';
-import PropTypes from 'prop-types';
 import LVDialog from './LVDialog';
 import LVStrings from './../../assets/localization';
 import LVColor from '../../styles/LVColor';
@@ -26,16 +25,16 @@ import Modal from 'react-native-modalbox';
 const MAX_BALANCE_LENGTH_LIMIT = 13;
 const FRAGMENT_LENGTH = 2;
 
-export class LVBalanceShowView extends Component {
+type Props = {
+    title: string,
+    symble?: string,
+    unit: string,
+    style?: ViewPropTypes.style,
+    textStyle: Text.propTypes.style,
+    balance: Object,
+};
 
-    static propTypes = {
-        title: PropTypes.string,
-        symble: PropTypes.string,
-        unit: PropTypes.string,
-        style: ViewPropTypes.style,
-        textStyle: Text.propTypes.style,
-        balance: PropTypes.object.isRequired,
-    };
+export class LVBalanceShowView extends Component<Props> {
 
     render() {
         let v = beautifyBalanceShow(this.props.balance);
