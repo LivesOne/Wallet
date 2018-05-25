@@ -4,18 +4,36 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, View, TextInput, TouchableOpacity, Image, ViewPropTypes, Keyboard, Platform } from 'react-native';
+import { StyleSheet, View, TextInput, TouchableOpacity, Image, ViewPropTypes, Keyboard, Platform ,Text} from 'react-native';
 import { Base, DefaultStyles, LightStyles, WhiteStyles, TextAlignCenterStyles } from './styles';
 
 import LVColor from '../../styles/LVColor';
-import PropTypes from 'prop-types';
 
-class MXCrossTextInput extends Component {
-    state: {
-        text: ?string,
-        defaultValue: string,
-        hasFocus: boolean,
-    };
+type State = {
+    text: ?string,
+    defaultValue: string,
+    hasFocus: boolean,
+};
+
+type Props = {
+    placeholder?: string,
+    rounded?: boolean,
+    themeStyle?: string,
+    style?: ViewPropTypes.style,
+    defaultValue?: string,
+    secureTextEntry?: boolean,
+    onTextChanged?: Function,
+    withUnderLine?: boolean,
+    keyboardType?: string,
+    withClearButton?: boolean,
+    rightComponent?: Element,
+    setFocusWhenMounted?: boolean,
+    textAlignCenter?: boolean,
+    value?: string,
+    boarderLineHeight?: number,
+    titleText?: string,
+};
+class MXCrossTextInput extends Component<Props,State> {
 
     constructor(props: any) {
         super(props);
@@ -29,23 +47,6 @@ class MXCrossTextInput extends Component {
 
     firstMounted = true;
 
-    static propTypes = {
-        placeholder: PropTypes.string,
-        rounded: PropTypes.bool,
-        themeStyle: PropTypes.string,
-        style: ViewPropTypes.style,
-        defaultValue: PropTypes.string,
-        secureTextEntry: PropTypes.bool,
-        onTextChanged: PropTypes.func,
-        withUnderLine: PropTypes.bool,
-        KeyboardType: PropTypes.string,
-        withClearButton: PropTypes.bool,
-        rightComponent: PropTypes.element,
-        setFocusWhenMounted: PropTypes.bool,
-        textAlignCenter: PropTypes.bool,
-        value: PropTypes.string,
-        boarderLineHeight: PropTypes.number,
-    };
 
     static defaultProps = {
         withUnderLine: true,
@@ -94,7 +95,7 @@ class MXCrossTextInput extends Component {
     }
 
     render() {
-        const { rounded, style, placeholder, secureTextEntry, withUnderLine, keyboardType, textAlignCenter, boarderLineHeight } = this.props;
+        const { rounded, style, placeholder, secureTextEntry, withUnderLine, keyboardType, textAlignCenter, boarderLineHeight,titleText } = this.props;
 
         const theme = this.getTheme();
 
@@ -112,7 +113,10 @@ class MXCrossTextInput extends Component {
                     !withUnderLine ? { borderBottomColor: 'transparent' } : null,
                     style,
                 ]}
-            >
+            >   
+                <Text style = {Base.titleLabel}>
+                    {titleText}
+                </Text>
                 <View style={[Base.content]}>
                     <TouchableOpacity style={[textAreaStyle]} activeOpacity={1} onPress={
                         () => {
@@ -155,7 +159,7 @@ class MXCrossTextInput extends Component {
                         )}
                     </View>
                 </View>
-                <View style={{width: '100%', height: lineHeight, backgroundColor: LVColor.separateLine}} />
+                <View style={{width: '100%', height: lineHeight, backgroundColor: LVColor.separateLine,marginTop: 15}} />
             </View>
         );
     }

@@ -24,15 +24,18 @@ if (Platform.OS === 'ios') {
 }
 
 const API = {
+    GET_TOKEN_LIST: HOST + '/wallet/token/list',
     GET_BALANCE: HOST + '/wallet/balance',
+    GET_BALANCES: HOST + '/wallet/balances',
     GET_MARKET: HOST + '/wallet/market',
     GET_TRANSACTION_HISTORY: HOST + '/wallet/history',
     GET_TRANSACTION_DETAIL: HOST + '/wallet/tx',
     GET_TRANSACTION_PARAM: HOST + '/wallet/param?',
-    POST_SIGNED_TRANSACTION: HOST + '/wallet/tx'
+    POST_SIGNED_TRANSACTION: HOST + '/wallet/tx',
+    GET_APP_CONFIG: HOST + '/wallet/appconfig'
 };
 
-const ErrorCodeMap: Map<number, string> = new Map([[1, 'Request parameter error'], [2, 'Server internal error']]);
+const ErrorCodeMap: Map<number, string> = new Map([[1, 'Request parameter error'], [2, 'Server internal error'], [3, 'Token is not supported']]);
 
 class LVFetch {
     constructor() {}
@@ -121,8 +124,16 @@ class LVFetch {
 class LVNetworking {
     constructor() {}
 
+    static async fetchTokenList() {
+        return await LVFetch.GET(API.GET_TOKEN_LIST);
+    }
+
     static async fetchBalance(address: string, type: string = 'eth') {
         return await LVFetch.GET(API.GET_BALANCE + '/' + address + '?type=' + type);
+    }
+
+    static async fetchBalances(address: string, types: Array<string>) {
+        return await LVFetch.GET(API.GET_BALANCES + '/' + address + '?types=' + types.join(','));
     }
 
     static async fetchMarketExchangeRates() {
@@ -143,6 +154,14 @@ class LVNetworking {
 
     static async transaction(txData: string) {
         return await LVFetch.POST(API.POST_SIGNED_TRANSACTION, { tx: txData });
+    }
+
+    static async getAppConfig() {
+        return await LVFetch.GET(API.GET_APP_CONFIG);
+    }
+
+    static getHost() {
+        return HOST;
     }
 }
 

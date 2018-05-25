@@ -180,12 +180,16 @@ export default class AddEditContactPage extends Component<Props, State> {
                             placeholder={LVStrings.contact_add_place_holder_nickname}
                             withClearButton
                             defaultValue={this.state.name}
+                            withUnderLine = {false}
+                            titleText={LVStrings.contact_add_place_nickname}
                             onTextChanged= {(text) => this.setState({name: text})}/>
                         <MXCrossTextInput ref={'addressTextInput'}
                             style={styles.textInputStyle} 
                             placeholder={LVStrings.contact_add_place_holder_address}
                             withClearButton={true}
                             defaultValue={this.state.address}
+                            withUnderLine = {false}
+                            titleText={LVStrings.contact_add_place_address}
                             rightComponent={<MXTouchableImage source={scanImg} onPress={ async () => {
                                 if (Platform.OS === 'android') {
                                     await Keyboard.dismiss();
@@ -197,16 +201,21 @@ export default class AddEditContactPage extends Component<Props, State> {
                             placeholder={LVStrings.contact_add_place_holder_cellphone}
                             withClearButton
                             defaultValue={this.state.cellPhone}
+                            withUnderLine = {false}
+                            titleText={LVStrings.contact_add_place_cellphone}
                             onTextChanged= {(text) => this.setState({cellPhone: text})}/>
                         <MXCrossTextInput style={styles.textInputStyle} 
                             placeholder={LVStrings.contact_add_place_holder_email}
                             withClearButton
                             defaultValue={this.state.email}
+                            withUnderLine = {false}
+                            titleText={LVStrings.contact_add_place_email}
                             onTextChanged= {(text) => this.setState({email: text})}/>
                         <MXCrossTextInput style={styles.textInputStyle}
                              placeholder={LVStrings.contact_add_place_holder_remarks}
                              withClearButton
                              defaultValue={this.state.remarks}
+                             titleText={LVStrings.contact_add_remarks}
                              onTextChanged= {(text) => this.setState({remarks: text})}/>
                     </View>
                 </ScrollView>
@@ -240,6 +249,6 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     textInputStyle: {
-        height: 60
+        height: 80
     }
 });
