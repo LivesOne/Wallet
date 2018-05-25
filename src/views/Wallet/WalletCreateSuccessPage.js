@@ -22,7 +22,16 @@ import LVPasswordDialog from '../Common/LVPasswordDialog';
 import { backupWallet } from '../../utils/MXUtils';
 import LVWalletManager from '../../logic/LVWalletManager';
 
-export default class WalletCreateSuccessPage extends Component {
+type Props = {
+    navigation: Object,
+    screenProps: Object
+};
+
+type State = {
+    alertMessage: string
+};
+
+export default class WalletCreateSuccessPage extends Component<Props,State> {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
@@ -37,10 +46,6 @@ export default class WalletCreateSuccessPage extends Component {
             alertMessage: ''
         };
     }
-
-    state: {
-        alertMessage: string
-    };
 
     onVerifyResult(success: boolean, password: string) {
         this.refs.passwordConfirm.dismiss();

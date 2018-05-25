@@ -38,28 +38,30 @@ import Toast from 'react-native-root-toast';
 import { LVKeyboardDismissView } from '../Common/LVKeyboardDismissView';
 const foundation = require('../../foundation/wallet.js');
 
- export default class AssetsImportPage extends Component {
-    static propTypes = {
-      dismissCallback: PropTypes.func
-    };
+type Props = {
+  navigation: Object,
+  dismissCallback: Function,
+  screenProps: Object
+};
 
+type State = {
+  leftPressed: boolean,
+  showModal: boolean,
+  privateKey: string,
+  privateKeyPwd: string,
+  privateKeyPwdAgain: string,
+  keyStore: string,
+  keyStorePwd: string,
+  alertMessage: ?string,
+  fromPage: string,
+  keyboardHeight: number
+};
+
+export default class AssetsImportPage extends Component<Props, State> {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
     };
-
-    state: {
-      leftPressed: boolean,
-      showModal: boolean,
-      privateKey: string,
-      privateKeyPwd: string,
-      privateKeyPwdAgain: string,
-      keyStore: string,
-      keyStorePwd: string,
-      alertMessage: ?string,
-      fromPage: string,
-      keyboardHeight: number,
-    }
 
     constructor() {
       super();
@@ -303,6 +305,13 @@ const foundation = require('../../foundation/wallet.js');
             />
             {this.state.leftPressed && this._renderKeystore()}
             {!this.state.leftPressed && this._renderPrivateKey()}
+
+            <MXButton
+              rounded
+              style={{alignSelf: 'center'}}
+              title={LVStrings.wallet_import}
+              onPress={ this.onPrivateImportPress.bind(this) }
+            />
             <LVLoadingToast ref={'toast'} title={LVStrings.wallet_import_header}/>
             <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
         </KeyboardDismissView>
@@ -321,17 +330,16 @@ const foundation = require('../../foundation/wallet.js');
             onChangeText={(newText)=>{this.setState({keyStore: newText})}}
             style={ styles.textInput }
           />
+
+          <Text style={[styles.textTip , {marginTop : 33}]}>
+            {LVStrings.wallet_import_tip_keystore_password}
+          </Text>
+
           <MXCrossTextInput
-            style={{marginTop: 15, marginBottom: 35}}
+            style={{marginTop: 5, marginBottom: 35}}
             secureTextEntry={true}
             onTextChanged={(newText)=>{ this.setState({keyStorePwd: newText}) }}
             placeholder={LVStrings.wallet_import_keystore_password_hint}
-          />
-          <MXButton
-            rounded
-            style={{alignSelf: 'center'}}
-            title={LVStrings.wallet_import}
-            onPress={ this.onKeystoreImportPress.bind(this) }
           />
         </View>
       );
@@ -339,7 +347,8 @@ const foundation = require('../../foundation/wallet.js');
 
     _renderPrivateKey = ()=> {
       return (
-        <LVKeyboardAvoidingView behavior='padding'>
+        <View style={{ flex : 1}}>
+        <LVKeyboardAvoidingView behavior='padding' style={{height : 500}}>
           <ScrollView style={{ flex: 1}}>
             <TextInput
               textAlignVertical={'top'}
@@ -350,27 +359,30 @@ const foundation = require('../../foundation/wallet.js');
               underlineColorAndroid = {'transparent'}
               style={ styles.textInput }
             />
+
+          <Text style={[styles.textTip , {marginTop : 33}]}>
+            {LVStrings.wallet_import_tip_keystore_password}
+          </Text>
             <MXCrossTextInput
-              style={{marginTop: 15, marginBottom: 10}}
+              style={{marginTop: 5}}
               secureTextEntry={true}
               returnKeyType={'next'}
               onTextChanged={(newText)=>{this.setState({privateKeyPwd: newText})}}
               placeholder={LVStrings.wallet_import_private_password_hint}
             />
+
+          <Text style={[styles.textTip , {marginTop : 38}]}>
+            {LVStrings.wallet_import_tip_keystore_password}
+          </Text>
             <MXCrossTextInput
-              style={{marginTop: 15, marginBottom: 35}}
+              style={{marginTop: 5}}
               secureTextEntry={true}
               onTextChanged={(newText)=>{this.setState({privateKeyPwdAgain: newText})}}
               placeholder={LVStrings.wallet_import_private_pwd_confirm_hint}
             />
-            <MXButton
-              rounded
-              style={{alignSelf: 'center'}}
-              title={LVStrings.wallet_import}
-              onPress={ this.onPrivateImportPress.bind(this) }
-            />
           </ScrollView>
         </LVKeyboardAvoidingView>
+        </View>
       );
     }
 
@@ -398,12 +410,15 @@ const foundation = require('../../foundation/wallet.js');
       backgroundColor: LVColor.white
     },
     textInput: {
-      backgroundColor: "#f8f9fb",
+      backgroundColor: "#F9F9FA",
       height: 110,
       marginTop: 20,
       borderRadius: 3,
       padding: 6,
       fontSize: 14,
     },
-
+    textTip : {
+      color : "#677384" ,
+      fontSize : 12,
+    }
   });

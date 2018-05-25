@@ -25,6 +25,7 @@ const localized_strings = {
     //receive
     receive_title:'My wallet QR code',
     receive_name:'Wallet address',
+    receive_name_suffix : "'s wallet",
     receive_copy:'Copy the address',
     receive_save:'Save the QR code',
     receive_empty:'You haven’t add a wallet yet',
@@ -56,6 +57,7 @@ const localized_strings = {
     wallet_name_hint: 'Enter name (less than 40 digits)',
     wallet_name_invalid: 'Incorrect name format',
     wallet_name_exceeds_limit: 'Wallet name is more than 40 digits',
+    wallet_import_tip_keystore_password : "Keystore password",
 
     wallet_create_wallet: 'Create wallet',
     wallet_creating_wallet: 'Creating wallet...',
@@ -224,6 +226,12 @@ const localized_strings = {
     contact_alert_remarks_exceeds_limit: 'Remark length exceeds limit',
     contact_confirm_delete_contact: 'Are you sure to delete this contact?',
     contact_empty_list_demonstration: 'You haven\'t added any contact yet',
+    contact_add_nav_right: 'Add',
+    contact_add_place_nickname: 'Nik Name',
+    contact_add_place_address: 'Wallet address',
+    contact_add_place_cellphone: 'Phone number',
+    contact_add_place_email: 'Email address',
+    contact_add_remarks: 'Remarks',
 
     // Network
     network_error: 'Network request failed, please try again!',

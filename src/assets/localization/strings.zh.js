@@ -25,6 +25,7 @@ const localized_strings = {
     //receive
     receive_title:'我的收款码',
     receive_name:'钱包地址',
+    receive_name_suffix : "的钱包",
     receive_copy:'复制地址',
     receive_save:'保存二维码',
     receive_empty:'您还未添加钱包',
@@ -47,6 +48,7 @@ const localized_strings = {
     wallet_import_private_key_required: '私钥不能为空！',
     wallet_import_success: '导入成功！',
     wallet_import_fail: '导入失败！',
+    wallet_import_tip_keystore_password : "Keystore密码",
     
     wallet_create_wallet: '创建钱包',
     wallet_creating_wallet: '创建钱包中...',
@@ -212,10 +214,10 @@ const localized_strings = {
     contact_list_nav_title: '联系人',
     contact_add_nav_title: '添加联系人',
     contact_edit_nav_title: '编辑联系人',
-    contact_add_place_holder_nickname: '联系人昵称',
-    contact_add_place_holder_address: '钱包地址',
-    contact_add_place_holder_cellphone: '手机号码',
-    contact_add_place_holder_email: '邮箱',
+    contact_add_place_holder_nickname: '请输入联系人昵称',
+    contact_add_place_holder_address: '请输入钱包地址',
+    contact_add_place_holder_cellphone: '请输入电话',
+    contact_add_place_holder_email: '请输入邮箱',
     contact_add_place_holder_remarks: '备注',
     contact_alert_name_required: '名字不能为空',
     contact_alert_address_required: '钱包地址不能为空',
@@ -225,6 +227,12 @@ const localized_strings = {
     contact_alert_remarks_exceeds_limit: '备注长度超过限制',
     contact_confirm_delete_contact: '确认删除联系人？',
     contact_empty_list_demonstration: '您还未添加联系人',
+    contact_add_nav_right: '添加',
+    contact_add_place_nickname: '昵称',
+    contact_add_place_address: '钱包地址',
+    contact_add_place_cellphone: '电话',
+    contact_add_place_email: '邮箱',
+    contact_add_remarks: '备注',
 
     // Network
     network_error: '网络请求失败，请重试!',

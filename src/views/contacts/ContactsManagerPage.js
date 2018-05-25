@@ -4,6 +4,7 @@
  * Author: Charles Liu
  * @flow
  */
+"use strict";
 
 import React, { Component } from 'react'
 import { Dimensions, Text, View, StyleSheet, Image,TouchableHighlight, FlatList } from 'react-native';
@@ -25,7 +26,17 @@ const AvatarIcon = require('../../assets/images/contact_avatar.png');
 const ShowDetailsIcon = require('../../assets/images/show_detail_arrow.png');
 const EmptyContactListIndicatorIcon = require('../../assets/images/contant_list_empty.png');
 
-export default class ContactsManagerPage extends Component {
+type Props = {navigation: Object };
+
+type State =  {
+        contacts: Array<Object>,
+        toDeDeletedContactName: ?string,
+        scrollEnabled: boolean,
+        readonly: boolean,
+        callback: Function
+};
+
+export default class ContactsManagerPage extends  Component<Props, State> {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
@@ -33,7 +44,7 @@ export default class ContactsManagerPage extends Component {
 
     renderRow : Function;
     onDeleteContact: Function;
-
+    
     constructor(props: any) {
         super();
 
@@ -49,13 +60,6 @@ export default class ContactsManagerPage extends Component {
         this.onDeleteContact = this.onDeleteContact.bind(this);
     }
 
-    state: {
-        contacts: Array<Object>,
-        toDeDeletedContactName: ?string,
-        scrollEnabled: boolean,
-        readonly: boolean,
-        callback: Function
-    }
 
     async loadContacts (){
         await ContactLib.instance.loadLocalContacts();
@@ -84,7 +88,7 @@ export default class ContactsManagerPage extends Component {
         this.loadContacts();
     }
 
-    renderRow({item, separators}) {
+    renderRow({item, separators}: any) {
         const swipeBts = [
             {
                 text: LVStrings.common_delete,
@@ -153,7 +157,8 @@ export default class ContactsManagerPage extends Component {
                     title={ LVStrings.contact_list_nav_title }
                     titleStyle={styles.navTitle}
                     onLeftPress={ () => {this.props.navigation.goBack() }}
-                    right={addIcon}
+                    right={LVStrings.contact_add_nav_right}
+                    rightTextColor= {LVColor.text.grey2}
                     onRightPress={ () =>{
                         if(!addIcon) {
                             return;
@@ -241,7 +246,7 @@ const styles = StyleSheet.create({
         marginTop: 125
     },
     emptyListTextStyle: {
-        marginTop: 5,
+        marginTop: 10,
         color: LVColor.text.editTextContent,
         fontSize: 15
     }

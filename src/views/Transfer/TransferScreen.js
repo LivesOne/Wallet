@@ -48,6 +48,8 @@ import { LVPasswordDialog } from '../Common/LVPasswordDialog';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import Toast from 'react-native-root-toast';
 import Transaction from 'ethereumjs-tx';
+import MXNavigatorHeader from '../../components/MXNavigatorHeader';
+
 var Big = require('big.js');
 import LVBig from '../../logic/LVBig';
 
@@ -56,31 +58,35 @@ const scanImg = require('../../assets/images/transfer_scan.png');
 
 const isAndroid = Platform.OS === 'android';
 
-class TransferScreen extends Component {
+type Props = {
+    
+};
+
+type State = {
+    wallet: ?Object,
+    password: string,
+    transactionParams: ?Object;
+    curETH: number,
+    addressIn: string,
+    amount: Big,
+    minGap: number,
+    maxGap:number,
+    balance: Big,
+    showModal: boolean,
+    openSelectWallet: boolean,
+    showQrScanModal: boolean,
+    alertMessage: string,
+    inputPwd: string,
+    balanceTip:string,
+    amountText: string,
+};
+
+class TransferScreen extends Component<Props, State> {
     static navigationOptions = {
         header: null
     };
 
     onSelectedContact: Function;
-
-    state: {
-        wallet: ?Object,
-        password: string,
-        transactionParams: ?Object;
-        curETH: number,
-        addressIn: string,
-        amount: Big,
-        minGap: number,
-        maxGap:number,
-        balance: Big,
-        showModal: boolean,
-        openSelectWallet: boolean,
-        showQrScanModal: boolean,
-        alertMessage: string,
-        inputPwd: string,
-        balanceTip:string,
-        amountText: string,
-    }
 
     constructor() {
         super();
@@ -416,21 +422,23 @@ class TransferScreen extends Component {
                             }}
                         isOpen= {this.state.showQrScanModal}
                         onClosed = {()=>{this.setState({ showQrScanModal: false })}}/>
-                    <TransferHeader
-                        style={styles.header}
-                        eth={this.state.curETH}
-                        balance={this.state.balance}
-                        onPressSelectWallet={()=>{this.setState({ openSelectWallet: true })}}
-                    ></TransferHeader>
+
+                    <MXNavigatorHeader
+                        style={{ backgroundColor: LVColor.white }}
+                        title={LVStrings.transaction_details}
+                        titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
+                        />
                     <View style= { styles.headerBelow }>
+                        <Text style = {{ fontSize: 12, color: LVColor.text.grey1, }}>{LVStrings.transfer_payee_address}</Text>
                         <MXCrossTextInput 
                             ref={'refAddressIn'}
                             style={styles.textInput} 
                             placeholder={LVStrings.transfer_payee_address}
                             defaultValue={this.state.addressIn}
                             boarderLineHeight={1}
+                            withUnderLine={false}
                             rightComponent={
-                                <View style={{flexDirection:'row', justifyContent: 'space-between', width: 55}}>
+                                <View style={{flexDirection:'row', justifyContent: 'space-between', width: 65}}>
                                     <MXTouchableImage source={addImg} onPress={() => {this.props.navigation.navigate('ContactList',{readonly:true, callback:this.onSelectedContact})}}/>
                                     <MXTouchableImage source={scanImg} onPress={async() => {
                                         if (Platform.OS === 'android') {
@@ -441,22 +449,26 @@ class TransferScreen extends Component {
                                 </View>
                             }
                             onTextChanged= {this.onAddressChanged.bind(this)}/>
-                        <MXCrossTextInput 
-                            ref={'refAmount'}
-                            style= {styles.textInput} 
-                            placeholder={LVStrings.transfer_amount}
-                            keyboardType = {'numeric'}
-                            boarderLineHeight={Platform.OS === 'android' ? 1 : null}
-                            onTextChanged={this.onAmountChanged.bind(this)}/>
-                        <TransferMinerGapSetter 
-                            ref={'gapSetter'}
-                            enable={this.state.transactionParams !== null}
-                            minimumValue={this.state.minGap}
-                            maximumValue={this.state.maxGap}
-                            defaultValue={transactionParams !== null?
-                            TransferUtils.convertHex2Eth(transactionParams.gasPrice, transactionParams.gasLimit) : 0}
-                            onGapChanged={this.onGapChanged.bind(this)}
-                            style = {styles.setter}/>
+                            <Text style = {{ fontSize: 12, color: LVColor.text.grey1,marginTop:12 }}>{LVStrings.transfer_amount}</Text>
+                            <MXCrossTextInput 
+                                ref={'refAmount'}
+                                style= {styles.textInput} 
+                                placeholder={LVStrings.transfer_amount}
+                                keyboardType = {'numeric'}
+                                withUnderLine={false}
+                                boarderLineHeight={Platform.OS === 'android' ? 1 : null}
+                                onTextChanged={this.onAmountChanged.bind(this)}/>
+                            
+                            <View style={styles.curEth} />
+                            <TransferMinerGapSetter 
+                                ref={'gapSetter'}
+                                enable={this.state.transactionParams !== null}
+                                minimumValue={this.state.minGap}
+                                maximumValue={this.state.maxGap}
+                                defaultValue={transactionParams !== null?
+                                TransferUtils.convertHex2Eth(transactionParams.gasPrice, transactionParams.gasLimit) : 0}
+                                onGapChanged={this.onGapChanged.bind(this)}
+                                style = {styles.setter}/>
                         <View style= { styles.curEth }>
                             <Text style = {styles.text}>{LVStrings.transfer_current_eth}</Text>
                             <Text style = {styles.textCurEth}>{StringUtils.convertAmountToCurrencyString(this.state.curETH, ',', 8)}</Text>
@@ -505,7 +517,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     textInput: {
-        marginTop: 5 * pixelRatio, 
         width: '100%',
     },
     header: {
@@ -513,6 +524,7 @@ const styles = StyleSheet.create({
     },
     headerBelow: {
         flex: 7,
+        marginTop: 17,
         marginHorizontal: 15,
     },
     setter: {
