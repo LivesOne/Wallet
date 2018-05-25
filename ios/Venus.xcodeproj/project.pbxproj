@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -48,6 +47,7 @@
 		C48308541F95E2220036FDC5 /* libRCTCameraRoll.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C483082F1F95E1300036FDC5 /* libRCTCameraRoll.a */; };
 		CC0F2921B5B74306A40D3990 /* libUdpSockets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE57DCA9D2EC4564AA2F68B9 /* libUdpSockets.a */; };
 		EA8378ABCCF74572B9FE6072 /* libRNCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F223CBFA2401444898BD274B /* libRNCamera.a */; };
+		7660D0BEA8CC4A7A9A5EA474 /* libRNAppUpdate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EDDA396C76774BCA81610B3C /* libRNAppUpdate.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -517,6 +517,8 @@
 		E46945750DF34770BA645832 /* RNCamera.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCamera.xcodeproj; path = "../node_modules/react-native-camera/ios/RNCamera.xcodeproj"; sourceTree = "<group>"; };
 		F223CBFA2401444898BD274B /* libRNCamera.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNCamera.a; sourceTree = "<group>"; };
 		FA5E1A3EDEE64114B587BC09 /* libReactNativeLocalization.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libReactNativeLocalization.a; sourceTree = "<group>"; };
+		85AC047BE18D40538EEBDF32 /* RNAppUpdate.xcodeproj */ = {isa = PBXFileReference; name = "RNAppUpdate.xcodeproj"; path = "../node_modules/react-native-appupdate/ios/RNAppUpdate.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		EDDA396C76774BCA81610B3C /* libRNAppUpdate.a */ = {isa = PBXFileReference; name = "libRNAppUpdate.a"; path = "libRNAppUpdate.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -550,6 +552,7 @@
 				3F70E2F75F2948A7B1C3E890 /* libRNFS.a in Frameworks */,
 				593FEE7AB69D42F295337AE6 /* libSplashScreen.a in Frameworks */,
 				EA8378ABCCF74572B9FE6072 /* libRNCamera.a in Frameworks */,
+				7660D0BEA8CC4A7A9A5EA474 /* libRNAppUpdate.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -817,6 +820,7 @@
 				3F684093B72345E7B56476AC /* SplashScreen.xcodeproj */,
 				E46945750DF34770BA645832 /* RNCamera.xcodeproj */,
 				1A02C73352FA4F1CAD0A05C9 /* RNDeviceInfo.xcodeproj */,
+				85AC047BE18D40538EEBDF32 /* RNAppUpdate.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1580,12 +1584,14 @@
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
+					"$(SRCROOT)/../node_modules/react-native-appupdate/ios/RNAppUpdate",
 				);
 				INFOPLIST_FILE = Venus/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/Venus\"",
 					"\"$(SRCROOT)/Venus\"",
 					"\"$(SRCROOT)/Venus\"",
 				);
@@ -1624,12 +1630,14 @@
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
+					"$(SRCROOT)/../node_modules/react-native-appupdate/ios/RNAppUpdate",
 				);
 				INFOPLIST_FILE = Venus/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/Venus\"",
 					"\"$(SRCROOT)/Venus\"",
 					"\"$(SRCROOT)/Venus\"",
 				);
@@ -1705,12 +1713,14 @@
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
+					"$(SRCROOT)/../node_modules/react-native-appupdate/ios/RNAppUpdate",
 				);
 				INFOPLIST_FILE = Venus/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/Venus\"",
 					"\"$(SRCROOT)/Venus\"",
 					"\"$(SRCROOT)/Venus\"",
 				);
@@ -1786,12 +1796,14 @@
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
+					"$(SRCROOT)/../node_modules/react-native-appupdate/ios/RNAppUpdate",
 				);
 				INFOPLIST_FILE = Venus/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/Venus\"",
 					"\"$(SRCROOT)/Venus\"",
 					"\"$(SRCROOT)/Venus\"",
 				);
