@@ -8,7 +8,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import { Separator } from 'react-native-tableview-simple';
-import PropTypes from 'prop-types';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
@@ -32,49 +31,47 @@ export default class TransactionDetailsScreen extends Component<Props> {
         tabBarVisible: false
     };
 
-    componentWillUnmount() {
-        TransactionDetailsScreen.lock = false;
-    }
-
     render() {
         const { transactionRecord } = this.props.navigation.state.params;
-        const { block, hash, type, amount, payer, receiver, minnerFee, datetime, state } = transactionRecord;
+        const { block, hash, type, token, balance, payer, receiver, minnerFee, datetime, state } = transactionRecord;
 
         const is_failed = false;
-        const symble = type === 'in' ? '+' : '-';
-        //const amountString = symble + StringUtils.convertAmountToCurrencyString(amount, ',', 0);
+        const prefix = type === 'in' ? '+' : '-';
         const feeString = StringUtils.beautifyBalanceShow(minnerFee, 'ETH').result;
-        const hasShrink = StringUtils.beautifyBalanceShow(amount, "LVT").hasShrink;
+        const hasShrink = StringUtils.beautifyBalanceShow(balance, 'LVT').hasShrink;
+        const payerAddress = StringUtils.converAddressToDisplayableText(payer, 9, 11);
+        const receiverAddress = StringUtils.converAddressToDisplayableText(receiver, 9, 11);
         //const remarks = transactionRecord.remarks || LVStrings.transaction_na;
 
-        const typeImg = state === 'ok' ? (symble === '+' ? receiptImg : transferImg) : state === 'waiting' ? waitingImg : failureImg;
-
+        const typeImg =
+            state === 'ok'
+                ? prefix === '+'
+                    ? receiptImg
+                    : transferImg
+                : state === 'waiting'
+                    ? waitingImg
+                    : failureImg;
 
         return (
             <View style={styles.container}>
                 <MXNavigatorHeader
                     left={require('../../assets/images/back_grey.png')}
                     title={LVStrings.transaction_details}
-                    style={{ backgroundColor: 'transparent' }}
-                    titleStyle={{ fontSize: LVSize.large, color: LVColor.text.grey1 }}
+                    style={{ backgroundColor: LVColor.white }}
+                    titleStyle={{ fontSize: LVSize.large, color: LVColor.text.grey2 }}
                     onLeftPress={() => {
                         this.props.navigation.goBack();
                     }}
                 />
                 <View style={styles.content}>
                     <View style={styles.header}>
+                        <LVTransDetailBalanceView prifix={prefix} balance={balance} token={token} />
                         <Image style={styles.image} source={typeImg} />
-                        <LVBalanceShowView 
-                            unit={'LVT'}
-                            title={LVStrings.show_detail_amount}
-                            symble={symble}
-                            balance={amount}
-                            textStyle={[styles.amount, { marginLeft: hasShrink ? 10 : 46}]}/>
                     </View>
                     <View style={styles.details}>
                         <View style={{ width: '100%', paddingLeft: 15, paddingRight: 15 }}>
-                            <LVSubTitleCell title={LVStrings.transaction_payer} value={'0x' + payer} />
-                            <LVSubTitleCell title={LVStrings.transaction_receiver} value={'0x' + receiver} />
+                            <LVSubTitleCell title={LVStrings.transaction_payer} value={payerAddress} />
+                            <LVSubTitleCell title={LVStrings.transaction_receiver} value={receiverAddress} />
                             <LVSubTitleCell title={LVStrings.transaction_minner_fee} value={feeString} />
                             {state === 'failed' && (
                                 <Text style={styles.failureText}>{LVStrings.transaction_failure_message}</Text>
@@ -97,12 +94,25 @@ export default class TransactionDetailsScreen extends Component<Props> {
     }
 }
 
+const LVTransDetailBalanceView = ({ prifix, balance, token }) => (
+    <View style={{ alignSelf: 'flex-end', marginLeft: 15, marginBottom: 20 }}>
+        <View style={{ flexDirection: 'row' }}>
+            <LVBalanceShowView
+                title={LVStrings.show_detail_amount}
+                unit={token.toUpperCase()}
+                symble={prifix}
+                balance={balance}
+                textStyle={styles.balance}
+            />
+            <Text style={styles.token} >{token.toUpperCase()}</Text>
+        </View>
+    </View>
+);
+
 const LVSubTitleCell = ({ title, value }) => (
-    <View style={{ height: 69, justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <View style={{ height: 8 }} />
-        <Text style={{ fontSize: 14, textAlign: 'left', color: LVColor.primary }}>{title}</Text>
-        <Text style={{ fontSize: 13, textAlign: 'left', color: LVColor.text.grey1 }}>{value}</Text>
-        <View style={{ width: '100%', height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }} />
+    <View style={{ height: 60, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Text style={{ fontSize: 14, textAlign: 'left', color: LVColor.text.grey2 }}>{title}</Text>
+        <Text style={{ fontSize: 13, textAlign: 'right', color: LVColor.text.placeHolder }}>{value}</Text>
     </View>
 );
 
@@ -123,14 +133,14 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         justifyContent: 'flex-start',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: LVColor.white
     },
     header: {
         width: '100%',
         height: 90,
         flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center'
+        justifyContent: 'space-between'
     },
     details: {
         flex: 1,
@@ -140,13 +150,21 @@ const styles = StyleSheet.create({
         backgroundColor: LVColor.white
     },
     image: {
-        marginLeft: 15
+        marginTop: 5,
+        marginRight: 15
     },
-    amount: {
+    balance: {
         fontSize: LVSize.xxlarge,
         textAlign: 'right',
         fontWeight: '600',
-        color: LVColor.text.grey1
+        color: LVColor.text.grey2
+    },
+    token: {
+        fontSize: LVSize.xsmall,
+        color: LVColor.text.grey1,
+        alignSelf: 'flex-end',
+        marginLeft: 5,
+        marginBottom: 4,
     },
     failureText: {
         fontSize: LVSize.xsmall,

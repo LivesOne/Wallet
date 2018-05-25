@@ -32,6 +32,7 @@ class MXButton extends Component<Props,State> {
     super(props);
     this.state = { 
       pressStatus: false,
+      isEmptyButtonType: false
 	};
   }
 

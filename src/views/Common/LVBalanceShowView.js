@@ -64,7 +64,7 @@ export class LVBalanceShowView extends Component<Props> {
                                 alignItems: 'center'}} onPress={()=>{this.refs.alert.close()}}>
                             <Image style={{}} source={CloseIcon}></Image>
                         </TouchableOpacity>
-                        <Text style={{fontSize: 18,  color: LVColor.text.grey2, marginBottom: 10, marginTop: -15}}>{title}</Text>
+                        <Text style={{fontSize: 16,  color: LVColor.text.grey2, marginBottom: 10, marginTop: -15}}>{title}</Text>
                         <TextInput  
                             underlineColorAndroid = {'transparent'}
                             multiline= {true}

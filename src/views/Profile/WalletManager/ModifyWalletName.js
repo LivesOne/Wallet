@@ -16,18 +16,22 @@ import WalletUtils from '../../Wallet/WalletUtils';
 import Toast from 'react-native-root-toast';
 import { LVKeyboardDismissView } from '../../Common/LVKeyboardDismissView';
 
-export class ModifyWalletName extends Component {
+type Props = {
+    navigation: Object
+};
+
+type State = {
+    wallet: ?Object,
+    name: ?string,
+    alertMessage: string,
+};
+
+export class ModifyWalletName extends React.Component<Props, State> {
 
     static navigationOptions = {
         header: null,
         tabBarVisible: false
     };
-
-    state: {
-        wallet: ?Object,
-        name: ?string,
-        alertMessage: string,
-    }
 
     constructor() {
         super();
@@ -127,10 +131,9 @@ export class ModifyWalletName extends Component {
                     rightTextColor = { LVColor.primary }
                     onRightPress={this.onSavePressed.bind(this)}/>
                     <View style= {{ paddingHorizontal:12.5}}>
-                        <Text style={styles.text}>
-                        { LVStrings.profile_wallet_name }</Text>
                         <MXCrossTextInput
                             ref={'textinput'}
+                            titleText={LVStrings.profile_wallet_name }
                             //setFocusWhenMounted = {true}
                             style={styles.textInput}
                             placeholder= { LVStrings.wallet_name_hint }

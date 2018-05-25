@@ -59,7 +59,7 @@ const BalanceValueView = ({ value, num, keepZero, unit }) => {
     return (
         <View>
             <LVBalanceShowView 
-                title = {unit==='LVT' ? LVStrings.total_lvt : LVStrings.total_eth}
+                title = {unit === 'LVT' ? LVStrings.total_lvt : LVStrings.total_eth}
                 unit={unit}
                 balance={value}
                 textStyle={{ fontSize: 24, textAlign: 'right', fontWeight: '600', color: LVColor.text.grey1 }}>
