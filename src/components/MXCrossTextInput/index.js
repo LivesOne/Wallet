@@ -26,7 +26,7 @@ type Props = {
     withUnderLine?: boolean,
     keyboardType?: string,
     withClearButton?: boolean,
-    rightComponent?: Element,
+    rightComponent?: any,
     setFocusWhenMounted?: boolean,
     textAlignCenter?: boolean,
     value?: string,

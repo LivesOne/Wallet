@@ -6,7 +6,7 @@
  * @flow
  */
 import React, { Component } from 'react'
-import { TextInput, View, StyleSheet, ScrollView, Keyboard, Platform } from 'react-native';
+import { TextInput, View, StyleSheet, ScrollView, Keyboard, Platform,PixelRatio } from 'react-native';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import MXCrossTextInput from '../../components/MXCrossTextInput';
 import {greyNavigationBackIcon} from '../../assets/LVIcons';
@@ -20,6 +20,8 @@ import LVQrScanModal from '../Common/LVQrScanModal';
 import LVLocalization from '../../assets/localization';
 import MXTouchableImage from '../../components/MXTouchableImage';
 import TransferUtils from '../Transfer/TransferUtils';
+import MXButton from '../../components/MXButton';
+import * as MXUtils from "../../utils/MXUtils";
 
 const scanImg = require('../../assets/images/transfer_scan.png');
 const navButtonEnableColor = '#FFAE1F';
@@ -154,6 +156,10 @@ export default class AddEditContactPage extends Component<Props, State> {
         });
     }
 
+    onPressButton = () => {
+     
+    };
+
     render() {
        let rightNavTextColor = navButtonDisableColor;
        if(!isEmptyString(this.state.name) 
@@ -170,9 +176,6 @@ export default class AddEditContactPage extends Component<Props, State> {
                     title={ this.state.navTitle }
                     titleStyle={styles.navTitle}
                     onLeftPress={ () => {this.props.navigation.goBack() }}
-                    right={LVStrings.common_done}
-                    rightTextColor={rightNavTextColor}
-                    onRightPress={this.onAddingDone}
                 />
                 <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
                     <View style={styles.container}>
@@ -217,6 +220,13 @@ export default class AddEditContactPage extends Component<Props, State> {
                              defaultValue={this.state.remarks}
                              titleText={LVStrings.contact_add_remarks}
                              onTextChanged= {(text) => this.setState({remarks: text})}/>
+                        <MXButton
+                                style={styles.button}
+                                title={LVStrings.profile_wallet_save}
+                                isEmptyButtonType={false}
+                                rounded
+                                onPress={this.onAddingDone}
+                        />    
                     </View>
                 </ScrollView>
                 <LVQrScanModal 
@@ -250,5 +260,11 @@ const styles = StyleSheet.create({
     },
     textInputStyle: {
         height: 80
-    }
+    },
+    button: {
+        height: 50,
+        width: MXUtils.getDeviceWidth() - 18 * PixelRatio.get(),
+        marginTop:125,
+        marginBottom:100,        
+    },
 });

@@ -4,7 +4,7 @@
 'use strict'
 
 import React, { Component } from 'react'
-import { Base, ActiveStyles, InActiveStyles, NormalStyles } from './styles'
+import { Base, ActiveStyles, InActiveStyles, NormalStyles ,ActiveEmptyStyles ,NormalEmptyStyles} from './styles'
 import { TouchableHighlight, View, ViewPropTypes, Image, Text } from 'react-native'
 import LVColor from '../../styles/LVColor'
 import PropTypes from 'prop-types';
@@ -16,37 +16,43 @@ type State = {
 type Props = {
 	title: string,
     rounded: boolean,
-    disabled: boolean,
+	disabled: boolean,
+	isEmptyButtonType:boolean,
     style: ViewPropTypes.style,
     onPress: Function,
 };
 
 class MXButton extends Component<Props,State> {
+	static defaultProps = {
+		disabled: false, // ...but we have a default prop for foo.
+	};
 
 	constructor(props: any) {
     super(props);
     this.state = { 
       pressStatus: false,
-    };
+	};
   }
 
   getTheme(disabled: boolean) {
     if (disabled) {
       return InActiveStyles;
     } else {
-      return this.state.pressStatus ? ActiveStyles : NormalStyles;
+		  console.log(this.props.isEmptyButtonType);
+		  console.log(this.props.isEmptyButtonType);
+     	 return this.state.pressStatus ? (this.props.isEmptyButtonType? ActiveEmptyStyles: ActiveStyles) : (this.props.isEmptyButtonType? NormalEmptyStyles: NormalStyles);
     }
   }
 
   render() {
-    const {title, rounded, style, onPress, disabled,} = this.props;
+    const {title, rounded, style, onPress, disabled} = this.props;
     const theme = this.getTheme(disabled);
 
     return (
       <TouchableHighlight
         activeOpacity={1}
         disabled = {disabled}
-        underlayColor={ LVColor.primary }
+        underlayColor={this.props.isEmptyButtonType?LVColor.button.buttoneEmptyActive :LVColor.button.buttonActive}
         onPressOut={() => {this.setState({ pressStatus: false })}}
         onPressIn={() => {this.setState({ pressStatus: true })}}
         style={[

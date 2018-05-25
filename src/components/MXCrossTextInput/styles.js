@@ -50,7 +50,6 @@ const Base = LVStyleSheet.create({
     justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
     alignItems: 'center',
     alignSelf: Platform.OS === 'ios' ? 'flex-end' : 'center',
-    marginBottom: 6,
   },
 
   clearButton: {
@@ -80,7 +79,7 @@ const DefaultStyles = StyleSheet.create({
     backgroundColor: LVColor.white,
   },
   label: {
-    color: LVColor.text.editTextPrimary,
+    color: LVColor.text.editTextContent,
   },
 });
 
@@ -89,7 +88,7 @@ const WhiteStyles = StyleSheet.create({
     backgroundColor: LVColor.white,
   },
   label: {
-    color: LVColor.text.editTextPrimary,
+    color: LVColor.text.editTextContent,
   },
 });
 
@@ -98,7 +97,7 @@ const LightStyles = StyleSheet.create({
     backgroundColor: LVColor.white,
   },
   label: {
-    color: LVColor.text.editTextPrimary,
+    color: LVColor.text.editTextContent,
   },
 });
 

@@ -31,6 +31,7 @@ const LVColor = {
     // 给文本使用
     text: {
         white: '#fff',
+        lightWhite: '#FEFEFE',
         dot3: '#333333',
         grey1: '#667383',
         grey2: '#677384',
@@ -39,7 +40,14 @@ const LVColor = {
         red: '#f25656',
         editTextContent: '#27347D',
         placeHolder: '#bfc5d1',
-        editTextPrimary: '#27347D'
+        editTextNomal: '#677384',
+        buttonInActiveText: '#E0E3F1',
+    },
+    button:{
+        // button inActive 颜色
+        buttonInActive: '#B6BDDD',
+        buttonActive: '#1B2768',
+        buttoneEmptyActive: '#ECEEF2',
     },
     // 背景色
     background: {

@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     },
     emptyListTextStyle: {
         marginTop: 10,
-        color: LVColor.text.editTextContent,
+        color: LVColor.text.editTextNomal,
         fontSize: 15
     }
 });
