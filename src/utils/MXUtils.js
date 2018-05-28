@@ -60,6 +60,16 @@ export function formatCurrency(n: number) {
   }
 }
 
+export const isIphoneX = () => {
+  let dimen = Dimensions.get('window');
+  return (
+      Platform.OS === 'ios' &&
+      !Platform.isPad &&
+      !Platform.isTVOS &&
+      (dimen.height === 812 || dimen.width === 812)
+  );
+};
+
 export const makeCancelable = (promise : Promise<any>) => {
   let hasCanceled_ = false;
 
