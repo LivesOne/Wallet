@@ -110,9 +110,12 @@ class AppUpdate {
   }
 
   getAppStoreCheckVersionSuccess(remote) {
-    version = remote.ios.versionName
-    if(version!==RNAppUpdate.versionName) {
-      this.GET("https://itunes.apple.com/lookup?id=" + this.remote.ios.iosAppId, this.getAppStoreVersionSuccess.bind(this), this.getVersionError.bind(this));
+    const version = remote.ios.versionName
+    const appid = remote.ios.iosAppId
+    const local_version = RNAppUpdate.versionName
+
+    if(version!==local_version) {
+      this.GET("https://itunes.apple.com/lookup?id=" + appid, this.getAppStoreVersionSuccess.bind(this), this.getVersionError.bind(this));
     }
   }
 
