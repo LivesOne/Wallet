@@ -26,7 +26,7 @@ const ProfileCell = (props) => (
         {...props}
         cellContentView={
             <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, height:60, marginLeft:-10}}>
-                <Text numberOfLines={1} style={{fontSize:15, color:"#667383"}}>
+                <Text numberOfLines={1} style={{fontSize:15, color:LVColor.text.grey2}}>
                     {props.title}
                 </Text>
             </View>
@@ -34,7 +34,11 @@ const ProfileCell = (props) => (
     />
   );
 
-export default class ProfleScreen extends Component {
+type Props = {
+    navigation: Object,
+};
+
+export default class ProfleScreen extends Component<Props> {
     static navigationOptions = {
         header: null
     };
@@ -45,13 +49,14 @@ export default class ProfleScreen extends Component {
                 <MXNavigatorHeader
                     title = {LVStrings.profile}
                     hideLeft={true}
-                    style={{backgroundColor:'#f8f9fb'}}
-                    titleStyle={{color:'#6d798a', fontSize:LVSize.large}}
+                    style={{backgroundColor:LVColor.white}}
+                    titleStyle={{color:LVColor.text.grey2, fontSize:LVSize.large}}
                 />
                 <ScrollView><TableView>
                     <Section 
-                        sectionPaddingTop={0} 
+                        sectionPaddingTop={20} 
                         sectionPaddingBottom={0} 
+                        sectionTintColor= {LVColor.primaryBack} 
                         separatorTintColor={"transparent"}
                         hideSeparator
                     >
@@ -62,15 +67,6 @@ export default class ProfleScreen extends Component {
                             disableImageResize
                             image={<Image source={WalletImage} style={styles.tableViewImage}/>}
                         />
-                        <Separator insetRight={15} tintColor="#eeeff2"/>
-                        <ProfileCell
-                            title={LVStrings.profile_trading_record}
-                            accessory="DisclosureIndicator"
-                            onPress={() => this.props.navigation.navigate('TransactionRecords')}
-                            disableImageResize
-                            image={<Image source={TradingImage} style={styles.tableViewImage}/>}
-                        />
-                        <Separator insetRight={15} tintColor="#eeeff2"/>
                         <ProfileCell
                             title={LVStrings.profile_contacts}
                             accessory="DisclosureIndicator"
@@ -82,7 +78,7 @@ export default class ProfleScreen extends Component {
                     <Section 
                         sectionPaddingTop={9} 
                         sectionPaddingBottom={0} 
-                        sectionTintColor="#f5f6fa" 
+                        sectionTintColor= {LVColor.primaryBack} 
                         separatorTintColor={"transparent"}
                         hideSeparator
                     >
@@ -93,7 +89,14 @@ export default class ProfleScreen extends Component {
                             disableImageResize
                             image={<Image source={AboutImage} style={styles.tableViewImage}/>}
                         />
-                        <Separator insetRight={15} tintColor="#eeeff2"/>
+                        <ProfileCell
+                            title={LVStrings.profile_feedback}
+                            accessory="DisclosureIndicator"
+                            onPress={() => this.props.navigation.navigate('FeedBack')}
+                            disableImageResize
+                            image={<Image source={FeedbackImage} style={styles.tableViewImage}/>}
+                        />    
+                        <Separator insetRight={15} tintColor={LVColor.separateLine}/>
                     </Section>
                 </TableView></ScrollView>
             </View>
