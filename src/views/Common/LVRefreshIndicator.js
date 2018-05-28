@@ -5,13 +5,12 @@
  */
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import PropTypes from 'prop-types';
 import * as Progress from 'react-native-progress';
 import LVColor from '../../styles/LVColor';
 
 const IndicatorHeight = 100;
 
-export default class LVRefreshIndicator extends Component {
+export default class LVRefreshIndicator extends React.Component<{}> {
     static indicatorHeight = IndicatorHeight;
     render() {
         return (

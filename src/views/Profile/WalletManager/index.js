@@ -27,16 +27,22 @@ import LVNetworking from '../../../logic/LVNetworking';
 import LVBig from '../../../logic/LVBig';
 const WalletIcon = require('../../../assets/images/wallet_grey.png');
 const ShowDetailsIcon = require('../../../assets/images/show_detail_arrow.png');
+const CreateWalletIcon = require('../../../assets/images/wm_create_wallet.png');
+const ImportWalletIcon = require('../../../assets/images/wm_import_wallet.png');
 
-export class WalletManagerScreen extends Component {
+type Props = {
+    navigation: Object
+};
+
+type State = {
+    wallets: Array<Object>
+};
+
+export class WalletManagerScreen extends Component<Props, State> {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
     };
-
-    state: {
-        wallets: Array<Object>
-    }
 
     onCreateWalletPressed : Function;
     onImportWalletPressed : Function;
@@ -138,12 +144,6 @@ export class WalletManagerScreen extends Component {
                                                 </View>
                                                 <Image source={ShowDetailsIcon} style={styles.cellRightTopShowDetailsIconStyle}/>
                                             </View>
-                                            <View style={styles.cellRightSeparatorStyle}/>
-                                            <View style={styles.cellRightBottomPanelStyle}>
-                                                <View style={styles.cellRightBottomContainerStyle}>
-                                                    <Text style={styles.cellRightBottomNumberStyle}>{adjust(item.lvt, item.eth)}</Text>
-                                                </View>
-                                            </View>
                                         </View>
                                     </View>
                                 </View>
@@ -151,21 +151,27 @@ export class WalletManagerScreen extends Component {
                                 }
                         />
                 </View>
-                <LVGradientPanel style={styles.bottomPanel}>
+                <View style={styles.bottomPanel}>
                     <View style={styles.bottomContainer}>
                         <TouchableHighlight style={styles.bottomButtonContainer} 
                                             onPress={this.onCreateWalletPressed}
                                             underlayColor={LVColor.primary}>
-                            <Text style={styles.bottomButtonText}>{LVStrings.wallet_create_wallet}</Text>
+                            <View style={styles.bottomButtonContainer}>
+                                <Image source={CreateWalletIcon} style={styles.bottomIconStyle}/>
+                                <Text style={styles.bottomButtonText}>{LVStrings.wallet_create_wallet}</Text>
+                            </View>
                         </TouchableHighlight>
                         <View style={styles.bottomSeparator}></View>
                         <TouchableHighlight style={styles.bottomButtonContainer} 
                                             onPress={this.onImportWalletPressed}
                                             underlayColor={LVColor.primary}>
-                            <Text style={styles.bottomButtonText}>{LVStrings.wallet_import_header}</Text>
+                            <View style={styles.bottomButtonContainer}>
+                                <Image source={ImportWalletIcon} style={styles.bottomIconStyle}/>
+                                <Text style={styles.bottomButtonText}>{LVStrings.wallet_import_header}</Text>
+                            </View>
                         </TouchableHighlight>
                     </View>
-                </LVGradientPanel>
+                </View>
                 <LVFullScreenModalView ref={'creationPage'}>
                     <LVWalletCreationNavigator screenProps={{dismiss: ()=> {
                         this.refs.creationPage.dismiss()
@@ -200,7 +206,11 @@ const styles = StyleSheet.create({
         fontSize: LVFontSize.large
     },
     bottomPanel: {
-        height: 50
+        height: 55,
+        backgroundColor: '#FFFFFF',
+        shadowColor: '#6B7A9F',
+        shadowOpacity: 0.1,
+        shadowRadius: 5
     },
     bottomContainer: {
         flex: 1,
@@ -212,14 +222,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    bottomIconStyle: {
+        marginRight: 5
+    },
     bottomSeparator: {
         width: 1,
         height: 20,
         marginTop:15,
-        backgroundColor: LVColor.white
+        backgroundColor: '#F5F6FA'
     },
     bottomButtonText: {
-        color: LVColor.white,
+        color: '#657182',
         fontSize: 15
     },
     listContainerStyle: {
@@ -229,7 +242,7 @@ const styles = StyleSheet.create({
         flex:1
     },
     cellContentViewContainer: {
-        height:110, 
+        height:90, 
         marginBottom:15,
         backgroundColor: LVColor.white,
         shadowOffset: {width: 0, height: -1},
@@ -244,11 +257,10 @@ const styles = StyleSheet.create({
     cellLeftContentStyle: {
         flex:0.215, 
         flexDirection: 'column', 
-        justifyContent: 'flex-start', 
+        justifyContent: 'center', 
         alignItems: 'center'
     },
     cellLeftImageStyle: {
-        marginTop: 15, 
         width:50, 
         height:50
     },
@@ -275,7 +287,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start'
     },
     cellWalletNameTextStyle: {
-        fontSize: 15,
+        fontSize: 16,
         color: '#677384'
     },
     cellWalletAddressTextStyle: {

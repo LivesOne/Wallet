@@ -36,6 +36,8 @@ import PropTypes from 'prop-types';
 import console from 'console-browserify';
 import Toast from 'react-native-root-toast';
 import { LVKeyboardDismissView } from '../Common/LVKeyboardDismissView';
+import * as MXUtils from "../../utils/MXUtils";
+import LVFontSize from '../../styles/LVFontSize';
 const foundation = require('../../foundation/wallet.js');
 
 type Props = {
@@ -57,7 +59,7 @@ type State = {
   keyboardHeight: number
 };
 
-export default class AssetsImportPage extends Component<Props, State> {
+export default class AssetsImportPage extends React.Component<Props, State> {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
@@ -293,7 +295,7 @@ export default class AssetsImportPage extends Component<Props, State> {
                     this.props.navigation.goBack();
                 }
             }}
-            right={ require("../../assets/images/qrScan.png") }
+            right={ require("../../assets/images/transfer_scan.png") }
             onRightPress = {
               () => { Keyboard.dismiss(); this.setState({showModal: true}) }
             }
@@ -306,14 +308,8 @@ export default class AssetsImportPage extends Component<Props, State> {
             {this.state.leftPressed && this._renderKeystore()}
             {!this.state.leftPressed && this._renderPrivateKey()}
 
-            <MXButton
-              rounded
-              style={{alignSelf: 'center'}}
-              title={LVStrings.wallet_import}
-              onPress={ this.onPrivateImportPress.bind(this) }
-            />
             <LVLoadingToast ref={'toast'} title={LVStrings.wallet_import_header}/>
-            <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
+            <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage || ''} buttonTitle={LVStrings.alert_ok}/>
         </KeyboardDismissView>
       )
     }
@@ -331,15 +327,18 @@ export default class AssetsImportPage extends Component<Props, State> {
             style={ styles.textInput }
           />
 
-          <Text style={[styles.textTip , {marginTop : 33}]}>
-            {LVStrings.wallet_import_tip_keystore_password}
-          </Text>
-
           <MXCrossTextInput
             style={{marginTop: 5, marginBottom: 35}}
             secureTextEntry={true}
+            titleText={LVStrings.wallet_import_keystore_password_label}
             onTextChanged={(newText)=>{ this.setState({keyStorePwd: newText}) }}
             placeholder={LVStrings.wallet_import_keystore_password_hint}
+          />
+          <MXButton
+            rounded
+            style={styles.importButtonStyle}
+            title={LVStrings.wallet_import}
+            onPress={ this.onKeystoreImportPress.bind(this) }
           />
         </View>
       );
@@ -360,25 +359,27 @@ export default class AssetsImportPage extends Component<Props, State> {
               style={ styles.textInput }
             />
 
-          <Text style={[styles.textTip , {marginTop : 33}]}>
-            {LVStrings.wallet_import_tip_keystore_password}
-          </Text>
             <MXCrossTextInput
               style={{marginTop: 5}}
               secureTextEntry={true}
               returnKeyType={'next'}
+              titleText={LVStrings.wallet_import_private_password_lable}
               onTextChanged={(newText)=>{this.setState({privateKeyPwd: newText})}}
               placeholder={LVStrings.wallet_import_private_password_hint}
             />
 
-          <Text style={[styles.textTip , {marginTop : 38}]}>
-            {LVStrings.wallet_import_tip_keystore_password}
-          </Text>
             <MXCrossTextInput
               style={{marginTop: 5}}
               secureTextEntry={true}
+              titleText={LVStrings.wallet_import_private_password_repeat_lable}
               onTextChanged={(newText)=>{this.setState({privateKeyPwdAgain: newText})}}
               placeholder={LVStrings.wallet_import_private_pwd_confirm_hint}
+            />
+            <MXButton
+              rounded
+              style={styles.importButtonStyle}
+              title={LVStrings.wallet_import}
+              onPress={ this.onPrivateImportPress.bind(this) }
             />
           </ScrollView>
         </LVKeyboardAvoidingView>
@@ -393,7 +394,7 @@ export default class AssetsImportPage extends Component<Props, State> {
  const LVKeyboardAvoidingView = (Platform.OS === 'ios') ? KeyboardAvoidingView : View;
  const KeyboardDismissView = (Platform.OS === 'ios') ? LVKeyboardDismissView : View;
 
-  const styles = LVStyleSheet.create({
+const styles = LVStyleSheet.create({
     container: {
       flex: 1,
       alignItems: "center",
@@ -420,5 +421,9 @@ export default class AssetsImportPage extends Component<Props, State> {
     textTip : {
       color : "#677384" ,
       fontSize : 12,
+    },
+    importButtonStyle: {
+      width: MXUtils.getDeviceWidth() - 30,
+      marginTop: 63
     }
   });

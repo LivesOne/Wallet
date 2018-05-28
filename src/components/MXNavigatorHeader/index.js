@@ -69,13 +69,13 @@ const styles = LVStyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: LVColor.primary
+        backgroundColor: LVColor.white
     },
 
     titleStyle: {
         alignSelf: 'center',
         textAlign: 'center',
-        color: LVColor.white,
+        color : '#6d798a',
         fontSize: LVFontSize.large,
         flex: 1
     },

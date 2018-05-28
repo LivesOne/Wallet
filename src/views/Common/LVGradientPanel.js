@@ -5,11 +5,16 @@
  */
 'use strict';
 
-import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import * as React from 'react';
+import { StyleSheet, View, ViewPropTypes } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
-export default class LVGradientPanel extends Component {
+type Props = { 
+    style?: ViewPropTypes.style,
+    children?: React.ChildrenArray<React.Element<any>>
+ };
+
+export default class LVGradientPanel extends React.Component<Props> {
     render() {
         return (
             <LinearGradient

@@ -11,12 +11,11 @@ import LVColor from '../../styles/LVColor'
 
 const Base = LVStyleSheet.create({
   main: {
-    backgroundColor: LVColor.primary,
     justifyContent: 'center',
     phone: {
       height: 50,
       width: 240,
-      borderRadius: 5,
+      borderRadius: 8,
     },
     pad: {
       height: 60,
@@ -26,10 +25,10 @@ const Base = LVStyleSheet.create({
   },
   rounded: {
     phone: {
-      borderRadius: 25,
+      borderRadius: 8,
     },
     pad: {
-      borderRadius: 35,
+      borderRadius: 8,
     }
   },
   inner: {
@@ -45,9 +44,19 @@ const Base = LVStyleSheet.create({
 
 const NormalStyles = StyleSheet.create({
   main: {
+    backgroundColor: LVColor.primary,
+    borderWidth: 0,
+  },
+  label: {
+    color: LVColor.text.lightWhite,
+  },
+});
+
+const NormalEmptyStyles = StyleSheet.create({
+  main: {
     backgroundColor: LVColor.white,
     borderColor: LVColor.primary,
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
   },
   label: {
     color: LVColor.primary,
@@ -56,23 +65,33 @@ const NormalStyles = StyleSheet.create({
 
 const ActiveStyles = StyleSheet.create({
   main: {
-    backgroundColor: LVColor.primary,
+    backgroundColor: LVColor.button.buttonActive,
     borderWidth: 0,
   },
   label: {
-    color: LVColor.white,
+    color: LVColor.text.lightWhite,
+  },
+});
+
+const ActiveEmptyStyles = StyleSheet.create({
+  main: {
+    backgroundColor: LVColor.button.buttoneEmptyActive,
+    borderWidth: 0,
+  },
+  label: {
+    color: LVColor.primary,
   },
 });
 
 const InActiveStyles = StyleSheet.create({
   main: {
-    backgroundColor: LVColor.white,
+    backgroundColor: LVColor.button.buttonInActive,
     borderColor: LVColor.border.grey1,
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
   },
   label: {
-    color: LVColor.text.grey1,
+    color: LVColor.text.buttonInActiveText,
   },
 });
 
-export { Base, ActiveStyles, InActiveStyles, NormalStyles };
+export { Base, ActiveStyles, InActiveStyles, NormalStyles,ActiveEmptyStyles,NormalEmptyStyles};

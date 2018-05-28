@@ -68,7 +68,6 @@ class ReceiveHeader extends Component {
                 style={{ backgroundColor: LVColor.primaryBack }}
                 title={LVStrings.receive_title}
                 titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
-                hideLeft={true}
                 left = {goback_gray}
                 onLeftPress = {this.onLeftPress}
                 right={share_qrcode}
@@ -246,6 +245,7 @@ class ReceiveScreen extends Component {
                                 Toast.show(LVStrings.common_done)
 
                             }}
+                            isEmptyButtonType = {true}
                             themeStyle={"active"}
                         /> 
                         {/* <MXButton
