@@ -19,6 +19,7 @@ import WalletCreatePage from '../Wallet/WalletCreatePage';
 import WalletImportPage from '../Wallet/WalletImportPage';
 import ContactsManagerPage from '../contacts/ContactsManagerPage';
 import AddEditContactPage from '../contacts/AddEditContactPage';
+import LVTContactDetailPage from '../contacts/LVTContactDetailPage';
 import TransactionRecordsScreen from '../Assets/TransactionRecordsScreen'
 import TransactionDetailsScreen from '../Assets/TransactionDetailsScreen';
 
@@ -34,6 +35,7 @@ const ProfileNavigator = StackNavigator(
         WalletImportPage: { screen: WalletImportPage },
         ContactList: { screen: ContactsManagerPage },
         AddEditContactPage: { screen: AddEditContactPage },
+        LVTContactDetailPage: { screen: LVTContactDetailPage },
         TransactionRecords: { screen: TransactionRecordsScreen },
         TransactionDetails: { screen: TransactionDetailsScreen },
     },

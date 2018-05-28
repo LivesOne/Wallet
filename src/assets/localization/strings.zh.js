@@ -214,6 +214,7 @@ const localized_strings = {
     //contacts
     contact_list_nav_title: '联系人',
     contact_add_nav_title: '添加联系人',
+    contact_Detail_nav_title: '添加联系人',
     contact_edit_nav_title: '编辑联系人',
     contact_add_place_holder_nickname: '请输入联系人昵称',
     contact_add_place_holder_address: '请输入钱包地址',
@@ -234,6 +235,7 @@ const localized_strings = {
     contact_add_place_cellphone: '电话',
     contact_add_place_email: '邮箱',
     contact_add_remarks: '备注',
+    contact_Detail_Button: '账户转账',
 
     // Network
     network_error: '网络请求失败，请重试!',

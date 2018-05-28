@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.cboy.rn.splashscreen.SplashScreenReactPackage;
 import com.facebook.react.ReactApplication;
+import com.hzl.pulltorefresh.RefreshReactPackage;
 import com.rnfs.RNFSPackage;
 import com.horcrux.svg.SvgPackage;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
@@ -38,6 +39,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MyReactPackage(),
             new MainReactPackage(),
+            new RefreshReactPackage(),
             new RNFSPackage(),
             new SvgPackage(),
             new SplashScreenReactPackage(),

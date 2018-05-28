@@ -161,13 +161,6 @@ export default class AddEditContactPage extends Component<Props, State> {
     };
 
     render() {
-       let rightNavTextColor = navButtonDisableColor;
-       if(!isEmptyString(this.state.name) 
-            && !isEmptyString(this.state.address)
-            && isAddress(this.state.address)) {
-           rightNavTextColor = navButtonEnableColor;
-       }
-
         return (
             <View style={styles.rootView}>
                 <MXNavigatorHeader
