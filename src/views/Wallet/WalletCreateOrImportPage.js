@@ -36,12 +36,14 @@ export default class WalletCreateOrImportPage extends Component<Props> {
                     onPress = {() => {
                         this.refs.creationPage.show();
                     }}
+                    isEmptyButtonType={true}
                     themeStyle={"active"}
                     style={styles.createButton}
                 />
                 <MXButton
                     rounded                
                     title={LVStrings.wallet_import_header}
+                    isEmptyButtonType={true}
                     onPress = {() => {
                         this.refs.importPage.show();
                     }}
@@ -73,8 +75,8 @@ const styles = LVStyleSheet.create({
         backgroundColor: LVColor.white,
     },
     image: {
-        width: 220, 
-        height: 220,
+        width: 190, 
+        height: 143,
     },
     createButton: {
         marginTop: 80,
