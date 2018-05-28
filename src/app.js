@@ -176,8 +176,11 @@ class VenusApp extends Component<Props, State> {
                     ref={'update'}
                     title={LVStrings.update_title}  
                     message={LVStrings.update_text} 
+                    confirmTitle = {LVStrings.update_ok}
+                    cancelTitle = {LVStrings.update_cancel}
                     onConfirm={()=> {
                         this.state.needUpdate(true);
+                        this.refs.update.dismiss();
                     }} />
             </View>
     }
@@ -189,6 +192,8 @@ class VenusApp extends Component<Props, State> {
             ref={'update'}
             title={LVStrings.update_title}  
             message={LVStrings.update_text} 
+            confirmTitle = {LVStrings.update_ok}
+            cancelTitle = {LVStrings.update_cancel}
             onConfirm={()=> {
                 this.state.needUpdate(true);
             }} />

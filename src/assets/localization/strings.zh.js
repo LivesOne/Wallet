@@ -258,8 +258,10 @@ const localized_strings = {
      over_limit_hint: '转账金额仅支持小数点后18位',
 
      //update
-     update_title: '钱包升级',
-     update_text: '你有新的钱包应用可以使用',
+     update_title: '更新提醒',
+     update_text: '发现新版本,快去体验吧!',
+     update_ok: '立即更新',
+     update_cancel: '以后再说'
 };
 
 export default localized_strings;

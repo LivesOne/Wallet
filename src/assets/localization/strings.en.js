@@ -258,8 +258,10 @@ const localized_strings = {
 
 
     //update
-    update_title: 'Update Wallet',
-    update_text: 'You have a new version for app',
+    update_title: 'Update Tip',
+    update_text: 'Find the new version for app',
+    update_ok: 'Update',
+    update_cancel: 'Cancel'
 };
 
 export default localized_strings;
