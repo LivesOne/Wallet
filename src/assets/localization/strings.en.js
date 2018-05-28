@@ -250,6 +250,11 @@ const localized_strings = {
 
     // over 18 limit
     over_limit_hint: 'Transfer Amount Only Support 18 Decimal Places',
+
+
+    //update
+    update_title: 'Update Wallet',
+    update_text: 'You have a new version for app',
 };
 
 export default localized_strings;

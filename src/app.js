@@ -35,8 +35,8 @@ type State = {
     loading: boolean,
     needShowGuide: boolean,
     hasAnyWallets: boolean,
-    update: object,
-    needUpdate: object
+    update: ?Object,
+    needUpdate: ?Object
 
 };
 
@@ -161,10 +161,10 @@ class VenusApp extends Component<Props, State> {
     render() {
         const { loading, needShowGuide, hasAnyWallets } = this.state;
         return Platform.OS === 'android' ? 
-            this.getAndroidMainScreen() : this.getMainScreen();
+            this.renderAndroidMainScreen() : this.renderIOSMainScreen();
     }
 
-    getAndroidMainScreen() {
+    renderAndroidMainScreen() {
         return <View style={{flex: 1}}>
                 <LVConfirmDialog
                     ref={'exitDialog'}
@@ -172,16 +172,29 @@ class VenusApp extends Component<Props, State> {
                     message={LVStrings.exit_app_prompt} 
                     onConfirm={()=> {BackHandler.exitApp()}} />
                     {this.getMainScreen()}
-                    <LVConfirmDialog
+                  <LVConfirmDialog
                     ref={'update'}
-                    title={LVStrings.alert_hint}  
-                    message={LVStrings.exit_app_prompt} 
+                    title={LVStrings.update_title}  
+                    message={LVStrings.update_text} 
                     onConfirm={()=> {
                         this.state.needUpdate(true);
                     }} />
             </View>
     }
 
+    renderIOSMainScreen() {
+        return <View style={{flex: 1}}>
+       
+          <LVConfirmDialog
+            ref={'update'}
+            title={LVStrings.update_title}  
+            message={LVStrings.update_text} 
+            onConfirm={()=> {
+                this.state.needUpdate(true);
+            }} />
+            {this.getMainScreen()}
+    </View> 
+    }
     getMainScreen() {
         const { loading, needShowGuide, hasAnyWallets } = this.state;
         if (needShowGuide) {
@@ -202,7 +215,7 @@ const LVAppLoadingView = () => {
         </View>
     );
 };
-import AppUpdate from 'react-native-appupdate';
+import AppUpdate from './utils/MxAppUpdate';
 
 
 
