@@ -25,6 +25,7 @@ const localized_strings = {
     //receive
     receive_title:'我的收款码',
     receive_name:'钱包地址',
+    receive_name_suffix : "的钱包",
     receive_copy:'复制地址',
     receive_save:'保存二维码',
     receive_empty:'您还未添加钱包',
@@ -37,8 +38,10 @@ const localized_strings = {
     wallet_import_private_key: '导入私钥',
     wallet_import_plain_private_key_hint: '明文私钥',
     wallet_import_keystore_hint: 'Keystore 文本内容',
+    wallet_import_private_password_lable:'设置密码',
     wallet_import_private_password_hint: '输入6~12位字母数字组合',
     wallet_import_private_pwd_confirm_hint: '重复输入你的密码',
+    wallet_import_keystore_password_label: 'Keystore密码',
     wallet_import_keystore_password_hint: '请输入Keystore密码',
     wallet_importing_wallet: '导入钱包中...',
     wallet_import_private_key_error: '私钥格式错误',
@@ -47,6 +50,7 @@ const localized_strings = {
     wallet_import_private_key_required: '私钥不能为空！',
     wallet_import_success: '导入成功！',
     wallet_import_fail: '导入失败！',
+    wallet_import_tip_keystore_password : "Keystore密码",
     
     wallet_create_wallet: '创建钱包',
     wallet_creating_wallet: '创建钱包中...',
@@ -108,7 +112,7 @@ const localized_strings = {
     total_amount: '总金额',
 
     // Assets
-    assets_title: '我的资产',
+    assets_title: '资产',
     recent_records: '最近交易记录',
     view_all_records: '查看全部记录',
 

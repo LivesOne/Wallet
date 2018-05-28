@@ -25,6 +25,7 @@ const localized_strings = {
     //receive
     receive_title:'My wallet QR code',
     receive_name:'Wallet address',
+    receive_name_suffix : "'s wallet",
     receive_copy:'Copy the address',
     receive_save:'Save the QR code',
     receive_empty:'You haven’t add a wallet yet',
@@ -42,8 +43,10 @@ const localized_strings = {
     wallet_import_private_key: 'Import private key',
     wallet_import_plain_private_key_hint: 'Private key plaintext',
     wallet_import_keystore_hint: 'Keystore text content',
+    wallet_import_private_password_lable:'Password',
     wallet_import_private_password_hint: 'Enter 6~12 digit of letters + numbers',
     wallet_import_private_pwd_confirm_hint: 'Confirm password',
+    wallet_import_keystore_password_label: 'Keystore password',
     wallet_import_keystore_password_hint: 'Enter Keystore password',
     wallet_importing_wallet: 'Importing wallet...',
     wallet_import_private_key_error: 'Private key format error',
@@ -56,6 +59,7 @@ const localized_strings = {
     wallet_name_hint: 'Enter name (less than 40 digits)',
     wallet_name_invalid: 'Incorrect name format',
     wallet_name_exceeds_limit: 'Wallet name is more than 40 digits',
+    wallet_import_tip_keystore_password : "Keystore password",
 
     wallet_create_wallet: 'Create wallet',
     wallet_creating_wallet: 'Creating wallet...',
@@ -103,7 +107,7 @@ const localized_strings = {
     password_verify_required: 'Password is required',
 
     // Assets
-    assets_title: 'My assets',
+    assets_title: 'Assets',
     recent_records: 'Recent transaction records',
     view_all_records: 'All records',
 

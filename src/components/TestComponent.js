@@ -60,7 +60,7 @@ class TestComponent extends Component {
                     title = {"title"}
                     left = {'left'}
                     onLeftPress = {() => {alert("left")}}
-                    right = {require("../assets/images/qrScan.png")}
+                    right = {require("../assets/images/transfer_scan.png")}
                     onRightPress = {() => {alert("right")}}
                 />
                 <MXButton

@@ -36,6 +36,8 @@ const receive_share = require("../../assets/images/receive_share.png");
 const lvt = require("../../assets/images/lvt.png");
 const receive_change_wallet = require("../../assets/images/receive_change_wallet.png");
 const receive_wallet_blank = require("../../assets/images/wallet_blank.png");
+const share_qrcode = require("../../assets/images/share_qrcode.png");
+const goback_gray = require("../../assets/images/goback_gray.png");
 
 // var PasteBoard = require('react-native-pasteboard');
 
@@ -46,6 +48,10 @@ class ReceiveHeader extends Component {
             this.props.callback();
         }
     };
+
+    onLeftPress = ()=> {
+        this.props.navigation.goBack();
+    }
 
     static propTypes = {
         callback: PropTypes.func
@@ -63,7 +69,9 @@ class ReceiveHeader extends Component {
                 title={LVStrings.receive_title}
                 titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
                 hideLeft={true}
-                right={receive_change_wallet}
+                left = {goback_gray}
+                onLeftPress = {this.onLeftPress}
+                right={share_qrcode}
                 onRightPress={this.onPressButton.bind(this)}
             />
 
@@ -78,15 +86,12 @@ class ReceiveScreen extends Component {
 
     
     state:{
-        // walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
-        // text: 'http://facebook.github.io/react-native/',
         wallet: ?Object,       
         openSelectWallet: boolean,
         walletIsBlank:boolean,
         
     };
 
-    
 
     constructor(props: any) {
         super(props);
@@ -210,60 +215,59 @@ class ReceiveScreen extends Component {
 
          return (
             <View style={styles.container}>
-                <ReceiveHeader callback={this.onPressSelectWallet}/>
+                <ReceiveHeader callback={this.onWalletShare}/>
 
                 <View style={styles.mainContainer2}>
-                <ScrollView showsVerticalScrollIndicator={false} style={{ width:'100%', }}  contentContainerStyle={styles.contentContainer}>
-                <View style={styles.mainContainer}>
+                    <ScrollView showsVerticalScrollIndicator={false} style={{ width:'100%', }}  contentContainerStyle={styles.contentContainer}>
+                        <View style={styles.mainContainer}>
 
-                <Text style={styles.name} >
-                    {LVStrings.receive_name}
+                        <Text style={styles.name} >
+                            {this.state.wallet.name + LVStrings.receive_name_suffix}
 
-                </Text>
-                <Text ellipsizeMode="middle" numberOfLines={1} style={styles.address}>
-                    {StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9)}
-                </Text>
+                        </Text>
+                        <Text ellipsizeMode="middle" numberOfLines={1} style={styles.address}>
+                            {StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9)}
+                        </Text>
 
-                <QRCode
-                getRef={(c) => (this.svg = c)}
-                style={styles.qrcode_pic}
-                value={TransferUtils.convertAddr2Iban(this.state.wallet.address)}
-                size={162}
-                /* logo={lvt} */
-                bgColor='white'
-                fgColor='black'/>
+                        <QRCode
+                        getRef={(c) => (this.svg = c)}
+                        value={TransferUtils.convertAddr2Iban(this.state.wallet.address)}
+                        size={162}
+                        /* logo={lvt} */
+                        bgColor='white'
+                        fgColor='black'/>
 
-                <MXButton
-                    rounded = {true}
-                    style={styles.button}
-                    title={LVStrings.receive_copy}
-                    onPress = {() => {
-                        Clipboard.setString(TransferUtils.convertToHexHeader(this.state.wallet.address));
-                        Toast.show(LVStrings.common_done)
+                        <MXButton
+                            rounded = {true}
+                            style={styles.button}
+                            title={LVStrings.receive_copy}
+                            onPress = {() => {
+                                Clipboard.setString(TransferUtils.convertToHexHeader(this.state.wallet.address));
+                                Toast.show(LVStrings.common_done)
 
-                    }}
-                    themeStyle={"active"}
-                /> 
-                <MXButton
-                    rounded = {true} 
-                    title={LVStrings.receive_save}
-                    style={styles.button_save}
-                    onPress = {() => {
-                    this.saveQrToDisk();
-                    }}
-                    themeStyle={"active"}
-                />
-                </View>
-                <View style={styles.share_container}>
-                <MxImage source={receive_share}
-                    onPress = { () => {
+                            }}
+                            themeStyle={"active"}
+                        /> 
+                        {/* <MXButton
+                            rounded = {true} 
+                            title={LVStrings.receive_save}
+                            style={styles.button_save}
+                            onPress = {() => {
+                            this.saveQrToDisk();
+                            }}
+                            themeStyle={"active"}
+                        /> */}
+                        </View>
+                        {/* <View style={styles.share_container}> */}
+                        {/* <MxImage source={receive_share}
+                            onPress = { () => {
 
-                        this.onWalletShare();
-                    }
-                    }
-                   ></MxImage>
-                </View>
-                </ScrollView>
+                                this.onWalletShare();
+                            }
+                            }
+                        ></MxImage> */}
+                        {/* </View> */}
+                    </ScrollView>
                 </View>
 
                 <LVSelectWalletModal
@@ -327,15 +331,15 @@ const styles = StyleSheet.create({
 
     name:{
         fontSize:18,
-        color:LVColor.grey2,
+        color:"#677384",
         textAlign:'center',
         paddingBottom:5,
-        
+        marginTop : 75,
     },
 
     address:{
         fontSize:15,
-        color:"#c3c8d3",
+        color:"#C3C9D4",
         textAlign:'center',
         paddingBottom:30,
     },
@@ -348,20 +352,13 @@ const styles = StyleSheet.create({
 
     mainContainer:{
         flex:6,
-        width:'90%',
+        width:'100%',
         flexDirection:'column',
         alignItems: 'center',
         justifyContent:'center',
         
         backgroundColor: LVColor.white,
-        // backgroundColor:'black',
-        elevation: 20,
-        shadowOffset: {width: 0, height: 0},
-        shadowColor: 'black',
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
-        padding:30,
-        marginTop: 10,
+        // backgroundColor:'red',
      },
 
      mainContainer2:{
@@ -387,8 +384,6 @@ const styles = StyleSheet.create({
     },
 
     qrcode_pic:{
-        height:162,
-        width:162,
     },
 
     share_container: {

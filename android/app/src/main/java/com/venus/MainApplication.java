@@ -5,6 +5,7 @@ import android.app.Application;
 import com.cboy.rn.splashscreen.SplashScreenReactPackage;
 import com.facebook.react.ReactApplication;
 import com.hzl.pulltorefresh.RefreshReactPackage;
+import com.parryworld.rnappupdate.RNAppUpdatePackage;
 import com.rnfs.RNFSPackage;
 import com.horcrux.svg.SvgPackage;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
@@ -40,6 +41,7 @@ public class MainApplication extends Application implements ReactApplication {
           new MyReactPackage(),
             new MainReactPackage(),
             new RefreshReactPackage(),
+            new RNAppUpdatePackage(),
             new RNFSPackage(),
             new SvgPackage(),
             new SplashScreenReactPackage(),

@@ -12,6 +12,7 @@ import {
   isEmptyString,
   isNotEmptyString,
   formatCurrency,
+  isIphoneX,
   log,
 } from './MXUtils';
 
@@ -28,6 +29,7 @@ const PLUtils = {
   checkEqualPwd,
   isEmptyString,
   isNotEmptyString,
+  isIphoneX,
   log,
 }
 

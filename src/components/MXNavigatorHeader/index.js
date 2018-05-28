@@ -1,33 +1,36 @@
-/**
+/*
+ * Project: Venus
+ * File: src/components/MXNavigatorHeader/index.js
+ * @flow
  */
-
 'use strict';
 
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { View, StyleSheet, Image, PixelRatio, Text, TouchableOpacity, Platform } from 'react-native';
+import * as React from 'react';
+import { StyleSheet, View, ViewPropTypes, Image, PixelRatio, Text, TouchableOpacity, Platform } from 'react-native';
 
 import LVColor from '../../styles/LVColor';
 import LVFontSize from '../../styles/LVFontSize';
+import LVUtils from '../../utils';
 let LVStyleSheet = require('../../styles/LVStyleSheet');
 
 const whiteBackIcon = require('../../assets/images/back.png');
 const defaultBackIcon = require('../../assets/images/back_grey.png')
 
-export default class MXNavigatorHeader extends Component {
-    static propTypes = {
-        title: PropTypes.string.isRequired,
-        titleStyle: Text.propTypes.style,
-        left: PropTypes.oneOfType([PropTypes.string, PropTypes.any]),
-        leftStyle: View.propTypes.style,
-        onLeftPress: PropTypes.func,
-        hideLeft: PropTypes.bool,
-        right: PropTypes.oneOfType([PropTypes.string, PropTypes.any]),
-        rightStyle: View.propTypes.style,
-        rightTextColor: PropTypes.string,
-        onRightPress: PropTypes.func,
-        style: View.propTypes.style
-    };
+type Props = {
+    style?: ViewPropTypes.style,
+    title: string,
+    titleStyle?: Text.propTypes.style,
+    left?: string | number | React.Element<any>,
+    leftStyle?: Text.propTypes.style | ViewPropTypes.style,
+    hideLeft?: boolean,
+    onLeftPress?: Function,
+    right?: string | number |  React.Element<any>,
+    rightStyle?: Text.propTypes.style | ViewPropTypes.style,
+    rightTextColor?: string,
+    onRightPress?: Function,
+};
+
+export default class MXNavigatorHeader extends React.Component<Props> {
 
     render() {
         const { title, titleStyle, left, leftStyle, onLeftPress, hideLeft, style, right, onRightPress, rightStyle, rightTextColor } = this.props;
@@ -61,21 +64,24 @@ export default class MXNavigatorHeader extends Component {
     }
 }
 
+const paddingTop = Platform.OS === 'ios' ? (LVUtils.isIphoneX() ? 44 : 20) : 0;
+const navHeight  = Platform.OS === 'ios' ? (LVUtils.isIphoneX() ? 88 : 64) : 50;
+
 const styles = LVStyleSheet.create({
     container: {
-        paddingTop: Platform.OS === 'ios' ? 20 : 0,
+        paddingTop: paddingTop,
         width: '100%',
-        height: Platform.OS === 'ios' ? 64 : 50,
+        height: navHeight,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: LVColor.primary
+        backgroundColor: LVColor.white
     },
 
     titleStyle: {
         alignSelf: 'center',
         textAlign: 'center',
-        color: LVColor.white,
+        color : '#6d798a',
         fontSize: LVFontSize.large,
         flex: 1
     },
