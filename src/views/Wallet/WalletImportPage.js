@@ -308,7 +308,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
             {this.state.leftPressed && this._renderKeystore()}
             {!this.state.leftPressed && this._renderPrivateKey()}
 
-            <MXButton
+            <MXButton 
               rounded
               style={{alignSelf: 'center'}}
               title={LVStrings.wallet_import}
@@ -348,8 +348,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
             rounded
             style={styles.importButtonStyle}
             title={LVStrings.wallet_import}
-            onPress={ this.onKeystoreImportPress.bind(this) }
-          />
+            onPress={ this.onKeystoreImportPress.bind(this) }/>
         </View>
       );
     }
