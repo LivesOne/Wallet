@@ -40,6 +40,7 @@ const localized_strings = {
     wallet_import_keystore_hint: 'Keystore 文本内容',
     wallet_import_private_password_lable:'设置密码',
     wallet_import_private_password_hint: '输入6~12位字母数字组合',
+    wallet_import_private_password_repeat_lable: "重复密码",
     wallet_import_private_pwd_confirm_hint: '重复输入你的密码',
     wallet_import_keystore_password_label: 'Keystore密码',
     wallet_import_keystore_password_hint: '请输入Keystore密码',
@@ -50,7 +51,6 @@ const localized_strings = {
     wallet_import_private_key_required: '私钥不能为空！',
     wallet_import_success: '导入成功！',
     wallet_import_fail: '导入失败！',
-    wallet_import_tip_keystore_password : "Keystore密码",
     
     wallet_create_wallet: '创建钱包',
     wallet_creating_wallet: '创建钱包中...',
@@ -218,6 +218,7 @@ const localized_strings = {
     //contacts
     contact_list_nav_title: '联系人',
     contact_add_nav_title: '添加联系人',
+    contact_Detail_nav_title: '添加联系人',
     contact_edit_nav_title: '编辑联系人',
     contact_add_place_holder_nickname: '请输入联系人昵称',
     contact_add_place_holder_address: '请输入钱包地址',
@@ -238,6 +239,7 @@ const localized_strings = {
     contact_add_place_cellphone: '电话',
     contact_add_place_email: '邮箱',
     contact_add_remarks: '备注',
+    contact_Detail_Button: '账户转账',
 
     // Network
     network_error: '网络请求失败，请重试!',

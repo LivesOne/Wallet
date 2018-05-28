@@ -45,6 +45,7 @@ const localized_strings = {
     wallet_import_keystore_hint: 'Keystore text content',
     wallet_import_private_password_lable:'Password',
     wallet_import_private_password_hint: 'Enter 6~12 digit of letters + numbers',
+    wallet_import_private_password_repeat_lable: "Repeat password",
     wallet_import_private_pwd_confirm_hint: 'Confirm password',
     wallet_import_keystore_password_label: 'Keystore password',
     wallet_import_keystore_password_hint: 'Enter Keystore password',
@@ -59,7 +60,6 @@ const localized_strings = {
     wallet_name_hint: 'Enter name (less than 40 digits)',
     wallet_name_invalid: 'Incorrect name format',
     wallet_name_exceeds_limit: 'Wallet name is more than 40 digits',
-    wallet_import_tip_keystore_password : "Keystore password",
 
     wallet_create_wallet: 'Create wallet',
     wallet_creating_wallet: 'Creating wallet...',
@@ -238,6 +238,7 @@ const localized_strings = {
     contact_add_place_cellphone: 'Phone number',
     contact_add_place_email: 'Email address',
     contact_add_remarks: 'Remarks',
+    contact_Detail_Button: 'AccountTransfer',
 
     // Network
     network_error: 'Network request failed, please try again!',

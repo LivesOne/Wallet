@@ -12,14 +12,13 @@ import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVStrings from '../../assets/localization';
 import LVColor from '../../styles/LVColor';
 import AddEditContactPage from './AddEditContactPage';
+import LVTContactDetailPage from './LVTContactDetailPage';
 import {greyNavigationBackIcon} from '../../assets/LVIcons';
 import * as ContactLib from '../../logic/LVContactManager';
 import Swipeout from 'react-native-swipeout';
 import { Separator } from 'react-native-tableview-simple';
-import { converAddressToDisplayableText} from '../../utils/MXStringUtils';
 import { LVConfirmDialog } from '../Common/LVDialog';
 import LVLocalization from '../../assets/localization';
-import TransferUtils from '../Transfer/TransferUtils';
 
 const AddIcon = require('../../assets/images/add_contact.png');
 const AvatarIcon = require('../../assets/images/contact_avatar.png');
@@ -133,16 +132,10 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                     onPressOut={separators.unhighlight}
                     underlayColor={LVColor.white}
                     onPress={()=>{
-                        if(this.state.callback) {
-                            this.state.callback(item.address);
-                            this.props.navigation.goBack();
-                        } else {
-                            this.setState({toDeDeletedContactName: null});
-                            this.props.navigation.navigate('AddEditContactPage', {
-                                callback:()=> this.loadContacts(),
-                                mode: 'edit', model: item})
-                        }
-                    }}>
+                        this.setState({toDeDeletedContactName: null});
+                        this.props.navigation.navigate('LVTContactDetailPage', {
+                             model: item});
+                }}>
                     <View style={styles.cellContentContainer}>
                         <View style={styles.cellLeftContentContainer}>
                             <Image source={AvatarIcon}/>
