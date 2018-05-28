@@ -107,7 +107,7 @@ const localized_strings = {
     password_verify_required: 'Password is required',
 
     // Assets
-    assets_title: 'My assets',
+    assets_title: 'Assets',
     recent_records: 'Recent transaction records',
     view_all_records: 'All records',
 
