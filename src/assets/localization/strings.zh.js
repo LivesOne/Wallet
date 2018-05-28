@@ -40,6 +40,7 @@ const localized_strings = {
     wallet_import_keystore_hint: 'Keystore 文本内容',
     wallet_import_private_password_lable:'设置密码',
     wallet_import_private_password_hint: '输入6~12位字母数字组合',
+    wallet_import_private_password_repeat_lable: "重复密码",
     wallet_import_private_pwd_confirm_hint: '重复输入你的密码',
     wallet_import_keystore_password_label: 'Keystore密码',
     wallet_import_keystore_password_hint: '请输入Keystore密码',
@@ -50,7 +51,6 @@ const localized_strings = {
     wallet_import_private_key_required: '私钥不能为空！',
     wallet_import_success: '导入成功！',
     wallet_import_fail: '导入失败！',
-    wallet_import_tip_keystore_password : "Keystore密码",
     
     wallet_create_wallet: '创建钱包',
     wallet_creating_wallet: '创建钱包中...',
