@@ -4,7 +4,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, View, TextInput, TouchableOpacity, Image, ViewPropTypes, Keyboard, Platform } from 'react-native';
+import { StyleSheet, View, TextInput, TouchableOpacity, Image, ViewPropTypes, Keyboard, Platform ,Text} from 'react-native';
 import { Base, DefaultStyles, LightStyles, WhiteStyles, TextAlignCenterStyles } from './styles';
 
 import LVColor from '../../styles/LVColor';
@@ -19,10 +19,10 @@ type Props = {
     placeholder?: string,
     rounded?: boolean,
     themeStyle?: string,
-    style?: any,
+    style?: ViewPropTypes.style,
     defaultValue?: string,
     secureTextEntry?: boolean,
-    onTextChanged?: any,
+    onTextChanged?: Function,
     withUnderLine?: boolean,
     keyboardType?: string,
     withClearButton?: boolean,
@@ -31,6 +31,7 @@ type Props = {
     textAlignCenter?: boolean,
     value?: string,
     boarderLineHeight?: number,
+    titleText?: string,
 };
 class MXCrossTextInput extends Component<Props,State> {
 
@@ -94,7 +95,7 @@ class MXCrossTextInput extends Component<Props,State> {
     }
 
     render() {
-        const { rounded, style, placeholder, secureTextEntry, withUnderLine, keyboardType, textAlignCenter, boarderLineHeight } = this.props;
+        const { rounded, style, placeholder, secureTextEntry, withUnderLine, keyboardType, textAlignCenter, boarderLineHeight,titleText } = this.props;
 
         const theme = this.getTheme();
 
@@ -112,7 +113,12 @@ class MXCrossTextInput extends Component<Props,State> {
                     !withUnderLine ? { borderBottomColor: 'transparent' } : null,
                     style,
                 ]}
-            >
+            >  
+                {this.props.titleText && (
+                    <Text style = {Base.titleLabel}>
+                        {titleText}
+                    </Text>
+                )}
                 <View style={[Base.content]}>
                     <TouchableOpacity style={[textAreaStyle]} activeOpacity={1} onPress={
                         () => {
@@ -155,7 +161,7 @@ class MXCrossTextInput extends Component<Props,State> {
                         )}
                     </View>
                 </View>
-                <View style={{width: '100%', height: lineHeight, backgroundColor: LVColor.separateLine}} />
+                <View style={{width: '100%', height: lineHeight, backgroundColor: LVColor.separateLine,marginTop: 15}} />
             </View>
         );
     }

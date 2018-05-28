@@ -56,7 +56,8 @@ export default class TransactionRecordList extends React.PureComponent<Props, St
     _renderItem = ({ item }) => (
         <LVTransactionRecordItem
             type={item.type}
-            amount={item.amount}
+            token={item.token.toUpperCase()}
+            balance={item.balance}
             address={item.type == 'in' ? item.payer : item.receiver}
             datetime={item.datetime}
             state={item.state}
@@ -123,7 +124,8 @@ const LVLoadingComponent = () => {
 
 type ItemProps = {
     type: string,
-    amount: Object,
+    token: string,
+    balance: Object,
     address: string,
     datetime: string,
     state: ?string,
@@ -133,12 +135,11 @@ type ItemProps = {
 class LVTransactionRecordItem extends React.PureComponent<ItemProps> {
 
     render() {
-        const { type, amount, address, datetime, state } = this.props;
+        const { type, token, balance, address, datetime, state } = this.props;
         const typeImage = type === 'in' ? inImg : outImg;
 
         const prefix = type === 'in' ? '+' : '-';
-        //const amountString = prefix + StringUtils.convertAmountToCurrencyString(amount, ',', 0) + ' LVT';
-        const amountString = prefix + StringUtils.beautifyBalanceShow(amount, 'LVT').result;
+        const amountString = prefix + StringUtils.beautifyBalanceShow(balance, token).result;
 
         //const
         const t = DateUtils.getTimePastFromNow(datetime);

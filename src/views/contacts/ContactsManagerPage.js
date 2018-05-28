@@ -25,6 +25,8 @@ const AddIcon = require('../../assets/images/add_contact.png');
 const AvatarIcon = require('../../assets/images/contact_avatar.png');
 const ShowDetailsIcon = require('../../assets/images/show_detail_arrow.png');
 const EmptyContactListIndicatorIcon = require('../../assets/images/contant_list_empty.png');
+const ItemEditIcon = require('../../assets/images/contant_list_itemEdit.png');
+const ItemDeleteIcon = require('../../assets/images/contant_list_itemDelete.png');
 
 type Props = {navigation: Object };
 
@@ -91,10 +93,22 @@ export default class ContactsManagerPage extends  Component<Props, State> {
     renderRow({item, separators}: any) {
         const swipeBts = [
             {
-                text: LVStrings.common_delete,
-                backgroundColor: '#f25656',
-                color: LVColor.white,
-                buttonWidth: 65,
+                component:<View style = {{flex:1,alignItems:"center",justifyContent:"center",marginRight:15}}>
+                <Image source={ItemEditIcon}/>
+                </View>,
+                backgroundColor: LVColor.white,
+                onPress: () => { 
+                    this.setState({toDeDeletedContactName: null});
+                    this.props.navigation.navigate('AddEditContactPage', {
+                                callback:()=> this.loadContacts(),
+                                mode: 'edit', model: item})
+                }
+            },
+            {
+                component:<View style = {{flex:1,alignItems:"center",justifyContent:"center",marginRight:15}}>
+                    <Image source={ItemDeleteIcon}/>
+                </View>,
+                backgroundColor: LVColor.white,
                 onPress: () => { 
                     this.setState({
                         toDeDeletedContactName: item.name
@@ -106,6 +120,7 @@ export default class ContactsManagerPage extends  Component<Props, State> {
         return (
             <Swipeout right={swipeBts} 
                 autoClose={true}
+                buttonWidth={50}
                 scroll={ (scrollEnabled)=> {this.setState({scrollEnabled: scrollEnabled});}}
                 close={!(this.state.toDeDeletedContactName == item.name)}
                 onOpen={(sectionID, rowID) => {
@@ -133,10 +148,8 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                             <Image source={AvatarIcon}/>
                             <View style={styles.cellLeftDetailsContainer}>
                                 <Text style={styles.nameTextStyle} numberOfLines={1}>{item.name}</Text>
-                                <Text style={styles.addressTextStyle}>{converAddressToDisplayableText(TransferUtils.removeHexHeader(item.address),9,9)}</Text>
                             </View>
                         </View>
-                        {!this.state.readonly && <Image source={ShowDetailsIcon}/>}
                     </View>
                 </TouchableHighlight>
             </Swipeout>
@@ -177,7 +190,6 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                         data={contacts}
                         keyExtractor={(item,index)=> item.name}
                         renderItem={this.renderRow}
-                        ItemSeparatorComponent={()=><Separator insetLeft={0} insetRight={12.5} tintColor={LVColor.separateLine} />}
                         ListEmptyComponent={()=> 
                             <View style={styles.emptyListContainer}>
                                 <Image source={EmptyContactListIndicatorIcon}/>
@@ -186,7 +198,7 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                         }/>
                 </View>
                 <LVConfirmDialog ref={'deleteConfirm'} 
-                            title={LVStrings.alert_hint}  
+                            title={''}  
                             message={LVStrings.contact_confirm_delete_contact} 
                             onConfirm={this.onDeleteContact} />
             </View>
@@ -207,7 +219,7 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         flex: 1,
-        paddingLeft: 12.5
+        paddingLeft: 15
     },
     cellContentContainer: {
         height: 60,
@@ -216,7 +228,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: LVColor.white,
-        paddingRight: 12.5
+        paddingRight: 15
     },
     cellLeftContentContainer: {
         flex: 1,
@@ -231,8 +243,9 @@ const styles = StyleSheet.create({
     },
     nameTextStyle: {
         width: Dimensions.get('window').width - 90,
-        fontSize: 15,
-        color: LVColor.text.grey1
+        fontSize: 14,
+        color: LVColor.text.grey2,
+        fontWeight: '500'
     },
     addressTextStyle: {
         fontSize: 12,
@@ -247,7 +260,7 @@ const styles = StyleSheet.create({
     },
     emptyListTextStyle: {
         marginTop: 10,
-        color: LVColor.text.editTextContent,
+        color: LVColor.text.editTextNomal,
         fontSize: 15
     }
 });

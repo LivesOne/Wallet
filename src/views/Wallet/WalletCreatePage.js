@@ -19,7 +19,11 @@ import MXCrossTextInput from '../../components/MXCrossTextInput';
 import LVWalletManager from '../../logic/LVWalletManager';
 import LVLoadingToast from '../Common/LVLoadingToast';
 import LVDialog from '../Common/LVDialog';
+import MXNavigatorHeader from './../../components/MXNavigatorHeader';
+import { greyNavigationBackIcon } from '../../assets/LVIcons';
 import { LVKeyboardDismissView } from '../Common/LVKeyboardDismissView';
+import LVFontSize from '../../styles/LVFontSize';
+import * as MXUtils from "../../utils/MXUtils";
 const backImg = require('../../assets/images/back.png');
 
 type Props = {
@@ -118,60 +122,55 @@ export default class WalletCreatePage extends Component<Props,State> {
     render() {
         return (
             <LVKeyboardDismissView style={styles.container}>
-                <LVGradientPanel style={styles.gradient}>
-                    <View style={styles.nav}>
-                        <MXTouchableImage 
-                            style={styles.navBack} 
-                            source={backImg}
-                            onPress={() => {
-                                if(this.props.screenProps.dismiss) {
-                                    this.props.screenProps.dismiss();
-                                } else {
-                                    this.props.navigation.goBack();
-                                }
-                            }}
-                        />
-                        <Text style={styles.navTitle}>{LVStrings.wallet_create_wallet}</Text>
-                        <View style={styles.navRightPlaceholder} />
-                    </View>
-                </LVGradientPanel>
+                <MXNavigatorHeader
+                    left={ greyNavigationBackIcon }
+                    title={ LVStrings.wallet_create_wallet }
+                    onLeftPress={ () => {
+                        if(this.props.screenProps.dismiss) {
+                            this.props.screenProps.dismiss();
+                        } else {
+                            this.props.navigation.goBack();
+                        }
+                     }}
+                />
                 <View style={styles.content}>
                     <View style={styles.textInputContainer}>
                         <MXCrossTextInput
                             placeholder={LVStrings.wallet_name_hint}
-                            style={ styles.textInput }
+                            titleText={LVStrings.wallet_create_name}
                             textAlignCenter={true}
-                            onTextChanged= {(text) => this.setState({name: text})}
-                        />
+                            withUnderLine={false}
+                            onTextChanged= {(text) => this.setState({name: text})}/>
                         <MXCrossTextInput
                             placeholder={LVStrings.wallet_create_password}
-                            style={ styles.textInput }
+                            titleText={LVStrings.wallet_create_password_label}
                             textAlignCenter={true}
                             secureTextEntry
-                            onTextChanged = {(text) => this.setState({password : text})}
-                        />
+                            withUnderLine={false}
+                            onTextChanged = {(text) => this.setState({password : text})}/>
                         <MXCrossTextInput
                             placeholder={LVStrings.wallet_create_password_verify}
-                            style={ styles.textInput }
+                            titleText={LVStrings.wallet_create_confirm_password_label}
                             textAlignCenter={true}
                             secureTextEntry
-                            withUnderLine = {false}
-                            onTextChanged = {(text) => this.setState({confirmPassword : text})}
+                            withUnderLine = {true}
+                            onTextChanged = {(text) => this.setState({confirmPassword : text})}/>
+                    </View>
+                    <View style={styles.bottomContainer}>
+                        <Text style={styles.descriptionTextStyle}>{LVStrings.wallet_create_explaination}</Text>
+                        <MXButton
+                            rounded                
+                            title={LVStrings.wallet_create}
+                            onPress = {() => {
+                                this.createWallet();
+                            }}
+                            themeStyle={"active"}
+                            style={styles.createButton}
                         />
                     </View>
-                    <Text style={styles.text}>{LVStrings.wallet_create_comment}</Text>
-                    <MXButton
-                        rounded                
-                        title={LVStrings.wallet_create}
-                        onPress = {() => {
-                            this.createWallet();
-                        }}
-                        themeStyle={"active"}
-                        style={styles.createButton}
-                    />
                 </View>
                 <LVLoadingToast ref={'toast'} title={LVStrings.wallet_creating_wallet}/>
-                <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
+                <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage || ''} buttonTitle={LVStrings.alert_ok}/>
             </LVKeyboardDismissView>
         )
     }
@@ -185,8 +184,7 @@ const Window = {
 const styles = LVStyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
+        flexDirection: 'column',
         backgroundColor: LVColor.white,
     },
     gradient: {
@@ -194,20 +192,6 @@ const styles = LVStyleSheet.create({
         height: 170,
         justifyContent: 'flex-start',
         alignItems: 'center',
-    },
-    nav: {
-        width: '100%',
-        height: 64,
-        paddingTop: 20,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    navTitle: {
-        fontSize: LVSize.large,
-        textAlign: 'center',
-        color: '#ffffff',
-        backgroundColor: 'transparent',
     },
     navBack: {
         paddingLeft: 12.5,
@@ -219,32 +203,25 @@ const styles = LVStyleSheet.create({
     },
     content: {
         flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        top: -86,
-        width: Window.width,
+        flexDirection: 'column',
+        justifyContent:'flex-start',
+        marginLeft:15,
+        marginRight:15
     },
     textInputContainer: {
-        alignItems: 'center',
-        shadowOffset: {width: 0, height: 3},
-        shadowColor: "#bfc5d1",
-        shadowOpacity: 0.2,
-        shadowRadius: 15,
-        borderRadius: 5,
-        width: Window.width - 25,
+        flexDirection: 'column',
+        height:240,
     },
-    textInput: {
-        height: 60,
-        width: Window.width - 65,
+    bottomContainer: {
+        flexDirection: 'column'
     },
-    text: {
-        marginTop: 15,
-        width: Window.width - 25,
-        fontSize: 12,
-        color: "#667383",
-        textAlign: "center",
+    descriptionTextStyle: {
+        fontSize: LVFontSize.xsmall,
+        color: LVColor.text.editTextNomal,
+        marginTop: 16
     },
     createButton: {
-        marginTop: 35,
+        marginTop: 93.5,
+        width: MXUtils.getDeviceWidth() - 30
     },
 });

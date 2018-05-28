@@ -1,10 +1,15 @@
 // @flow
 'use strict'
 
-import React, { Component } from 'react'
-import { Text, View, Keyboard, TouchableOpacity } from 'react-native';
+import * as React from 'react';
+import { Text, View, ViewPropTypes, Keyboard, TouchableOpacity } from 'react-native';
 
-export class LVKeyboardDismissView extends Component {
+type Props = { 
+    style?: ViewPropTypes.style,
+    children?: React.ChildrenArray<React.Element<any>>
+ };
+
+export class LVKeyboardDismissView extends React.Component<Props> {
 
     render() {
         return (

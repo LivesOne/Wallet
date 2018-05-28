@@ -71,7 +71,8 @@ const AppTabNavigator = TabNavigator(
         tabBarOptions: {
             showLabel: true,
             style: {
-                backgroundColor: LVColor.tabBar.background
+                backgroundColor: LVColor.tabBar.background,
+                shadowColor:LVColor.tabBar.shadowColor,shadowOffset:{width:0,height:-1},shadowOpacity:0.2,shadowRadius:18
             },
             activeTintColor: LVColor.tabBar.tintColor,
         },

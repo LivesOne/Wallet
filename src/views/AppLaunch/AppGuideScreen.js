@@ -17,10 +17,11 @@ const pageImage_1 = require('../../assets/images/app_guide_page_1.jpg');
 const pageImage_2 = require('../../assets/images/app_guide_page_2.jpg');
 const pageImage_3 = require('../../assets/images/app_guide_page_3.jpg');
 
-export default class AppGuideScreen extends Component {
-    static propTypes = {
-        callback: PropTypes.func
-    };
+type Props = { 
+    callback: ?Function
+ };
+
+export default class AppGuideScreen extends Component<Props> {
 
     onPressButton = () => {
         if (this.props.callback) {

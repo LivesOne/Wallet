@@ -12,7 +12,11 @@
 
 @implementation LVReactExport
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(LVReactExport);
+
++ (BOOL)requiresMainQueueSetup {
+  return YES;
+}
 
 RCT_EXPORT_METHOD(helloWorld:(NSString *)name) {
   NSLog(@"%@", name);

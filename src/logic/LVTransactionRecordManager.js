@@ -21,7 +21,8 @@ class LVTransactionRecord {
     type: string;
     payer: string;
     receiver: string;
-    amount: Object;
+    token: string;
+    balance: Object;
     timestamp: number;
     datetime: string = '';
     minnerFee: Object;
@@ -34,16 +35,17 @@ class LVTransactionRecord {
         this.type = this.isEqualAddress(json.to || '', currentWalletAddress) ? 'in' : 'out';
         this.payer = this.pureAddress(json.from);
         this.receiver = this.pureAddress(json.to);
-        //this.amount = Number(json.value) * Math.pow(10, -18);
+        this.token = 'lvt';
+        //this.balance = Number(json.value) * Math.pow(10, -18);
         this.state = state;
         if (state === 'waiting') {
-            this.amount = json.lvt ? new Big(json.lvt) : LVBig.getInitBig();
+            this.balance = json.lvt ? new Big(json.lvt) : LVBig.getInitBig();
             this.minnerFee = json.eth ? new Big(json.eth) : LVBig.getInitBig();
             this.timestamp = json.timestamp;
             this.datetime = Moment(this.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss');
         } else if (state !== 'failed'){
             try {
-                this.amount = new Big(json.value).times(new Big(10).pow(-18));
+                this.balance = new Big(json.value).times(new Big(10).pow(-18));
             } catch (e) {
                 TransferUtils.log('error = ' + e.message + " value = " + json.value);
             }
@@ -55,7 +57,7 @@ class LVTransactionRecord {
             transactionHash: this.hash,
             from: this.payer,
             to: this.receiver,
-            lvt: this.amount,
+            lvt: this.balance,
             eth: this.minnerFee,
             timestamp: this.timestamp,
             state: this.state
@@ -122,10 +124,10 @@ export default class LVTransactionRecordManager {
             LVTransactionRecordManager.unfinishedRecords.push(record);
             LVTransactionRecordManager.records.unshift(record);
 
-            LVTransactionRecordManager.preUsedLvt = LVTransactionRecordManager.preUsedLvt.plus(record.amount);
+            LVTransactionRecordManager.preUsedLvt = LVTransactionRecordManager.preUsedLvt.plus(record.balance);
             LVTransactionRecordManager.preUsedEth = LVTransactionRecordManager.preUsedEth.plus(record.minnerFee);
 
-            wallet.lvt = wallet.lvt.minus(record.amount);
+            wallet.lvt = wallet.lvt.minus(record.balance);
             wallet.eth = wallet.eth.minus(record.minnerFee);
 
             await LVTransactionRecordManager.saveUnfinishedTransactionRecords();
@@ -163,6 +165,7 @@ export default class LVTransactionRecordManager {
             let _preUsedEth = 0;
 
             const value = await LVNetworking.fetchTransactionHistory(wallet.address);
+            console.log(value);
 
             if (value && value.length > 0) {
                 _finishedRecords = value.map(record => new LVTransactionRecord(record, wallet.address));
