@@ -154,6 +154,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-rk-pull-to-refresh')
     compile project(':react-native-appupdate')
     compile project(':react-native-fs')
     compile project(':react-native-svg')
