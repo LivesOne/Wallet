@@ -29,6 +29,7 @@ import SplashScreen from "react-native-splash-screen";
 import console from 'console-browserify';
 import { LVConfirmDialog } from './views/Common/LVDialog';
 import { loadavg } from 'react-native-os';
+import LVNetworking  from './logic/LVNetworking';
 
 type State = {
     loading: boolean,
@@ -52,10 +53,9 @@ class VenusApp extends Component<Props, State> {
 
         const appUpdate = new AppUpdate({
             iosAppId: '123456',
-            apkVersionUrl: 'http://10.0.5.50:9000/uploads/u2.json',
+            apkVersionUrl: LVNetworking.getAppConfigURL(),
             needUpdateApp: (needUpdate) => {
                this.setState({needUpdate:needUpdate});
-    
                this.refs.update.show();
             },
             forceUpdateApp: () => {
@@ -82,7 +82,7 @@ class VenusApp extends Component<Props, State> {
         this.handleWalletImportOrCreateSuccess = this.handleWalletImportOrCreateSuccess.bind(this);
         // this.initUpdateApp = this.initUpdateApp.bind(this);
         // this.initUpdateApp();
-        // this.state.update.checkUpdate();
+        this.state.update.checkUpdate();
     }
 
     componentWillMount() {
