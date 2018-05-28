@@ -29,7 +29,8 @@ const API = {
     GET_TRANSACTION_HISTORY: HOST + '/wallet/history',
     GET_TRANSACTION_DETAIL: HOST + '/wallet/tx',
     GET_TRANSACTION_PARAM: HOST + '/wallet/param?',
-    POST_SIGNED_TRANSACTION: HOST + '/wallet/tx'
+    POST_SIGNED_TRANSACTION: HOST + '/wallet/tx',
+    GET_APP_CONFIG: HOST + '/wallet/appconfig'
 };
 
 const ErrorCodeMap: Map<number, string> = new Map([[1, 'Request parameter error'], [2, 'Server internal error']]);

@@ -33,22 +33,56 @@ import { loadavg } from 'react-native-os';
 type State = {
     loading: boolean,
     needShowGuide: boolean,
-    hasAnyWallets: boolean
+    hasAnyWallets: boolean,
+    update: object,
+    needUpdate: object
+
 };
 
 type Props = {
 };
 
 class VenusApp extends Component<Props, State> {
+       
+   
+
+
     constructor() {
         super();
+
+        const appUpdate = new AppUpdate({
+            iosAppId: '123456',
+            apkVersionUrl: 'http://10.0.5.50:9000/uploads/u2.json',
+            needUpdateApp: (needUpdate) => {
+               this.setState({needUpdate:needUpdate});
+    
+               this.refs.update.show();
+            },
+            forceUpdateApp: () => {
+              console.log("Force update will start")
+            },
+            notNeedUpdateApp: () => {
+              console.log("App is up to date")
+            },
+            downloadApkStart: () => { console.log("Start") },
+            downloadApkProgress: (progress) => { console.log(`Downloading ${progress}%...`) },
+            downloadApkEnd: () => { console.log("End") },
+            onError: () => { console.log("downloadApkError") }
+          }); 
+    
         this.state = {
             loading: true,
             needShowGuide: false,
-            hasAnyWallets: false
+            hasAnyWallets: false,
+            update: appUpdate,
+            needUpdate: this.initUpdateApp
+
         };
         this.handleAppGuideCallback = this.handleAppGuideCallback.bind(this);
         this.handleWalletImportOrCreateSuccess = this.handleWalletImportOrCreateSuccess.bind(this);
+        // this.initUpdateApp = this.initUpdateApp.bind(this);
+        // this.initUpdateApp();
+        // this.state.update.checkUpdate();
     }
 
     componentWillMount() {
@@ -56,6 +90,9 @@ class VenusApp extends Component<Props, State> {
         LVNotificationCenter.addObserver(this, LVNotification.walletImported, this.handleWalletImportOrCreateSuccess);
         LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletImportOrCreateSuccess);
     }
+
+
+   
 
     handleBack = () => {
         const { loading, needShowGuide, hasAnyWallets } = this.state;
@@ -106,6 +143,11 @@ class VenusApp extends Component<Props, State> {
         }
     }
 
+    initUpdateApp = () => {
+        
+        //   this.setState({ update: appUpdate});
+    }
+
     handleAppGuideCallback = () => {
         this.setState({ needShowGuide: false });
         LVConfiguration.setAppGuidesHasBeenDisplayed();
@@ -130,6 +172,13 @@ class VenusApp extends Component<Props, State> {
                     message={LVStrings.exit_app_prompt} 
                     onConfirm={()=> {BackHandler.exitApp()}} />
                     {this.getMainScreen()}
+                    <LVConfirmDialog
+                    ref={'update'}
+                    title={LVStrings.alert_hint}  
+                    message={LVStrings.exit_app_prompt} 
+                    onConfirm={()=> {
+                        this.state.needUpdate(true);
+                    }} />
             </View>
     }
 
@@ -153,5 +202,8 @@ const LVAppLoadingView = () => {
         </View>
     );
 };
+import AppUpdate from 'react-native-appupdate';
+
+
 
 export default VenusApp;
