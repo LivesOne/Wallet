@@ -110,7 +110,7 @@ const localized_strings = {
     total_amount: '总金额',
 
     // Assets
-    assets_title: '我的资产',
+    assets_title: '资产',
     recent_records: '最近交易记录',
     view_all_records: '查看全部记录',
 

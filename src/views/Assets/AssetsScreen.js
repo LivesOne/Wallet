@@ -7,13 +7,14 @@
 
 import React, { Component } from 'react';
 import { AppState, StyleSheet, Dimensions, Platform, View, Text } from 'react-native';
-import { PullView } from 'react-native-rk-pull-to-refresh';
 import Toast from 'react-native-root-toast';
 import Moment from 'moment';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
+import LVUtils from '../../utils';
 import LVStrings from '../../assets/localization';
 import LVDialog from '../Common/LVDialog';
+import LVWalletHeader from '../Common/LVWalletHeader';
 import LVDetailTextCell from '../Common/LVDetailTextCell';
 import LVRefreshIndicator from '../Common/LVRefreshIndicator';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
@@ -26,7 +27,6 @@ import LVNotification from '../../logic/LVNotification';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVTransactionRecordManager';
 
-import WalletInfoView from './WalletInfoView';
 import WalletBalanceView from './WalletBalanceView';
 import TransactionRecordList from './TransactionRecordList';
 import TransactionDetailsScreen from './TransactionDetailsScreen';
@@ -180,60 +180,25 @@ class AssetsScreen extends Component<Props, State> {
         }
     };
 
-    shouldAdjustForIOS() {
-        const wallet = this.state.wallet || {};
-        var b = isIOS && wallet.lvt.eq(0);
-        console.log('should adjust = ' + wallet.lvt);
-        return isIOS  && wallet.lvt.eq(0);
-    }
-
     render() {
         const { transactionList } = this.state;
         const wallet = this.state.wallet || {};
 
         return (
             <View style={styles.container}>
-                <View style={[styles.topPanel, {height: this.shouldAdjustForIOS() ? 250 : 315  }]}>
-                    <PullView
-                        ref={'pull'}
-                        style={[styles.topPanel, {height: this.shouldAdjustForIOS() ? 250 : 315}]}
-                        onPullRelease={this.onPullRelease.bind(this)}
-                        topIndicatorHeight={LVRefreshIndicator.indicatorHeight}
-                        topIndicatorRender={this.topIndicatorRender.bind(this)}
-                        onPullStateChangeHeight={this.onPullStateChangeHeight.bind(this)}
-                    >
-                        <View style={styles.gradient}>
-                            <MXNavigatorHeader
-                                style={{ backgroundColor: 'transparent' }}
-                                title={LVStrings.assets_title}
-                                titleStyle={{color: '#ffffff', fontSize: LVSize.large}}
-                                hideLeft={true}
-                                right={selectImg}
-                                onRightPress={this.onPressSelectWallet}
-                            />
-                            <WalletInfoView style={styles.walletInfo} title={wallet.name} address={wallet.address} />
-                            <WalletBalanceView 
-                                style={[styles.balance, {height: this.shouldAdjustForIOS() ? 150 /2 : 150,}]} 
-                                lvt={wallet.lvt} eth={wallet.eth} />
-                        </View>
-                    </PullView>
+                <View style={styles.topPanel}>
+                    <MXNavigatorHeader
+                        style={{ backgroundColor: 'transparent' }}
+                        title={LVStrings.assets_title}
+                        titleStyle={{ color: '#ffffff', fontSize: LVSize.large }}
+                        hideLeft={true}
+                        right={selectImg}
+                        onRightPress={this.onPressSelectWallet}
+                    />
+                    <LVWalletHeader title={wallet.name} address={wallet.address} />
                 </View>
 
                 <View style={styles.bottomPanel}>
-                    <LVDetailTextCell
-                        style={styles.recent}
-                        text={LVStrings.recent_records}
-                        detailText={LVStrings.view_all_records}
-                        onPress={this.onPressShowAll}
-                    />
-
-                    <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: LVColor.separateLine }} />
-
-                    <TransactionRecordList
-                        style={styles.list}
-                        records={transactionList}
-                        onPressItem={this.onPressRecord}
-                    />
                 </View>
 
                 <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
@@ -265,41 +230,21 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     topPanel: {
         width: Window.width,
-        height: 315
-    },
-    gradient: {
-        flex: 1,
+        height: LVUtils.isIphoneX() ? 219 : 195,
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: LVColor.primary
-    },
-    walletInfo: {
-        width: Window.width - 25
-    },
-    balance: {
-        width: Window.width - 25,
-        marginTop: 15
     },
     bottomPanel: {
         flex: 1,
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: LVColor.separateLine
-    },
-    recent: {
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: LVColor.white
-    },
-    list: {
-        width: '100%',
-        backgroundColor: LVColor.white
+        backgroundColor: LVColor.background.assets
     }
 });
 

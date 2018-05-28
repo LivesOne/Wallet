@@ -22,7 +22,7 @@ type Props = {
     titleStyle?: Text.propTypes.style,
     left?: string | number | React.Element<any>,
     leftStyle?: Text.propTypes.style | ViewPropTypes.style,
-    hideLeft: boolean,
+    hideLeft?: boolean,
     onLeftPress?: Function,
     right?: string | number |  React.Element<any>,
     rightStyle?: Text.propTypes.style | ViewPropTypes.style,
