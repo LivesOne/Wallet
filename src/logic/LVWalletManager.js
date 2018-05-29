@@ -66,7 +66,7 @@ class WalletManager {
     /**
      * save wallets to disk storage.
      */
-    async saveWalletsToLocal() {
+    async saveToDisk() {
         const walletInfo = {
             wallets: this.wallets,
             selectedIndex: this.selectedIndex
@@ -139,7 +139,7 @@ class WalletManager {
                     wallet.setBalance(token, balances[token]);
                 });
 
-                await this.saveWalletsToLocal();
+                await this.saveToDisk();
                 LVNotificationCenter.postNotification(LVNotification.balanceChanged);
             } catch (error) {
                 console.log('error in refresh wallet datas : ' + error);
