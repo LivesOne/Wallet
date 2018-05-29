@@ -13,12 +13,12 @@ import PropTypes from 'prop-types';
 import DatePicker from 'react-native-datepicker';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
+import LVUtils from '../../utils';
 import LVStrings from '../../assets/localization';
-import LVWalletHeader from '../Common/LVWalletHeader';
-import LVGradientPanel from '../Common/LVGradientPanel';
-import LVRefreshIndicator from '../Common/LVRefreshIndicator';
+import LVWalletBalanceHeader from '../Common/LVWalletBalanceHeader';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVConfiguration from '../../logic/LVConfiguration';
+import LVWallet from '../../logic/LVWallet';
 import LVWalletManager from '../../logic/LVWalletManager';
 import LVNotification from '../../logic/LVNotification';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
@@ -29,6 +29,7 @@ import TransactionDetailsScreen from './TransactionDetailsScreen';
 
 type Props = { navigation: Object };
 type State = {
+    wallet: LVWallet,
     startDate: string,
     endDate: string,
     transactionList: ?Array<LVTransactionRecord>
@@ -42,7 +43,9 @@ class AssetsDetailsScreen extends Component<Props, State> {
 
     constructor(props: any) {
         super(props);
+        const wallet = LVWalletManager.getSelectedWallet() || LVWallet.emptyWallet();
         this.state = {
+            wallet: wallet,
             startDate: '',
             endDate: '',
             transactionList: LVTransactionRecordManager.records
@@ -80,17 +83,13 @@ class AssetsDetailsScreen extends Component<Props, State> {
 
     async onPullRelease() {
         await LVTransactionRecordManager.refreshTransactionRecords();
-        LVNotificationCenter.postNotification(LVNotification.transcationRecordsChanged);
-
         this.setState({ transactionList: LVTransactionRecordManager.records });
         this.refs.pull && this.refs.pull.resolveHandler();
     }
 
     render() {
-        const wallet = LVWalletManager.getSelectedWallet();
-        const walletName = wallet && wallet.name;
-        const walletAddress = wallet && wallet.address;
-        const { startDate, endDate, transactionList } = this.state;
+        const { wallet, startDate, endDate, transactionList } = this.state;
+        const { token } = this.props.navigation.state.params;
 
         const startTimestamp = Moment(startDate, 'YYYY-MM-DD').format('X');
         const endTimestamp = Moment(endDate, 'YYYY-MM-DD')
@@ -103,17 +102,17 @@ class AssetsDetailsScreen extends Component<Props, State> {
 
         return (
             <View style={styles.container}>
-                <LVGradientPanel style={styles.gradient}>
+                <View style={styles.topPanel}>
                     <MXNavigatorHeader
-                        title={LVStrings.transaction_records}
+                        title={wallet.name}
                         style={{ backgroundColor: 'transparent' }}
                         titleStyle={{ fontSize: LVSize.large, color: LVColor.text.white }}
                         onLeftPress={() => {
                             this.props.navigation.goBack();
                         }}
                     />
-                    <LVWalletHeader style={styles.walletInfo} title={walletName} address={walletAddress} />
-                </LVGradientPanel>
+                    <LVWalletBalanceHeader style={styles.walletInfo} token={token} balance={wallet.getBalance(token)} />
+                </View>
 
                 <View style={styles.datePanel}>
                     <View style={styles.dateLeft}>
@@ -166,11 +165,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center'
     },
-    gradient: {
-        width: '100%',
-        height: 160,
-        justifyContent: 'space-between',
-        alignItems: 'center'
+    topPanel: {
+        width: Window.width,
+        height: LVUtils.isIphoneX() ? 219 : 195,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        backgroundColor: LVColor.primary
     },
     walletInfo: {
         marginBottom: 15,
