@@ -16,7 +16,6 @@ import {
     StatusBar
 } from 'react-native';
 import MXNavigatorHeader from './../../../components/MXNavigatorHeader';
-import WalletInfoView from '../../Assets/WalletInfoView';
 import LVSize from '../../../styles/LVFontSize';
 import { Cell, Section, TableView, Separator } from 'react-native-tableview-simple';
 import MXButton from './../../../components/MXButton';
