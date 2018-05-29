@@ -176,7 +176,7 @@ export class ModifyWalletPwd extends React.Component<Props, State> {
             <LVKeyboardDismissView style={{ backgroundColor: 'white', flex: 1}}>
                 <MXNavigatorHeader
                     left={ IconBack }
-                    style={{backgroundColor:'#F8F9FB'}}
+                    style={{backgroundColor:LVColor.white}}
                     title={ LVStrings.profile_wallet_modify_password }
                     titleStyle={{color:'#6d798a'}}
                     onLeftPress={ () => {
