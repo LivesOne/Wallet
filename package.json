@@ -54,6 +54,7 @@
     "react-native-device-info": "^0.21.5",
     "react-native-fs": "^2.9.12",
     "react-native-http": "github:tradle/react-native-http#834492d",
+    "react-native-iphone-x-helper": "^1.0.3",
     "react-native-level-fs": "^3.0.1",
     "react-native-linear-gradient": "^2.4.0",
     "react-native-localization": "^1.0.9",

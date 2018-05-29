@@ -25,6 +25,8 @@ import LVNotificationCenter from '../../../logic/LVNotificationCenter';
 import LVNotification from '../../../logic/LVNotification';
 import LVNetworking from '../../../logic/LVNetworking';
 import LVBig from '../../../logic/LVBig';
+import { ifIphoneX } from 'react-native-iphone-x-helper'
+import { iPhoneX_Bottom_Inset } from '../../../utils/MXUtils';
 const WalletIcon = require('../../../assets/images/wallet_grey.png');
 const ShowDetailsIcon = require('../../../assets/images/show_detail_arrow.png');
 const CreateWalletIcon = require('../../../assets/images/wm_create_wallet.png');
@@ -196,7 +198,8 @@ const styles = StyleSheet.create({
         flex : 1,
         flexDirection: 'column',
         justifyContent: 'space-between',
-        backgroundColor: '#F8F9FB'
+        backgroundColor: '#F8F9FB',
+        ...ifIphoneX({paddingBottom: iPhoneX_Bottom_Inset}, {paddingBottom:0})
     },
     nav: {
         backgroundColor : LVColor.profileNavBack

@@ -12,6 +12,7 @@ import WalletUtils from '../views/Wallet/WalletUtils';
 
 export const getDeviceHeight = () => Dimensions.get('window').height;
 export const getDeviceWidth = () => Dimensions.get('window').width;
+export const iPhoneX_Bottom_Inset = 34;
 
 export const checkValidEmail = (email: string) => {
   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

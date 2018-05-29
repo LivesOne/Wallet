@@ -5228,6 +5228,10 @@ react-native-fs@^2.3.3, react-native-fs@^2.9.12:
     Base64 "~0.2.0"
     inherits "~2.0.1"
 
+react-native-iphone-x-helper@^1.0.3:
+  version "1.0.3"
+  resolved "http://registry.npm.taobao.org/react-native-iphone-x-helper/download/react-native-iphone-x-helper-1.0.3.tgz#7a2f1e0574e899a0f1d426e6167fd98990083214"
+
 react-native-level-fs@^3.0.1:
   version "3.0.1"
   resolved "https://registry.npmjs.org/react-native-level-fs/-/react-native-level-fs-3.0.1.tgz#f3054614c2bc1a379dcb3d3ee51b6a1b66123283"
