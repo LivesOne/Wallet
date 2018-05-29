@@ -186,12 +186,14 @@ export class ModifyWalletPwd extends React.Component<Props, State> {
                     <MXCrossTextInput
                         style={styles.textInput}
                         secureTextEntry={true}
+                        withUnderLine={false}
                         titleText={LVStrings.profile_wallet_cur_password}
                         placeholder= { LVStrings.profile_wallet_cur_password }
                         onTextChanged={ this.onCurPwdChanged.bind(this) }/>
                     <MXCrossTextInput
                         style={styles.textInput}
                         secureTextEntry={true}
+                        withUnderLine={false}
                         titleText={LVStrings.profile_wallet_new_password}
                         placeholder= { LVStrings.wallet_import_private_password_hint }
                         onTextChanged={ this.onNewPwdChanged.bind(this) }
