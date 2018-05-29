@@ -95,6 +95,7 @@ class ReceiveScreen extends Component {
     constructor(props: any) {
         super(props);
         const wallet = LVWalletManager.getSelectedWallet();
+        // const {wallet} = this.props.navigation.state.params;
         this.state = {
             wallet: wallet,
             openSelectWallet: false,
