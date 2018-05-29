@@ -39,8 +39,9 @@ class AppUpdate {
 
   getApkVersionSuccess(remote) {
     console.log("getApkVersionSuccess", remote);
-    if (RNAppUpdate.versionCode < remote.android.versionCode) {
-      if (remote.android.forceUpdate) {
+    console.log("versionCode:"+remote.result.android.versionCode);
+    if (RNAppUpdate.versionCode < remote.result.android.versionCode) {
+      if (remote.result.android.forceUpdate) {
         if(this.options.forceUpdateApp) {
           this.options.forceUpdateApp();
         }
@@ -70,7 +71,7 @@ class AppUpdate {
     const downloadDestPath = `${RNFS.DocumentDirectoryPath}/NewApp.apk`;
 
     const ret = RNFS.downloadFile({
-      fromUrl: remote.android.apkUrl,
+      fromUrl: remote.result.android.apkUrl,
       toFile: downloadDestPath,
       begin,
       progress,
@@ -110,9 +111,9 @@ class AppUpdate {
   }
 
   getAppStoreCheckVersionSuccess(remote) {
-    const versionName = remote.ios.versionName
-    const versionCode = remote.ios.versionCode
-    const appid = remote.ios.iosAppId
+    const versionName = remote.result.ios.versionName
+    const versionCode = remote.result.ios.versionCode
+    const appid = remote.result.ios.iosAppId
     const local_version = RNAppUpdate.versionName
     const local_versionCode = RNAppUpdate.versionCode
 
