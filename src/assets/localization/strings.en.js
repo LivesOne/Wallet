@@ -23,10 +23,10 @@ const localized_strings = {
     common_camera_not_authorized: 'Camera not authorized',
 
     //receive
-    receive_title:'My wallet QR code',
+    receive_title:'Receive',
     receive_name:'Wallet address',
     receive_name_suffix : "'s wallet",
-    receive_copy:'Copy the address',
+    receive_copy:'Copy wallet address',
     receive_save:'Save the QR code',
     receive_empty:'You haven’t add a wallet yet',
     receive_save_finish:'Completed',

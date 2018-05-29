@@ -109,11 +109,12 @@ export class LVPasswordDialog extends React.Component<Props, State> {
                 cancelTitleStyle={verifying ? {color: LVColor.text.grey4} : null}
                 width={300}
                 >
-                    <View>
+                    <View style = {{height : 64}}>
                         {!verifying && 
                         <MXCrossTextInput
                             ref={'textinput'}
-                            style={{width: 240, alignSelf: 'center'}}
+                            style={{width: 210, height : "100%" , alignSelf: 'center' , }}
+                            inputContainerStyle = {{borderWidth : 1 , borderColor : "#C3C8D4" , paddingLeft : 10 , paddingRight : 10}}
                             secureTextEntry={true}
                             withUnderLine={true}
                             onTextChanged={newText => {
