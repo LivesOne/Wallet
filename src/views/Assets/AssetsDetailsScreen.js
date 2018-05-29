@@ -107,6 +107,7 @@ class AssetsDetailsScreen extends Component<Props, State> {
                         title={wallet.name}
                         style={{ backgroundColor: 'transparent' }}
                         titleStyle={{ fontSize: LVSize.large, color: LVColor.text.white }}
+                        left={require('../../assets/images/back.png')}
                         onLeftPress={() => {
                             this.props.navigation.goBack();
                         }}
