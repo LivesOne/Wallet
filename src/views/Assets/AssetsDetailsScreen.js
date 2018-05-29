@@ -15,8 +15,9 @@ import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVUtils from '../../utils';
 import LVStrings from '../../assets/localization';
-import LVWalletBalanceHeader from '../Common/LVWalletBalanceHeader';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
+import LVWalletBalanceHeader from '../Common/LVWalletBalanceHeader';
+import LVFullScreenModalView from '../Common/LVFullScreenModalView';
 import LVConfiguration from '../../logic/LVConfiguration';
 import LVWallet from '../../logic/LVWallet';
 import LVWalletManager from '../../logic/LVWalletManager';
@@ -26,6 +27,12 @@ import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVT
 
 import TransactionRecordList from './TransactionRecordList';
 import TransactionDetailsScreen from './TransactionDetailsScreen';
+
+import ReceiveNavigator from '../Receive/ReceiveNavigator';
+import TransferNavigator from '../Transfer/TransferNavigator';
+
+const receiverIcon = require('../../assets/images/assets_receive.png');
+const transferIcon = require('../../assets/images/assets_transfer.png');
 
 type Props = { navigation: Object };
 type State = {
@@ -52,6 +59,8 @@ class AssetsDetailsScreen extends Component<Props, State> {
         };
         this.onStartDateChange = this.onStartDateChange.bind(this);
         this.onEndDateChange = this.onEndDateChange.bind(this);
+        this.onReceiverButtonPressed = this.onReceiverButtonPressed.bind(this);
+        this.onTransferButtonPressed = this.onTransferButtonPressed.bind(this);
     }
 
     componentDidMount() {
@@ -59,7 +68,9 @@ class AssetsDetailsScreen extends Component<Props, State> {
     }
 
     initFilterDate = async () => {
-        const startDate = Moment().add(-2, 'days').format('YYYY-MM-DD');
+        const startDate = Moment()
+            .add(-2, 'days')
+            .format('YYYY-MM-DD');
         const endDate = Moment().format('YYYY-MM-DD');
         this.setState({ startDate: startDate, endDate: endDate });
     };
@@ -86,6 +97,14 @@ class AssetsDetailsScreen extends Component<Props, State> {
         this.setState({ transactionList: LVTransactionRecordManager.records });
         this.refs.pull && this.refs.pull.resolveHandler();
     }
+
+    onReceiverButtonPressed = () => {
+        this.refs.receiveScreen.show();
+    };
+
+    onTransferButtonPressed = () => {
+        this.refs.transferScreen.show();
+    };
 
     render() {
         const { wallet, startDate, endDate, transactionList } = this.state;
@@ -117,7 +136,7 @@ class AssetsDetailsScreen extends Component<Props, State> {
 
                 <View style={styles.datePanel}>
                     <View style={styles.dateLeft}>
-                        <Text style={styles.text}>{LVStrings.transaction_records_time}</Text>
+                        <Text style={styles.text}>{LVStrings.transaction_records}</Text>
                         <View style={{ marginLeft: 15, height: 20, width: 1, backgroundColor: '#ccc' }} />
                     </View>
 
@@ -131,6 +150,45 @@ class AssetsDetailsScreen extends Component<Props, State> {
                 </View>
 
                 <TransactionRecordList style={styles.list} records={filteredList} onPressItem={this.onPressRecord} />
+
+                <View style={styles.bottom}>
+                    <View style={styles.bottomContainer}>
+                        <TouchableOpacity style={styles.bottomButtonContainer} onPress={this.onReceiverButtonPressed}>
+                            <View style={styles.bottomButtonContainer}>
+                                <Image source={receiverIcon} style={styles.bottomIconStyle} />
+                                <Text style={styles.bottomButtonText}>{LVStrings.receive}</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <View style={styles.bottomSeparator} />
+                        <TouchableOpacity style={styles.bottomButtonContainer} onPress={this.onTransferButtonPressed}>
+                            <View style={styles.bottomButtonContainer}>
+                                <Image source={transferIcon} style={styles.bottomIconStyle} />
+                                <Text style={styles.bottomButtonText}>{LVStrings.transfer}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                <LVFullScreenModalView ref={'receiveScreen'}>
+                    <ReceiveNavigator
+                        screenProps={{
+                            dismiss: () => {
+                                this.refs.receiveScreen.dismiss();
+                                //this.handleWalletChange();
+                            }
+                        }}
+                    />
+                </LVFullScreenModalView>
+                <LVFullScreenModalView ref={'transferScreen'}>
+                    <TransferNavigator
+                        screenProps={{
+                            dismiss: () => {
+                                this.refs.transferScreen.dismiss();
+                                //this.handleWalletChange();
+                            },
+                        }}
+                    />
+                </LVFullScreenModalView>
             </View>
         );
     }
@@ -144,7 +202,7 @@ const LVDataPicker = ({ date, min, max, onDateChange }) => {
             date={date}
             mode="date"
             format="YYYY-MM-DD"
-            minDate={min || "2010-01-01"}
+            minDate={min || '2010-01-01'}
             maxDate={max || Moment().format('YYYY-MM-DD')}
             showIcon={false}
             confirmBtnText={LVStrings.common_confirm}
@@ -163,7 +221,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: Window.width,
-        justifyContent: 'space-between',
         alignItems: 'center'
     },
     topPanel: {
@@ -204,6 +261,39 @@ const styles = StyleSheet.create({
     list: {
         width: '100%',
         backgroundColor: LVColor.white
+    },
+    bottom: {
+        height: LVUtils.isIphoneX() ? 89 : 55,
+        width: '100%',
+        backgroundColor: '#FFFFFF',
+        shadowColor: '#6B7A9F',
+        shadowOpacity: 0.1,
+        shadowRadius: 5
+    },
+    bottomContainer: {
+        flex: 1,
+        marginTop: 12,
+        flexDirection: 'row',
+        alignItems: 'flex-start'
+    },
+    bottomButtonContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    bottomIconStyle: {
+        marginRight: 5
+    },
+    bottomSeparator: {
+        width: 2,
+        height: 20,
+        marginTop: 15,
+        backgroundColor: '#F5F6FA'
+    },
+    bottomButtonText: {
+        color: '#657182',
+        fontSize: 15
     }
 });
 

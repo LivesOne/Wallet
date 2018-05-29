@@ -427,6 +427,13 @@ class TransferScreen extends Component<Props, State> {
                         style={{ backgroundColor: LVColor.white }}
                         title={LVStrings.transaction_details}
                         titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
+                        onLeftPress={() => {
+                            if (this.props.screenProps.dismiss) {
+                                this.props.screenProps.dismiss();
+                            } else {
+                                this.props.navigation.goBack();
+                            }
+                        }}
                         />
                     <View style= { styles.headerBelow }>
                         <Text style = {{ fontSize: 12, color: LVColor.text.grey1, }}>{LVStrings.transfer_payee_address}</Text>

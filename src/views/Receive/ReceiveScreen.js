@@ -50,7 +50,11 @@ class ReceiveHeader extends Component {
     };
 
     onLeftPress = ()=> {
-        this.props.navigation.goBack();
+        if (this.props.screenProps.dismiss) {
+            this.props.screenProps.dismiss();
+        } else {
+            this.props.navigation.goBack();
+        }
     }
 
     static propTypes = {
@@ -215,7 +219,7 @@ class ReceiveScreen extends Component {
 
          return (
             <View style={styles.container}>
-                <ReceiveHeader callback={this.onWalletShare}/>
+                <ReceiveHeader callback={this.onWalletShare} screenProps={this.props.screenProps} />
 
                 <View style={styles.mainContainer2}>
                     <ScrollView showsVerticalScrollIndicator={false} style={{ width:'100%', }}  contentContainerStyle={styles.contentContainer}>
@@ -283,7 +287,7 @@ class ReceiveScreen extends Component {
     }else {
         return (
             <View style={styles.container}>
-                <ReceiveHeader callback={this.onPressSelectWallet}/>
+                <ReceiveHeader callback={this.onPressSelectWallet} screenProps={this.props.screenProps} />
                 <View style={styles.mainContainer2}>
                 <Image source={receive_wallet_blank}/>
                 <Text >
