@@ -30,6 +30,14 @@ import console from 'console-browserify';
 import { LVConfirmDialog } from './views/Common/LVDialog';
 import { loadavg } from 'react-native-os';
 import LVNetworking  from './logic/LVNetworking';
+import Toast from 'react-native-root-toast';
+import AppUpdate from './utils/MxAppUpdate';
+
+
+import { YellowBox } from 'react-native'
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated'])
+
+
 
 type State = {
     loading: boolean,
@@ -64,7 +72,11 @@ class VenusApp extends Component<Props, State> {
             notNeedUpdateApp: () => {
               console.log("App is up to date")
             },
-            downloadApkStart: () => { console.log("Start") },
+            downloadApkStart: () => { 
+                Toast.show(LVStrings.update_download_tip);
+                console.log("Start") 
+            },
+
             downloadApkProgress: (progress) => { console.log(`Downloading ${progress}%...`) },
             downloadApkEnd: () => { console.log("End") },
             onError: () => { console.log("downloadApkError") }
@@ -220,8 +232,5 @@ const LVAppLoadingView = () => {
         </View>
     );
 };
-import AppUpdate from './utils/MxAppUpdate';
-
-
 
 export default VenusApp;
