@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
     topPanel: {
         flexDirection: 'column',
         justifyContent: 'flex-start',
-        height: 195,
+        height: MXUtils.isIphoneX() ? 219 : 195,
         backgroundColor:LVColor.primary
     },
     walletInfo: {
