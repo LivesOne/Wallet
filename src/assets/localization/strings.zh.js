@@ -263,7 +263,9 @@ const localized_strings = {
      update_title: '更新提醒',
      update_text: '发现新版本,快去体验吧!',
      update_ok: '立即更新',
-     update_cancel: '以后再说'
+     update_cancel: '以后再说',
+     update_download_tip: '后台下载最新的版本',
+
 };
 
 export default localized_strings;

@@ -263,7 +263,8 @@ const localized_strings = {
     update_title: 'Update Tip',
     update_text: 'Find the new version for app',
     update_ok: 'Update',
-    update_cancel: 'Cancel'
+    update_cancel: 'Cancel',
+    update_download_tip: 'The newest version is downloading by background!',
 };
 
 export default localized_strings;
