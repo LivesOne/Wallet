@@ -141,11 +141,11 @@ export class ModifyWalletName extends React.Component<Props, State> {
                             onTextChanged={ this.onTextChanged.bind(this) }
                         />
                         <MXButton
-                        rounded                
-                        title={LVStrings.profile_wallet_save}
-                        onPress = {this.onSavePressed}
-                        themeStyle={"active"}
-                        style={styles.saveButton}/>
+                            rounded                
+                            title={LVStrings.profile_wallet_save}
+                            onPress = {this.onSavePressed}
+                            themeStyle={"active"}
+                            style={styles.saveButton}/>
                     </View>
                     <LVDialog ref={'alert'} 
                         title={LVStrings.alert_hint} 
