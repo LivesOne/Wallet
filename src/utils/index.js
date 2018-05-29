@@ -31,7 +31,7 @@ const PLUtils = {
   isNotEmptyString,
   isIphoneX,
   log,
-}
+};
 
 export default PLUtils;
 

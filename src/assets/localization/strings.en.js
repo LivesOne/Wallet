@@ -117,7 +117,7 @@ const localized_strings = {
 
     // Transaction record
     transaction_records: 'Transaction records',
-    transaction_records_no_data: 'No transactions',
+    transaction_records_no_data: 'No records',
     transaction_records_time: 'Time',
     transaction_records_to: 'to',
     transaction_waiting: 'In process',

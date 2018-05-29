@@ -118,7 +118,7 @@ const localized_strings = {
 
     // Transaction record
     transaction_records: '交易记录',
-    transaction_records_no_data: '暂无交易',
+    transaction_records_no_data: '暂无记录',
     transaction_records_time: '时间',
     transaction_records_to: '至',
     transaction_waiting: '等待中',
