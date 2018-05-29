@@ -23,10 +23,10 @@ const localized_strings = {
     common_camera_not_authorized: 'Camera not authorized',
 
     //receive
-    receive_title:'My wallet QR code',
+    receive_title:'Receive',
     receive_name:'Wallet address',
     receive_name_suffix : "'s wallet",
-    receive_copy:'Copy the address',
+    receive_copy:'Copy wallet address',
     receive_save:'Save the QR code',
     receive_empty:'You haven’t add a wallet yet',
     receive_save_finish:'Completed',
@@ -258,6 +258,14 @@ const localized_strings = {
 
     // over 18 limit
     over_limit_hint: 'Transfer Amount Only Support 18 Decimal Places',
+
+
+    //update
+    update_title: 'Update Tip',
+    update_text: 'Find the new version for app',
+    update_ok: 'Update',
+    update_cancel: 'Cancel',
+    update_download_tip: 'The newest version is downloading by background!',
 };
 
 export default localized_strings;

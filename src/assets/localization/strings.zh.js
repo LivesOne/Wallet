@@ -23,10 +23,10 @@ const localized_strings = {
     common_camera_not_authorized: '相机权限未开启',
 
     //receive
-    receive_title:'我的收款码',
+    receive_title:'收款',
     receive_name:'钱包地址',
     receive_name_suffix : "的钱包",
-    receive_copy:'复制地址',
+    receive_copy:'复制钱包地址',
     receive_save:'保存二维码',
     receive_empty:'您还未添加钱包',
     receive_save_finish:'保存完成',
@@ -257,6 +257,14 @@ const localized_strings = {
 
      // over 18 limit
      over_limit_hint: '转账金额仅支持小数点后18位',
+
+     //update
+     update_title: '更新提醒',
+     update_text: '发现新版本,快去体验吧!',
+     update_ok: '立即更新',
+     update_cancel: '以后再说',
+     update_download_tip: '后台下载最新的版本',
+
 };
 
 export default localized_strings;
