@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { AppState, StyleSheet, Dimensions, Platform, View, Text } from 'react-native';
+import { AppState, StyleSheet, Dimensions, Platform, ListView, RefreshControl, View, Text } from 'react-native';
 import Toast from 'react-native-root-toast';
 import Moment from 'moment';
 import LVSize from '../../styles/LVFontSize';
@@ -19,15 +19,17 @@ import LVDetailTextCell from '../Common/LVDetailTextCell';
 import LVRefreshIndicator from '../Common/LVRefreshIndicator';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
+import LVWallet from '../../logic/LVWallet';
+import LVWalletManager from '../../logic/LVWalletManager';
 import LVMarketInfo from '../../logic/LVMarketInfo';
 import LVNetworking from '../../logic/LVNetworking';
 import LVPersistent from '../../logic/LVPersistent';
-import LVWalletManager from '../../logic/LVWalletManager';
 import LVNotification from '../../logic/LVNotification';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVTransactionRecordManager';
 
 import WalletBalanceView from './WalletBalanceView';
+import WalletBalanceList from './WalletBalanceList';
 import TransactionRecordList from './TransactionRecordList';
 import TransactionDetailsScreen from './TransactionDetailsScreen';
 
@@ -39,10 +41,9 @@ const isIOS = Platform.OS === 'ios';
 type Props = { navigation: Object };
 type State = {
     appState: string,
-    wallet: ?Object,
-    transactionList: ?Array<LVTransactionRecord>,
+    wallet: ?LVWallet,
     openSelectWallet: boolean,
-    showIndicator: boolean,
+    refreshing: boolean,
 };
 
 class AssetsScreen extends Component<Props, State> {
@@ -57,9 +58,8 @@ class AssetsScreen extends Component<Props, State> {
         this.state = {
             appState: AppState.currentState || 'inactive',
             wallet: wallet,
-            transactionList: null,
             openSelectWallet: false,
-            showIndicator: true,
+            refreshing: false,
         };
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
@@ -85,23 +85,22 @@ class AssetsScreen extends Component<Props, State> {
         LVNotificationCenter.removeObservers(this);
     }
 
-    async onPullRelease() {
+    async onRefreshDatas() {
+        this.setState({ refreshing: true });
         try {
-            await LVTransactionRecordManager.refreshTransactionRecords();
+            //await LVTransactionRecordManager.refreshTransactionRecords();
             await LVWalletManager.updateWalletBalance();
-            await LVPersistent.setNumber(LVLastAssetsRefreshTimeKey, Moment().format('X'));
+            //await LVPersistent.setNumber(LVLastAssetsRefreshTimeKey, Moment().format('X'));
 
             const wallet = LVWalletManager.getSelectedWallet();
-            this.setState({ transactionList: LVTransactionRecordManager.records, wallet: wallet });
-    
-            this.refs.pull && this.refs.pull.finishRefresh();
+            this.setState({ wallet: wallet });
     
             setTimeout(async () => {
-                this.setState({ showIndicator: false });
+                this.setState({ refreshing: false });
             }, 500);
 
         } catch (error) {
-            this.refs.pull && this.refs.pull.finishRefresh();
+            this.setState({ refreshing: false });
             Toast.show(error.message);
         }
     }
@@ -127,21 +126,13 @@ class AssetsScreen extends Component<Props, State> {
         const newAddress = wallet ? wallet.address : '';
         const curAddress = this.state.wallet ? this.state.wallet.address : '';
 
-        this.setState({ wallet: wallet, showIndicator: true });
-
-        if (curAddress != newAddress) {
-            LVTransactionRecordManager.clear();
-            this.setState({ transactionList: LVTransactionRecordManager.records });
-            setTimeout(async () => {
-                this.refs.pull && this.refs.pull.startRefresh();
-            }, 500);
-        }
+        this.setState({ wallet: wallet });
     };
 
     handleRecordsChanged = () => {
         const wallet = LVWalletManager.getSelectedWallet();
-        this.setState({ transactionList: null });
-        this.setState({ transactionList: LVTransactionRecordManager.records, wallet: wallet });
+        //this.setState({ transactionList: null });
+        //this.setState({ transactionList: LVTransactionRecordManager.records, wallet: wallet });
     };
 
     onPressSelectWallet = () => {
@@ -168,11 +159,11 @@ class AssetsScreen extends Component<Props, State> {
         }, 200);
     };
 
-    onPressRecord = (record: Object) => {
+    onPressToken = (token: string) => {
         if (TransactionDetailsScreen.lock == false) {
             TransactionDetailsScreen.lock = true;
             this.props.navigation.navigate('TransactionDetails', {
-                transactionRecord: record
+                transactionRecord: token
             });
             setTimeout(() => {
                 TransactionDetailsScreen.lock = false;
@@ -181,8 +172,11 @@ class AssetsScreen extends Component<Props, State> {
     };
 
     render() {
-        const { transactionList } = this.state;
-        const wallet = this.state.wallet || {};
+        //const { transactionList } = this.state;
+        const wallet = this.state.wallet || LVWallet.emptyWallet();
+
+        // only support LVT and ETH this version.
+        const balance_list = wallet.balance_list.filter((value) => { return value.token === 'lvt' || value.token === 'eth' });
 
         return (
             <View style={styles.container}>
@@ -198,27 +192,12 @@ class AssetsScreen extends Component<Props, State> {
                     <LVWalletHeader title={wallet.name} address={wallet.address} />
                 </View>
 
-                <View style={styles.bottomPanel}>
-                </View>
+                <WalletBalanceList style={styles.list} balances={balance_list} refreshing={this.state.refreshing} onRefresh={this.onRefreshDatas.bind(this)} onPressItem={this.onPressToken.bind(this)} />
 
                 <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
             </View>
         );
     }
-
-    topIndicatorRender() {
-        return this.state.showIndicator ? <LVRefreshIndicator /> : null;
-    }
-
-    onPullStateChangeHeight = (pulling: boolean, pullok: boolean, pullrelease: boolean, moveHeight: number) => {
-        if (pulling) {
-            if (this.state.showIndicator === false) {
-                this.setState({ showIndicator: true });
-            }
-        } else if (pullok) {
-        } else if (pullrelease) {
-        }
-    };
 }
 
 const Window = {
@@ -239,11 +218,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: LVColor.primary
     },
-    bottomPanel: {
+    list: {
         flex: 1,
         width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
+        paddingTop: 15,
         backgroundColor: LVColor.background.assets
     }
 });

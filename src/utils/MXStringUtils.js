@@ -11,10 +11,10 @@ var sha3 = require('crypto-js/sha3');
 const MAX_BALANCE_LENGTH_LIMIT = 13;
 const FRAGMENT_LENGTH = 3;
 
-export function convertAmountToCurrencyString(amount: number, thousandsSeparator: ?string, precision: ?number, keepZero: boolean = false): string {
-    const amounts = amount || 0;
+export function convertAmountToCurrencyString(amount: number|string|Big, thousandsSeparator: ?string, precision: number = 0, keepZero: boolean = false): string {
+    const bigAmounts = amount ? Big(amount) : Big(0);
     const sep = thousandsSeparator || ',';
-    const arr = (precision !== null ? amounts.toFixed(precision || 0) : (amounts + '')).split('.');
+    const arr = (precision > 0 ? bigAmounts.toFixed(precision) : bigAmounts.toString()).split('.');
 
     let result = '';
     let num = (arr[0] || 0).toString();

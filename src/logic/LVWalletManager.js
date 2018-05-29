@@ -5,6 +5,7 @@
  * @flow
  */
 
+import LVWallet from './LVWallet';
 import LVPersistent from './LVPersistent';
 import LVConfiguration from './LVConfiguration';
 import LVNotificationCenter from '../logic/LVNotificationCenter';
@@ -19,19 +20,13 @@ const foundation = require('../foundation/wallet.js');
 const WalletsKey :string = '@Venus:WalletsInfo';
 
 function createNewKeystore(name: string, password: string, keystore: Object){
-    return {
-        name: name,
-        keystore: keystore,
-        address: keystore.address,
-        lvt: LVBig.getInitBig(),
-        eth: LVBig.getInitBig()
-    };
+    return new LVWallet(name, keystore);
 }
 
 class WalletManager {
     //don't use this property directly, use getWallets() method instead as this method
     //will return a new array that contains same elements.
-    wallets: Array<Object>;
+    wallets: Array<LVWallet>;
     selectedIndex: number;
 
     constructor() {
@@ -44,20 +39,43 @@ class WalletManager {
      */
     async loadLocalWallets() {
         const walletsInfo = await LVPersistent.getObject(WalletsKey);
-        if(walletsInfo) {
+        if (walletsInfo) {
             console.log(walletsInfo);
-            const wallets = walletsInfo.wallets;
-            let tmpWallets = JSON.parse(JSON.stringify(wallets));
-            for (var i = 0;i < wallets.length; i++) {
-                tmpWallets[i].lvt = LVBig.convert2Big(wallets[i].lvt)
-                tmpWallets[i].eth = LVBig.convert2Big(wallets[i].eth)
+            if (walletsInfo.wallets.length > 0 && walletsInfo.wallets[0].hasOwnProperty("lvt")) { //old persistent
+                this.wallets = [];
+                walletsInfo.wallets.forEach((w) => {
+                    var new_wallet = new LVWallet(w.name, w.keystore);
+                    new_wallet.setBalance('lvt', w.lvt);
+                    new_wallet.setBalance('eth', w.eth);
+                    this.wallets.push(new_wallet);
+                });
+            } else {
+                this.wallets = [];
+                walletsInfo.wallets.forEach((w) => {
+                    var new_wallet = new LVWallet(w.name, w.keystore);
+                    w.balance_list.forEach((b) => {
+                        new_wallet.setBalance(b.token, b.value);
+                    });
+                    this.wallets.push(new_wallet);
+                });
             }
-            this.wallets = tmpWallets;
             this.selectedIndex = Math.max(0,Math.min(this.wallets.length - 1, walletsInfo.selectedIndex));
         }
     }
+
+    /**
+     * save wallets to disk storage.
+     */
+    async saveWalletsToLocal() {
+        const walletInfo = {
+            wallets: this.wallets,
+            selectedIndex: this.selectedIndex
+        };
+        await LVConfiguration.setAnyWalletAvailable(this.wallets.length > 0);
+        await LVPersistent.setObject(WalletsKey, walletInfo);
+    }
     
-    getWallets() : Array<Object> {
+    getWallets() : Array<LVWallet> {
         return [].concat(this.wallets).reverse();
     }
 
@@ -94,7 +112,7 @@ class WalletManager {
                     balance: 0 //the balance of the wallet.
                 }
      */
-    getSelectedWallet() : ?Object {
+    getSelectedWallet() : ?LVWallet {
         if(this.selectedIndex < this.wallets.length) {
             return this.wallets[this.selectedIndex];
         }
@@ -114,17 +132,14 @@ class WalletManager {
         const wallet = this.getSelectedWallet();
         if (wallet) {
             try {
-                const lvt = await LVNetworking.fetchBalance(wallet.address, 'lvt');
-                const eth = await LVNetworking.fetchBalance(wallet.address, 'eth');
+                const tokens = ['lvt', 'eth'];
+                const balances = await LVNetworking.fetchBalances(wallet.address, tokens);
 
-                var bigLvt = LVBig.convert2Big(lvt);
-                var bigEth = LVBig.convert2Big(eth);
-                WalletUtils.log('bn lvt = ' + bigLvt.toString() + ' eth = ' + bigEth.toString());
+                tokens.forEach((token) => {
+                    wallet.setBalance(token, balances[token]);
+                });
 
-                wallet.lvt = (lvt ? bigLvt : LVBig.getInitBig()).minus(LVBig.convert2Big(LVTransactionRecordManager.preUsedLvt));
-                wallet.eth = (eth ? bigEth : LVBig.getInitBig()).minus(LVBig.convert2Big(LVTransactionRecordManager.preUsedEth));
-                WalletUtils.log('lvt = ' +  typeof wallet.lvt);
-                await this.saveToDisk();
+                await this.saveWalletsToLocal();
                 LVNotificationCenter.postNotification(LVNotification.balanceChanged);
             } catch (error) {
                 console.log('error in refresh wallet datas : ' + error);
@@ -136,7 +151,7 @@ class WalletManager {
      * export the private key of current wallet.
      * @param  {string} password
      */
-    async exportPrivateKey(wallet: Object, password: string): Promise<string> {
+    async exportPrivateKey(wallet: LVWallet, password: string): Promise<string> {
         const promise = new Promise(function(resolve, reject){
             try {
                 foundation.exportPrivateKey(password, wallet.keystore,(privateKey,error) => {
@@ -161,7 +176,7 @@ class WalletManager {
      * @param  {string} password
      * @returns Promise
      */
-    async createWallet(name : string, password : string) : Promise<Object> {
+    async createWallet(name : string, password : string) : Promise<LVWallet> {
         const promise = new Promise(function(resolve, reject){
             foundation.createKeyStore(password, null, function(keystore, error){
                 if(error) {
@@ -176,10 +191,10 @@ class WalletManager {
     }
 
     /**
-     * @param  {Object} wallet
+     * @param  {LVWallet} wallet
      * @returns bool
      */
-    addWallet(wallet : Object) : bool {
+    addWallet(wallet : LVWallet) : bool {
         const index = this.wallets.findIndex((w) => {
             if(w.address === wallet.address || w.name === wallet.name) {
                 console.log('warning, attempt to add duplicate wallet');
@@ -195,7 +210,7 @@ class WalletManager {
         return false;
     }
 
-    updateWallet(wallet: Object) : bool {
+    updateWallet(wallet: LVWallet) : bool {
         const index = this.wallets.findIndex((w) => {
             return w.address === wallet.address;
         });
@@ -285,11 +300,11 @@ class WalletManager {
     }
     /**
      * Modify wallet's password
-     * @param  {Object} wallet
+     * @param  {LVWallet} wallet
      * @param  {string} oldPassword
      * @param  {string} newPassword
      */
-    async modifyPassword(wallet : Object, oldPassword : string, newPassword: string) {
+    async modifyPassword(wallet : LVWallet, oldPassword : string, newPassword: string) {
         const promise = new Promise(function(resolve, reject) {
             try {
                 foundation.modifyPassword(oldPassword, wallet.keystore, newPassword, function(calcedKeystore, error){
@@ -316,7 +331,7 @@ class WalletManager {
         const promise = new Promise(function(resolve, reject) {
             try {
                 foundation.verifyPassword(password, keystore, function(isMatched: boolean, error){
-                    WalletUtils.log('no catch and isMatched = ' + isMatched);
+                    WalletUtils.log('no catch and isMatched = ' + (isMatched ? 'true' : 'false'));
                     resolve(isMatched);
                 })
             } catch (error) {
@@ -326,25 +341,6 @@ class WalletManager {
         });
 
         return promise;
-    }
-
-    async saveToDisk() {
-        const walletInfo = {
-            wallets: this.wallets,
-            selectedIndex: this.selectedIndex
-        };
-
-        const walletInfoCopy = JSON.parse(JSON.stringify(walletInfo));
-        WalletUtils.log(JSON.stringify(walletInfoCopy))
-        for (var i = 0; i < walletInfo.wallets.length; i++) {
-            var wallet = walletInfoCopy.wallets[i];
-            var originalWallet = walletInfo.wallets[i];
-            wallet.lvt = originalWallet.lvt.toString();
-            wallet.eth = originalWallet.eth.toString();
-        }
-
-        await LVConfiguration.setAnyWalletAvailable(this.wallets.length > 0);
-        await LVPersistent.setObject(WalletsKey, walletInfoCopy);
     }
 }
 
