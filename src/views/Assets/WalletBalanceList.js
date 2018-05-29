@@ -45,7 +45,7 @@ export default class WalletBalanceList extends React.Component<Props> {
 
     _onPressItem = (item: Object) => {
         if (this.props.onPressItem) {
-            this.props.onPressItem(item);
+            this.props.onPressItem(item.token);
         }
     };
 
@@ -95,7 +95,7 @@ class LVWalletBalanceCard extends React.Component<BalanceCardProps> {
         return (
             <View style={styles.record}>
                 <Image source={left_shadow} />
-                <TouchableOpacity style={styles.card} activeOpacity={0.6}>
+                <TouchableOpacity style={styles.card} activeOpacity={0.6} onPress={this.props.onPressItem}>
                     <View style={styles.left}>
                         <Image style={styles.image} source={tokenImage} resizeMode="contain" />
                         <Text style={styles.token}>{token.toUpperCase()}</Text>

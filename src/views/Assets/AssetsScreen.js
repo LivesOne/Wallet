@@ -90,7 +90,7 @@ class AssetsScreen extends Component<Props, State> {
         try {
             //await LVTransactionRecordManager.refreshTransactionRecords();
             await LVWalletManager.updateWalletBalance();
-            //await LVPersistent.setNumber(LVLastAssetsRefreshTimeKey, Moment().format('X'));
+            await LVPersistent.setNumber(LVLastAssetsRefreshTimeKey, Moment().format('X'));
 
             const wallet = LVWalletManager.getSelectedWallet();
             this.setState({ wallet: wallet });
@@ -113,7 +113,7 @@ class AssetsScreen extends Component<Props, State> {
             const lastRefreshTime = await LVPersistent.getNumber(LVLastAssetsRefreshTimeKey);
             const currentTime = Moment().format('X');
             if (currentTime - lastRefreshTime > 120) {
-                this.refs.pull && this.refs.pull.startRefresh();
+                this.onRefreshDatas();
             }
         }
         this.setState({ appState: nextAppState });
@@ -160,14 +160,8 @@ class AssetsScreen extends Component<Props, State> {
     };
 
     onPressToken = (token: string) => {
-        if (TransactionDetailsScreen.lock == false) {
-            TransactionDetailsScreen.lock = true;
-            this.props.navigation.navigate('TransactionDetails', {
-                transactionRecord: token
-            });
-            setTimeout(() => {
-                TransactionDetailsScreen.lock = false;
-            }, 500);
+        if (this.state.wallet) {
+            this.props.navigation.navigate('TransactionRecords');
         }
     };
 
@@ -175,8 +169,8 @@ class AssetsScreen extends Component<Props, State> {
         //const { transactionList } = this.state;
         const wallet = this.state.wallet || LVWallet.emptyWallet();
 
-        // only support LVT and ETH this version.
-        const balance_list = wallet.balance_list.filter((value) => { return value.token === 'lvt' || value.token === 'eth' });
+        // only support LVT in this version.
+        const balance_list = wallet.balance_list.filter((value) => { return value.token === 'lvt' });
 
         return (
             <View style={styles.container}>
