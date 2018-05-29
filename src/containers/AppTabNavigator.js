@@ -105,12 +105,9 @@ export default () => (
             const curScreen = getRouteName(currentState);
 
             if (preScreen !== curScreen) {
-                if (curScreen === 'Transfer') {
-                   LVNotificationCenter.postNotification(LVNotification.navigateToTransfer);
-                }
                 // set statusBarStyle to light in native
                 if (curScreen === 'Assets' 
-                    || curScreen === 'TransactionRecords' 
+                    || curScreen === 'AssetsDetails' 
                     || curScreen === 'Transfer') {
                     StatusBar.setBarStyle('light-content', true);
                 } else {

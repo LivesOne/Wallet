@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Assets/TransactionRecordsScreen.js
+ * File: src/views/Assets/AssetsDetailsScreen.js
  * @flow
  */
 'use strict';
@@ -34,7 +34,7 @@ type State = {
     transactionList: ?Array<LVTransactionRecord>
 };
 
-class TransactionRecordsScreen extends Component<Props, State> {
+class AssetsDetailsScreen extends Component<Props, State> {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
@@ -218,4 +218,4 @@ const datePickerStyles = StyleSheet.create({
     }
 });
 
-export default TransactionRecordsScreen;
+export default AssetsDetailsScreen;

@@ -26,7 +26,6 @@ import LVNetworking from '../../logic/LVNetworking';
 import LVPersistent from '../../logic/LVPersistent';
 import LVNotification from '../../logic/LVNotification';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
-import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVTransactionRecordManager';
 
 import WalletBalanceView from './WalletBalanceView';
 import WalletBalanceList from './WalletBalanceList';
@@ -143,26 +142,20 @@ class AssetsScreen extends Component<Props, State> {
         this.setState({ openSelectWallet: false });
     };
 
-    _processing_showall_pressed = false;
-    onPressShowAll = () => {
+    _processing_assets_detail_pressed = false;
+    onPressAssetsDetail = (token: string) => {
         if (this._processing_showall_pressed) {
             return;
         }
-        this._processing_showall_pressed = true;
+        this._processing_assets_detail_pressed = true;
 
         if (this.state.wallet) {
-            this.props.navigation.navigate('TransactionRecords');
+            this.props.navigation.navigate('AssetsDetails', { token: token });
         }
 
         setTimeout(async () => {
-            this._processing_showall_pressed = false;
+            this._processing_assets_detail_pressed = false;
         }, 200);
-    };
-
-    onPressToken = (token: string) => {
-        if (this.state.wallet) {
-            this.props.navigation.navigate('TransactionRecords');
-        }
     };
 
     render() {
@@ -186,7 +179,7 @@ class AssetsScreen extends Component<Props, State> {
                     <LVWalletHeader title={wallet.name} address={wallet.address} />
                 </View>
 
-                <WalletBalanceList style={styles.list} balances={balance_list} refreshing={this.state.refreshing} onRefresh={this.onRefreshDatas.bind(this)} onPressItem={this.onPressToken.bind(this)} />
+                <WalletBalanceList style={styles.list} balances={balance_list} refreshing={this.state.refreshing} onRefresh={this.onRefreshDatas.bind(this)} onPressItem={this.onPressAssetsDetail.bind(this)} />
 
                 <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
             </View>
