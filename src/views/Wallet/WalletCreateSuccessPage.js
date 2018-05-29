@@ -83,6 +83,14 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
         this.refs.passwordConfirm.show();
     }
 
+    onPressBackupLaterButton() {
+        if (this.props.screenProps.dismiss) {
+            this.props.screenProps.dismiss();
+        } else {
+            this.props.navigation.goBack();
+        }
+    }
+
     async verifyPassword(inputPwd: string) {
         const wallet = this.props.navigation.state.params.wallet;
         return await LVWalletManager.verifyPassword(inputPwd, wallet.keystore);
@@ -113,8 +121,15 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
                     rounded
                     title={LVStrings.profile_wallet_backup}
                     onPress={this.onPressWalletBackupButton.bind(this)}
-                    themeStyle={'active'}
                     style={styles.backupButton}
+                    isEmptyButtonType={true}
+                />
+                <MXButton
+                    rounded
+                    title={LVStrings.profile_wallet_backup_later}
+                    onPress={this.onPressBackupLaterButton.bind(this)}
+                    style={styles.backupButton}
+                    isEmptyButtonType={true}
                 />
                 <LVDialog
                     ref={'disclaimer'}
@@ -155,8 +170,8 @@ const styles = LVStyleSheet.create({
     },
     image: {
         marginTop: Window.width < 500 ? 36 : 50,
-        width: 145,
-        height: 145
+        width: 90,
+        height: 90
     },
     text: {
         fontSize: 18,

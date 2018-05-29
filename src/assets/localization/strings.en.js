@@ -172,6 +172,7 @@ const localized_strings = {
     profile_wallet_import_right_now: 'Import now',
     profile_wallet_export: 'Export private key',
     profile_wallet_backup: 'Back up keystore',
+    profile_wallet_backup_later: 'Back up later',
     profile_wallet_delete_wallet: 'Delete wallet',
     profile_wallet_save: 'Save',
     profile_wallet_my_private_key: 'My private key',
