@@ -88,6 +88,7 @@ export default class LVDialog extends React.Component<Props> {
                                 style={styles.button}
                                 rounded={true}
                                 title={buttonTitle}
+                                isEmptyButtonType = {true}
                                 onPress={this.onPressButton.bind(this)}
                             />
                         ) : null}
@@ -171,11 +172,14 @@ export class LVConfirmDialog extends React.Component<ConfirmDialogProps> {
             fontSize: 16,
             color: LVColor.text.grey1
         };
+        const confirmButtonTitleStyle = {
+            fontSize: 16,
+            color: LVColor.text.yellow,
+        };
         const lineWidth = StyleSheet.hairlineWidth;
-        const lineColor = LVColor.separateLine;
+        const lineColor = "#F5F6FA";
 
         const { confirmTitle, cancelTitle } = this.props;
-
         const childrenHeight = this.props.children ? ( this.props.children.props.height || 64) : 0;
         const modalHeight = 50 + childrenHeight;
 
@@ -183,24 +187,22 @@ export class LVConfirmDialog extends React.Component<ConfirmDialogProps> {
             <LVDialog ref={'dialog'} {...this.props}>
                 <View style={{ justifyContent: 'space-between', alignItems: 'center', width: '100%', height: modalHeight }}>
                     <View style={{justifyContent: 'center', alignItems: 'center'}}>{this.props.children}</View>
-                    <View style={{ width: '100%', height: 50 }}>
-                        <View style={{ width: '100%', height: lineWidth, backgroundColor: lineColor }} />
-                        <Separator insetLeft={0} tintColor={LVColor.separateLine} />
+                    <View style={{ flex : 1 ,}}>
                         <View style={buttonPanelStyle}>
-                            <TouchableOpacity
-                                activeOpacity={0.8}
-                                style={buttonStyle}
-                                onPress={this.onPressConfirm.bind(this)}
-                            >
-                                <Text style={[buttonTitleStyle, this.props.confirmTitleStyle]}>{confirmTitle}</Text>
-                            </TouchableOpacity>
-                            <View style={{ width: lineWidth, height: '100%', backgroundColor: lineColor }} />
                             <TouchableOpacity
                                 activeOpacity={0.8}
                                 style={buttonStyle}
                                 onPress={this.onPressCancel.bind(this)}
                             >
                                 <Text style={[buttonTitleStyle, this.props.cancelTitleStyle]}>{cancelTitle}</Text>
+                            </TouchableOpacity>
+                            <View style={{ width: 2, height: 20, backgroundColor: lineColor }} />
+                            <TouchableOpacity
+                                activeOpacity={0.8}
+                                style={buttonStyle}
+                                onPress={this.onPressConfirm.bind(this)}
+                            >
+                                <Text style={[confirmButtonTitleStyle, this.props.confirmTitleStyle]}>{confirmTitle}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -223,8 +225,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     title: {
-        color: LVColor.text.grey1,
-        fontSize: 18
+        color: LVColor.text.grey2,
+        fontSize: 15
     },
     message: {
         paddingLeft: 25,

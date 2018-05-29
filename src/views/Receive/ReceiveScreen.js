@@ -36,8 +36,8 @@ const receive_share = require("../../assets/images/receive_share.png");
 const lvt = require("../../assets/images/lvt.png");
 const receive_change_wallet = require("../../assets/images/receive_change_wallet.png");
 const receive_wallet_blank = require("../../assets/images/wallet_blank.png");
-const share_qrcode = require("../../assets/images/share_qrcode.png");
 const goback_gray = require("../../assets/images/goback_gray.png");
+const share_qrcode = require("../../assets/images/share_qrcode.png");
 
 // var PasteBoard = require('react-native-pasteboard');
 
@@ -69,7 +69,6 @@ class ReceiveHeader extends Component {
     render() {
         return (
             <MXNavigatorHeader
-                style={{ backgroundColor: LVColor.primaryBack }}
                 title={LVStrings.receive_title}
                 titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
                 left = {goback_gray}
@@ -89,12 +88,15 @@ class ReceiveScreen extends Component {
 
     
     state:{
+        // walletAddress: '0x2A609SF354346FDHFHFGHGFJE6ASD119cB7',
+        // text: 'http://facebook.github.io/react-native/',
         wallet: ?Object,       
         openSelectWallet: boolean,
         walletIsBlank:boolean,
         
     };
 
+    
 
     constructor(props: any) {
         super(props);
@@ -223,18 +225,19 @@ class ReceiveScreen extends Component {
 
                 <View style={styles.mainContainer2}>
                     <ScrollView showsVerticalScrollIndicator={false} style={{ width:'100%', }}  contentContainerStyle={styles.contentContainer}>
-                        <View style={styles.mainContainer}>
+                    <View style={styles.mainContainer}>
 
                         <Text style={styles.name} >
-                            {this.state.wallet.name + LVStrings.receive_name_suffix}
+                                {this.state.wallet.name + LVStrings.receive_name_suffix}
 
                         </Text>
                         <Text ellipsizeMode="middle" numberOfLines={1} style={styles.address}>
-                            {StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9)}
+                            {StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 11)}
                         </Text>
 
                         <QRCode
                         getRef={(c) => (this.svg = c)}
+                        style={styles.qrcode_pic}
                         value={TransferUtils.convertAddr2Iban(this.state.wallet.address)}
                         size={162}
                         /* logo={lvt} */
@@ -252,18 +255,9 @@ class ReceiveScreen extends Component {
                             }}
                             isEmptyButtonType = {true}
                             themeStyle={"active"}
-                        /> 
-                        {/* <MXButton
-                            rounded = {true} 
-                            title={LVStrings.receive_save}
-                            style={styles.button_save}
-                            onPress = {() => {
-                            this.saveQrToDisk();
-                            }}
-                            themeStyle={"active"}
-                        /> */}
-                        </View>
-                        {/* <View style={styles.share_container}> */}
+                            /> 
+                    </View>
+                    <View style={styles.share_container}>
                         {/* <MxImage source={receive_share}
                             onPress = { () => {
 
@@ -271,16 +265,16 @@ class ReceiveScreen extends Component {
                             }
                             }
                         ></MxImage> */}
-                        {/* </View> */}
+                    </View>
                     </ScrollView>
                 </View>
 
-                <LVSelectWalletModal
+                {/* <LVSelectWalletModal
                     isOpen={this.state.openSelectWallet}
                     onClosed={this.onSelectWalletClosed}
                     selectedWalletId={this.state.walletId}
                     onSelected={this.onWalletSelected}
-                />
+                /> */}
 
             </View>
         );
@@ -328,7 +322,7 @@ const styles = StyleSheet.create({
 
     button:{
         marginTop:30,
-        marginBottom:15,
+        marginBottom:75,
     },
     button_save:{
         marginBottom:15,
@@ -336,15 +330,15 @@ const styles = StyleSheet.create({
 
     name:{
         fontSize:18,
-        color:"#677384",
+        color:LVColor.grey2,
         textAlign:'center',
         paddingBottom:5,
-        marginTop : 75,
+        
     },
 
     address:{
         fontSize:15,
-        color:"#C3C9D4",
+        color:"#c3c8d3",
         textAlign:'center',
         paddingBottom:30,
     },
@@ -357,13 +351,20 @@ const styles = StyleSheet.create({
 
     mainContainer:{
         flex:6,
-        width:'100%',
+        width:'90%',
         flexDirection:'column',
         alignItems: 'center',
         justifyContent:'center',
         
         backgroundColor: LVColor.white,
-        // backgroundColor:'red',
+        // backgroundColor:'black',
+        elevation: 20,
+        shadowOffset: {width: 0, height: 0},
+        shadowColor: 'black',
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+        padding:30,
+        marginTop: 30,
      },
 
      mainContainer2:{
@@ -389,10 +390,13 @@ const styles = StyleSheet.create({
     },
 
     qrcode_pic:{
+        height:162,
+        width:162,
     },
 
     share_container: {
         flex:1,
+        height:50,
         transform: [
         { translateY:-30,},
         // {'translate':[0,-30,1]
