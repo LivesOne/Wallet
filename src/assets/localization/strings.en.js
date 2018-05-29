@@ -100,6 +100,7 @@ const localized_strings = {
     wallet_export_private_key_copied_to_clipboard: 'The private key has been copied to the clipboard',
     wallet_delete_hint: 'Are your sure to delete the wallet?',
     wallet_delete_success: 'Successfully deleted',
+    wallet_detail: 'Details',
 
     //password verify
     password_verify_title: 'Verify password',
@@ -107,7 +108,7 @@ const localized_strings = {
     password_verify_required: 'Password is required',
 
     // Assets
-    assets_title: 'My assets',
+    assets_title: 'Assets',
     recent_records: 'Recent transaction records',
     view_all_records: 'All records',
 
@@ -237,6 +238,7 @@ const localized_strings = {
     contact_add_place_cellphone: 'Phone number',
     contact_add_place_email: 'Email address',
     contact_add_remarks: 'Remarks',
+    contact_Detail_Button: 'AccountTransfer',
 
     // Network
     network_error: 'Network request failed, please try again!',

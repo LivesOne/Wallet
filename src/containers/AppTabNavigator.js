@@ -40,22 +40,22 @@ const AppTabNavigator = TabNavigator(
                 tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? assetsIcon : assetsFocusedIcon} />
             })
         },
-        Receive: {
-            screen: ReceiveNavigator,
-            path: 'Receive',
-            navigationOptions: ({ navigation }) => ({
-                tabBarLabel: LVStrings.receive,
-                tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? receiveIcon : receiveFocusedIcon} />
-            })
-        },
-        Transfer: {
-            screen: TransferNavigator,
-            path: 'Transfer',
-            navigationOptions: ({ navigation }) => ({
-                tabBarLabel: LVStrings.transfer,
-                tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? transIcon : transFocusedIcon} />
-            })
-        },
+        // Receive: {
+        //     screen: ReceiveNavigator,
+        //     path: 'Receive',
+        //     navigationOptions: ({ navigation }) => ({
+        //         tabBarLabel: LVStrings.receive,
+        //         tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? receiveIcon : receiveFocusedIcon} />
+        //     })
+        // },
+        // Transfer: {
+        //     screen: TransferNavigator,
+        //     path: 'Transfer',
+        //     navigationOptions: ({ navigation }) => ({
+        //         tabBarLabel: LVStrings.transfer,
+        //         tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? transIcon : transFocusedIcon} />
+        //     })
+        // },
         Profile: {
             screen: ProfileNavigator,
             path: 'Profile',
@@ -109,7 +109,9 @@ export default () => (
                    LVNotificationCenter.postNotification(LVNotification.navigateToTransfer);
                 }
                 // set statusBarStyle to light in native
-                if (curScreen === 'Assets' || curScreen === 'TransactionRecords' || curScreen === 'Transfer') {
+                if (curScreen === 'Assets' 
+                    || curScreen === 'TransactionRecords' 
+                    || curScreen === 'Transfer') {
                     StatusBar.setBarStyle('light-content', true);
                 } else {
                     StatusBar.setBarStyle('default', true);

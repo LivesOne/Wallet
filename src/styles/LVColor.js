@@ -22,7 +22,7 @@ const LVColor = {
         shadowColor:'#6B7A9F',
     },
     // 分隔线
-    separateLine: '#D8D8D8',
+    separateLine: '#F5F6FA',
     // Progress Bar
     progressBar: {
         fill: '#7dcd40',
@@ -54,6 +54,7 @@ const LVColor = {
     background: {
         white: '#fff',
         datePanel: '#f4f5f9',
+        assets: '#F8F9FE',
         grey1: '#ddd',
         grey2: '#eee',
         grey3: '#f7f7f7'
