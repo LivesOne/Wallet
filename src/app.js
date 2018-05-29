@@ -29,6 +29,12 @@ import SplashScreen from "react-native-splash-screen";
 import console from 'console-browserify';
 import { LVConfirmDialog } from './views/Common/LVDialog';
 import { loadavg } from 'react-native-os';
+import codePush from "react-native-code-push";
+
+let codePushOptions = { 
+    checkFrequency: codePush.CheckFrequency.ON_APP_RESUME, 
+    installMode: codePush.InstallMode.ON_NEXT_RESUME  
+};
 
 type State = {
     loading: boolean,
@@ -153,5 +159,7 @@ const LVAppLoadingView = () => {
         </View>
     );
 };
+
+VenusApp = codePush(codePushOptions)(VenusApp);
 
 export default VenusApp;
