@@ -55,7 +55,6 @@ const BalanceItemHeader = ({ icon, title }) => (
 );
 
 const BalanceValueView = ({ value, num, keepZero, unit }) => {
-    //const valueString = StringUtils.convertAmountToCurrencyString(value, ',', num, keepZero);
     return (
         <View>
             <LVBalanceShowView 

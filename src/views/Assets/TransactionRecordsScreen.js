@@ -14,6 +14,7 @@ import DatePicker from 'react-native-datepicker';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
+import LVWalletHeader from '../Common/LVWalletHeader';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import LVRefreshIndicator from '../Common/LVRefreshIndicator';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
@@ -23,7 +24,6 @@ import LVNotification from '../../logic/LVNotification';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVTransactionRecordManager';
 
-import WalletInfoView from './WalletInfoView';
 import TransactionRecordList from './TransactionRecordList';
 import TransactionDetailsScreen from './TransactionDetailsScreen';
 
@@ -112,7 +112,7 @@ class TransactionRecordsScreen extends Component<Props, State> {
                             this.props.navigation.goBack();
                         }}
                     />
-                    <WalletInfoView style={styles.walletInfo} title={walletName} address={walletAddress} />
+                    <LVWalletHeader style={styles.walletInfo} title={walletName} address={walletAddress} />
                 </LVGradientPanel>
 
                 <View style={styles.datePanel}>
