@@ -338,8 +338,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
             rounded
             style={styles.importButtonStyle}
             title={LVStrings.wallet_import}
-            onPress={ this.onKeystoreImportPress.bind(this) }
-          />
+            onPress={ this.onKeystoreImportPress.bind(this) }/>
         </View>
       );
     }

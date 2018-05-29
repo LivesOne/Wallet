@@ -109,7 +109,9 @@ export default () => (
                    LVNotificationCenter.postNotification(LVNotification.navigateToTransfer);
                 }
                 // set statusBarStyle to light in native
-                if (curScreen === 'Assets' || curScreen === 'TransactionRecords' || curScreen === 'Transfer') {
+                if (curScreen === 'Assets' 
+                    || curScreen === 'TransactionRecords' 
+                    || curScreen === 'Transfer') {
                     StatusBar.setBarStyle('light-content', true);
                 } else {
                     StatusBar.setBarStyle('default', true);
