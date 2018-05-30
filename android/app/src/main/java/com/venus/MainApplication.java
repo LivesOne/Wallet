@@ -6,7 +6,6 @@ import com.cboy.rn.splashscreen.SplashScreenReactPackage;
 import com.facebook.react.ReactApplication;
 import com.microsoft.codepush.react.CodePush;
 import com.hzl.pulltorefresh.RefreshReactPackage;
-import com.parryworld.rnappupdate.RNAppUpdatePackage;
 import com.rnfs.RNFSPackage;
 import com.horcrux.svg.SvgPackage;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
@@ -47,9 +46,8 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MyReactPackage(),
             new MainReactPackage(),
-            new CodePush(null, getApplicationContext(), BuildConfig.DEBUG),
+            new CodePush(BuildConfig.CODEPUSH_KEY, getApplicationContext(), BuildConfig.DEBUG),
             new RefreshReactPackage(),
-            new RNAppUpdatePackage(),
             new RNFSPackage(),
             new SvgPackage(),
             new SplashScreenReactPackage(),

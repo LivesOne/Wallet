@@ -84,6 +84,7 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
     }
 
     onPressBackupLaterButton() {
+        LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
         if (this.props.screenProps.dismiss) {
             this.props.screenProps.dismiss();
         } else {
