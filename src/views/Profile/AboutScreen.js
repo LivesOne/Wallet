@@ -14,7 +14,11 @@ import LVFontSize from '../../styles/LVFontSize';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import { greyNavigationBackIcon } from '../../assets/LVIcons';
 
-export default class PLAboutPage extends Component {
+type Props = {
+    navigation: Object
+};
+
+export default class PLAboutPage extends Component<Props> {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
