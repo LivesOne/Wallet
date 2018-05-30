@@ -10,13 +10,13 @@ import LVColor from '../../styles/LVColor'
 
 const Base = LVStyleSheet.create({
   main: {
-    height: 80,
+    height: 60,
     width: MXUtils.getDeviceWidth() - 18 * PixelRatio.get(),
     backgroundColor: LVColor.white,
   },
   content: {
-    marginTop: 10,
     flexDirection: 'row',
+    marginTop: Platform.OS === 'ios' ? 10 : 0,
   },
   rounded: {
     phone: {
@@ -30,7 +30,6 @@ const Base = LVStyleSheet.create({
   titleLabel: {
       fontSize: 12,
       color: LVColor.text.grey2,
-      marginTop: 18,
   },
 
   textArea: {
@@ -56,7 +55,7 @@ const Base = LVStyleSheet.create({
   },
 
   rightComponent: {
-    marginLeft: 6
+    marginLeft: 6,
   }
 
 });

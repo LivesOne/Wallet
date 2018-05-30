@@ -21,6 +21,7 @@ const localized_strings = {
     common_done: 'Done',
     common_delete: 'Delete',
     common_camera_not_authorized: 'Camera not authorized',
+    common_next: "Next",
 
     //receive
     receive_title:'Receive',
