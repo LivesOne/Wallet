@@ -21,6 +21,7 @@ const localized_strings = {
     common_done: '完成',
     common_delete: '删除',
     common_camera_not_authorized: '相机权限未开启',
+    common_next: "下一步",
 
     //receive
     receive_title:'收款',

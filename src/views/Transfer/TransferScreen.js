@@ -487,7 +487,7 @@ class TransferScreen extends Component<Props, State> {
                                 rounded = {true} 
                                 style ={styles.btn} 
                                 onPress = {this.onTransferPresse.bind(this)}
-                                title={LVStrings.transfer}>
+                                title={LVStrings.common_next}>
                             </MXButton>
                         </View>
                     </View>
@@ -567,7 +567,7 @@ const styles = StyleSheet.create({
     },
     btn: {
         alignSelf: 'center',
-        width: MXUtils.getDeviceWidth() * 2/ 3
+        width: '100%'
     }
 });
 

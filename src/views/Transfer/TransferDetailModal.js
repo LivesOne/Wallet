@@ -59,15 +59,17 @@ export class TransferDetailModal extends Component<Props> {
                 >
                 <View style={styles.container}>
                   <View style={ styles.titleContainer }>
-                    <View style={{width: 40}}></View>
                     <Text style={styles.title}> {LVStrings.transfer_payment_details}</Text>
-                    <MXTouchableImage style={{width: 40}} source={CloseIcon} onPress={this.onClosed}></MXTouchableImage>
+                    <MXTouchableImage style={{position:'absolute', right:20}} source={CloseIcon} onPress={this.onClosed}></MXTouchableImage>
                   </View>
                   <DetailItem leftText={LVStrings.transfer_address_in} rightText={address}></DetailItem>
                   <DetailItem leftText={LVStrings.transfer_amount} rightText={amount + ' LVT'}></DetailItem>
                   <DetailItem leftText={LVStrings.transfer_miner_tips} rightText={TransferUtils.convertMinnerGap(minerGap) + ' ETH'}></DetailItem>
                   {/* <DetailItem leftText={LVStrings.transfer_remarks} rightText={remarks}></DetailItem> */}
-                <MXButton title={LVStrings.transfer} rounded={true} style={styles.btn} onPress = {onTransferConfirmed}></MXButton>
+                  <View style={styles.btnContainer}>
+                    <MXButton title={LVStrings.transfer} rounded={true} style={styles.btn} onPress = {onTransferConfirmed}></MXButton>
+                  </View>
+                
                 </View>
             </Modal>
         )
@@ -77,36 +79,37 @@ export class TransferDetailModal extends Component<Props> {
 const styles = StyleSheet.create({
     modal: {
         justifyContent: 'center',
-        height: '60%'
+        height: '50%'
       },
     container: {
-        flex: 1,
         height: '100%',
         width: '100%',
         backgroundColor: 'white',
         borderRadius: 20, 
     },
     titleContainer: {
+        flex:1,
         flexDirection: 'row', 
-        justifyContent: 'space-between', 
-        height: 50, 
-        alignItems: 'center', 
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: MXUtils.getDeviceHeight() / 6, 
         borderWidth: StyleSheet.hairlineWidth,  
         borderColor: 'transparent', 
+        paddingHorizontal: 20,
         borderBottomColor: LVColor.border.editTextBottomBoarder
     },
     title: {
-        fontSize: 18, 
+        fontSize: 16, 
         color: LVColor.text.grey1,
+        alignSelf: 'center',
     },
     detailContainer: {
+        flex:1,
         flexDirection: 'row', 
-        height: 50, 
+        alignItems: 'center',
         justifyContent: 'space-between', 
-        alignItems: 'center', 
-        borderWidth: StyleSheet.hairlineWidth, 
-        borderColor: 'transparent', 
-        borderBottomColor: LVColor.border.editTextBottomBoarder,
+        height: MXUtils.getDeviceHeight() / 6, 
+        
         marginHorizontal: 20,
     },
     left: {
@@ -119,9 +122,17 @@ const styles = StyleSheet.create({
         textAlign: 'right',
         textAlignVertical: 'center',
     },
+    btnContainer: {
+        flex:2,
+        alignItems: 'center',
+        justifyContent: 'center', 
+        marginHorizontal: 20,
+        borderWidth: StyleSheet.hairlineWidth, 
+        borderColor: 'transparent', 
+        borderTopColor: LVColor.border.editTextBottomBoarder,
+    },
     btn: {
-        alignSelf: 'center',
-        marginTop: 30
+        width: '100%',
     }
 });
 

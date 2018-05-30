@@ -209,13 +209,13 @@ class TestComponent extends Component {
         // const result1 = await LVNetworking.fetchTokenList();
         // WalletUtils.log('list =' + JSON.stringify(result1));
 
-        // WalletUtils.log('test fetch balances');
-        // const result1 = await LVNetworking.fetchBalances(wallet.address, ["lvt", "eth"]);
-        // WalletUtils.log('balances =' + JSON.stringify(result1));
+        WalletUtils.log('test fetch balances');
+        const result1 = await LVNetworking.fetchBalances(wallet.address, ["lvt", "eth"]);
+        WalletUtils.log('balances =' + JSON.stringify(result1));
 
-        WalletUtils.log('get app config');
-        const result1 = await LVNetworking.getAppConfig();
-        WalletUtils.log('app config = ' + JSON.stringify(result1));
+        // WalletUtils.log('get app config');
+        // const result1 = await LVNetworking.getAppConfig();
+        // WalletUtils.log('app config = ' + JSON.stringify(result1));
 
         // const result2 = await LVNetworking.fetchTransactionParam(wallet.address, '0x0233C1dd7fbE6DaB8C233Bf017F4B1F3BAfEc0B3', 10000000000000000000);
         // this.log('Param =' + JSON.stringify(result2));
