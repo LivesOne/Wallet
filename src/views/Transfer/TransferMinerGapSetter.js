@@ -99,9 +99,9 @@ export class TransferMinerGapSetter extends Component<Props, State> {
         return (
         <View style={[styles.container, this.props.style]} >
             <View style={styles.topContainer}>
-                <Text style={styles.title}>{ LVStrings.transfer_miner_tips }</Text>
+                <Text style={[styles.title, {color: LVColor.text.grey2, fontWeight:'100',}]}>{ LVStrings.transfer_miner_tips }</Text>
                 <View style={[styles.tipsContainner, {borderColor:this.props.enable ? LVColor.primary: '#DDDDDD'}]}>
-                    <Text style={[styles.tipsIndicator, {color: this.props.enable ?LVColor.primary : '#DDDDDD'}]}>{ this.calculateValue() }</Text>
+                    <Text style={[styles.tipsIndicator, {color: true ? LVColor.white : '#DDDDDD'}]}>{ this.calculateValue() }</Text>
                 </View>
             </View>
             <View style={styles.sliderContainer}>
@@ -135,35 +135,38 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
         marginTop: 20,
-        marginBottom:5,
     },
     title: {
-        fontSize: 16,
-        color: LVColor.text.editTextContent,
+        fontSize: 15,
+        color: LVColor.white,
         marginBottom:5,
+        fontWeight:'300',
     },
     tipsContainner: {
         height: 35,
         width: 130,
+        backgroundColor: LVColor.text.yellow,
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1, 
-        borderRadius: 2, 
+        borderWidth: 0, 
+        borderRadius: 5, 
     },
     tipsIndicator: {
-        color: LVColor.primary,
+        color: LVColor.white,
     },
     sliderContainer: {
         flexDirection: 'row',
         justifyContent: "space-between",
         alignItems: "center",
+        marginTop: 20,
+        marginBottom:20,
     },
     sliderWrapper: {
         width: '75%',
     },
     text: {
-        fontSize: 16,
-        color: LVColor.text.grey3,
+        fontSize: 14,
+        color: LVColor.text.grey2,
     },
     track: {
         height: 4,

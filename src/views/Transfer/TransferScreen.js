@@ -436,10 +436,10 @@ class TransferScreen extends Component<Props, State> {
                         }}
                         />
                     <View style= { styles.headerBelow }>
-                        <Text style = {{ fontSize: 12, color: LVColor.text.grey1, }}>{LVStrings.transfer_payee_address}</Text>
                         <MXCrossTextInput 
                             ref={'refAddressIn'}
                             style={styles.textInput} 
+                            titleText={LVStrings.transfer_payee_address}
                             placeholder={LVStrings.transfer_payee_address}
                             defaultValue={this.state.addressIn}
                             boarderLineHeight={1}
@@ -456,13 +456,14 @@ class TransferScreen extends Component<Props, State> {
                                 </View>
                             }
                             onTextChanged= {this.onAddressChanged.bind(this)}/>
-                            <Text style = {{ fontSize: 12, color: LVColor.text.grey1,marginTop:12 }}>{LVStrings.transfer_amount}</Text>
                             <MXCrossTextInput 
                                 ref={'refAmount'}
-                                style= {styles.textInput} 
+                                style= {[styles.textInput, {marginTop: 10}]} 
+                                titleText={LVStrings.transfer_amount}
                                 placeholder={LVStrings.transfer_amount}
                                 keyboardType = {'numeric'}
                                 withUnderLine={false}
+                                inputContainerStyle={{marginTop:isAndroid ? 0 : 15}}
                                 boarderLineHeight={Platform.OS === 'android' ? 1 : null}
                                 onTextChanged={this.onAmountChanged.bind(this)}/>
                             
@@ -543,7 +544,6 @@ const styles = StyleSheet.create({
         borderColor: 'transparent', 
         borderBottomColor: LVColor.border.editTextBottomBoarder, 
         borderWidth: StyleSheet.hairlineWidth, 
-        marginTop:10
     },
     text: {
         fontSize: 16,   

@@ -162,7 +162,7 @@ class MXCrossTextInput extends Component<Props,State> {
                         )}
                     </View>
                 </View>
-                <View style={{width: '100%', height: lineHeight, backgroundColor: LVColor.separateLine,marginTop: 15}} />
+                <View style={{width: '100%', height: lineHeight, backgroundColor: LVColor.separateLine,marginTop: 0}} />
             </View>
         );
     }
