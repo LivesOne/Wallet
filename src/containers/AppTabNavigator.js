@@ -12,20 +12,10 @@ import LVColor from '../styles/LVColor';
 import LVStrings from '../assets/localization';
 
 import AssetsNavigator from '../views/Assets/AssetsNavigator';
-import ReceiveNavigator from '../views/Receive/ReceiveNavigator';
 import ProfileNavigator from '../views/Profile/ProfileNavigator';
-import TransferNavigator from '../views/Transfer/TransferNavigator';
-import LVNotificationCenter from '../logic/LVNotificationCenter';
-import LVNotification from '../logic/LVNotification';
 
 const assetsIcon = require('../assets/images/tab_assets.png');
 const assetsFocusedIcon = require('../assets/images/tab_assets_h.png');
-
-const receiveIcon = require('../assets/images/tab_receive.png');
-const receiveFocusedIcon = require('../assets/images/tab_receive_h.png');
-
-const transIcon = require('../assets/images/tab_transaction.png');
-const transFocusedIcon = require('../assets/images/tab_transaction_h.png');
 
 const profileIcon = require('../assets/images/tab_profile.png');
 const profileFocusedIcon = require('../assets/images/tab_profile_h.png');
@@ -40,22 +30,6 @@ const AppTabNavigator = TabNavigator(
                 tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? assetsIcon : assetsFocusedIcon} />
             })
         },
-        // Receive: {
-        //     screen: ReceiveNavigator,
-        //     path: 'Receive',
-        //     navigationOptions: ({ navigation }) => ({
-        //         tabBarLabel: LVStrings.receive,
-        //         tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? receiveIcon : receiveFocusedIcon} />
-        //     })
-        // },
-        // Transfer: {
-        //     screen: TransferNavigator,
-        //     path: 'Transfer',
-        //     navigationOptions: ({ navigation }) => ({
-        //         tabBarLabel: LVStrings.transfer,
-        //         tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? transIcon : transFocusedIcon} />
-        //     })
-        // },
         Profile: {
             screen: ProfileNavigator,
             path: 'Profile',
@@ -72,9 +46,12 @@ const AppTabNavigator = TabNavigator(
             showLabel: true,
             style: {
                 backgroundColor: LVColor.tabBar.background,
-                shadowColor:LVColor.tabBar.shadowColor,shadowOffset:{width:0,height:-1},shadowOpacity:0.2,shadowRadius:18
+                shadowColor: LVColor.tabBar.shadowColor,
+                shadowOffset: { width: 0, height: -1 },
+                shadowOpacity: 0.2,
+                shadowRadius: 18
             },
-            activeTintColor: LVColor.tabBar.tintColor,
+            activeTintColor: LVColor.tabBar.tintColor
         },
         swipeEnabled: false,
         mode: Platform.OS === 'ios' ? 'modal' : 'card',
@@ -104,15 +81,13 @@ export default () => (
             const preScreen = getRouteName(prevState);
             const curScreen = getRouteName(currentState);
 
-            if (preScreen !== curScreen) {
-                // set statusBarStyle to light in native
-                if (curScreen === 'Assets' 
-                    || curScreen === 'AssetsDetails' 
-                    || curScreen === 'Transfer') {
-                    StatusBar.setBarStyle('light-content', true);
-                } else {
-                    StatusBar.setBarStyle('default', true);
-                }
+            console.log(preScreen + ' -> ' + curScreen);
+
+            // set statusBarStyle to light in native
+            if (curScreen === 'Assets' || curScreen === 'AssetsDetails' || curScreen === 'Transfer') {
+                StatusBar.setBarStyle('light-content', true);
+            } else {
+                StatusBar.setBarStyle('default', true);
             }
         }}
     />

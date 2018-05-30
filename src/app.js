@@ -107,9 +107,6 @@ class VenusApp extends Component<Props, State> {
         LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletImportOrCreateSuccess);
     }
 
-
-   
-
     handleBack = () => {
         const { loading, needShowGuide, hasAnyWallets } = this.state;
         if (!loading && !needShowGuide) {
@@ -202,29 +199,34 @@ class VenusApp extends Component<Props, State> {
     }
 
     renderIOSMainScreen() {
-        return <View style={{flex: 1}}>
-       
-          <LVConfirmDialog
-            ref={'update'}
-            title={LVStrings.update_title}  
-            message={LVStrings.update_text} 
-            confirmTitle = {LVStrings.update_ok}
-            cancelTitle = {LVStrings.update_cancel}
-            onConfirm={()=> {
-                this.state.needUpdate(true);
-            }} />
+        return <View style={{ flex: 1 }}>
+
+            <LVConfirmDialog
+                ref={'update'}
+                title={LVStrings.update_title}
+                message={LVStrings.update_text}
+                confirmTitle={LVStrings.update_ok}
+                cancelTitle={LVStrings.update_cancel}
+                onConfirm={() => {
+                    this.state.needUpdate(true);
+                }} />
             {this.getMainScreen()}
-    </View> 
+        </View>
     }
+
     getMainScreen() {
         const { loading, needShowGuide, hasAnyWallets } = this.state;
         if (needShowGuide) {
+            StatusBar.setBarStyle('default', false);
             return <AppGuideScreen callback={this.handleAppGuideCallback} />;
         } else if (loading) {
+            StatusBar.setBarStyle('default', false);
             return <LVAppLoadingView />;
         } else if (hasAnyWallets) {
+            StatusBar.setBarStyle('light-content', false);
             return <AppTabNavigator/>
         } else {
+            StatusBar.setBarStyle('default', false);
             return <WalletCreateOrImportPage />;
         }
     }
