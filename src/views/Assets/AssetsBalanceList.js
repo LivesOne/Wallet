@@ -1,6 +1,6 @@
 /*
  * Project: Venus
- * File: src/views/Assets/WalletBalanceList.js
+ * File: src/views/Assets/AssetsBalanceList.js
  * @flow
  */
 'use strict';
@@ -29,7 +29,7 @@ type Props = {
     onPressItem: Function
 };
 
-export default class WalletBalanceList extends React.Component<Props> {
+export default class AssetsBalanceList extends React.Component<Props> {
 
     constructor() {
         super();

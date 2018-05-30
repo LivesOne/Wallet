@@ -135,18 +135,18 @@ class AssetsDetailsScreen extends Component<Props, State> {
                 </View>
 
                 <View style={styles.datePanel}>
-                    <View style={styles.dateLeft}>
-                        <Text style={styles.text}>{LVStrings.transaction_records}</Text>
-                        <View style={{ marginLeft: 15, height: 20, width: 1, backgroundColor: '#ccc' }} />
-                    </View>
-
-                    <View style={styles.dateRight}>
+                    <Text style={styles.text}>{LVStrings.transaction_records}</Text>
+                    <View style={styles.datePickers}>
                         <LVDataPicker date={startDate} min={null} max={endDate} onDateChange={this.onStartDateChange} />
-                        <Text style={[styles.text, { marginLeft: 15, marginRight: 15 }]}>
-                            {LVStrings.transaction_records_to}
-                        </Text>
+                        <View
+                            style={{ marginLeft: 4, marginRight: 4, width: 10, height: 2, backgroundColor: '#667283' }}
+                        />
                         <LVDataPicker date={endDate} min={startDate} max={null} onDateChange={this.onEndDateChange} />
                     </View>
+                </View>
+
+                <View style={{ width: '100%', height: 1, justifyContent: 'center', backgroundColor: LVColor.white }}>
+                    <View style={{ flex: 1, marginLeft: 15, marginRight: 15, backgroundColor: LVColor.separateLine }} />
                 </View>
 
                 <TransactionRecordList style={styles.list} records={filteredList} onPressItem={this.onPressRecord} />
@@ -185,7 +185,7 @@ class AssetsDetailsScreen extends Component<Props, State> {
                             dismiss: () => {
                                 this.refs.transferScreen.dismiss();
                                 //this.handleWalletChange();
-                            },
+                            }
                         }}
                     />
                 </LVFullScreenModalView>
@@ -193,22 +193,22 @@ class AssetsDetailsScreen extends Component<Props, State> {
         );
     }
 }
-
 const LVDataPicker = ({ date, min, max, onDateChange }) => {
     return (
         <DatePicker
-            style={{ width: 100 }}
-            customStyles={datePickerStyles}
-            date={date}
-            mode="date"
-            format="YYYY-MM-DD"
-            minDate={min || '2010-01-01'}
-            maxDate={max || Moment().format('YYYY-MM-DD')}
-            showIcon={false}
-            confirmBtnText={LVStrings.common_confirm}
-            cancelBtnText={LVStrings.common_cancel}
-            onDateChange={onDateChange}
-        />
+        style={{ width: 108, height: 31, backgroundColor: '#F5F6FA' }}
+        customStyles={datePickerStyles}
+        date={date}
+        mode="date"
+        format="YYYY.MM.DD"
+        minDate={min || '2010-01-01'}
+        maxDate={max || Moment().format('YYYY-MM-DD')}
+        showIcon={true}
+        iconSource={require('../../assets/images/date_picker_icon.png')}
+        confirmBtnText={LVStrings.common_confirm}
+        cancelBtnText={LVStrings.common_cancel}
+        onDateChange={onDateChange}
+    />
     );
 };
 
@@ -235,28 +235,25 @@ const styles = StyleSheet.create({
         width: Window.width - 25
     },
     datePanel: {
-        width: '100%',
         height: 50,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: LVColor.background.datePanel
-    },
-    dateLeft: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginLeft: 12.5
-    },
-    dateRight: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center'
+        backgroundColor: LVColor.white
     },
     text: {
         fontSize: 15,
-        color: LVColor.text.grey1,
+        fontWeight: '600',
+        marginLeft: 15,
+        color: LVColor.text.grey2,
         backgroundColor: 'transparent'
+    },
+    datePickers: {
+        flex: 1,
+        marginRight: 15,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center'
     },
     list: {
         width: '100%',
@@ -298,11 +295,22 @@ const styles = StyleSheet.create({
 });
 
 const datePickerStyles = StyleSheet.create({
+    dateIcon: {
+        width: 14,
+        height: 14,
+        marginRight: 8,
+        marginBottom: 8
+    },
     dateInput: {
+        marginLeft: 8,
+        marginBottom: 8,
         borderWidth: 0
     },
     dateText: {
-        color: LVColor.primary
+        fontSize: 13,
+        fontFamily: 'SFProText-Medium',
+        textAlign: 'right',
+        color: LVColor.text.yellow
     },
     btnTextConfirm: {
         color: LVColor.primary

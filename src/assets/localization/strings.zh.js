@@ -239,6 +239,8 @@ const localized_strings = {
     contact_add_place_cellphone: '电话',
     contact_add_place_email: '邮箱',
     contact_add_remarks: '备注',
+    contact_Detail_Button: '账户转账',
+    contact_Search_Empty_Button: '未找到此联系人',
 
     // Network
     network_error: '网络请求失败，请重试!',

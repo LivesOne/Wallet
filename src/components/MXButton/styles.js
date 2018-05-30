@@ -55,11 +55,12 @@ const NormalStyles = StyleSheet.create({
 const NormalEmptyStyles = StyleSheet.create({
   main: {
     backgroundColor: LVColor.white,
-    borderColor: LVColor.primary,
+    borderColor: LVColor.button.buttonEmptyBorder,
     borderWidth: StyleSheet.hairlineWidth,
   },
   label: {
     color: LVColor.primary,
+    fontWeight: '500'
   },
 });
 
@@ -80,6 +81,7 @@ const ActiveEmptyStyles = StyleSheet.create({
   },
   label: {
     color: LVColor.primary,
+    fontWeight: '500'
   },
 });
 

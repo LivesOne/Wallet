@@ -40,22 +40,22 @@ const AppTabNavigator = TabNavigator(
                 tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? assetsIcon : assetsFocusedIcon} />
             })
         },
-        Receive: {
-            screen: ReceiveNavigator,
-            path: 'Receive',
-            navigationOptions: ({ navigation }) => ({
-                tabBarLabel: LVStrings.receive,
-                tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? receiveIcon : receiveFocusedIcon} />
-            })
-        },
-        Transfer: {
-            screen: TransferNavigator,
-            path: 'Transfer',
-            navigationOptions: ({ navigation }) => ({
-                tabBarLabel: LVStrings.transfer,
-                tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? transIcon : transFocusedIcon} />
-            })
-        },
+        // Receive: {
+        //     screen: ReceiveNavigator,
+        //     path: 'Receive',
+        //     navigationOptions: ({ navigation }) => ({
+        //         tabBarLabel: LVStrings.receive,
+        //         tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? receiveIcon : receiveFocusedIcon} />
+        //     })
+        // },
+        // Transfer: {
+        //     screen: TransferNavigator,
+        //     path: 'Transfer',
+        //     navigationOptions: ({ navigation }) => ({
+        //         tabBarLabel: LVStrings.transfer,
+        //         tabBarIcon: ({ focused, tintColor }) => <Image source={!focused ? transIcon : transFocusedIcon} />
+        //     })
+        // },
         Profile: {
             screen: ProfileNavigator,
             path: 'Profile',

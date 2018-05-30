@@ -50,6 +50,10 @@ const LVColor = {
         buttonInActive: '#B6BDDD',
         buttonActive: '#1B2768',
         buttoneEmptyActive: '#ECEEF2',
+        buttonEmptyBorder: '#C3C8D4',
+    },
+    searchBar:{
+        background:'#F9F9FA',
     },
     // 背景色
     background: {
