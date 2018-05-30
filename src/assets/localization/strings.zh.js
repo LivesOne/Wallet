@@ -241,6 +241,7 @@ const localized_strings = {
     contact_add_remarks: '备注',
     contact_Detail_Button: '账户转账',
     contact_Search_Empty_Button: '未找到此联系人',
+    contact_Detail_Title: '的钱包',
 
     // Network
     network_error: '网络请求失败，请重试!',
