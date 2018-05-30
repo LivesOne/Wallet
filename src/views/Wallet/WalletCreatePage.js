@@ -24,6 +24,7 @@ import { greyNavigationBackIcon } from '../../assets/LVIcons';
 import { LVKeyboardDismissView } from '../Common/LVKeyboardDismissView';
 import LVFontSize from '../../styles/LVFontSize';
 import * as MXUtils from "../../utils/MXUtils";
+import { MXCrossInputHeight } from '../../styles/LVStyleSheet';
 const backImg = require('../../assets/images/back.png');
 
 type Props = {
@@ -136,12 +137,14 @@ export default class WalletCreatePage extends Component<Props,State> {
                 <View style={styles.content}>
                     <View style={styles.textInputContainer}>
                         <MXCrossTextInput
+                            style={styles.crossInputStyle}
                             placeholder={LVStrings.wallet_name_hint}
                             titleText={LVStrings.wallet_create_name}
                             textAlignCenter={true}
                             withUnderLine={false}
                             onTextChanged= {(text) => this.setState({name: text})}/>
                         <MXCrossTextInput
+                            style={styles.crossInputStyle}
                             placeholder={LVStrings.wallet_create_password}
                             titleText={LVStrings.wallet_create_password_label}
                             textAlignCenter={true}
@@ -149,6 +152,7 @@ export default class WalletCreatePage extends Component<Props,State> {
                             withUnderLine={false}
                             onTextChanged = {(text) => this.setState({password : text})}/>
                         <MXCrossTextInput
+                            style={styles.crossInputStyle}
                             placeholder={LVStrings.wallet_create_password_verify}
                             titleText={LVStrings.wallet_create_confirm_password_label}
                             textAlignCenter={true}
@@ -211,17 +215,20 @@ const styles = LVStyleSheet.create({
     textInputContainer: {
         flexDirection: 'column',
         height:240,
+        marginTop: 15
     },
     bottomContainer: {
         flexDirection: 'column'
     },
     descriptionTextStyle: {
         fontSize: LVFontSize.xsmall,
-        color: LVColor.text.editTextNomal,
-        marginTop: 16
+        color: LVColor.text.editTextNomal
     },
     createButton: {
         marginTop: 93.5,
         width: MXUtils.getDeviceWidth() - 30
     },
+    crossInputStyle: {
+        height: MXCrossInputHeight
+    }
 });
