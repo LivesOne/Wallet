@@ -1,12 +1,11 @@
 'use strict';
 
 import {
-  NativeModules,
-  Platform,
+    NativeModules,
+    Platform,
 } from 'react-native';
 import RNFS from 'react-native-fs';
-
-const RNAppUpdate = NativeModules.RNAppUpdate;
+import DeviceInfo from 'react-native-device-info';
 
 const jobId = -1;
 
@@ -40,7 +39,7 @@ class AppUpdate {
   getApkVersionSuccess(remote) {
     console.log("getApkVersionSuccess", remote);
     console.log("versionCode:"+remote.result.android.versionCode);
-    if (RNAppUpdate.versionCode < remote.result.android.versionCode) {
+    if (DeviceInfo.getBuildNumber() < remote.result.android.versionCode) {
       if (remote.result.android.forceUpdate) {
         if(this.options.forceUpdateApp) {
           this.options.forceUpdateApp();
@@ -84,7 +83,7 @@ class AppUpdate {
     ret.promise.then((res) => {
       console.log("downloadApkEnd");
       this.options.downloadApkEnd && this.options.downloadApkEnd();
-      RNAppUpdate.installApk(downloadDestPath);
+      NativeModules.LVReactExport.installApk(downloadDestPath);
 
       jobId = -1;
     }).catch((err) => {
@@ -114,8 +113,8 @@ class AppUpdate {
     const versionName = remote.result.ios.versionName
     const versionCode = remote.result.ios.versionCode
     const appid = remote.result.ios.iosAppId
-    const local_version = RNAppUpdate.versionName
-    const local_versionCode = RNAppUpdate.versionCode
+    const local_version = DeviceInfo.getReadableVersion();
+    const local_versionCode = DeviceInfo.getBuildNumber();
 
     if(local_versionCode<versionCode) {
       this.GET("https://itunes.apple.com/lookup?id=" + appid, this.getAppStoreVersionSuccess.bind(this), this.getVersionError.bind(this));
@@ -130,11 +129,12 @@ class AppUpdate {
     const result = data.results[0];
     const version = result.version;
     const trackViewUrl = result.trackViewUrl;
-    if (version !== RNAppUpdate.versionName) {
+    if (version !== DeviceInfo.getReadableVersion()) {
       if (this.options.needUpdateApp) {
         this.options.needUpdateApp((isUpdate) => {
           if (isUpdate) {
-            RNAppUpdate.installFromAppStore(trackViewUrl);
+            // RNAppUpdate.installFromAppStore(trackViewUrl);
+            // TODO 添加跳转到ios应用商店
           }
         });
       }

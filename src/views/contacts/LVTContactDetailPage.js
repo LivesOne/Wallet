@@ -152,7 +152,7 @@ export default class LVTContactDetailPage extends Component<Props,State>{
                         }}
                     />
             </LVFullScreenModalView>
-
+            
             </View>
        );
     }

@@ -7,7 +7,7 @@
 "use strict";
 
 import React, { Component } from 'react'
-import { Dimensions, Text, View, StyleSheet, Image,TouchableHighlight, FlatList ,PixelRatio,ScrollView,TouchableWithoutFeedback} from 'react-native';
+import { Dimensions, Text, View, StyleSheet, Image,TouchableHighlight, FlatList ,PixelRatio,ScrollView,TouchableOpacity} from 'react-native';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVStrings from '../../assets/localization';
 import LVColor from '../../styles/LVColor';
@@ -21,6 +21,7 @@ import { LVConfirmDialog } from '../Common/LVDialog';
 import LVLocalization from '../../assets/localization';
 import MXSearchBar from '../../components/MXSearchBar/index';
 import * as MXUtils from "../../utils/MXUtils";
+import LVKeyboardSpacer from '../Common/LVKeyboardSpacer';
 
 const AddIcon = require('../../assets/images/add_contact.png');
 const AvatarIcon = require('../../assets/images/contact_avatar.png');
@@ -265,9 +266,10 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                         })
                     }}
                 />
-                <TouchableWithoutFeedback  
-                onPress={this.lostBlur.bind(this)}>  
+                {/* <TouchableWithoutFeedback  
+                onPress={this.lostBlur.bind(this)}>   */}
                 <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
+                <TouchableOpacity activeOpacity={1.0} onPress={this.lostBlur.bind(this)}>
                 <MXSearchBar
                     ref = {'searchbar'}
                     style = {{marginTop: 10}}
@@ -309,8 +311,10 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                             </View>
                         }/>
                 </View>
+                <LVKeyboardSpacer/>
+                </TouchableOpacity>
                 </ScrollView>
-                </TouchableWithoutFeedback>
+                {/* </TouchableWithoutFeedback> */}
                 <LVConfirmDialog ref={'deleteConfirm'} 
                             title={''}  
                             message={LVStrings.contact_confirm_delete_contact} 

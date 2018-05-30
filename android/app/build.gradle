@@ -124,12 +124,14 @@ android {
     buildTypes {
         debug {
             buildConfigField "boolean", "IS_RELEASE", Boolean.toString(getBranchName() == 'release_android')
+            buildConfigField "String", "CODEPUSH_KEY", '"YjWhra4qtzsgn5cVQzyEyL_GEy3342042889-30c6-4d95-8c28-d800912b97c7"'
         }
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
             buildConfigField "boolean", "IS_RELEASE", Boolean.toString(getBranchName() == 'release_android')
+            buildConfigField "String", "CODEPUSH_KEY", '"ea0ClcimjKimme9BY9HNvW8FgssP42042889-30c6-4d95-8c28-d800912b97c7"'
         }
     }
     // applicationVariants are e.g. debug, release
@@ -152,12 +154,17 @@ android {
             path 'src/main/jni/Android.mk'
         }
     }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
 }
 
 dependencies {
     compile project(':react-native-code-push')
     compile project(':react-native-rk-pull-to-refresh')
-    compile project(':react-native-appupdate')
     compile project(':react-native-fs')
     compile project(':react-native-svg')
     compile project(':react-native-splash-screen')
@@ -173,6 +180,7 @@ dependencies {
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
+    compile 'com.liulishuo.filedownloader:library:1.7.4'
     testCompile 'junit:junit:4.12'
 }
 
