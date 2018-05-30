@@ -7,7 +7,6 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, Dimensions, View, Text, Image, TouchableOpacity } from 'react-native';
-import { PullView } from 'react-native-rk-pull-to-refresh';
 import Moment from 'moment';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-native-datepicker';
@@ -39,7 +38,8 @@ type State = {
     wallet: LVWallet,
     startDate: string,
     endDate: string,
-    transactionList: ?Array<LVTransactionRecord>
+    refreshing: boolean,
+    transactionRecords: ?Array<LVTransactionRecord>
 };
 
 class AssetsDetailsScreen extends Component<Props, State> {
@@ -55,7 +55,8 @@ class AssetsDetailsScreen extends Component<Props, State> {
             wallet: wallet,
             startDate: '',
             endDate: '',
-            transactionList: LVTransactionRecordManager.records
+            refreshing: false,
+            transactionRecords: LVTransactionRecordManager.records
         };
         this.onStartDateChange = this.onStartDateChange.bind(this);
         this.onEndDateChange = this.onEndDateChange.bind(this);
@@ -65,6 +66,7 @@ class AssetsDetailsScreen extends Component<Props, State> {
 
     componentDidMount() {
         this.initFilterDate();
+        this.refreshRecords();
     }
 
     initFilterDate = async () => {
@@ -89,13 +91,25 @@ class AssetsDetailsScreen extends Component<Props, State> {
             this.props.navigation.navigate('TransactionDetails', {
                 transactionRecord: record
             });
+            setTimeout(() => {
+                TransactionDetailsScreen.lock = false;
+            }, 200);
         }
     };
 
-    async onPullRelease() {
-        await LVTransactionRecordManager.refreshTransactionRecords();
-        this.setState({ transactionList: LVTransactionRecordManager.records });
-        this.refs.pull && this.refs.pull.resolveHandler();
+    async refreshRecords() {
+        this.setState({ refreshing: true });
+        try {
+            await LVTransactionRecordManager.refreshTransactionRecords();
+            this.setState({ transactionRecords: LVTransactionRecordManager.records });
+
+            setTimeout(async () => {
+                this.setState({ refreshing: false });
+            }, 500);
+        } catch (error) {
+            this.setState({ refreshing: false });
+        }
+        
     }
 
     onReceiverButtonPressed = () => {
@@ -107,16 +121,14 @@ class AssetsDetailsScreen extends Component<Props, State> {
     };
 
     render() {
-        const { wallet, startDate, endDate, transactionList } = this.state;
+        const { wallet, startDate, endDate, transactionRecords } = this.state;
         const { token } = this.props.navigation.state.params;
 
         const startTimestamp = Moment(startDate, 'YYYY-MM-DD').format('X');
-        const endTimestamp = Moment(endDate, 'YYYY-MM-DD')
-            .add(1, 'days')
-            .format('X');
+        const endTimestamp = Moment(endDate, 'YYYY-MM-DD').add(1, 'days').format('X');
 
-        const filteredList = transactionList
-            ? transactionList.filter(item => item.timestamp >= startTimestamp && item.timestamp <= endTimestamp)
+        const filteredRecords = transactionRecords
+            ? transactionRecords.filter(item => item.timestamp >= startTimestamp && item.timestamp <= endTimestamp)
             : null;
 
         return (
@@ -149,7 +161,13 @@ class AssetsDetailsScreen extends Component<Props, State> {
                     <View style={{ flex: 1, marginLeft: 15, marginRight: 15, backgroundColor: LVColor.separateLine }} />
                 </View>
 
-                <TransactionRecordList style={styles.list} records={filteredList} onPressItem={this.onPressRecord} />
+                <TransactionRecordList
+                    style={styles.list}
+                    records={filteredRecords}
+                    refreshing={this.state.refreshing}
+                    onRefresh={this.refreshRecords.bind(this)}
+                    onPressItem={this.onPressRecord}
+                />
 
                 <View style={styles.bottom}>
                     <View style={styles.bottomContainer}>
@@ -174,7 +192,6 @@ class AssetsDetailsScreen extends Component<Props, State> {
                         screenProps={{
                             dismiss: () => {
                                 this.refs.receiveScreen.dismiss();
-                                //this.handleWalletChange();
                             }
                         }}
                     />
@@ -184,7 +201,6 @@ class AssetsDetailsScreen extends Component<Props, State> {
                         screenProps={{
                             dismiss: () => {
                                 this.refs.transferScreen.dismiss();
-                                //this.handleWalletChange();
                             }
                         }}
                     />
@@ -196,19 +212,19 @@ class AssetsDetailsScreen extends Component<Props, State> {
 const LVDataPicker = ({ date, min, max, onDateChange }) => {
     return (
         <DatePicker
-        style={{ width: 108, height: 31, backgroundColor: '#F5F6FA' }}
-        customStyles={datePickerStyles}
-        date={date}
-        mode="date"
-        format="YYYY.MM.DD"
-        minDate={min || '2010-01-01'}
-        maxDate={max || Moment().format('YYYY-MM-DD')}
-        showIcon={true}
-        iconSource={require('../../assets/images/date_picker_icon.png')}
-        confirmBtnText={LVStrings.common_confirm}
-        cancelBtnText={LVStrings.common_cancel}
-        onDateChange={onDateChange}
-    />
+            style={{ width: 108, height: 31, backgroundColor: '#F5F6FA' }}
+            customStyles={datePickerStyles}
+            date={date}
+            mode="date"
+            format="YYYY.MM.DD"
+            minDate={min || '2010-01-01'}
+            maxDate={max || Moment().format('YYYY-MM-DD')}
+            showIcon={true}
+            iconSource={require('../../assets/images/date_picker_icon.png')}
+            confirmBtnText={LVStrings.common_confirm}
+            cancelBtnText={LVStrings.common_cancel}
+            onDateChange={onDateChange}
+        />
     );
 };
 
@@ -285,7 +301,7 @@ const styles = StyleSheet.create({
     bottomSeparator: {
         width: 2,
         height: 20,
-        marginTop: 15,
+        marginTop: 6,
         backgroundColor: '#F5F6FA'
     },
     bottomButtonText: {

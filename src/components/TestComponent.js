@@ -5,7 +5,7 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, NativeModules } from 'react-native';
+import { StyleSheet, View, Text, NativeModules, Platform, Keyboard } from 'react-native';
 import MXButton from './MXButton';
 import MXNavigatorHeader from './MXNavigatorHeader';
 import MXCrossTextInput from './MXCrossTextInput';
@@ -21,11 +21,15 @@ import { LVPasswordDialog } from '../views/Common/LVPasswordDialog';
 import { LVBalanceShowView } from '../views/Common/LVBalanceShowView';
 var Big = require('big.js');
 import {  beautifyBalanceShow } from '../utils/MXStringUtils';
+import MXTouchableImage from './MXTouchableImage';
 
 const eth_local = require('../foundation/ethlocal.js');
 const wallet = require('../foundation/wallet.js');
 
 const ICAP = require('ethereumjs-icap')
+
+const addImg = require('../assets/images/transfer_add_contracts.png');
+const scanImg = require('../assets/images/transfer_scan.png');
 
 const MAX_BALANCE_LENGTH_LIMIT = 13;
 
@@ -80,9 +84,21 @@ class TestComponent extends Component {
 
                 </LVBalanceShowView> */}
                 
+                
                 <MXCrossTextInput
+                    titleText={"hello"}
                     withUnderLine = {true}
                     placeholder={"hello"}
+                    rightComponent={
+                        <View style={{backgroundColor:'gray', height: 10, flexDirection:'row', justifyContent: 'space-between', width: 65}}>
+                            <MXTouchableImage source={addImg} onPress={() => {this.props.navigation.navigate('ContactList',{readonly:true, callback:this.onSelectedContact})}}/>
+                            <MXTouchableImage source={scanImg} onPress={async() => {
+                                if (Platform.OS === 'android') {
+                                    await Keyboard.dismiss();
+                                }
+                                }}/>
+                        </View>
+                    }
                     onTextChanged = {(newText) => {this.setState({str: newText})}}
                 />
 
@@ -193,13 +209,13 @@ class TestComponent extends Component {
         // const result1 = await LVNetworking.fetchTokenList();
         // WalletUtils.log('list =' + JSON.stringify(result1));
 
-        // WalletUtils.log('test fetch balances');
-        // const result1 = await LVNetworking.fetchBalances(wallet.address, ["lvt", "eth"]);
-        // WalletUtils.log('balances =' + JSON.stringify(result1));
+        WalletUtils.log('test fetch balances');
+        const result1 = await LVNetworking.fetchBalances(wallet.address, ["lvt", "eth"]);
+        WalletUtils.log('balances =' + JSON.stringify(result1));
 
-        WalletUtils.log('get app config');
-        const result1 = await LVNetworking.getAppConfig();
-        WalletUtils.log('app config = ' + JSON.stringify(result1));
+        // WalletUtils.log('get app config');
+        // const result1 = await LVNetworking.getAppConfig();
+        // WalletUtils.log('app config = ' + JSON.stringify(result1));
 
         // const result2 = await LVNetworking.fetchTransactionParam(wallet.address, '0x0233C1dd7fbE6DaB8C233Bf017F4B1F3BAfEc0B3', 10000000000000000000);
         // this.log('Param =' + JSON.stringify(result2));

@@ -13,7 +13,6 @@ import LVNotification from '../logic/LVNotification';
 import LVNetworking from './LVNetworking';
 import LVTransactionRecordManager from './LVTransactionRecordManager';
 import WalletUtils from '../views/Wallet/WalletUtils';
-import console from 'console-browserify';
 import LVBig from './LVBig';
 
 const foundation = require('../foundation/wallet.js');
@@ -134,7 +133,7 @@ class WalletManager {
             try {
                 const tokens = ['lvt', 'eth'];
                 const balances = await LVNetworking.fetchBalances(wallet.address, tokens);
-
+                console.log(balances);
                 tokens.forEach((token) => {
                     wallet.setBalance(token, balances[token]);
                 });
