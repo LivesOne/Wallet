@@ -238,7 +238,7 @@ const localized_strings = {
     contact_add_place_email: 'Email address',
     contact_add_remarks: 'Remarks',
     contact_Detail_Button: 'AccountTransfer',
-
+    contact_Search_Empty_Button: 'This contact was not found',
     // Network
     network_error: 'Network request failed, please try again!',
     network_error_network_lost: 'Your network is not connected, please try again!',

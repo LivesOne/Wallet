@@ -89,13 +89,6 @@ export default class ProfleScreen extends Component<Props> {
                             disableImageResize
                             image={<Image source={AboutImage} style={styles.tableViewImage}/>}
                         />
-                        <ProfileCell
-                            title={LVStrings.profile_feedback}
-                            accessory="DisclosureIndicator"
-                            onPress={() => this.props.navigation.navigate('FeedBack')}
-                            disableImageResize
-                            image={<Image source={FeedbackImage} style={styles.tableViewImage}/>}
-                        />    
                         <Separator insetRight={15} tintColor={LVColor.separateLine}/>
                     </Section>
                 </TableView></ScrollView>

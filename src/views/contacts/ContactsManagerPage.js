@@ -7,7 +7,7 @@
 "use strict";
 
 import React, { Component } from 'react'
-import { Dimensions, Text, View, StyleSheet, Image,TouchableHighlight, FlatList } from 'react-native';
+import { Dimensions, Text, View, StyleSheet, Image,TouchableHighlight, FlatList ,PixelRatio,ScrollView,TouchableWithoutFeedback} from 'react-native';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVStrings from '../../assets/localization';
 import LVColor from '../../styles/LVColor';
@@ -19,6 +19,8 @@ import Swipeout from 'react-native-swipeout';
 import { Separator } from 'react-native-tableview-simple';
 import { LVConfirmDialog } from '../Common/LVDialog';
 import LVLocalization from '../../assets/localization';
+import MXSearchBar from '../../components/MXSearchBar/index';
+import * as MXUtils from "../../utils/MXUtils";
 
 const AddIcon = require('../../assets/images/add_contact.png');
 const AvatarIcon = require('../../assets/images/contact_avatar.png');
@@ -34,7 +36,10 @@ type State =  {
         toDeDeletedContactName: ?string,
         scrollEnabled: boolean,
         readonly: boolean,
-        callback: Function
+        callback: Function,
+        searchContacts:Array<Object>,
+        isSearchingStatus:boolean,
+        currentSearchText:string
 };
 
 export default class ContactsManagerPage extends  Component<Props, State> {
@@ -45,7 +50,7 @@ export default class ContactsManagerPage extends  Component<Props, State> {
 
     renderRow : Function;
     onDeleteContact: Function;
-    
+    onChangedText:Function;
     constructor(props: any) {
         super();
 
@@ -55,12 +60,55 @@ export default class ContactsManagerPage extends  Component<Props, State> {
             toDeDeletedContactName: null,
             scrollEnabled: true,
             readonly: params.readonly,
-            callback: params.callback
+            callback: params.callback,
+            searchContacts:[],
+            isSearchingStatus:false,
+            currentSearchText:'',
         };
         this.renderRow = this.renderRow.bind(this);
         this.onDeleteContact = this.onDeleteContact.bind(this);
+        this.onChangedText = this.onChangedText.bind(this);
     }
 
+    onChangedText = (text:string)=>{
+        this.setState({
+            currentSearchText:text,
+        });
+        const { contacts } = this.state;
+        var len = contacts.length;
+        var arr = [];
+        for(var i=0;i<len;i++){
+            //如果字符串中不包含目标字符会返回-1
+            if(contacts[i].name.toLowerCase()
+            .indexOf(text.toLowerCase()
+        )>=0){
+                arr.push(contacts[i]);
+            }
+        }
+        if ((text !== null ||
+            text !== '' || 
+            text !== undefined)) {
+                this.setState({
+                    isSearchingStatus: true,
+                    searchContacts:arr,
+                    currentSearchText:text,
+                });
+        }
+    };
+
+    lostBlur = ()=>{
+        //失去焦点实现
+        if ((this.state.currentSearchText === null ||
+            this.state.currentSearchText === '' || 
+            this.state.currentSearchText === undefined) &&
+            this.state.isSearchingStatus
+        ) {
+            this.refs.searchtextinput.blur();
+            this.setState({
+                isSearchingStatus: false,
+            });
+        }
+    };
 
     async loadContacts (){
         await ContactLib.instance.loadLocalContacts();
@@ -150,9 +198,8 @@ export default class ContactsManagerPage extends  Component<Props, State> {
     }
     
     render() {
-        const { contacts } = this.state;
+        const { contacts,isSearchingStatus,searchContacts } = this.state;
         const { params } = this.props.navigation.state;
-
         let addIcon = AddIcon;
 
         return (
@@ -176,20 +223,52 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                         })
                     }}
                 />
+                <TouchableWithoutFeedback  
+                onPress={this.lostBlur.bind(this)}>  
+                <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
+                <MXSearchBar
+                    ref = {'searchbar'}
+                    style = {{marginTop: 10}}
+                    placeholder = {LVStrings.contact_add_place_holder_nickname}
+                    onTextChanged = {this.onChangedText}
+                    onFocus = {()=>{
+                        if (this.state.currentSearchText !== null &&
+                            this.state.currentSearchText !== '' && 
+                            this.state.currentSearchText !== undefined &&
+                            this.state.isSearchingStatus) {
+                                this.setState({
+                                    isSearchingStatus: true,
+                                });
+                        }
+                    }}
+                    onEndEditing = {() => {
+                        if ((this.state.currentSearchText === null ||
+                            this.state.currentSearchText === '' || 
+                            this.state.currentSearchText === undefined) &&
+                            this.state.isSearchingStatus
+                        ) {
+                            this.setState({
+                                isSearchingStatus: false,
+                            });
+                        }
+                    }}
+                    />
                 <View style={styles.listContainer}>
                     <FlatList
                         scrollEnabled={this.state.scrollEnabled}
                         extraData={this.state}
-                        data={contacts}
+                        data={isSearchingStatus?searchContacts:contacts}
                         keyExtractor={(item,index)=> item.name}
                         renderItem={this.renderRow}
                         ListEmptyComponent={()=> 
                             <View style={styles.emptyListContainer}>
                                 <Image source={EmptyContactListIndicatorIcon}/>
-                                <Text style={styles.emptyListTextStyle}>{LVLocalization.contact_empty_list_demonstration}</Text>
+                                <Text style={styles.emptyListTextStyle}>{isSearchingStatus? LVLocalization.contact_Search_Empty_Button: LVLocalization.contact_empty_list_demonstration}</Text>
                             </View>
                         }/>
                 </View>
+                </ScrollView>
+                </TouchableWithoutFeedback>
                 <LVConfirmDialog ref={'deleteConfirm'} 
                             title={''}  
                             message={LVStrings.contact_confirm_delete_contact} 
