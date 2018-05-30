@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
     bottomSeparator: {
         width: 2,
         height: 20,
-        marginTop: 15,
+        marginTop: 6,
         backgroundColor: '#F5F6FA'
     },
     bottomButtonText: {

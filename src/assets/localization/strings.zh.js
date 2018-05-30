@@ -21,6 +21,7 @@ const localized_strings = {
     common_done: '完成',
     common_delete: '删除',
     common_camera_not_authorized: '相机权限未开启',
+    common_next: "下一步",
 
     //receive
     receive_title:'收款',
@@ -241,6 +242,7 @@ const localized_strings = {
     contact_add_remarks: '备注',
     contact_Detail_Button: '账户转账',
     contact_Search_Empty_Button: '未找到此联系人',
+    contact_Detail_Title: '的钱包',
 
     // Network
     network_error: '网络请求失败，请重试!',
