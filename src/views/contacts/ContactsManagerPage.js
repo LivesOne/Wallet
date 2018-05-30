@@ -268,7 +268,8 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                 />
                 {/* <TouchableWithoutFeedback  
                 onPress={this.lostBlur.bind(this)}>   */}
-                <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
+                <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}
+                >
                 <TouchableOpacity activeOpacity={1.0} onPress={this.lostBlur.bind(this)}>
                 <MXSearchBar
                     ref = {'searchbar'}

@@ -115,12 +115,12 @@ class MXCrossTextInput extends Component<Props,State> {
                     style,
                 ]}
             >  
-                {this.props.titleText && (
-                    <Text style = {Base.titleLabel}>
-                        {titleText}
-                    </Text>
-                )}
                 <View style={[Base.content , inputContainerStyle ,]}>
+                    {this.props.titleText && (
+                        <Text style = {Base.titleLabel}>
+                            {titleText}
+                        </Text>
+                    )}
                     <TouchableOpacity style={[textAreaStyle]} activeOpacity={1} onPress={
                         () => {
                             this.setState({hasFocus: true})
@@ -162,7 +162,7 @@ class MXCrossTextInput extends Component<Props,State> {
                         )}
                     </View>
                 </View>
-                <View style={{width: '100%', height: lineHeight, backgroundColor: LVColor.separateLine,marginTop: 0}} />
+                <View style={{width: '100%', height: lineHeight, backgroundColor: LVColor.separateLine,marginTop: 19}} />
             </View>
         );
     }
