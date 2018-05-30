@@ -198,8 +198,7 @@ const styles = StyleSheet.create({
         flex : 1,
         flexDirection: 'column',
         justifyContent: 'space-between',
-        backgroundColor: '#F8F9FB',
-        ...ifIphoneX({paddingBottom: iPhoneX_Bottom_Inset}, {paddingBottom:0})
+        backgroundColor: '#F8F9FB'
     },
     nav: {
         backgroundColor : LVColor.profileNavBack
@@ -209,7 +208,7 @@ const styles = StyleSheet.create({
         fontSize: LVFontSize.large
     },
     bottomPanel: {
-        height: 55,
+        ...ifIphoneX({height: 55 + iPhoneX_Bottom_Inset},{height: 55}),
         backgroundColor: '#FFFFFF',
         shadowColor: '#6B7A9F',
         shadowOpacity: 0.1,
@@ -217,7 +216,8 @@ const styles = StyleSheet.create({
     },
     bottomContainer: {
         flex: 1,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        ...ifIphoneX({marginBottom: iPhoneX_Bottom_Inset}, {marginBottom:0})
     },
     bottomButtonContainer: {
         flex: 1,
