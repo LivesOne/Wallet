@@ -6,36 +6,46 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions, View, ViewPropTypes, Image, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { Separator } from 'react-native-tableview-simple';
+import {
+    StyleSheet,
+    Dimensions,
+    View,
+    ViewPropTypes,
+    Image,
+    Text,
+    FlatList,
+    TouchableOpacity,
+    RefreshControl
+} from 'react-native';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import PLUtils, { DateUtils, StringUtils } from '../../utils';
-import * as Progress from 'react-native-progress';
-
-const windowHeight = Dimensions.get('window').height;
+import * as LVContactManager from '../../logic/LVContactManager';
 
 const inImg = require('../../assets/images/transfer_in.png');
 const outImg = require('../../assets/images/transfer_out.png');
 
 type Props = {
     style: ViewPropTypes.style,
-    loading?: bool,
     records: ?Array<Object>,
-    onPressItem: Function,
+    refreshing: boolean,
+    onRefresh: Function,
+    onPressItem: Function
 };
 type State = {
     selected: Map<string, boolean>
 };
 
 export default class TransactionRecordList extends React.PureComponent<Props, State> {
-
     constructor(props: any) {
         super(props);
         this.state = {
             selected: (new Map(): Map<string, boolean>)
         };
+        if (LVContactManager.instance.contacts.length === 0) {
+            LVContactManager.instance.loadLocalContacts();
+        }
     }
 
     _keyExtractor = (item, index) => index.toString();
@@ -67,40 +77,40 @@ export default class TransactionRecordList extends React.PureComponent<Props, St
         />
     );
 
-    getScrollMetrics = () => {
-        return this.refs.list._listRef._scrollMetrics;
+    _onRefresh = () => {
+        if (this.props.onRefresh) {
+            this.props.onRefresh();
+        }
     };
 
     render() {
-        const { loading, records, style } = this.props;
+        const { records, style } = this.props;
 
-        if (loading === true) {
-            return <LVLoadingComponent />;
-        } else {
-            return (
-                <FlatList
-                    ref={'list'}
-                    style={style}
-                    data={records}
-                    extraData={this.state}
-                    keyExtractor={this._keyExtractor}
-                    renderItem={this._renderItem}
-                    showsVerticalScrollIndicator={false}
-                    showsHorizontalScrollIndicator={false}
-                    ItemSeparatorComponent={() => <Separator insetRight={15} tintColor={LVColor.separateLine} />}
-                    ListEmptyComponent={() => <LVEmptyListComponent />}
-                />
-            );
-        }
+        return (
+            <FlatList
+                ref={'list'}
+                style={style}
+                data={records}
+                extraData={this.state}
+                keyExtractor={this._keyExtractor}
+                renderItem={this._renderItem}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                ListEmptyComponent={() => <LVEmptyListComponent />}
+                refreshControl={
+                    <RefreshControl refreshing={this.props.refreshing} onRefresh={this._onRefresh.bind(this)} />
+                }
+            />
+        );
     }
 }
 
 const LVEmptyListComponent = () => {
     const img = require('../../assets/images/no_transactions.png');
-    const wh = Dimensions.get('window').height ;
+    const wh = Dimensions.get('window').height;
     const size = wh < 500 ? 44 : 60;
     const font = wh < 500 ? LVSize.small : LVSize.default;
-    const height = wh - (PLUtils.isIphoneX() ? (295 + 50 + 89) : (195 + 50 + 55));
+    const height = wh - (PLUtils.isIphoneX() ? 295 + 50 + 89 : 195 + 50 + 55);
 
     return (
         <View style={{ flex: 1, height: height, justifyContent: 'center', alignItems: 'center' }}>
@@ -108,14 +118,6 @@ const LVEmptyListComponent = () => {
             <Text style={{ marginTop: 10, fontSize: font, color: LVColor.text.grey1 }}>
                 {LVStrings.transaction_records_no_data}
             </Text>
-        </View>
-    );
-};
-
-const LVLoadingComponent = () => {
-    return (
-        <View style={{ flex: 1, width: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
-            <ActivityIndicator size='small' />
         </View>
     );
 };
@@ -131,52 +133,43 @@ type ItemProps = {
 };
 
 class LVTransactionRecordItem extends React.PureComponent<ItemProps> {
-
     render() {
         const { type, token, balance, address, datetime, state } = this.props;
-        const typeImage = type === 'in' ? inImg : outImg;
+        const typeIcon = type === 'in' ? inImg : outImg;
+        const typeString = type === 'in' ? LVStrings.receive : LVStrings.transfer;
 
         const prefix = type === 'in' ? '+' : '-';
         const amountString = prefix + StringUtils.beautifyBalanceShow(balance, token).result;
+        const timePast = DateUtils.getTimePastFromNow(datetime);
+        const addressText = StringUtils.converAddressToDisplayableText(address, 3, 4);
 
-        //const
-        const t = DateUtils.getTimePastFromNow(datetime);
-        const timePast =
-            t.avaiable === false
-                ? datetime
-                : t.years
-                  ? t.years + ' ' + LVStrings.time_pass_years_ago
-                  : t.months
-                    ? t.months + ' ' + LVStrings.time_pass_months_ago
-                    : t.days
-                      ? t.days === 1 ? LVStrings.time_pass_yesterday : t.days + ' ' + LVStrings.time_pass_days_ago
-                      : t.hours
-                        ? t.hours + ' ' + LVStrings.time_pass_hours_ago
-                        : t.minutes
-                          ? t.minutes + ' ' + LVStrings.time_pass_minutes_ago
-                          : LVStrings.time_pass_a_moment_ago;
+        const contact = LVContactManager.instance.contacts.find((c) => c.address.toUpperCase() === '0X' + address.toUpperCase());
+        const nickName = contact ? contact.name : '';
 
         return (
             <TouchableOpacity style={[styles.record]} activeOpacity={0.7} onPress={this.props.onPressItem}>
-                <View style={styles.info}>
-                    <View style={styles.infoInner}>
-                        <Image source={typeImage} />
-                        <Text style={styles.addressText} numberOfLines={1} ellipsizeMode="middle">
-                            {StringUtils.converAddressToDisplayableText(address)}
-                        </Text>
-                    </View>
-                    <View style={styles.infoInner}>
+                <View style={styles.recordType}>
+                    <Image style={styles.typeIcon} source={typeIcon} resizeMode='contain' />
+                    <Text style={styles.typeText}>{typeString}</Text>
+                </View>
+                <View style={styles.recordInfo}>
+                    <View style={[styles.recordInfoLine, { height: 26 }]}>
+                        <Text style={styles.addressText} numberOfLines={1} ellipsizeMode="middle">{addressText}</Text>
                         {state === 'ok' ? (
                             <Text style={styles.amountText}>{amountString}</Text>
                         ) : state === 'waiting' ? (
                             <Text style={styles.statusText}>{LVStrings.transaction_waiting}</Text>
                         ) : state === 'failed' ? (
                             <Text style={styles.statusText}>{LVStrings.transaction_failed}</Text>
-                        ) : null}
+                        ) : (
+                            <View />
+                        )}
+                    </View>
+                    <View style={styles.recordInfoLine}>
+                        <Text style={styles.nicknameText}>{nickName}</Text>
+                        <Text style={styles.timeText}>{timePast}</Text>
                     </View>
                 </View>
-
-                <Text style={styles.timeText}>{timePast}</Text>
             </TouchableOpacity>
         );
     }
@@ -184,50 +177,66 @@ class LVTransactionRecordItem extends React.PureComponent<ItemProps> {
 
 const styles = StyleSheet.create({
     record: {
-        marginLeft: 12.5,
-        marginRight: 12.5,
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        height: 60
+        height: 80,
+        marginLeft: 15,
+        marginRight: 15,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        backgroundColor: LVColor.white
     },
-    info: {
-        width: '100%',
+    recordType: {
+        height: 26,
+        marginTop: 16,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
     },
-    infoInner: {
+    recordInfo: {
+        flex: 1,
+        marginLeft: 10,
+        marginTop: 16,
+        marginBottom: 16,
+    },
+    recordInfoLine: {
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center'
     },
-    addressText: {
-        marginLeft: 10,
-        color: LVColor.text.grey1,
-        fontSize: 15,
-        textAlign: 'left'
+    typeIcon: {
+        width: 26,
+        height: 26
     },
-    timeText: {
-        marginTop: 3,
-        marginLeft: 30,
-        color: LVColor.text.grey3,
-        fontSize: 12,
-        textAlign: 'left'
+    typeText: {
+        marginLeft: 6,
+        fontSize: 13,
+        fontWeight: '600',
+        color: LVColor.text.grey1
+    },
+    addressText: {
+        fontSize: 13,
+        fontWeight: '600',
+        textAlign: 'left',
+        color: LVColor.text.grey1
+    },
+    amountText: {
+        color: LVColor.text.grey2,
+        fontSize: 15,
+        fontWeight: '600',
+        textAlign: 'right'
     },
     statusText: {
         color: LVColor.text.red,
         fontSize: 12,
         textAlign: 'right'
     },
-    amountText: {
-        color: LVColor.text.grey2,
-        fontSize: 15,
-        textAlign: 'right'
+    nicknameText: {
+        fontSize: 12,
+        textAlign: 'left',
+        color: LVColor.text.placeHolder,
     },
-    progress: {
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    }
+    timeText: {
+        fontSize: 12,
+        textAlign: 'right',
+        color: LVColor.text.placeHolder,
+    },
 });
