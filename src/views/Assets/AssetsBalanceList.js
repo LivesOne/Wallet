@@ -35,12 +35,6 @@ export default class AssetsBalanceList extends React.Component<Props> {
         super();
     }
 
-    _onRefresh = () => {
-        if (this.props.onRefresh) {
-            this.props.onRefresh();
-        }
-    };
-
     _keyExtractor = (item, index) => index.toString();
 
     _onPressItem = (item: Object) => {
@@ -58,6 +52,12 @@ export default class AssetsBalanceList extends React.Component<Props> {
             }}
         />
     );
+
+    _onRefresh = () => {
+        if (this.props.onRefresh) {
+            this.props.onRefresh();
+        }
+    };
 
     render() {
         const { style, balances } = this.props;
@@ -94,7 +94,7 @@ class LVWalletBalanceCard extends React.Component<BalanceCardProps> {
         const balanceString = StringUtils.convertAmountToCurrencyString(balance, ',', 4, true);
         return (
             <View style={styles.record}>
-                <Image source={left_shadow} />
+                <Image style={{ marginBottom: 7.5 }} source={left_shadow} />
                 <TouchableOpacity style={styles.card} activeOpacity={0.6} onPress={this.props.onPressItem}>
                     <View style={styles.left}>
                         <Image style={styles.image} source={tokenImage} resizeMode="contain" />
@@ -102,7 +102,7 @@ class LVWalletBalanceCard extends React.Component<BalanceCardProps> {
                     </View>
                     <Text style={styles.balance}>{balanceString}</Text>
                 </TouchableOpacity>
-                <Image source={right_shadow} />
+                <Image style={{ marginBottom: 7.5 }} source={right_shadow} />
             </View>
         );
     }
@@ -114,11 +114,12 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
     },
     card: {
         flex: 1,
         height: 66,
+        marginBottom: 7.5,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',

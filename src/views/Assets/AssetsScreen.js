@@ -75,7 +75,7 @@ class AssetsScreen extends Component<Props, State> {
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
         LVNotificationCenter.addObserver(this, LVNotification.balanceChanged, this.handleBalanceChange);
 
-        this.onRefreshBalance();
+        this.refreshBalance();
     }
 
     componentWillUnmount() {
@@ -91,7 +91,7 @@ class AssetsScreen extends Component<Props, State> {
             const lastRefreshTime = await LVPersistent.getNumber(LVLastAssetsRefreshTimeKey);
             const currentTime = Moment().format('X');
             if (currentTime - lastRefreshTime > 120) {
-                this.onRefreshBalance();
+                this.refreshBalance();
             }
         }
         this.setState({ appState: nextAppState });
@@ -120,22 +120,6 @@ class AssetsScreen extends Component<Props, State> {
         this.setState({ wallet: wallet });
     }
 
-    async onRefreshBalance() {
-        this.setState({ refreshing: true });
-        try {
-            await LVWalletManager.updateWalletBalance();
-            await LVPersistent.setNumber(LVLastAssetsRefreshTimeKey, Moment().format('X'));
-    
-            setTimeout(async () => {
-                this.setState({ refreshing: false });
-            }, 500);
-
-        } catch (error) {
-            this.setState({ refreshing: false });
-            Toast.show(error.message);
-        }
-    }
-
     _processing_assets_detail_pressed = false;
     onPressAssetsDetail = (token: string) => {
         if (this._processing_showall_pressed) {
@@ -151,6 +135,22 @@ class AssetsScreen extends Component<Props, State> {
             this._processing_assets_detail_pressed = false;
         }, 200);
     };
+
+    async refreshBalance() {
+        this.setState({ refreshing: true });
+        try {
+            await LVWalletManager.updateWalletBalance();
+            await LVPersistent.setNumber(LVLastAssetsRefreshTimeKey, Moment().format('X'));
+    
+            setTimeout(async () => {
+                this.setState({ refreshing: false });
+            }, 500);
+
+        } catch (error) {
+            this.setState({ refreshing: false });
+            Toast.show(error.message);
+        }
+    }
 
     render() {
         const wallet = this.state.wallet || LVWallet.emptyWallet();
@@ -172,7 +172,7 @@ class AssetsScreen extends Component<Props, State> {
                     <LVWalletHeader title={wallet.name} address={wallet.address} />
                 </View>
 
-                <AssetsBalanceList style={styles.list} balances={balance_list} refreshing={this.state.refreshing} onRefresh={this.onRefreshBalance.bind(this)} onPressItem={this.onPressAssetsDetail.bind(this)} />
+                <AssetsBalanceList style={styles.list} balances={balance_list} refreshing={this.state.refreshing} onRefresh={this.refreshBalance.bind(this)} onPressItem={this.onPressAssetsDetail.bind(this)} />
 
                 <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
             </View>
