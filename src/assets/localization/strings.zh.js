@@ -23,10 +23,10 @@ const localized_strings = {
     common_camera_not_authorized: '相机权限未开启',
 
     //receive
-    receive_title:'我的收款码',
+    receive_title:'收款',
     receive_name:'钱包地址',
     receive_name_suffix : "的钱包",
-    receive_copy:'复制地址',
+    receive_copy:'复制钱包地址',
     receive_save:'保存二维码',
     receive_empty:'您还未添加钱包',
     receive_save_finish:'保存完成',
@@ -102,7 +102,7 @@ const localized_strings = {
     wallet_name_hint: '输入名称（少于20个字）',
     wallet_name_invalid: '名称格式错误',
     wallet_name_exceeds_limit: '钱包名称超过20个字',
-
+    wallet_detail: '详情',
     //password verify
     password_verify_title: '密码验证',
     password_verifying: '密码验证中...',
@@ -118,7 +118,7 @@ const localized_strings = {
 
     // Transaction record
     transaction_records: '交易记录',
-    transaction_records_no_data: '暂无交易',
+    transaction_records_no_data: '暂无记录',
     transaction_records_time: '时间',
     transaction_records_to: '至',
     transaction_waiting: '等待中',
@@ -173,6 +173,7 @@ const localized_strings = {
     profile_wallet_import_right_now: '马上导入',
     profile_wallet_export: '导出私钥',
     profile_wallet_backup: '备份Keystore',
+    profile_wallet_backup_later: '稍后备份',
     profile_wallet_delete_wallet: '删除钱包',
     profile_wallet_save: '保存',
     profile_wallet_my_private_key: '我的私钥',
@@ -218,7 +219,6 @@ const localized_strings = {
     //contacts
     contact_list_nav_title: '联系人',
     contact_add_nav_title: '添加联系人',
-    contact_Detail_nav_title: '添加联系人',
     contact_edit_nav_title: '编辑联系人',
     contact_add_place_holder_nickname: '请输入联系人昵称',
     contact_add_place_holder_address: '请输入钱包地址',
@@ -259,6 +259,14 @@ const localized_strings = {
 
      // over 18 limit
      over_limit_hint: '转账金额仅支持小数点后18位',
+
+     //update
+     update_title: '更新提醒',
+     update_text: '发现新版本,快去体验吧!',
+     update_ok: '立即更新',
+     update_cancel: '以后再说',
+     update_download_tip: '后台下载最新的版本',
+
 };
 
 export default localized_strings;

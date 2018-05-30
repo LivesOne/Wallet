@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.cboy.rn.splashscreen.SplashScreenReactPackage;
 import com.facebook.react.ReactApplication;
+import com.microsoft.codepush.react.CodePush;
 import com.hzl.pulltorefresh.RefreshReactPackage;
 import com.parryworld.rnappupdate.RNAppUpdatePackage;
 import com.rnfs.RNFSPackage;
@@ -30,6 +31,12 @@ import java.util.List;
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+
+        @Override
+        protected String getJSBundleFile() {
+        return CodePush.getJSBundleFile();
+        }
+    
     @Override
     public boolean getUseDeveloperSupport() {
       return BuildConfig.DEBUG;
@@ -40,6 +47,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MyReactPackage(),
             new MainReactPackage(),
+            new CodePush(null, getApplicationContext(), BuildConfig.DEBUG),
             new RefreshReactPackage(),
             new RNAppUpdatePackage(),
             new RNFSPackage(),

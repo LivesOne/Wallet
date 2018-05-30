@@ -18,7 +18,7 @@ import LVDialog from './LVDialog';
 import LVStrings from './../../assets/localization';
 import LVColor from '../../styles/LVColor';
 import console from 'console-browserify';
-import {  beautifyBalanceShow } from '../../utils/MXStringUtils';
+import * as StringUtils from '../../utils/MXStringUtils';
 const CloseIcon = require('../../assets/images/close_modal.png');
 import Modal from 'react-native-modalbox';
 
@@ -32,14 +32,20 @@ type Props = {
     style?: ViewPropTypes.style,
     textStyle: Text.propTypes.style,
     balance: Object,
+    showSeparator?: boolean
 };
 
 export class LVBalanceShowView extends Component<Props> {
 
     render() {
-        let v = beautifyBalanceShow(this.props.balance);
+        let v = StringUtils.beautifyBalanceShow(this.props.balance);
         const {symble, title, unit} = this.props;
-        const values = symble ? symble + v.result : v.result; 
+        var values = symble ? symble + v.result : v.result; 
+
+        if (this.props.showSeparator) {
+            values = StringUtils.convertAmountToCurrencyString(values, ',', 0, true);
+        }
+
         return (
             <TouchableOpacity style = {this.props.style} activeOpacity={0.8} onPress = {()=>{
                 if (v.hasShrink) {

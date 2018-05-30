@@ -33,6 +33,7 @@ const API = {
     GET_TRANSACTION_PARAM: HOST + '/wallet/param?',
     POST_SIGNED_TRANSACTION: HOST + '/wallet/tx',
     GET_APP_CONFIG: HOST + '/wallet/appconfig'
+    // GET_APP_CONFIG: 'http://10.0.5.50:9000/uploads/u5.json'
 };
 
 const ErrorCodeMap: Map<number, string> = new Map([[1, 'Request parameter error'], [2, 'Server internal error'], [3, 'Token is not supported']]);
@@ -156,8 +157,10 @@ class LVNetworking {
         return await LVFetch.POST(API.POST_SIGNED_TRANSACTION, { tx: txData });
     }
 
-    static async getAppConfig() {
-        return await LVFetch.GET(API.GET_APP_CONFIG);
+    static  getAppConfigURL() {
+        return API.GET_APP_CONFIG;
+    // static async getAppConfig() {
+        // return await LVFetch.GET(API.GET_APP_CONFIG);
     }
 
     static getHost() {

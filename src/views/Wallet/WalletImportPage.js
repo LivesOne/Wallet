@@ -308,12 +308,6 @@ export default class AssetsImportPage extends React.Component<Props, State> {
             {this.state.leftPressed && this._renderKeystore()}
             {!this.state.leftPressed && this._renderPrivateKey()}
 
-            <MXButton
-              rounded
-              style={{alignSelf: 'center'}}
-              title={LVStrings.wallet_import}
-              onPress={ this.onPrivateImportPress.bind(this) }
-            />
             <LVLoadingToast ref={'toast'} title={LVStrings.wallet_import_header}/>
             <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage || ''} buttonTitle={LVStrings.alert_ok}/>
         </KeyboardDismissView>
@@ -333,10 +327,6 @@ export default class AssetsImportPage extends React.Component<Props, State> {
             style={ styles.textInput }
           />
 
-          <Text style={[styles.textTip , {marginTop : 33}]}>
-            {LVStrings.wallet_import_tip_keystore_password}
-          </Text>
-
           <MXCrossTextInput
             style={{marginTop: 5, marginBottom: 35}}
             secureTextEntry={true}
@@ -348,8 +338,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
             rounded
             style={styles.importButtonStyle}
             title={LVStrings.wallet_import}
-            onPress={ this.onKeystoreImportPress.bind(this) }
-          />
+            onPress={ this.onKeystoreImportPress.bind(this) }/>
         </View>
       );
     }
@@ -369,9 +358,6 @@ export default class AssetsImportPage extends React.Component<Props, State> {
               style={ styles.textInput }
             />
 
-          <Text style={[styles.textTip , {marginTop : 33}]}>
-            {LVStrings.wallet_import_tip_keystore_password}
-          </Text>
             <MXCrossTextInput
               style={{marginTop: 5}}
               secureTextEntry={true}
@@ -381,13 +367,10 @@ export default class AssetsImportPage extends React.Component<Props, State> {
               placeholder={LVStrings.wallet_import_private_password_hint}
             />
 
-          <Text style={[styles.textTip , {marginTop : 38}]}>
-            {LVStrings.wallet_import_tip_keystore_password}
-          </Text>
             <MXCrossTextInput
               style={{marginTop: 5}}
               secureTextEntry={true}
-              titleText={LVStrings.wallet_import_private_pwd_confirm_hint}
+              titleText={LVStrings.wallet_import_private_password_repeat_lable}
               onTextChanged={(newText)=>{this.setState({privateKeyPwdAgain: newText})}}
               placeholder={LVStrings.wallet_import_private_pwd_confirm_hint}
             />

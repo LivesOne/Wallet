@@ -32,6 +32,7 @@ type Props = {
     value?: string,
     boarderLineHeight?: number,
     titleText?: string,
+    inputContainerStyle ? : ViewPropTypes.style,
 };
 class MXCrossTextInput extends Component<Props,State> {
 
@@ -95,7 +96,7 @@ class MXCrossTextInput extends Component<Props,State> {
     }
 
     render() {
-        const { rounded, style, placeholder, secureTextEntry, withUnderLine, keyboardType, textAlignCenter, boarderLineHeight,titleText } = this.props;
+        const { rounded, style, placeholder, secureTextEntry, withUnderLine, keyboardType, textAlignCenter, boarderLineHeight,titleText,inputContainerStyle } = this.props;
 
         const theme = this.getTheme();
 
@@ -119,7 +120,7 @@ class MXCrossTextInput extends Component<Props,State> {
                         {titleText}
                     </Text>
                 )}
-                <View style={[Base.content]}>
+                <View style={[Base.content , inputContainerStyle]}>
                     <TouchableOpacity style={[textAreaStyle]} activeOpacity={1} onPress={
                         () => {
                             this.setState({hasFocus: true})

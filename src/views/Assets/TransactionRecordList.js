@@ -8,11 +8,10 @@
 import React, { Component } from 'react';
 import { StyleSheet, Dimensions, View, ViewPropTypes, Image, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Separator } from 'react-native-tableview-simple';
-import PropTypes from 'prop-types';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
-import { DateUtils, StringUtils } from '../../utils';
+import PLUtils, { DateUtils, StringUtils } from '../../utils';
 import * as Progress from 'react-native-progress';
 
 const windowHeight = Dimensions.get('window').height;
@@ -98,16 +97,15 @@ export default class TransactionRecordList extends React.PureComponent<Props, St
 
 const LVEmptyListComponent = () => {
     const img = require('../../assets/images/no_transactions.png');
-    const wh = Dimensions.get('window').height;
-    const top = wh < 500 ? 4 : 64;
+    const wh = Dimensions.get('window').height ;
     const size = wh < 500 ? 44 : 60;
-    const sep = wh < 500 ? 0 : 10;
     const font = wh < 500 ? LVSize.small : LVSize.default;
+    const height = wh - (PLUtils.isIphoneX() ? (295 + 50 + 89) : (195 + 50 + 55));
 
     return (
-        <View style={{ flex: 1, alignItems: 'center' }}>
-            <Image style={{ marginTop: top, width: size, height: size }} resizeMode="contain" source={img} />
-            <Text style={{ marginTop: sep, fontSize: font, color: LVColor.text.grey1 }}>
+        <View style={{ flex: 1, height: height, justifyContent: 'center', alignItems: 'center' }}>
+            <Image style={{ marginTop: 0, width: size, height: size }} resizeMode="contain" source={img} />
+            <Text style={{ marginTop: 10, fontSize: font, color: LVColor.text.grey1 }}>
                 {LVStrings.transaction_records_no_data}
             </Text>
         </View>

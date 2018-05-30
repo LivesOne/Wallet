@@ -9,12 +9,12 @@ import React from 'react';
 import { StackNavigator } from "react-navigation";
 
 import AssetsScreen from './AssetsScreen';
-import TransactionRecordsScreen from './TransactionRecordsScreen';
+import AssetsDetailsScreen from './AssetsDetailsScreen';
 import TransactionDetailsScreen from './TransactionDetailsScreen';
 
 const AssetsNavigator = StackNavigator({
     Assets: { screen: AssetsScreen },
-    TransactionRecords: { screen: TransactionRecordsScreen },
+    AssetsDetails: { screen: AssetsDetailsScreen },
     TransactionDetails: { screen: TransactionDetailsScreen },
 });
 

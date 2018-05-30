@@ -60,9 +60,10 @@ export class WalletExportModal extends Component {
                         selectTextOnFocus={false}
                         style={ styles.textInput }>{ this.props.privateKey }
                     </TextInput>
-                    <Text style={{fontSize: 15, color: LVColor.text.red, marginTop: 15,  fontWeight: '200', textAlign: 'left'}}>{LVStrings.profile_wallet_export_warnning}</Text>
+                    <Text style={{fontSize: 15, color: LVColor.text.yellow, marginTop: 15,  fontWeight: '200', textAlign: 'left'}}>{LVStrings.profile_wallet_export_warnning}</Text>
                     <MXButton
                         rounded
+                        isEmptyButtonType = {true}
                         style={ styles.btn }
                         onPress={this.onCopyKey.bind(this)}
                         title={ LVStrings.prifile_wallet_export_copy_key }/>

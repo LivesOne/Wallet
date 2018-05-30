@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     },
     address: {
         marginTop: 5,
+        fontFamily: 'SFProText-Regular',
         fontSize: LVSize.xsmall,
         textAlign: 'center',
         color: '#ffffff',

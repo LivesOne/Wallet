@@ -23,10 +23,10 @@ const localized_strings = {
     common_camera_not_authorized: 'Camera not authorized',
 
     //receive
-    receive_title:'My wallet QR code',
+    receive_title:'Receive',
     receive_name:'Wallet address',
     receive_name_suffix : "'s wallet",
-    receive_copy:'Copy the address',
+    receive_copy:'Copy wallet address',
     receive_save:'Save the QR code',
     receive_empty:'You haven’t add a wallet yet',
     receive_save_finish:'Completed',
@@ -45,6 +45,7 @@ const localized_strings = {
     wallet_import_keystore_hint: 'Keystore text content',
     wallet_import_private_password_lable:'Password',
     wallet_import_private_password_hint: 'Enter 6~12 digit of letters + numbers',
+    wallet_import_private_password_repeat_lable: "Repeat password",
     wallet_import_private_pwd_confirm_hint: 'Confirm password',
     wallet_import_keystore_password_label: 'Keystore password',
     wallet_import_keystore_password_hint: 'Enter Keystore password',
@@ -59,7 +60,6 @@ const localized_strings = {
     wallet_name_hint: 'Enter name (less than 40 digits)',
     wallet_name_invalid: 'Incorrect name format',
     wallet_name_exceeds_limit: 'Wallet name is more than 40 digits',
-    wallet_import_tip_keystore_password : "Keystore password",
 
     wallet_create_wallet: 'Create wallet',
     wallet_creating_wallet: 'Creating wallet...',
@@ -100,6 +100,7 @@ const localized_strings = {
     wallet_export_private_key_copied_to_clipboard: 'The private key has been copied to the clipboard',
     wallet_delete_hint: 'Are your sure to delete the wallet?',
     wallet_delete_success: 'Successfully deleted',
+    wallet_detail: 'Details',
 
     //password verify
     password_verify_title: 'Verify password',
@@ -116,7 +117,7 @@ const localized_strings = {
 
     // Transaction record
     transaction_records: 'Transaction records',
-    transaction_records_no_data: 'No transactions',
+    transaction_records_no_data: 'No records',
     transaction_records_time: 'Time',
     transaction_records_to: 'to',
     transaction_waiting: 'In process',
@@ -171,6 +172,7 @@ const localized_strings = {
     profile_wallet_import_right_now: 'Import now',
     profile_wallet_export: 'Export private key',
     profile_wallet_backup: 'Back up keystore',
+    profile_wallet_backup_later: 'Back up later',
     profile_wallet_delete_wallet: 'Delete wallet',
     profile_wallet_save: 'Save',
     profile_wallet_my_private_key: 'My private key',
@@ -256,6 +258,14 @@ const localized_strings = {
 
     // over 18 limit
     over_limit_hint: 'Transfer Amount Only Support 18 Decimal Places',
+
+
+    //update
+    update_title: 'Update Tip',
+    update_text: 'Find the new version for app',
+    update_ok: 'Update',
+    update_cancel: 'Cancel',
+    update_download_tip: 'The newest version is downloading by background!',
 };
 
 export default localized_strings;
