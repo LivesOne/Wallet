@@ -27,7 +27,7 @@ import LVPersistent from '../../logic/LVPersistent';
 import LVNotification from '../../logic/LVNotification';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
 
-import WalletBalanceList from './WalletBalanceList';
+import AssetsBalanceList from './AssetsBalanceList';
 import TransactionRecordList from './TransactionRecordList';
 import TransactionDetailsScreen from './TransactionDetailsScreen';
 
@@ -75,7 +75,7 @@ class AssetsScreen extends Component<Props, State> {
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
         LVNotificationCenter.addObserver(this, LVNotification.balanceChanged, this.handleBalanceChange);
 
-        this.refs.pull && this.refs.pull.startRefresh();
+        this.onRefreshBalance();
     }
 
     componentWillUnmount() {
@@ -172,7 +172,7 @@ class AssetsScreen extends Component<Props, State> {
                     <LVWalletHeader title={wallet.name} address={wallet.address} />
                 </View>
 
-                <WalletBalanceList style={styles.list} balances={balance_list} refreshing={this.state.refreshing} onRefresh={this.onRefreshBalance.bind(this)} onPressItem={this.onPressAssetsDetail.bind(this)} />
+                <AssetsBalanceList style={styles.list} balances={balance_list} refreshing={this.state.refreshing} onRefresh={this.onRefreshBalance.bind(this)} onPressItem={this.onPressAssetsDetail.bind(this)} />
 
                 <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
             </View>
