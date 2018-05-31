@@ -201,7 +201,8 @@ class AssetsDetailsScreen extends Component<Props, State> {
                         screenProps={{
                             dismiss: () => {
                                 this.refs.transferScreen.dismiss();
-                            }
+                            },
+                            token: 'lvt'
                         }}
                     />
                 </LVFullScreenModalView>

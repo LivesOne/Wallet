@@ -59,8 +59,8 @@ const scanImg = require('../../assets/images/transfer_scan.png');
 const isAndroid = Platform.OS === 'android';
 
 type Props = {
-    
-};
+    screenProps: Object,
+     navigation: Object };
 
 type State = {
     wallet: ?Object,
@@ -137,9 +137,10 @@ class TransferScreen extends Component<Props, State> {
 
     async tryFetchParams() {
         const {wallet, amount, addressIn} = this.state;
+        const { token } = this.props.screenProps.token;
         if (wallet && amount.gt(0) && addressIn && TransferUtils.isValidAddress(addressIn)) {
             try {
-                let params = await TransferLogic.fetchTransactionParam(wallet.address, addressIn, amount);
+                let params = await TransferLogic.fetchTransactionParam(wallet.address, addressIn, amount, token);
                 let range = TransferUtils.getMinerGapRange(params);
                 TransferUtils.log('tryFetchParams result = ' + JSON.stringify(params)
                 + ' minGap = ' +  range.min

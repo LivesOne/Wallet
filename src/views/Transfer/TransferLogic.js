@@ -12,12 +12,12 @@ export default class TransferLogic {
     
     constructor() {}
 
-    static async fetchTransactionParam(from: string, to: string, value: Object) {
+    static async fetchTransactionParam(from: string, to: string, value: Object, token: string) {
         let f = TransferUtils.convertToHexHeader(from);
         let t = TransferUtils.convertToHexHeader(to);
         let v = TransferUtils.convert2BNHex(value);
         TransferUtils.log('tryFetchParams request = ' + JSON.stringify({from: f, to: t, value: v}));
-        return await LVNetworking.fetchTransactionParam(f, t, v);
+        return await LVNetworking.fetchTransactionParam(f, t, v, token);
     }
 
       /**
