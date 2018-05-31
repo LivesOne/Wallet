@@ -110,7 +110,7 @@ class AssetsDetailsScreen extends Component<Props, State> {
         this.setState({ refreshing: true });
         try {
             const { token } = this.props.navigation.state.params;
-            
+
             await LVWalletManager.updateWalletBalance();
             await LVTransactionRecordManager.refreshTransactionRecords(token);
 
@@ -167,7 +167,7 @@ class AssetsDetailsScreen extends Component<Props, State> {
                 </View>
 
                 <View style={styles.datePanel}>
-                    <Text style={styles.text}>{LVStrings.transaction_records}</Text>
+                    <Text style={styles.text}>{LVStrings.transaction_records_time}</Text>
                     <View style={styles.datePickers}>
                         <LVDataPicker date={startDate} min={null} max={endDate} onDateChange={this.onStartDateChange} />
                         <View
