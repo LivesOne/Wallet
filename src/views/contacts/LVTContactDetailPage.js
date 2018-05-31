@@ -148,7 +148,8 @@ export default class LVTContactDetailPage extends Component<Props,State>{
                         screenProps={{
                             dismiss: () => {
                                 this.refs.transferScreen.dismiss();
-                            }
+                            },
+                            address: this.state.address
                         }}
                     />
             </LVFullScreenModalView>
