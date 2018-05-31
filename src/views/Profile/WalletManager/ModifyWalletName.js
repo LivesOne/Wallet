@@ -162,7 +162,8 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'flex-start',
         marginLeft: 15, 
-        marginRight:15
+        marginRight:15,
+        marginTop: 11
     },
     text: {
         color: LVColor.primary, 

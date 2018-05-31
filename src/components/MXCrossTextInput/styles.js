@@ -7,16 +7,16 @@ import { StyleSheet, PixelRatio, Platform } from 'react-native';
 import * as MXUtils from "../../utils/MXUtils";
 let LVStyleSheet = require('../../styles/LVStyleSheet');
 import LVColor from '../../styles/LVColor'
+import { MXCrossInputHeight } from '../../styles/LVStyleSheet';
 
 const Base = LVStyleSheet.create({
   main: {
-    height: 60,
+    height: MXCrossInputHeight,
     width: MXUtils.getDeviceWidth() - 18 * PixelRatio.get(),
     backgroundColor: LVColor.white,
   },
   content: {
-    flexDirection: 'row',
-    marginTop: Platform.OS === 'ios' ? 10 : 0,
+    justifyContent:'center',
   },
   rounded: {
     phone: {
@@ -33,8 +33,8 @@ const Base = LVStyleSheet.create({
   },
 
   textArea: {
-    flex: 1,
-    justifyContent: 'flex-end', 
+    width:'100%',
+    marginTop:10
   },
 
   label: {
@@ -62,8 +62,8 @@ const Base = LVStyleSheet.create({
 
 const TextAlignCenterStyles = StyleSheet.create({
   textArea: {
-    flex: 1,
-    justifyContent: 'center', 
+    width:'100%',
+    marginTop:10
   },
   buttonArea: {
     flexDirection: 'row',

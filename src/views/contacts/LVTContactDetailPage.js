@@ -16,7 +16,8 @@ import TransferUtils from '../Transfer/TransferUtils';
 import { converAddressToDisplayableText} from '../../utils/MXStringUtils';
 import MXButton from '../../components/MXButton';
 import * as MXUtils from "../../utils/MXUtils";
-import TransactionDetailsScreen from '../Assets/TransactionDetailsScreen';
+import LVFullScreenModalView from '../Common/LVFullScreenModalView';
+import TransferNavigator from '../Transfer/TransferNavigator';
 
 const AvatarIcon = require('../../assets/images/contact_detail_avatar.png');
 
@@ -44,7 +45,7 @@ export default class LVTContactDetailPage extends Component<Props,State>{
         super();
 
         const { params } = props.navigation.state;
-        const navTitle = LVStrings.contact_Detail_nav_title;
+        const navTitle = LVStrings.contact_Detail_Title;
         const model = params.model;
         if(!model) {
             this.state = {
@@ -62,7 +63,7 @@ export default class LVTContactDetailPage extends Component<Props,State>{
                 address: model.address,
                 cellPhone: model.cellPhone,
                 email: model.email,
-                navTitle: navTitle,
+                navTitle: model.name +  navTitle,
                 mode: params.mode,
                 contactsDetail: [
                 {name:LVStrings.contact_add_place_nickname,nameValue:model.name},
@@ -76,13 +77,7 @@ export default class LVTContactDetailPage extends Component<Props,State>{
     };
 
     onAccountTransferDone = ()=> {
-        //跳转到账户转账界面
-        // if (TransactionDetailsScreen.lock == false) {
-        //     TransactionDetailsScreen.lock = true;
-        //     this.props.navigation.navigate('TransactionDetails', {
-        //         transactionRecord: {payer:this.state.address}
-        //     });
-        // }
+        this.refs.transferScreen.show();
     };
 
     renderRow({item,index}: any) {
@@ -137,7 +132,7 @@ export default class LVTContactDetailPage extends Component<Props,State>{
                             renderItem={this.renderRow}
                             />
                     </View>
-                    <View style = {{backgroundColor: LVColor.separateLine,height: 1,paddingRight:15,paddingLeft:15}}>
+                    <View style = {{backgroundColor: LVColor.separateLine,height: 1,paddingRight:15,paddingLeft:15,width:MXUtils.getDeviceWidth() - 18 * PixelRatio.get()}}>
                     </View>
                     <MXButton
                                 style={styles.button}
@@ -148,6 +143,16 @@ export default class LVTContactDetailPage extends Component<Props,State>{
                     /> 
                 </View>
             </ScrollView>
+            <LVFullScreenModalView ref={'transferScreen'}>
+                    <TransferNavigator
+                        screenProps={{
+                            dismiss: () => {
+                                this.refs.transferScreen.dismiss();
+                            }
+                        }}
+                    />
+            </LVFullScreenModalView>
+            
             </View>
        );
     }

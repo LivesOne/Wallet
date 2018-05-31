@@ -7,7 +7,7 @@
 "use strict";
 
 import React, { Component } from 'react'
-import { Dimensions, Text, View, StyleSheet, Image,TouchableHighlight, FlatList ,PixelRatio,ScrollView,TouchableWithoutFeedback} from 'react-native';
+import { Dimensions, Text, View, StyleSheet, Image,TouchableHighlight, FlatList ,PixelRatio,ScrollView,TouchableOpacity} from 'react-native';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVStrings from '../../assets/localization';
 import LVColor from '../../styles/LVColor';
@@ -21,6 +21,7 @@ import { LVConfirmDialog } from '../Common/LVDialog';
 import LVLocalization from '../../assets/localization';
 import MXSearchBar from '../../components/MXSearchBar/index';
 import * as MXUtils from "../../utils/MXUtils";
+import LVKeyboardSpacer from '../Common/LVKeyboardSpacer';
 
 const AddIcon = require('../../assets/images/add_contact.png');
 const AvatarIcon = require('../../assets/images/contact_avatar.png');
@@ -28,6 +29,8 @@ const ShowDetailsIcon = require('../../assets/images/show_detail_arrow.png');
 const EmptyContactListIndicatorIcon = require('../../assets/images/contant_list_empty.png');
 const ItemEditIcon = require('../../assets/images/contant_list_itemEdit.png');
 const ItemDeleteIcon = require('../../assets/images/contant_list_itemDelete.png');
+const ItemSelected = require('../../assets/images/contact_selected.png');
+const ItemUnselected = require('../../assets/images/contact_unSelected.png');
 
 type Props = {navigation: Object };
 
@@ -39,7 +42,9 @@ type State =  {
         callback: Function,
         searchContacts:Array<Object>,
         isSearchingStatus:boolean,
-        currentSearchText:string
+        currentSearchText:string,
+        isItemSelected:Array<boolean>,
+        currentSelectItem:any
 };
 
 export default class ContactsManagerPage extends  Component<Props, State> {
@@ -64,6 +69,8 @@ export default class ContactsManagerPage extends  Component<Props, State> {
             searchContacts:[],
             isSearchingStatus:false,
             currentSearchText:'',
+            isItemSelected:[false],
+            currentSelectItem:null
         };
         this.renderRow = this.renderRow.bind(this);
         this.onDeleteContact = this.onDeleteContact.bind(this);
@@ -137,7 +144,7 @@ export default class ContactsManagerPage extends  Component<Props, State> {
         this.loadContacts();
     }
 
-    renderRow({item, separators}: any) {
+    renderRow({item,index,separators}: any) {
         const swipeBts = [
             {
                 component:<View style = {{flex:1,alignItems:"center",justifyContent:"center",marginRight:15}}>
@@ -166,8 +173,10 @@ export default class ContactsManagerPage extends  Component<Props, State> {
         ];
         return (
             <Swipeout right={swipeBts} 
+                backgroundColor = {LVColor.white}
                 autoClose={true}
                 buttonWidth={50}
+                disabled = {this.state.readonly}
                 scroll={ (scrollEnabled)=> {this.setState({scrollEnabled: scrollEnabled});}}
                 close={!(this.state.toDeDeletedContactName == item.name)}
                 onOpen={(sectionID, rowID) => {
@@ -191,6 +200,35 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                                 <Text style={styles.nameTextStyle} numberOfLines={1}>{item.name}</Text>
                             </View>
                         </View>
+                        {this.state.readonly &&
+                        <TouchableHighlight 
+                        underlayColor={LVColor.white}  
+                        onPress={()=>{
+                            if (this.state.isItemSelected[index]) {
+                                this.state.isItemSelected[index] = false,
+                                this.setState({
+                                    currentSelectItem:null,
+                                })
+                            } else {
+                                this.state.isItemSelected[index]  = true;
+
+                                for (let i = 0; i < this.state.isItemSelected.length; i++) {
+                                    const element = this.state.isItemSelected;
+                                    if (i !== index) {
+                                        element[i] = false
+                                    }
+                                }
+
+                                this.setState({
+                                    currentSelectItem:item
+                                });
+                            }
+                        }}>
+                            <View style = {styles.cellRightContentContainer}>
+                                {this.state.isItemSelected[index]? <Image source = {ItemSelected}/> : <Image source = {ItemUnselected}/>}
+                            </View>    
+                        </TouchableHighlight>
+                        }
                     </View>
                 </TouchableHighlight>
             </Swipeout>
@@ -209,7 +247,12 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                     style={styles.nav}
                     title={ LVStrings.contact_list_nav_title }
                     titleStyle={styles.navTitle}
-                    onLeftPress={ () => {this.props.navigation.goBack() }}
+                    onLeftPress={ () => {
+                        if (this.state.currentSelectItem !== null) {
+                            this.state.callback(this.state.currentSelectItem['address']);
+                        }
+                        this.props.navigation.goBack()
+                     }}
                     right={LVStrings.contact_add_nav_right}
                     rightTextColor= {LVColor.text.grey2}
                     onRightPress={ () =>{
@@ -223,9 +266,11 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                         })
                     }}
                 />
-                <TouchableWithoutFeedback  
-                onPress={this.lostBlur.bind(this)}>  
-                <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
+                {/* <TouchableWithoutFeedback  
+                onPress={this.lostBlur.bind(this)}>   */}
+                <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}
+                >
+                <TouchableOpacity activeOpacity={1.0} onPress={this.lostBlur.bind(this)}>
                 <MXSearchBar
                     ref = {'searchbar'}
                     style = {{marginTop: 10}}
@@ -267,8 +312,10 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                             </View>
                         }/>
                 </View>
+                <LVKeyboardSpacer/>
+                </TouchableOpacity>
                 </ScrollView>
-                </TouchableWithoutFeedback>
+                {/* </TouchableWithoutFeedback> */}
                 <LVConfirmDialog ref={'deleteConfirm'} 
                             title={''}  
                             message={LVStrings.contact_confirm_delete_contact} 
@@ -306,6 +353,12 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
+    cellRightContentContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
         alignItems: 'center',
     },
     cellLeftDetailsContainer: {

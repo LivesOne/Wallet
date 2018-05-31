@@ -242,6 +242,9 @@ const localized_strings = {
     contact_add_remarks: 'Remarks',
     contact_Detail_Button: 'AccountTransfer',
     contact_Search_Empty_Button: 'This contact was not found',
+    contact_Detail_Title: "'s Wallet",
+
+
     // Network
     network_error: 'Network request failed, please try again!',
     network_error_network_lost: 'Your network is not connected, please try again!',

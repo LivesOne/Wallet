@@ -41,6 +41,7 @@ const localized_strings = {
     wallet_import_keystore_hint: 'Keystore 文本内容',
     wallet_import_private_password_lable:'设置密码',
     wallet_import_private_password_hint: '输入6~12位字母数字组合',
+    wallet_import_private_password_repeat_lable: "重复密码",
     wallet_import_private_pwd_confirm_hint: '重复输入你的密码',
     wallet_import_keystore_password_label: 'Keystore密码',
     wallet_import_keystore_password_hint: '请输入Keystore密码',
@@ -242,6 +243,7 @@ const localized_strings = {
     contact_add_remarks: '备注',
     contact_Detail_Button: '账户转账',
     contact_Search_Empty_Button: '未找到此联系人',
+    contact_Detail_Title: '的钱包',
 
     // Network
     network_error: '网络请求失败，请重试!',
