@@ -137,7 +137,8 @@ class TransferScreen extends Component<Props, State> {
 
     async tryFetchParams() {
         const {wallet, amount, addressIn} = this.state;
-        const { token } = this.props.screenProps.token;
+        const {token} = this.props.screenProps;
+        console.log(JSON.stringify(this.props.screenProps));
         if (wallet && amount.gt(0) && addressIn && TransferUtils.isValidAddress(addressIn)) {
             try {
                 let params = await TransferLogic.fetchTransactionParam(wallet.address, addressIn, amount, token);
@@ -354,9 +355,10 @@ class TransferScreen extends Component<Props, State> {
             }, 500);
         }
         setTimeout(async ()=> {
+            const {token} = this.props.screenProps;
             let gasPrice = this.userHasSetGap ? TransferUtils.getSetGasPriceHexStr(this.minerGap, transactionParams.gasLimit) : transactionParams.gasPrice;
             let rst = await TransferLogic.transaction(addressIn, password, amount, transactionParams.nonce,
-                transactionParams.gasLimit, gasPrice, transactionParams.token, transactionParams.chainID, wallet);
+                transactionParams.gasLimit, gasPrice, transactionParams.token, transactionParams.chainID, wallet, token);
             let success = rst && rst.result;
             if (success) {  
                 LVNotificationCenter.postNotification(LVNotification.transcationCreated, {
@@ -364,7 +366,7 @@ class TransferScreen extends Component<Props, State> {
                     from: wallet.address,
                     to: addressIn,
                     amount: amount,
-                    token:'lvt',
+                    token:token,
                     fee: this.minerGap,
                     timestamp: Moment().format('X'),
                 });
@@ -409,6 +411,7 @@ class TransferScreen extends Component<Props, State> {
                 {this.state.showModal && <TransferDetailModal
                     isOpen= {this.state.showModal}
                     address= {this.state.addressIn}
+                    type={this.props.screenProps.token}
                     amount= {parseFloat(this.state.amount.toFixed())}
                     minerGap= {this.minerGap}
                     onClosed = {()=>{this.setState({ showModal: false })}}

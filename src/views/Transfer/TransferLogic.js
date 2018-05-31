@@ -16,7 +16,7 @@ export default class TransferLogic {
         let f = TransferUtils.convertToHexHeader(from);
         let t = TransferUtils.convertToHexHeader(to);
         let v = TransferUtils.convert2BNHex(value);
-        TransferUtils.log('tryFetchParams request = ' + JSON.stringify({from: f, to: t, value: v}));
+        TransferUtils.log('tryFetchParams request = ' + JSON.stringify({from: f, to: t, value: v, token: token}));
         return await LVNetworking.fetchTransactionParam(f, t, v, token);
     }
 
@@ -26,33 +26,46 @@ export default class TransferLogic {
      * @param  {string} value 值包括gas
      */
     static async transaction(toAddress: string, password: string, value: Big, 
-            nonce: string, gasLimit: string, gasPrice: string, token: string, chainId: string, wallet: Object) {
+            nonce: string, gasLimit: string, gasPrice: string, token: string, chainId: string, wallet: Object, type: string) {
         let to = TransferUtils.convertToHexHeader(toAddress);
         let from = TransferUtils.convertToHexHeader(wallet.address);
         let v = TransferUtils.convert2BNHex(value);
         return new Promise((resolve, reject) => {
             let params = {from: from, to: to, value: v, nonce: nonce, gasLimit: gasLimit, gasPrice: gasPrice, lvt: wallet.lvt, eth: wallet.eth};
             TransferUtils.log('transfer params = '+ JSON.stringify(params));
-            let result = this.innerTransaction(to, password, v, nonce, gasLimit, gasPrice, token, chainId, wallet);
+            let result = this.innerTransaction(to, password, v, nonce, gasLimit, gasPrice, token, chainId, wallet, type);
             resolve(result);
         });
             
     }
 
     static async innerTransaction(toAddress: string, password: string, value: string, 
-        nonce: string, gasLimit: string, gasPrice: string, token: string, chainId: string, wallet: Object) {
+        nonce: string, gasLimit: string, gasPrice: string, token: string, chainId: string, wallet: Object, type: string) {
             let privateKey = await this.getPrivateKey(password, wallet.keystore);
-            let txData = await eth_local.generateTxData(
-                privateKey,
-                nonce,
-                token,
-                ' ',
-                toAddress,
-                value,
-                gasPrice,
-                gasLimit,
-                chainId
-            );
+            let txData;
+            if ('eth' === type) {
+                txData = await eth_local.generateTxDataForETH(
+                    privateKey,
+                    nonce,
+                    ' ',
+                    toAddress,
+                    value,
+                    gasPrice,
+                    gasLimit,
+                    chainId); 
+            } else {
+                txData = await eth_local.generateTxData(
+                    privateKey,
+                    nonce,
+                    token,
+                    ' ',
+                    toAddress,
+                    value,
+                    gasPrice,
+                    gasLimit,
+                    chainId
+                    );
+            };
             let success = false;
             try {
                 TransferUtils.log('transfer tx = ' + JSON.stringify(txData));
