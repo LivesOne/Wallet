@@ -67,6 +67,11 @@ class AssetsDetailsScreen extends Component<Props, State> {
     componentDidMount() {
         this.initFilterDate();
         this.refreshRecords();
+        LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.handleTranscationRecordsChanged);
+    }
+
+    componentWillUnmount() {
+        LVNotificationCenter.removeObservers(this);
     }
 
     initFilterDate = async () => {
@@ -97,15 +102,21 @@ class AssetsDetailsScreen extends Component<Props, State> {
         }
     };
 
+    handleTranscationRecordsChanged = () => {
+        this.setState({ transactionRecords: LVTransactionRecordManager.records });
+    }
+
     async refreshRecords() {
         this.setState({ refreshing: true });
         try {
             const { token } = this.props.navigation.state.params;
+
             await LVWalletManager.updateWalletBalance();
             await LVTransactionRecordManager.refreshTransactionRecords(token);
-            const records = LVTransactionRecordManager.records.filter((record) => { return record.token === token });
 
+            const records = LVTransactionRecordManager.records; 
             const wallet = LVWalletManager.getSelectedWallet();
+
             if (wallet) {
                 this.setState({ wallet: wallet, transactionRecords: records });
             } else {
@@ -119,7 +130,6 @@ class AssetsDetailsScreen extends Component<Props, State> {
             this.setState({ refreshing: false });
             console.log(error);
         }
-        
     }
 
     onReceiverButtonPressed = () => {
@@ -138,7 +148,7 @@ class AssetsDetailsScreen extends Component<Props, State> {
         const endTimestamp = Moment(endDate, 'YYYY-MM-DD').add(1, 'days').format('X');
 
         const filteredRecords = transactionRecords
-            ? transactionRecords.filter(item => item.timestamp >= startTimestamp && item.timestamp <= endTimestamp)
+            ? transactionRecords.filter(item => item.token === token && item.timestamp >= startTimestamp && item.timestamp <= endTimestamp)
             : null;
 
         return (
@@ -157,7 +167,7 @@ class AssetsDetailsScreen extends Component<Props, State> {
                 </View>
 
                 <View style={styles.datePanel}>
-                    <Text style={styles.text}>{LVStrings.transaction_records}</Text>
+                    <Text style={styles.text}>{LVStrings.transaction_records_time}</Text>
                     <View style={styles.datePickers}>
                         <LVDataPicker date={startDate} min={null} max={endDate} onDateChange={this.onStartDateChange} />
                         <View
