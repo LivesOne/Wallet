@@ -193,16 +193,16 @@ const localized_strings = {
     // Transfer
     transfer_title: 'Transfer',
     transfer_purse_balance: 'Balance',
-    transfer_payee_address: 'Receiver’s wallet address',
-    transfer_amount: 'Transfer amount',
+    transfer_payee_address: 'Receiver Wallet Address',
+    transfer_amount: 'Transfer Amount',
     transfer_remarks: 'Remarks',
     transfer_miner_tips: 'Miner fee',
     transfer_slow: 'Slow',
     transfer_fast: 'Fast',
     transfer_current_eth: 'Current wallet\'s ETH',
-    transfer_hint: 'Execute transaction will deduct ETH from your current wallet. The miner fee will be deducted after the transaction succeed.',
+    transfer_hint: 'The ETH in your current wallet will be deducted after the transaction is executed. The miner’s fees will not be refunded after the transaction is packaged.',
     transfer_payment_details: 'Payment details',
-    transfer_address_in: 'Receiver’s wallet address',
+    transfer_address_in: 'Receiver Wallet Address',
     
     // App Guide Message
     guide_button_title: 'Enter now',
