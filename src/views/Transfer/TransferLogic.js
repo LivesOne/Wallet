@@ -55,6 +55,7 @@ export default class TransferLogic {
             );
             let success = false;
             try {
+                TransferUtils.log('transfer tx = ' + JSON.stringify(txData));
                 let result = await LVNetworking.transaction(txData);
                 TransferUtils.log('transfer result = ' + JSON.stringify(result));
                 if (result && result.hasOwnProperty('transactionHash')) {
