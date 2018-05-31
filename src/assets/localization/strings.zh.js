@@ -55,6 +55,7 @@ const localized_strings = {
     wallet_import_tip_keystore_password : "Keystore密码",
     
     wallet_create_wallet: '创建钱包',
+    wallet_create_hint_message: '注意，钱包的密码是单独存在，每个钱包都有自己的密码',
     wallet_creating_wallet: '创建钱包中...',
     wallet_create_name: '钱包名称',
     wallet_create_password_label: '钱包密码',

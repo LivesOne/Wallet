@@ -33,14 +33,14 @@ export default class TransactionDetailsScreen extends Component<Props> {
 
     render() {
         const { transactionRecord } = this.props.navigation.state.params;
-        const { block, hash, type, token, balance, payer, receiver, minnerFee, datetime, state } = transactionRecord;
+        const { block, hash, type, token, amount, from, to, minnerFee, datetime, state } = transactionRecord;
 
         const is_failed = false;
         const prefix = type === 'in' ? '+' : '-';
-        const feeString = StringUtils.beautifyBalanceShow(minnerFee, 'ETH').result;
-        const hasShrink = StringUtils.beautifyBalanceShow(balance, 'LVT').hasShrink;
-        const payerAddress = StringUtils.converAddressToDisplayableText(payer, 9, 11);
-        const receiverAddress = StringUtils.converAddressToDisplayableText(receiver, 9, 11);
+        const feeString = StringUtils.beautifyBalanceShow(minnerFee).result;
+        const hasShrink = StringUtils.beautifyBalanceShow(amount).hasShrink;
+        const payerAddress = StringUtils.converAddressToDisplayableText(from, 9, 11);
+        const receiverAddress = StringUtils.converAddressToDisplayableText(to, 9, 11);
         //const remarks = transactionRecord.remarks || LVStrings.transaction_na;
 
         const typeImg =
@@ -65,7 +65,7 @@ export default class TransactionDetailsScreen extends Component<Props> {
                 />
                 <View style={styles.content}>
                     <View style={styles.header}>
-                        <LVTransDetailBalanceView prifix={prefix} balance={balance} token={token} />
+                        <LVTransDetailBalanceView prifix={prefix} balance={amount} token={token} />
                         <Image style={styles.image} source={typeImg} />
                     </View>
                     <View style={styles.details}>

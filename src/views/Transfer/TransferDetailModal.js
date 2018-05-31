@@ -27,6 +27,7 @@ type Props = {
     address: string,
     amount: number,
     minerGap: number,
+    type: string,
     //remarks: PropTypes.string,
     onTransferConfirmed: Function,
 };
@@ -45,7 +46,7 @@ export class TransferDetailModal extends Component<Props> {
     };
 
     render() {
-        const {isOpen, onClosed, address, amount, minerGap, onTransferConfirmed } = this.props;
+        const {isOpen, onClosed, address, amount, minerGap, onTransferConfirmed, type} = this.props;
         return (
             <Modal 
                 isOpen={isOpen}
@@ -63,7 +64,7 @@ export class TransferDetailModal extends Component<Props> {
                     <MXTouchableImage style={{position:'absolute', right:20}} source={CloseIcon} onPress={this.onClosed}></MXTouchableImage>
                   </View>
                   <DetailItem leftText={LVStrings.transfer_address_in} rightText={address}></DetailItem>
-                  <DetailItem leftText={LVStrings.transfer_amount} rightText={amount + ' LVT'}></DetailItem>
+                  <DetailItem leftText={LVStrings.transfer_amount} rightText={amount + ' ' + type.toUpperCase()}></DetailItem>
                   <DetailItem leftText={LVStrings.transfer_miner_tips} rightText={TransferUtils.convertMinnerGap(minerGap) + ' ETH'}></DetailItem>
                   {/* <DetailItem leftText={LVStrings.transfer_remarks} rightText={remarks}></DetailItem> */}
                   <View style={styles.btnContainer}>

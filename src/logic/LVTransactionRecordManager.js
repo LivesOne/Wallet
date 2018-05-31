@@ -5,60 +5,69 @@
  */
 'use strict';
 
+import Big from 'big.js';
+import Moment from 'moment';
+import LVWallet, { LVBalance } from './LVWallet';
 import LVNetworking from './LVNetworking';
 import LVWalletManager from './LVWalletManager';
 import LVPersistent from './LVPersistent';
 import LVNotification from './LVNotification';
 import LVNotificationCenter from './LVNotificationCenter';
-import Moment from 'moment';
-var Big = require('big.js');
-import LVBig from './LVBig';
 import TransferUtils from '../views/Transfer/TransferUtils';
 
 class LVTransactionRecord {
     block: number;
     hash: string;
-    type: string;
-    payer: string;
-    receiver: string;
+    
+    from: string;
+    to: string;
+    
     token: string;
-    balance: Object;
-    timestamp: number;
-    datetime: string = '';
+    amount: Object;
     minnerFee: Object;
+    
+    timestamp: number;
     remarks: string;
     state: string; // ok, failed, waiting
 
-    constructor(json: any, currentWalletAddress: string, state: string = 'ok') {
+    constructor(json: any, state: string = 'ok') {
         this.block = json.block;
-        this.hash = json.transactionHash;
-        this.type = this.isEqualAddress(json.to || '', currentWalletAddress) ? 'in' : 'out';
-        this.payer = this.pureAddress(json.from);
-        this.receiver = this.pureAddress(json.to);
-        this.token = 'lvt';
-        //this.balance = Number(json.value) * Math.pow(10, -18);
+        this.hash  = json.transactionHash;
+        this.from  = this.pureAddress(json.from);
+        this.to    = this.pureAddress(json.to);
+        this.token = json.token || 'lvt';
         this.state = state;
+
         if (state === 'waiting') {
-            this.balance = json.lvt ? new Big(json.lvt) : LVBig.getInitBig();
-            this.minnerFee = json.eth ? new Big(json.eth) : LVBig.getInitBig();
+            this.amount = json.amount ? new Big(json.amount) : Big(0);
+            this.minnerFee = json.fee ? new Big(json.fee) : Big(0);
             this.timestamp = json.timestamp;
-            this.datetime = Moment(this.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss');
         } else if (state !== 'failed'){
             try {
-                this.balance = new Big(json.value).times(new Big(10).pow(-18));
+                this.amount = new Big(json.value).times(new Big(10).pow(-18));
             } catch (e) {
                 TransferUtils.log('error = ' + e.message + " value = " + json.value);
             }
         }
     }
 
+    get type(): string {
+        const wallet = LVWalletManager.getSelectedWallet();
+        return this.isEqualAddress(this.to, wallet ? wallet.address : '') ? 'in' : 'out';
+    }
+
+    get datetime(): string {
+        return this.timestamp ? Moment(this.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss') : '';
+    }
+
     unfinishedRecordJson() {
         return {
             transactionHash: this.hash,
-            from: this.payer,
-            to: this.receiver,
-            lvt: this.balance,
-            eth: this.minnerFee,
+            from: this.from,
+            to: this.to,
+            token: this.token,
+            amount: this.amount,
+            fee: this.minnerFee,
             timestamp: this.timestamp,
             state: this.state
         };
@@ -75,7 +84,6 @@ class LVTransactionRecord {
         } else {
             this.state = 'ok';
             this.timestamp = timestamp;
-            this.datetime = Moment(this.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss');
             this.minnerFee = new Big(detailJson.gas * detailJson.gasPrice * Math.pow(10, -18));
         }
     }
@@ -96,11 +104,9 @@ class LVTransactionRecord {
 const LVTransactionUnfinishedRecords = '@Venus:UnfinishedRecordsV1';
 
 export default class LVTransactionRecordManager {
-    static unfinishedRecords: Array<LVTransactionRecord> = [];
     static records: Array<LVTransactionRecord> = [];
-
-    static preUsedLvt: Object = LVBig.getInitBig();
-    static preUsedEth: Object = LVBig.getInitBig();
+    static unfinish_records: Array<LVTransactionRecord> = [];
+    static in_using_balances: Array<LVBalance> = [];
 
     constructor() {
         LVNotificationCenter.addObserver(
@@ -111,24 +117,23 @@ export default class LVTransactionRecordManager {
     }
 
     static clear() {
-        this.unfinishedRecords = [];
         this.records = [];
-        this.preUsedLvt = {};
-        this.preUsedEth = {};
+        this.unfinish_records = [];
+        this.in_using_balances = [];
     }
 
     async handleTransactionCreated(json: ?Object) {
         const wallet = LVWalletManager.getSelectedWallet();
         if (json && wallet) {
-            const record = new LVTransactionRecord(json, wallet.address, 'waiting');
-            LVTransactionRecordManager.unfinishedRecords.push(record);
+            const record = new LVTransactionRecord(json, 'waiting');
             LVTransactionRecordManager.records.unshift(record);
+            LVTransactionRecordManager.unfinish_records.push(record);
 
-            LVTransactionRecordManager.preUsedLvt = LVTransactionRecordManager.preUsedLvt.plus(record.balance);
-            LVTransactionRecordManager.preUsedEth = LVTransactionRecordManager.preUsedEth.plus(record.minnerFee);
+            //LVTransactionRecordManager.in_using_balances.push(new LVBalance(record.token, record.amount));
+            //LVTransactionRecordManager.in_using_balances.push(new LVBalance('eth', record.minnerFee));
 
-            wallet.lvt = wallet.lvt.minus(record.balance);
-            wallet.eth = wallet.eth.minus(record.minnerFee);
+            //wallet.minusBalance(record.token, record.amount);
+            //wallet.minusBalance('eth', record.minnerFee);
 
             await LVTransactionRecordManager.saveUnfinishedTransactionRecords();
 
@@ -139,7 +144,7 @@ export default class LVTransactionRecordManager {
     static async saveUnfinishedTransactionRecords() {
         const wallet = LVWalletManager.getSelectedWallet();
         if (wallet) {
-            const objects = this.unfinishedRecords.map(record => record.unfinishedRecordJson());
+            const objects = this.unfinish_records.map(record => record.unfinishedRecordJson());
             await LVPersistent.setObject(LVTransactionUnfinishedRecords + '_' + wallet.address, objects);
         }
     }
@@ -149,14 +154,14 @@ export default class LVTransactionRecordManager {
         if (wallet) {
             const uObjects = await LVPersistent.getObject(LVTransactionUnfinishedRecords + '_' + wallet.address);
             if (uObjects && uObjects.length > 0) {
-                const uRecords = uObjects.map(json => new LVTransactionRecord(json, wallet.address, json.state));
+                const uRecords = uObjects.map(json => new LVTransactionRecord(json, json.state));
                 return uRecords;
             }
         }
         return null;
     }
 
-    static async refreshTransactionRecords() {
+    static async refreshTransactionRecords(token: string) {
         const wallet = LVWalletManager.getSelectedWallet();
         if (wallet) {
             let _finishedRecords = [];
@@ -164,7 +169,7 @@ export default class LVTransactionRecordManager {
             let _preUsedLvt = 0;
             let _preUsedEth = 0;
 
-            const value = await LVNetworking.fetchTransactionHistory(wallet.address);
+            const value = await LVNetworking.fetchTransactionHistory(wallet.address, token);
             console.log(value);
 
             if (value && value.length > 0) {
@@ -199,18 +204,18 @@ export default class LVTransactionRecordManager {
             }
 
             this.records = [];
-            this.unfinishedRecords = [];
+            this.unfinish_records = [];
 
             this.records.push(..._finishedRecords);
-            this.unfinishedRecords.push(..._unfinishedRecords);
+            this.unfinish_records.push(..._unfinishedRecords);
 
             await this.saveUnfinishedTransactionRecords();
 
-            this.records.push(...this.unfinishedRecords);
+            this.records.push(...this.unfinish_records);
             this.records.sort((a, b) => b.timestamp - a.timestamp);
 
-            this.preUsedLvt = new Big(_preUsedLvt);
-            this.preUsedEth = new Big(_preUsedEth);
+            //this.preUsedLvt = new Big(_preUsedLvt);
+            //this.preUsedEth = new Big(_preUsedEth);
         }
     }
 }
