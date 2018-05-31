@@ -78,14 +78,17 @@ export default class LVDialog extends React.Component<Props> {
             >
                 <View style={styles.dialog}>
                     <View style={styles.dialogTopPanel}>
-                        <Text style={[styles.title, this.props.titleStyle]}>{this.props.title}</Text>
-                    </View>
-                    <View style={styles.dialogContent} onPress={this.props.onPressContent}>
+                        {this.props.title && (
+                            <Text style={[styles.title, this.props.titleStyle]}>{this.props.title}</Text>
+                        )}
+                        
                         {message ? <Text style={[styles.message, this.props.messageStyle]}>{message}</Text> : null}
+                    </View>
+                    
+                    <View style={styles.dialogContent} onPress={this.props.onPressContent}>
                         {this.props.children}
                         {buttonTitle ? (
                             <MXButton
-                                style={styles.button}
                                 rounded={true}
                                 title={buttonTitle}
                                 isEmptyButtonType = {true}
@@ -124,11 +127,11 @@ export class LVConfirmDialog extends React.Component<ConfirmDialogProps> {
     }
 
     show() {
-        this.refs.dialog.show();
+        this.refs.dialog.open();
     }
 
     dismiss() {
-        this.refs.dialog.dismiss();
+        this.refs.dialog.close();
     }
 
     onPressCancel() {
@@ -159,12 +162,12 @@ export class LVConfirmDialog extends React.Component<ConfirmDialogProps> {
         const buttonPanelStyle = {
             flex: 1,
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            justifyContent: 'center',
             alignItems: 'center'
         };
         const buttonStyle = {
-            width: '50%',
-            height: '100%',
+            width:'50%',
+            height:'100%',
             justifyContent: 'center',
             alignItems: 'center'
         };
@@ -181,33 +184,54 @@ export class LVConfirmDialog extends React.Component<ConfirmDialogProps> {
 
         const { confirmTitle, cancelTitle } = this.props;
         const childrenHeight = this.props.children ? ( this.props.children.props.height || 64) : 0;
-        const modalHeight = 50 + childrenHeight;
-
+        const modalWidth = { width: this.props.width || '90%' };
+        const modalHeight = {
+            height: this.props.height || 120 + childrenHeight
+        };
         return (
-            <LVDialog ref={'dialog'} {...this.props}>
-                <View style={{ justifyContent: 'space-between', alignItems: 'center', width: '100%', height: modalHeight }}>
-                    <View style={{justifyContent: 'center', alignItems: 'center'}}>{this.props.children}</View>
-                    <View style={{ flex : 1 ,}}>
-                        <View style={buttonPanelStyle}>
-                            <TouchableOpacity
-                                activeOpacity={0.8}
-                                style={buttonStyle}
-                                onPress={this.onPressCancel.bind(this)}
-                            >
-                                <Text style={[buttonTitleStyle, this.props.cancelTitleStyle]}>{cancelTitle}</Text>
-                            </TouchableOpacity>
-                            <View style={{ width: 2, height: 20, backgroundColor: lineColor }} />
-                            <TouchableOpacity
-                                activeOpacity={0.8}
-                                style={buttonStyle}
-                                onPress={this.onPressConfirm.bind(this)}
-                            >
-                                <Text style={[confirmButtonTitleStyle, this.props.confirmTitleStyle]}>{confirmTitle}</Text>
-                            </TouchableOpacity>
+            <Modal
+                ref={'dialog'}
+                isOpen={false}
+                style={[styles.modal, modalWidth, modalHeight]}
+                entry={'top'}
+                position={'center'}
+                coverScreen={true}
+                backButtonClose={true}
+                swipeToClose={false}
+                backdropOpacity={0.5}
+                animationDuration={300}
+                backdropPressToClose={this.props.tapToClose === true}
+                easing={Easing.elastic(0.75)}
+            >
+                <View style={styles.dialog}>
+                    <View style={styles.confirmDialogTopPanel}>
+                        {this.props.title && (
+                            <Text style={[styles.title, this.props.titleStyle]}>{this.props.title}</Text>
+                        )}
+                        <View style={{justifyContent: 'center', alignItems: 'center'}}>{this.props.children}</View>
+                    </View>
+                    
+                    <View style={styles.confirmDialogBottomPanel} onPress={this.props.onPressContent}>
+                        <View style={{ flex : 1}}>
+                            <View style={buttonPanelStyle}>
+                                <TouchableOpacity
+                                    activeOpacity={0.8}
+                                    style={buttonStyle}
+                                    onPress={this.onPressCancel.bind(this)}>
+                                    <Text style={[buttonTitleStyle, this.props.cancelTitleStyle]}>{cancelTitle}</Text>
+                                </TouchableOpacity>
+                                <View style={{ width: 2, height: 20, backgroundColor: lineColor }} />
+                                <TouchableOpacity
+                                    activeOpacity={0.8}
+                                    style={buttonStyle}
+                                    onPress={this.onPressConfirm.bind(this)}>
+                                    <Text style={[confirmButtonTitleStyle, this.props.confirmTitleStyle]}>{confirmTitle}</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 </View>
-            </LVDialog>
+            </Modal>
         );
     }
 }
@@ -220,13 +244,12 @@ const Window = {
 const styles = StyleSheet.create({
     modal: {
         marginTop: -44,
-        borderRadius: 5,
-        justifyContent: 'flex-start',
-        alignItems: 'center'
+        borderRadius: 5
     },
     title: {
         color: LVColor.text.grey2,
-        fontSize: 15
+        fontSize: 15,
+        marginBottom: 15
     },
     message: {
         paddingLeft: 25,
@@ -239,24 +262,33 @@ const styles = StyleSheet.create({
     dialog: {
         flex: 1,
         width: '100%',
-        flexDirection: 'column',
-        justifyContent: 'space-between'
+        flexDirection: 'column'
     },
     dialogTopPanel: {
-        height: 50,
+        flex:0.7,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    confirmDialogTopPanel: {
+        flex:0.7,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center'
     },
     dialogContent: {
-        flex: 1,
+        flex: 0.3,
         width: '100%',
-        marginTop: 10,
+        marginBottom: 20,
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center'
     },
-    button: {
-        marginBottom: 20
+    confirmDialogBottomPanel: {
+        flex: 0.3,
+        width: '100%',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
