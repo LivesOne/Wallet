@@ -143,16 +143,16 @@ class LVNetworking {
         return await LVFetch.GET(API.GET_MARKET);
     }
 
-    static async fetchTransactionHistory(address: string) {
-        return await LVFetch.GET(API.GET_TRANSACTION_HISTORY + '/' + address);
+    static async fetchTransactionHistory(address: string, type: string) {
+        return await LVFetch.GET(API.GET_TRANSACTION_HISTORY + '/' + address + '?type=' + type);
     }
 
     static async fetchTransactionDetail(transactionHash: string) {
         return await LVFetch.GET(API.GET_TRANSACTION_DETAIL + '/' + transactionHash);
     }
 
-    static async fetchTransactionParam(from: string, to: string, value: string) {
-        return await LVFetch.GET(API.GET_TRANSACTION_PARAM + 'from=' + from + '&to=' + to + '&value=' + value);
+    static async fetchTransactionParam(from: string, to: string, value: string, type: string) {
+        return await LVFetch.GET(API.GET_TRANSACTION_PARAM + 'from=' + from + '&to=' + to + '&value=' + value + '&type=' + type);
     }
 
     static async transaction(txData: string) {

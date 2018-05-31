@@ -362,8 +362,9 @@ class TransferScreen extends Component<Props, State> {
                     transactionHash: rst.transactionHash,
                     from: wallet.address,
                     to: addressIn,
-                    lvt: amount,
-                    eth: this.minerGap,
+                    amount: amount,
+                    token:'lvt',
+                    fee: this.minerGap,
                     timestamp: Moment().format('X'),
                 });
                 await this.resetUIState();
