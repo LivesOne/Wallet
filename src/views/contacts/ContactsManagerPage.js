@@ -236,7 +236,7 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                                 <Text style={styles.nameTextStyle} numberOfLines={1}>{item.name}</Text>
                             </View>
                         </View>
-                        {this.state.readonly &&
+                        {this.state.readonly ?
                         <TouchableHighlight 
                         underlayColor={LVColor.white}  
                         onPress={()=>{
@@ -245,7 +245,7 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                             <View style = {styles.cellRightContentContainer}>
                                 {this.state.isItemSelected[index]? <Image source = {ItemSelected}/> : <Image source = {ItemUnselected}/>}
                             </View>    
-                        </TouchableHighlight>
+                        </TouchableHighlight> : null
                         }
                     </View>
                 </TouchableHighlight>
@@ -270,7 +270,7 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                         }
                         this.props.navigation.goBack()
                      }}
-                    right={this.state.readonly?'':LVStrings.contact_add_nav_right}
+                    right={this.state.readonly?' ':LVStrings.contact_add_nav_right}
                     rightTextColor= {LVColor.text.grey2}
                     onRightPress={ () =>{
                         if(this.state.readonly) {
