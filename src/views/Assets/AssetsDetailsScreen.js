@@ -205,7 +205,7 @@ class AssetsDetailsScreen extends Component<Props, State> {
                             dismiss: () => {
                                 this.refs.transferScreen.dismiss();
                             },
-                            token: 'eth'
+                            token: token
                         }}
                     />
                 </LVFullScreenModalView>
