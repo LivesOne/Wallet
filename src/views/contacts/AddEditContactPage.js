@@ -13,7 +13,7 @@ import {greyNavigationBackIcon} from '../../assets/LVIcons';
 import LVStrings from '../../assets/localization';
 import LVColor from '../../styles/LVColor';
 import * as ContactLib from '../../logic/LVContactManager';
-import { isEmptyString, isNotEmptyString } from '../../utils/MXUtils';
+import { checkValidPhone, checkValidEmail, isEmptyString, isNotEmptyString } from '../../utils/MXUtils';
 import { isAddress, getCharLength } from '../../utils/MXStringUtils';
 import LVDialog from '../Common/LVDialog';
 import LVQrScanModal from '../Common/LVQrScanModal';
@@ -110,6 +110,16 @@ export default class AddEditContactPage extends Component<Props, State> {
             this.refs.alert.show();
             return;
         }
+        if (isNotEmptyString(this.state.cellPhone) && !checkValidPhone(this.state.cellPhone)) {
+            this.setState({alertMessage: LVLocalization.contact_alert_Phone_invalid});
+            this.refs.alert.show();
+            return;
+        }
+        if (isNotEmptyString(this.state.email) && !checkValidEmail(this.state.email)) {
+            this.setState({alertMessage: LVLocalization.contact_alert_Email_invalid});
+            this.refs.alert.show();
+            return;
+        }
         if(isNotEmptyString(this.state.remarks) && getCharLength(this.state.remarks) > 80) {
             this.setState({alertMessage: LVLocalization.contact_alert_remarks_exceeds_limit});
             this.refs.alert.show();
@@ -201,6 +211,7 @@ export default class AddEditContactPage extends Component<Props, State> {
                         <MXCrossTextInput style={styles.textInputStyle} 
                             placeholder={LVStrings.contact_add_place_holder_cellphone}
                             withClearButton
+                            keyboardType = {'phone-pad'}
                             defaultValue={this.state.cellPhone}
                             withUnderLine = {false}
                             titleText={LVStrings.contact_add_place_cellphone}
@@ -208,6 +219,7 @@ export default class AddEditContactPage extends Component<Props, State> {
                         <MXCrossTextInput style={styles.textInputStyle} 
                             placeholder={LVStrings.contact_add_place_holder_email}
                             withClearButton
+                            keyboardType = {'email-address'}
                             defaultValue={this.state.email}
                             withUnderLine = {false}
                             titleText={LVStrings.contact_add_place_email}

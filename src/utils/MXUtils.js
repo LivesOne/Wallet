@@ -19,6 +19,12 @@ export const checkValidEmail = (email: string) => {
   return re.test(email.trim());
 };
 
+export const checkValidPhone = (phone: string) => {
+  var re = /^1(3|4|5|7|8)\d{9}$/; // 手机号码
+  var re2 = /^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/; //固话
+  return re.test(phone.trim()) || re2.test(phone.trim());
+};
+
 export const checkValidPassword = (password: string) => {
   return password && password !== null && password.trim().length >= 8;
 };

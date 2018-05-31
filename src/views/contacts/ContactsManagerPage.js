@@ -23,7 +23,6 @@ import MXSearchBar from '../../components/MXSearchBar/index';
 import * as MXUtils from "../../utils/MXUtils";
 import LVKeyboardSpacer from '../Common/LVKeyboardSpacer';
 
-const AddIcon = require('../../assets/images/add_contact.png');
 const AvatarIcon = require('../../assets/images/contact_avatar.png');
 const ShowDetailsIcon = require('../../assets/images/show_detail_arrow.png');
 const EmptyContactListIndicatorIcon = require('../../assets/images/contant_list_empty.png');
@@ -31,6 +30,7 @@ const ItemEditIcon = require('../../assets/images/contant_list_itemEdit.png');
 const ItemDeleteIcon = require('../../assets/images/contant_list_itemDelete.png');
 const ItemSelected = require('../../assets/images/contact_selected.png');
 const ItemUnselected = require('../../assets/images/contact_unSelected.png');
+const dismissKeyboard = require('dismissKeyboard');
 
 type Props = {navigation: Object };
 
@@ -56,6 +56,8 @@ export default class ContactsManagerPage extends  Component<Props, State> {
     renderRow : Function;
     onDeleteContact: Function;
     onChangedText:Function;
+    onSelectedItem:Function;
+
     constructor(props: any) {
         super();
 
@@ -75,9 +77,31 @@ export default class ContactsManagerPage extends  Component<Props, State> {
         this.renderRow = this.renderRow.bind(this);
         this.onDeleteContact = this.onDeleteContact.bind(this);
         this.onChangedText = this.onChangedText.bind(this);
+        this.onSelectedItem = this.onSelectedItem.bind(this);
     }
 
-    onChangedText = (text:string)=>{
+    onSelectedItem = (item:any,index:number) => {
+        if (this.state.isItemSelected[index]) {
+            this.state.isItemSelected[index] = false,
+            this.setState({
+                currentSelectItem:null,
+            })
+        } else {
+            this.state.isItemSelected[index]  = true;
+
+            for (let i = 0; i < this.state.isItemSelected.length; i++) {
+                const element = this.state.isItemSelected;
+                if (i !== index) {
+                    element[i] = false
+                }
+            }
+            this.setState({
+                currentSelectItem:item
+            });
+        }
+    };
+
+    onChangedText = async (text:string)=>{
         this.setState({
             currentSearchText:text,
         });
@@ -92,8 +116,8 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                 arr.push(contacts[i]);
             }
         }
-        if ((text !== null ||
-            text !== '' || 
+        if ((text !== null &&
+            text !== '' && 
             text !== undefined)) {
                 this.setState({
                     isSearchingStatus: true,
@@ -105,12 +129,12 @@ export default class ContactsManagerPage extends  Component<Props, State> {
 
     lostBlur = ()=>{
         //失去焦点实现
+        dismissKeyboard();
         if ((this.state.currentSearchText === null ||
             this.state.currentSearchText === '' || 
             this.state.currentSearchText === undefined) &&
             this.state.isSearchingStatus
         ) {
-            this.refs.searchtextinput.blur();
             this.setState({
                 isSearchingStatus: false,
             });
@@ -137,6 +161,14 @@ export default class ContactsManagerPage extends  Component<Props, State> {
         ContactLib.instance.remove(contact);
         ContactLib.instance.saveToDisk();
         this.loadContacts();
+        if (this.state.isSearchingStatus) {
+            const index = this.state.searchContacts.findIndex((contact)=> {
+                return contact.name === this.state.toDeDeletedContactName;
+            });
+            if (index !== -1) {
+                this.state.searchContacts.splice(index);
+            }
+        }
         this.state.toDeDeletedContactName = null;
     }
 
@@ -189,9 +221,13 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                     onPressOut={separators.unhighlight}
                     underlayColor={LVColor.white}
                     onPress={()=>{
-                        this.setState({toDeDeletedContactName: null});
-                        this.props.navigation.navigate('LVTContactDetailPage', {
-                             model: item});
+                        if (this.state.readonly) {
+                            this.onSelectedItem(item,index);
+                        } else {
+                            this.setState({toDeDeletedContactName: null});
+                            this.props.navigation.navigate('LVTContactDetailPage', {
+                                 model: item});    
+                        }
                 }}>
                     <View style={styles.cellContentContainer}>
                         <View style={styles.cellLeftContentContainer}>
@@ -204,25 +240,7 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                         <TouchableHighlight 
                         underlayColor={LVColor.white}  
                         onPress={()=>{
-                            if (this.state.isItemSelected[index]) {
-                                this.state.isItemSelected[index] = false,
-                                this.setState({
-                                    currentSelectItem:null,
-                                })
-                            } else {
-                                this.state.isItemSelected[index]  = true;
-
-                                for (let i = 0; i < this.state.isItemSelected.length; i++) {
-                                    const element = this.state.isItemSelected;
-                                    if (i !== index) {
-                                        element[i] = false
-                                    }
-                                }
-
-                                this.setState({
-                                    currentSelectItem:item
-                                });
-                            }
+                            this.onSelectedItem(item,index);
                         }}>
                             <View style = {styles.cellRightContentContainer}>
                                 {this.state.isItemSelected[index]? <Image source = {ItemSelected}/> : <Image source = {ItemUnselected}/>}
@@ -238,7 +256,6 @@ export default class ContactsManagerPage extends  Component<Props, State> {
     render() {
         const { contacts,isSearchingStatus,searchContacts } = this.state;
         const { params } = this.props.navigation.state;
-        let addIcon = AddIcon;
 
         return (
             <View style={styles.rootContainer}>
@@ -253,10 +270,10 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                         }
                         this.props.navigation.goBack()
                      }}
-                    right={LVStrings.contact_add_nav_right}
+                    right={this.state.readonly?'':LVStrings.contact_add_nav_right}
                     rightTextColor= {LVColor.text.grey2}
                     onRightPress={ () =>{
-                        if(!addIcon) {
+                        if(this.state.readonly) {
                             return;
                         }
                         this.setState({toDeDeletedContactName: null});
@@ -266,11 +283,12 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                         })
                     }}
                 />
-                {/* <TouchableWithoutFeedback  
-                onPress={this.lostBlur.bind(this)}>   */}
+                <TouchableOpacity 
+                activeOpacity = {1}
+                onPress={this.lostBlur.bind(this)}
+                >
                 <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}
                 >
-                <TouchableOpacity activeOpacity={1.0} onPress={this.lostBlur.bind(this)}>
                 <MXSearchBar
                     ref = {'searchbar'}
                     style = {{marginTop: 10}}
@@ -313,13 +331,13 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                         }/>
                 </View>
                 <LVKeyboardSpacer/>
-                </TouchableOpacity>
                 </ScrollView>
-                {/* </TouchableWithoutFeedback> */}
                 <LVConfirmDialog ref={'deleteConfirm'} 
                             title={''}  
+                            dismissAfterConfirm = {true}
                             message={LVStrings.contact_confirm_delete_contact} 
                             onConfirm={this.onDeleteContact} />
+                </TouchableOpacity>
             </View>
         );
     }

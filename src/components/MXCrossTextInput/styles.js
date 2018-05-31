@@ -33,9 +33,13 @@ const Base = LVStyleSheet.create({
       color: LVColor.text.grey2,
   },
 
+  textInputView:{
+	flexDirection: 'row',
+    alignItems: 'center'
+},
+
   textArea: {
     flex: 1,
-    marginTop:10
   },
 
   label: {
@@ -64,7 +68,6 @@ const Base = LVStyleSheet.create({
 const TextAlignCenterStyles = StyleSheet.create({
   textArea: {
     flex:1,
-    marginTop:10
   },
   buttonArea: {
     flexDirection: 'row',

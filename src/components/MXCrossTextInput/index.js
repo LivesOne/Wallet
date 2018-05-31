@@ -122,8 +122,8 @@ class MXCrossTextInput extends Component<Props,State> {
                             {titleText}
                         </Text>
                     )}
-                    <View style = {{flexDirection: 'row'}}>
-                    <TouchableOpacity style={[textAreaStyle]} activeOpacity={1} onPress={
+                    <View style = {Base.textInputView}>
+                    <TouchableOpacity style={[textAreaStyle,this.props.titleText && {marginTop:10},]} activeOpacity={1} onPress={
                         () => {
                             this.setState({hasFocus: true})
                             this.refs.textinput.focus()
@@ -138,7 +138,7 @@ class MXCrossTextInput extends Component<Props,State> {
                             selectTextOnFocus={this.firstMounted && this.props.setFocusWhenMounted}
                             tintColor={LVColor.primary}
                             keyboardType={keyboardType}
-                            style={[Base.label, theme.label , {padding : 0}]}
+                            style={[Base.label, theme.label]}
                             secureTextEntry={secureTextEntry}
                             clearButtonMode={this.props.withClearButton ? 'while-editing' : 'never'}
                             onChangeText={this.onChangeText.bind(this)}

@@ -234,6 +234,8 @@ const localized_strings = {
     contact_alert_contact_exists: '联系人已存在',
     contact_alert_name_exceeds_limit: '联系人名称超过20个字',
     contact_alert_remarks_exceeds_limit: '备注长度超过限制',
+    contact_alert_Email_invalid: '邮箱格式错误',
+    contact_alert_Phone_invalid: '电话格式错误',
     contact_confirm_delete_contact: '是否要删除',
     contact_empty_list_demonstration: '您还未添加联系人',
     contact_add_nav_right: '添加',
