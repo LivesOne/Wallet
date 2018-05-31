@@ -36,6 +36,7 @@ import PropTypes from 'prop-types';
 import console from 'console-browserify';
 import Toast from 'react-native-root-toast';
 import { LVKeyboardDismissView } from '../Common/LVKeyboardDismissView';
+import { MXCrossInputHeight } from '../../styles/LVStyleSheet';
 import * as MXUtils from "../../utils/MXUtils";
 import LVFontSize from '../../styles/LVFontSize';
 const foundation = require('../../foundation/wallet.js');
@@ -300,16 +301,18 @@ export default class AssetsImportPage extends React.Component<Props, State> {
               () => { Keyboard.dismiss(); this.setState({showModal: true}) }
             }
             />
-            <MXSwitchTab
-              leftText={ LVStrings.wallet_import_keyStore }
-              rightText={ LVStrings.wallet_import_private_key }
-              onTabSwitched={this._onHeaderPressed.bind(this)}
-            />
-            {this.state.leftPressed && this._renderKeystore()}
-            {!this.state.leftPressed && this._renderPrivateKey()}
+            <View style={styles.contentContainer}>
+              <MXSwitchTab
+                leftText={ LVStrings.wallet_import_keyStore }
+                rightText={ LVStrings.wallet_import_private_key }
+                onTabSwitched={this._onHeaderPressed.bind(this)}
+              />
+              {this.state.leftPressed && this._renderKeystore()}
+              {!this.state.leftPressed && this._renderPrivateKey()}
 
-            <LVLoadingToast ref={'toast'} title={LVStrings.wallet_import_header}/>
-            <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage || ''} buttonTitle={LVStrings.alert_ok}/>
+              <LVLoadingToast ref={'toast'} title={LVStrings.wallet_import_header}/>
+              <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage || ''} buttonTitle={LVStrings.alert_ok}/>
+            </View>
         </KeyboardDismissView>
       )
     }
@@ -328,7 +331,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
           />
 
           <MXCrossTextInput
-            style={{marginTop: 5, marginBottom: 35}}
+            style={[styles.crossTextInputStyle, {marginTop: 15}]}
             secureTextEntry={true}
             titleText={LVStrings.wallet_import_keystore_password_label}
             onTextChanged={(newText)=>{ this.setState({keyStorePwd: newText}) }}
@@ -359,16 +362,17 @@ export default class AssetsImportPage extends React.Component<Props, State> {
             />
 
             <MXCrossTextInput
-              style={{marginTop: 5}}
+              style={[styles.crossTextInputStyle, {marginTop: 15}]}
               secureTextEntry={true}
               returnKeyType={'next'}
+              withUnderLine={false}
               titleText={LVStrings.wallet_import_private_password_lable}
               onTextChanged={(newText)=>{this.setState({privateKeyPwd: newText})}}
               placeholder={LVStrings.wallet_import_private_password_hint}
             />
 
             <MXCrossTextInput
-              style={{marginTop: 5}}
+              style={styles.crossTextInputStyle}
               secureTextEntry={true}
               titleText={LVStrings.wallet_import_private_password_repeat_lable}
               onTextChanged={(newText)=>{this.setState({privateKeyPwdAgain: newText})}}
@@ -396,8 +400,11 @@ export default class AssetsImportPage extends React.Component<Props, State> {
 const styles = LVStyleSheet.create({
     container: {
       flex: 1,
-      alignItems: "center",
       backgroundColor: LVColor.white
+    },
+    contentContainer: {
+      marginLeft: 15,
+      marginRight: 15
     },
     importByContainer: {
       flexDirection: 'row',
@@ -424,5 +431,8 @@ const styles = LVStyleSheet.create({
     importButtonStyle: {
       width: MXUtils.getDeviceWidth() - 30,
       marginTop: 63
+    },
+    crossTextInputStyle: {
+      height: MXCrossInputHeight
     }
   });

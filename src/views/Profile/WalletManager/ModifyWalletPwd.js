@@ -245,7 +245,8 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'flex-start',
         marginLeft: 15, 
-        marginRight:15
+        marginRight:15,
+        marginTop: 11
     },
     text: {
         marginTop: 15, 
@@ -254,7 +255,8 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     textInput: {
-        width: '100%'
+        width: '100%',
+        height: 80
     },
     saveButton: {
         width: '100%',

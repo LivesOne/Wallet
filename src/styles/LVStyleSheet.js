@@ -7,6 +7,8 @@
 import {StyleSheet} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
+export const MXCrossInputHeight = 80;
+
 export function create(styles: Object): {[name: string]: number} {
   const platformStyles = {};
   Object.keys(styles).forEach((name) => {

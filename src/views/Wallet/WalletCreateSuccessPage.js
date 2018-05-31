@@ -115,43 +115,45 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
                         }
                     }}
                 />
-                <Image source={createSuccessImage} style={styles.image} />
-                <Text style={styles.text}>{LVStrings.wallet_create_success}</Text>
-                <Text style={styles.detailText}>{LVStrings.wallet_create_success_comment}</Text>
-                <MXButton
-                    rounded
-                    title={LVStrings.profile_wallet_backup}
-                    onPress={this.onPressWalletBackupButton.bind(this)}
-                    style={styles.backupButton}
-                    isEmptyButtonType={true}
-                />
-                <MXButton
-                    rounded
-                    title={LVStrings.profile_wallet_backup_later}
-                    onPress={this.onPressBackupLaterButton.bind(this)}
-                    style={styles.backupButton}
-                    isEmptyButtonType={true}
-                />
-                <LVDialog
-                    ref={'disclaimer'}
-                    height={230}
-                    title={LVStrings.wallet_disclaimer}
-                    titleStyle={{ color: 'red' }}
-                    message={LVStrings.wallet_disclaimer_content}
-                    buttonTitle={LVStrings.common_confirm}
-                    onPress={() => this.refs.disclaimer.dismiss()}
-                />
-                <LVPasswordDialog
-                    ref={'passwordConfirm'}
-                    verify={this.verifyPassword.bind(this)}
-                    onVerifyResult={this.onVerifyResult.bind(this)}
-                />
-                <LVDialog
-                    ref={'alert'}
-                    title={LVStrings.alert_hint}
-                    message={this.state.alertMessage}
-                    buttonTitle={LVStrings.alert_ok}
-                />
+                <View style={styles.contentContainer}>
+                    <Image source={createSuccessImage} style={styles.image} />
+                    <Text style={styles.text}>{LVStrings.wallet_create_success}</Text>
+                    <Text style={styles.detailText}>{LVStrings.wallet_create_success_comment}</Text>
+                    <MXButton
+                        rounded
+                        title={LVStrings.profile_wallet_backup}
+                        onPress={this.onPressWalletBackupButton.bind(this)}
+                        style={styles.backupButton}
+                        isEmptyButtonType={true}
+                    />
+                    <MXButton
+                        rounded
+                        title={LVStrings.profile_wallet_backup_later}
+                        onPress={this.onPressBackupLaterButton.bind(this)}
+                        style={styles.backupButton}
+                        isEmptyButtonType={true}
+                    />
+                    <LVDialog
+                        ref={'disclaimer'}
+                        height={230}
+                        title={LVStrings.wallet_disclaimer}
+                        titleStyle={{ color: 'red' }}
+                        message={LVStrings.wallet_disclaimer_content}
+                        buttonTitle={LVStrings.common_confirm}
+                        onPress={() => this.refs.disclaimer.dismiss()}
+                    />
+                    <LVPasswordDialog
+                        ref={'passwordConfirm'}
+                        verify={this.verifyPassword.bind(this)}
+                        onVerifyResult={this.onVerifyResult.bind(this)}
+                    />
+                    <LVDialog
+                        ref={'alert'}
+                        title={LVStrings.alert_hint}
+                        message={this.state.alertMessage}
+                        buttonTitle={LVStrings.alert_ok}
+                    />
+                </View>
             </View>
         );
     }
@@ -165,12 +167,15 @@ const Window = {
 const styles = LVStyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
         backgroundColor: LVColor.white
     },
+    contentContainer: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        marginTop: 91
+    },
     image: {
-        marginTop: Window.width < 500 ? 36 : 50,
         width: 90,
         height: 90
     },

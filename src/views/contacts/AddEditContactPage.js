@@ -6,7 +6,7 @@
  * @flow
  */
 import React, { Component } from 'react'
-import { TextInput, View, StyleSheet, ScrollView, Keyboard, Platform,PixelRatio } from 'react-native';
+import { TextInput, View, StyleSheet,TouchableOpacity, ScrollView, Keyboard, Platform,PixelRatio } from 'react-native';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import MXCrossTextInput from '../../components/MXCrossTextInput';
 import {greyNavigationBackIcon} from '../../assets/LVIcons';
@@ -22,10 +22,12 @@ import MXTouchableImage from '../../components/MXTouchableImage';
 import TransferUtils from '../Transfer/TransferUtils';
 import MXButton from '../../components/MXButton';
 import * as MXUtils from "../../utils/MXUtils";
+import LVKeyboardSpacer from '../Common/LVKeyboardSpacer';
 
 const scanImg = require('../../assets/images/transfer_scan.png');
 const navButtonEnableColor = '#FFAE1F';
 const navButtonDisableColor = '#c3c8d3';
+const dismissKeyboard = require('dismissKeyboard');
 
 type Props = {navigation: Object};
 
@@ -171,6 +173,9 @@ export default class AddEditContactPage extends Component<Props, State> {
                     onLeftPress={ () => {this.props.navigation.goBack() }}
                 />
                 <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
+                <TouchableOpacity activeOpacity={1.0} onPress={()=>{
+                    dismissKeyboard();
+                }}>
                     <View style={styles.container}>
                         <MXCrossTextInput style={styles.textInputStyle} 
                             placeholder={LVStrings.contact_add_place_holder_nickname}
@@ -221,6 +226,8 @@ export default class AddEditContactPage extends Component<Props, State> {
                                 onPress={this.onAddingDone}
                         />    
                     </View>
+                    <LVKeyboardSpacer/>
+                    </TouchableOpacity>
                 </ScrollView>
                 <LVQrScanModal 
                     barcodeReceived={(data)=>{
