@@ -14,9 +14,10 @@ const Base = LVStyleSheet.create({
     height: MXCrossInputHeight,
     width: MXUtils.getDeviceWidth() - 18 * PixelRatio.get(),
     backgroundColor: LVColor.white,
+    justifyContent:'center',
   },
   content: {
-    justifyContent:'center',
+    // justifyContent:'center',
   },
   rounded: {
     phone: {
@@ -33,7 +34,7 @@ const Base = LVStyleSheet.create({
   },
 
   textArea: {
-    width:'100%',
+    flex: 1,
     marginTop:10
   },
 
@@ -62,7 +63,7 @@ const Base = LVStyleSheet.create({
 
 const TextAlignCenterStyles = StyleSheet.create({
   textArea: {
-    width:'100%',
+    flex:1,
     marginTop:10
   },
   buttonArea: {
