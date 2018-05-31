@@ -113,10 +113,10 @@ export class LVPasswordDialog extends React.Component<Props, State> {
                         {!verifying && 
                         <MXCrossTextInput
                             ref={'textinput'}
-                            style={{width: 210}}
+                            style={{width: 210, height: 40}}
                             inputContainerStyle = {{borderWidth : 1 , borderColor : "#C3C8D4" , padding : 5, borderRadius: 4}}
                             secureTextEntry={true}
-                            withUnderLine={false}
+                            withUnderLine={true}
                             onTextChanged={newText => {
                                 this.setState({ inputPwd: newText.trim() });
                             }}
