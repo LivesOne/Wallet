@@ -7,7 +7,7 @@
 
 import React, { Component } from 'react';
 
-import { StyleSheet,Share, View, Platform,Text,Image,ScrollView ,Clipboard,CameraRoll ,ActionSheetIOS} from 'react-native';
+import { StyleSheet,Share, View, Platform,Text,Image,ScrollView ,Clipboard,CameraRoll ,ActionSheetIOS , StatusBar} from 'react-native';
 
 import PropTypes from 'prop-types';
 import LVSize from '../../styles/LVFontSize';
@@ -115,7 +115,7 @@ class ReceiveScreen extends Component {
 
 
     componentWillMount() {
-
+        StatusBar.setBarStyle('default', true);
     }
 
     componentDidMount() {
@@ -125,6 +125,7 @@ class ReceiveScreen extends Component {
 
     componentWillUnmount() {
         LVNotificationCenter.removeObservers(this);
+        StatusBar.setBarStyle('light-content', true);
     }
 
     refreshWalletDatas = async () => {
