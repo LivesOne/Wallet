@@ -243,7 +243,7 @@ const localized_strings = {
     contact_add_place_cellphone: 'Phone number',
     contact_add_place_email: 'Email address',
     contact_add_remarks: 'Remarks',
-    contact_Detail_Button: 'AccountTransfer',
+    contact_Detail_Button: 'Account Transfer',
     contact_Search_Empty_Button: 'This contact was not found',
     contact_Detail_Title: "'s Wallet",
 

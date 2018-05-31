@@ -203,13 +203,11 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
     },
     cellLeftContentContainer: {
-        flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
     },
     cellRightContentContainer: {
-        flex: 3,
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
