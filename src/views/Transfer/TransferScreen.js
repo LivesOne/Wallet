@@ -119,7 +119,12 @@ class TransferScreen extends Component<Props, State> {
         LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.refreshWalletDatas);
         LVNotificationCenter.addObserver(this, LVNotification.networkStatusChanged, this.handleNeworkChange);
         this.refreshWalletDatas();
-        this.fixAndroidPaste();
+        // this.fixAndroidPaste();
+        const {address} = this.props.screenProps;
+        if (address != null || address != undefined) {
+            this.refs.refAddressIn.setText(address);
+            this.setState({addressIn: address});
+        }
     }
 
     fixAndroidPaste() {
@@ -406,6 +411,9 @@ class TransferScreen extends Component<Props, State> {
         //alert(PixelRatio.get());
         //TransferUtils.log('minerGap = ' + this.minerGap + " userHasSet = " + this.userHasSetGap.toString());
         const {transactionParams} = this.state;
+        const {address} = this.props.screenProps;
+        if (address != null || address != undefined) {
+        }
         return (
             <View style={{flexDirection: 'column', flex: 1, justifyContent: 'space-between'}}>
                 {this.state.showModal && <TransferDetailModal
