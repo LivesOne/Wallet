@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
         color: LVColor.text.grey2,
         marginTop: 30,
         borderRadius: 3,
+        padding : 10,
     },
     warnning: {
         fontSize: 15, 

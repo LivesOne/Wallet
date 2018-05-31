@@ -8,8 +8,10 @@ import LVColor from './../../styles/LVColor';
 import LVStrings from './../../assets/localization';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import TransferUtils from '../Transfer/TransferUtils';
+import { getDeviceHeight } from '../../utils/MXUtils';
 
-const CAMERA_WIDTH = Dimensions.get('window').width * 0.6;
+const CAMERA_WIDTH = Dimensions.get('window').width;
+const CAMERA_HEIGHT = getDeviceHeight();
 
 type Props = {
     isOpen: boolean,
@@ -72,22 +74,37 @@ export class LVQrScanModal extends React.Component<Props, State> {
                             <Text style={{ textAlign: 'center', fontSize: 16}}>{LVStrings.common_camera_not_authorized}</Text>
                         </View>
                     )}
-                    containerStyle={{backgroundColor: 'rgba(40, 41, 44, 0.5)'}}
-                    topContent={(
-                        <View style= {styles.header}>
-                        <Text 
-                            onPress={this.onClosed.bind(this)}
-                            style={styles.left}>{LVStrings.common_close}</Text>
-                        <Text style={styles.title}>{LVStrings.qrScan_title}</Text>
-                        <View style={styles.right}></View>
-                        </View> )}
+                    containerStyle={{backgroundColor: '#88000000'}}
                     topViewStyle={styles.topViewStyle}
                     cameraStyle={ styles.cameraStyle }
                     bottomContent={
-                        (<View style= {{flex:1, }}>
-                            <Text style={styles.qrScanHint}>{LVStrings.qrScan_hint}</Text>
-                        </View>)  }
-                    bottomViewStyle={{flex:1, }}>
+                        (<View style= {     {
+                            position: 'absolute',
+                            height: CAMERA_HEIGHT,
+                            flexDirection: 'column',
+                            width: CAMERA_WIDTH,
+                            top: -CAMERA_HEIGHT + 20, 
+                            backgroundColor:'transparent'}}>
+                            <View style= {styles.header}>
+                                <Text 
+                                    onPress={this.onClosed.bind(this)}
+                                    style={styles.left}>{LVStrings.common_close}</Text>
+                                <Text style={styles.title}>{LVStrings.qrScan_title}</Text>
+                                <View style={styles.right}></View>
+                            </View>
+                            <View style={styles.top}></View>
+                            <View style={styles.middle}>
+                                <View style={styles.middleSide}></View>
+                                <View style={styles.middleCenter}></View>
+                                <View style={styles.middleSide}></View>
+                            </View>
+                            <View style={styles.bottom}>
+                                <Text style={styles.qrScanHint}>{LVStrings.qrScan_hint}</Text>
+                            </View>
+
+                            
+                        </View> ) }
+                    bottomViewStyle={{flex:1}}>
                 </QRCodeScanner>
             </Modal>
         )
@@ -98,18 +115,43 @@ const styles = StyleSheet.create({
     modal: {
       },
     header: {
-        paddingTop: Platform.OS === 'ios' ? 20 : 0,
         width: '100%',
         height: Platform.OS === 'ios' ? 70 : 50,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: 'rgba(40, 41, 44, 0.1)'
+        backgroundColor: 'rgba(0,0,0,0.6)'
+    },
+    top: {
+        flex:1,
+        backgroundColor: 'rgba(0,0,0,0.5)'
+    },
+    middle : {
+        height: CAMERA_WIDTH * 0.6,
+        width: "100%",
+        flexDirection: 'row',
+    },
+    bottom : {
+        flex:4,  
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        backgroundColor: 'rgba(0,0,0,0.5)'
+    },
+    middleSide: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)'
+    },
+    middleCenter: {
+        width: CAMERA_WIDTH * 0.6,
+        height: CAMERA_WIDTH * 0.6,
+        borderWidth: 2,
+        borderColor: LVColor.text.yellow
     },
     left: {
         width: 50,
         marginLeft: 15,
-        color: LVColor.primary,
+        color: LVColor.text.yellow,
         fontSize: 16,
         textAlign:'left'
     },
@@ -118,12 +160,13 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     right: {
-        width: 50
+        width: 50,
+        marginRight: 15,
     },
     qrScanHint: {
         color: 'white',
-        fontSize: 16,
-        marginTop: 30,
+        fontSize: 14,
+        marginTop: 20,
     },
     centerText: {
         flex: 1,
@@ -136,21 +179,20 @@ const styles = StyleSheet.create({
         color: '#000',
       },
       cameraStyle: {
-        width: CAMERA_WIDTH, 
-        height:CAMERA_WIDTH, 
+        width: "100%", 
+        height:"100%", 
         alignItems: 'center',
-        marginTop: CAMERA_WIDTH/2, 
         backgroundColor: 'transparent',
         borderWidth: 2, 
         padding: 2,
-        borderColor: LVColor.primary,
         justifyContent: 'center', 
         alignSelf: 'center'
       },
       topViewStyle: {
         flex: 0, 
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: 'transparent',
       }
 });
 

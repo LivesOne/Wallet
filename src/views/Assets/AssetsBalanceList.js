@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 4,
 
-        elevation: 20,
+        elevation: 5,
         shadowOffset: { width: 0, height: 1 },
         shadowColor: LVColor.primary,
         shadowOpacity: 0.05,

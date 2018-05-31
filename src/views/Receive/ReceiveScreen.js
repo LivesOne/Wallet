@@ -74,7 +74,7 @@ class ReceiveHeader extends Component {
                 left = {goback_gray}
                 onLeftPress = {this.onLeftPress}
                 right={share_qrcode}
-                onRightPress={this.onPressButton.bind(this)}
+                onRightPress={this.onPressButton}
             />
 
         );
@@ -141,8 +141,7 @@ class ReceiveScreen extends Component {
         }
     }
 
-    onWalletShare() {
-        const wallet = this.state.wallet;
+    onWalletShare(wallet) {
 
        if (wallet && wallet.address) {
             const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
@@ -209,7 +208,10 @@ class ReceiveScreen extends Component {
         this.setState({ openSelectWallet: false });
     };
 
-
+    onCopyWalletAddress(){
+        Clipboard.setString(TransferUtils.convertToHexHeader(this.state.wallet.address));
+        Toast.show(LVStrings.common_done)
+    };
 
   
   
@@ -221,7 +223,7 @@ class ReceiveScreen extends Component {
 
          return (
             <View style={styles.container}>
-                <ReceiveHeader callback={this.onWalletShare} screenProps={this.props.screenProps} />
+                <ReceiveHeader callback={() => {this.onWalletShare(this.state.wallet)}} screenProps={this.props.screenProps} />
 
                 <View style={styles.mainContainer2}>
                     <ScrollView showsVerticalScrollIndicator={false} style={{ width:'100%', }}  contentContainerStyle={styles.contentContainer}>
@@ -248,11 +250,7 @@ class ReceiveScreen extends Component {
                             rounded = {true}
                             style={styles.button}
                             title={LVStrings.receive_copy}
-                            onPress = {() => {
-                                Clipboard.setString(TransferUtils.convertToHexHeader(this.state.wallet.address));
-                                Toast.show(LVStrings.common_done)
-
-                            }}
+                            onPress = {() => {this.onCopyWalletAddress()}}
                             isEmptyButtonType = {true}
                             themeStyle={"active"}
                             /> 
