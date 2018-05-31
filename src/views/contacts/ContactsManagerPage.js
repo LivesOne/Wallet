@@ -270,7 +270,7 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                         }
                         this.props.navigation.goBack()
                      }}
-                    right={this.state.readonly?'':LVStrings.contact_add_nav_right}
+                    right={this.state.readonly?' ':LVStrings.contact_add_nav_right}
                     rightTextColor= {LVColor.text.grey2}
                     onRightPress={ () =>{
                         if(this.state.readonly) {
