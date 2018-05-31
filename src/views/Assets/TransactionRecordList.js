@@ -66,8 +66,8 @@ export default class TransactionRecordList extends React.PureComponent<Props, St
         <LVTransactionRecordItem
             type={item.type}
             token={item.token.toUpperCase()}
-            balance={item.balance}
-            address={item.type == 'in' ? item.payer : item.receiver}
+            balance={item.amount}
+            address={item.type == 'in' ? item.from : item.to}
             datetime={item.datetime}
             state={item.state}
             selected={!!this.state.selected.get(item.hash)}
