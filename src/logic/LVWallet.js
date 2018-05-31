@@ -17,7 +17,7 @@ class LVBalance {
     }
 }
 
-export default class LVWallet {
+class LVWallet {
     name: string;
     address: string;
     keystore: Object;
@@ -77,9 +77,16 @@ export default class LVWallet {
         }
     }
 
+    minusBalance(token: string, amount: number | string | Big) {
+        var b = this.getBalance(token);
+        b.minus(amount);
+        this.setBalance(token, b);
+    }
+
     static emptyWallet() : LVWallet {
         return new LVWallet('', { address: '' });
     }
 };
 
-// export default LVWallet;
+export default LVWallet;
+export { LVBalance };

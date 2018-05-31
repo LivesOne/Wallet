@@ -56,7 +56,7 @@ class AssetsDetailsScreen extends Component<Props, State> {
             startDate: '',
             endDate: '',
             refreshing: false,
-            transactionRecords: LVTransactionRecordManager.records
+            transactionRecords: null
         };
         this.onStartDateChange = this.onStartDateChange.bind(this);
         this.onEndDateChange = this.onEndDateChange.bind(this);
@@ -100,14 +100,17 @@ class AssetsDetailsScreen extends Component<Props, State> {
     async refreshRecords() {
         this.setState({ refreshing: true });
         try {
-            await LVTransactionRecordManager.refreshTransactionRecords();
-            this.setState({ transactionRecords: LVTransactionRecordManager.records });
+            const { token } = this.props.navigation.state.params;
+            await LVTransactionRecordManager.refreshTransactionRecords(token);
+            const records = LVTransactionRecordManager.records.filter((record) => { return record.token === token });
+            this.setState({ transactionRecords: records });
 
             setTimeout(async () => {
                 this.setState({ refreshing: false });
             }, 500);
         } catch (error) {
             this.setState({ refreshing: false });
+            console.log(error);
         }
         
     }
