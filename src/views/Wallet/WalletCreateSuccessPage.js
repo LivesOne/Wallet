@@ -47,6 +47,10 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
         };
     }
 
+    componentDidMount() {
+        LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
+    }
+
     onVerifyResult(success: boolean, password: string) {
         this.refs.passwordConfirm.dismiss();
         if(!success) {
@@ -84,7 +88,6 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
     }
 
     onPressBackupLaterButton() {
-        LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
         if (this.props.screenProps.dismiss) {
             this.props.screenProps.dismiss();
         } else {
@@ -107,7 +110,6 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
                 <MXNavigatorHeader
                     title={LVStrings.wallet_create_wallet}
                     onLeftPress={() => {
-                        LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
                         if (this.props.screenProps.dismiss) {
                             this.props.screenProps.dismiss();
                         } else {
