@@ -294,11 +294,6 @@ class TransferScreen extends Component<Props, State> {
             return;
         }
 
-        if (this.minerGap === 0) {
-            this.setState({alertMessage:LVStrings.transfer_miner_gap_not_access });
-            this.refs.alert.show();
-            return;
-        }
 
         if (balance.lt(amount) || (wallet && wallet.eth.lt(this.minerGap))) {
             if(balance.lt(amount) && (wallet && wallet.eth.lt(this.minerGap))) {
@@ -309,6 +304,12 @@ class TransferScreen extends Component<Props, State> {
                 this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
             }
             this.refs.insufficientDialog.show();
+            return;
+        }
+
+        if (this.minerGap === 0) {
+            this.setState({alertMessage:LVStrings.transfer_miner_gap_not_access });
+            this.refs.alert.show();
             return;
         }
 
@@ -517,6 +518,7 @@ class TransferScreen extends Component<Props, State> {
                         onVerifyResult={this.onVerifyResult.bind(this)} />
                     <LVConfirmDialog
                         ref={'insufficientDialog'}
+                        height={200}
                         title={LVStrings.alert_hint}  
                         message={this.state.balanceTip} 
                         onConfirm={()=>{this.props.navigation.navigate("ReceiveTip")}} />
