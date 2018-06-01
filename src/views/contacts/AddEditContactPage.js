@@ -36,7 +36,6 @@ type State =  {
     address: string,
     cellPhone: string,
     email: string,
-    remarks: string,
     alertMessage: string,
     navTitle: string,
     mode: string,
@@ -64,7 +63,6 @@ export default class AddEditContactPage extends Component<Props, State> {
                 address: '',
                 cellPhone: '',
                 email: '',
-                remarks: '',
                 alertMessage: '',
                 navTitle: navTitle,
                 mode: params.mode,
@@ -77,7 +75,6 @@ export default class AddEditContactPage extends Component<Props, State> {
                 address: model.address,
                 cellPhone: model.cellPhone,
                 email: model.email,
-                remarks: model.remarks,
                 alertMessage: '',
                 navTitle: navTitle,
                 mode: params.mode,
@@ -120,11 +117,6 @@ export default class AddEditContactPage extends Component<Props, State> {
             this.refs.alert.show();
             return;
         }
-        if(isNotEmptyString(this.state.remarks) && getCharLength(this.state.remarks) > 80) {
-            this.setState({alertMessage: LVLocalization.contact_alert_remarks_exceeds_limit});
-            this.refs.alert.show();
-            return;
-        }
 
         if(this.state.mode === 'add') {
             if(ContactLib.instance.containsContact(this.state.name)) {
@@ -136,8 +128,7 @@ export default class AddEditContactPage extends Component<Props, State> {
             const contact = ContactLib.LVContactManager.createContact(this.state.name,
                 TransferUtils.convertToHexHeader(this.state.address),
                 this.state.cellPhone,
-                this.state.email,
-                this.state.remarks);
+                this.state.email);
             ContactLib.instance.add(contact);
         } else if(this.state.editModel) {
             const originalName = this.state.editModel.name;
@@ -152,7 +143,6 @@ export default class AddEditContactPage extends Component<Props, State> {
             this.state.editModel.address = this.state.address;
             this.state.editModel.cellPhone = this.state.cellPhone;
             this.state.editModel.email = this.state.email;
-            this.state.editModel.remarks = this.state.remarks;
         }
         
         await ContactLib.instance.saveToDisk();
@@ -224,12 +214,6 @@ export default class AddEditContactPage extends Component<Props, State> {
                             withUnderLine = {false}
                             titleText={LVStrings.contact_add_place_email}
                             onTextChanged= {(text) => this.setState({email: text})}/>
-                        <MXCrossTextInput style={styles.textInputStyle}
-                             placeholder={LVStrings.contact_add_place_holder_remarks}
-                             withClearButton
-                             defaultValue={this.state.remarks}
-                             titleText={LVStrings.contact_add_remarks}
-                             onTextChanged= {(text) => this.setState({remarks: text})}/>
                         <MXButton
                                 style={styles.button}
                                 title={LVStrings.profile_wallet_save}

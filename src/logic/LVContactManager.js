@@ -16,7 +16,7 @@ class LVContactManager {
         this.contacts = [];
     }
 
-    static createContact(name: string, address: string, cellPhone: string, email: string, remarks: string) {
+    static createContact(name: string, address: string, cellPhone: string, email: string) {
         if(isEmptyString(name)) {
             throw 'name should not be null or empty';
         }
@@ -29,7 +29,6 @@ class LVContactManager {
             address: address,
             cellPhone: cellPhone,
             email: email,
-            remarks: remarks
         };
     }
 
