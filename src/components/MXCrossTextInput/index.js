@@ -146,7 +146,7 @@ class MXCrossTextInput extends Component<Props,State> {
                             keyboardType={keyboardType}
                             blurOnSubmit={blurOnSubmit}
                             returnKeyType={returnKeyType}
-                            style={[Base.label, theme.label]}
+                            style={[Base.label, theme.label , {padding : 0}]}
                             secureTextEntry={secureTextEntry}
                             clearButtonMode={this.props.withClearButton ? 'while-editing' : 'never'}
                             onChangeText={this.onChangeText.bind(this)}
