@@ -120,7 +120,6 @@ class MXCrossTextInput extends Component<Props,State> {
                     rounded ? Base.rounded : null,
                     !withUnderLine ? { borderBottomColor: 'transparent' } : null,
                     style,
-                   inputContainerStyle 
                 ]}
             >  
                 <View style={[Base.content]}>
@@ -129,7 +128,7 @@ class MXCrossTextInput extends Component<Props,State> {
                             {titleText}
                         </Text>
                     )}
-                    <View style = {Base.textInputView}>
+                    <View style = {[Base.textInputView , inputContainerStyle]}>
                     <TouchableOpacity style={[textAreaStyle,this.props.titleText && {marginTop:10},]} activeOpacity={1} onPress={
                         () => {
                             this.setState({hasFocus: true})
@@ -147,7 +146,7 @@ class MXCrossTextInput extends Component<Props,State> {
                             keyboardType={keyboardType}
                             blurOnSubmit={blurOnSubmit}
                             returnKeyType={returnKeyType}
-                            style={[Base.label, theme.label]}
+                            style={[Base.label, theme.label , {padding : 0}]}
                             secureTextEntry={secureTextEntry}
                             clearButtonMode={this.props.withClearButton ? 'while-editing' : 'never'}
                             onChangeText={this.onChangeText.bind(this)}

@@ -47,6 +47,10 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
         };
     }
 
+    componentDidMount() {
+        LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
+    }
+
     onVerifyResult(success: boolean, password: string) {
         this.refs.passwordConfirm.dismiss();
         if(!success) {
@@ -80,11 +84,10 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
     }
 
     onPressWalletBackupButton() {
-        this.refs.passwordConfirm.show();
+        this.refs.disclaimer.show();
     }
 
     onPressBackupLaterButton() {
-        LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
         if (this.props.screenProps.dismiss) {
             this.props.screenProps.dismiss();
         } else {
@@ -107,7 +110,6 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
                 <MXNavigatorHeader
                     title={LVStrings.wallet_create_wallet}
                     onLeftPress={() => {
-                        LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
                         if (this.props.screenProps.dismiss) {
                             this.props.screenProps.dismiss();
                         } else {
@@ -134,14 +136,19 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
                         isEmptyButtonType={true}
                     />
                     <LVDialog
-                        ref={'disclaimer'}
-                        height={230}
-                        title={LVStrings.wallet_disclaimer}
-                        titleStyle={{ color: 'red' }}
-                        message={LVStrings.wallet_disclaimer_content}
-                        buttonTitle={LVStrings.common_confirm}
-                        onPress={() => this.refs.disclaimer.dismiss()}
-                    />
+                    ref={'disclaimer'}
+                    height={230}
+                    title={LVStrings.wallet_disclaimer}
+                    titleStyle={{ color: LVColor.text.grey2,fontSize: 18,fontWeight: '500' }}
+                    message={LVStrings.wallet_disclaimer_content}
+                    buttonTitle={LVStrings.common_confirm}
+                    onPress={() => {
+                        this.refs.disclaimer.dismiss();
+                        setTimeout(() => {
+                            this.refs.passwordConfirm.show();
+                        }, 300);
+                    }}
+                />
                     <LVPasswordDialog
                         ref={'passwordConfirm'}
                         verify={this.verifyPassword.bind(this)}
