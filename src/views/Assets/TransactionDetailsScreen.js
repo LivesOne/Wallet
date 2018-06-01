@@ -103,6 +103,7 @@ const LVTransDetailBalanceView = ({ prifix, balance, token }) => (
                 symble={prifix}
                 balance={balance}
                 textStyle={styles.balance}
+                showSeparator={true}
             />
             <Text style={styles.token} >{token.toUpperCase()}</Text>
         </View>
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
     balance: {
         fontSize: LVSize.xxlarge,
         textAlign: 'right',
-        fontWeight: '600',
+        fontFamily: 'DINAlternate-Bold',
         color: LVColor.text.grey2
     },
     token: {

@@ -40,11 +40,13 @@ export class LVBalanceShowView extends Component<Props> {
     render() {
         let v = StringUtils.beautifyBalanceShow(this.props.balance);
         const {symble, title, unit} = this.props;
-        var values = symble ? symble + v.result : v.result; 
+        var values = v.result; 
 
         if (this.props.showSeparator) {
-            values = StringUtils.convertAmountToCurrencyString(values, ',', 0, true);
+            values = StringUtils.convertAmountToCurrencyString(v.result, ',', 0, true);
         }
+
+        values = symble ? symble + values : values;
 
         return (
             <TouchableOpacity style = {this.props.style} activeOpacity={0.8} onPress = {()=>{
