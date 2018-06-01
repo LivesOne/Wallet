@@ -43,8 +43,6 @@ type State =  {
         searchContacts:Array<Object>,
         isSearchingStatus:boolean,
         currentSearchText:string,
-        isItemSelected:Array<boolean>,
-        currentSelectItem:any
 };
 
 export default class ContactsManagerPage extends  Component<Props, State> {
@@ -71,8 +69,6 @@ export default class ContactsManagerPage extends  Component<Props, State> {
             searchContacts:[],
             isSearchingStatus:false,
             currentSearchText:'',
-            isItemSelected:[false],
-            currentSelectItem:null
         };
         this.renderRow = this.renderRow.bind(this);
         this.onDeleteContact = this.onDeleteContact.bind(this);
@@ -81,30 +77,13 @@ export default class ContactsManagerPage extends  Component<Props, State> {
     }
 
     onSelectedItem = (item:any,index:number) => {
-        if (this.state.isItemSelected[index]) {
-            this.state.isItemSelected[index] = false,
-            this.setState({
-                currentSelectItem:null,
-            })
-        } else {
-            this.state.isItemSelected[index]  = true;
-
-            for (let i = 0; i < this.state.isItemSelected.length; i++) {
-                const element = this.state.isItemSelected;
-                if (i !== index) {
-                    element[i] = false
-                }
-            }
-            this.setState({
-                currentSelectItem:item
-            });
+        if (item !== null) {
+            this.state.callback(item['address']);
         }
+        this.props.navigation.goBack()
     };
 
     onChangedText = async (text:string)=>{
-        this.setState({
-            currentSearchText:text,
-        });
         const { contacts } = this.state;
         var len = contacts.length;
         var arr = [];
@@ -116,15 +95,11 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                 arr.push(contacts[i]);
             }
         }
-        if ((text !== null &&
-            text !== '' && 
-            text !== undefined)) {
-                this.setState({
-                    isSearchingStatus: true,
-                    searchContacts:arr,
-                    currentSearchText:text,
-                });
-        }
+        this.setState({
+            isSearchingStatus: true,
+            searchContacts:arr,
+            currentSearchText:text,
+        });
     };
 
     lostBlur = ()=>{
@@ -236,17 +211,6 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                                 <Text style={styles.nameTextStyle} numberOfLines={1}>{item.name}</Text>
                             </View>
                         </View>
-                        {this.state.readonly ?
-                        <TouchableHighlight 
-                        underlayColor={LVColor.white}  
-                        onPress={()=>{
-                            this.onSelectedItem(item,index);
-                        }}>
-                            <View style = {styles.cellRightContentContainer}>
-                                {this.state.isItemSelected[index]? <Image source = {ItemSelected}/> : <Image source = {ItemUnselected}/>}
-                            </View>    
-                        </TouchableHighlight> : null
-                        }
                     </View>
                 </TouchableHighlight>
             </Swipeout>
@@ -265,9 +229,6 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                     title={ LVStrings.contact_list_nav_title }
                     titleStyle={styles.navTitle}
                     onLeftPress={ () => {
-                        if (this.state.currentSelectItem !== null) {
-                            this.state.callback(this.state.currentSelectItem['address']);
-                        }
                         this.props.navigation.goBack()
                      }}
                     right={this.state.readonly?' ':LVStrings.contact_add_nav_right}
