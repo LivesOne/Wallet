@@ -111,7 +111,8 @@ export function converAddressToDisplayableText(address: string, headNum: number 
         return address;
     }
 
-    const upaddr = address.toUpperCase();
+    const pureAddress = address.substr(0, 2).toLowerCase() === '0x' ? address.substring(2, address.length) : address;
+    const upaddr = pureAddress.toUpperCase();
     const head = upaddr.substr(0, headNum);
     const tail = upaddr.substr(upaddr.length - tailNum, tailNum);
     return ['0x',head,'...',tail].join('');
