@@ -271,10 +271,10 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     confirmDialogTopPanel: {
-        flex:0.7,
+        flex:1,
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     dialogContent: {
         flex: 0.3,
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     confirmDialogBottomPanel: {
-        flex: 0.3,
+        height : 64,
         width: '100%',
         flexDirection: 'column',
         justifyContent: 'center',

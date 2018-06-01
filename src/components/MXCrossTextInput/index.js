@@ -138,7 +138,7 @@ class MXCrossTextInput extends Component<Props,State> {
                             selectTextOnFocus={this.firstMounted && this.props.setFocusWhenMounted}
                             tintColor={LVColor.primary}
                             keyboardType={keyboardType}
-                            style={[Base.label, theme.label]}
+                            style={[Base.label, theme.label , {padding : 0}]}
                             secureTextEntry={secureTextEntry}
                             clearButtonMode={this.props.withClearButton ? 'while-editing' : 'never'}
                             onChangeText={this.onChangeText.bind(this)}
