@@ -14,7 +14,7 @@ const walletIcon = require('../../assets/images/assets_wallet.png');
 
 type Props = {
     style?: ViewPropTypes.style,
-    title: ?string,
+    name: ?string,
     address: ?string,
     walletIcon?: number | React.Element<any>
 };
@@ -22,13 +22,13 @@ type Props = {
 export default class LVWalletHeader extends React.Component<Props> {
 
     render() {
-        const { title } = this.props;
+        const { name } = this.props;
         const address = StringUtils.converAddressToDisplayableText(this.props.address || '', 9, 11);
 
         return (
             <View style={[styles.container, this.props.style]}>
                 <Image source={this.props.walletIcon || walletIcon} style={styles.img} resizeMode='contain' />
-                <Text style={styles.title} numberOfLines={1} ellipsizeMode="middle" >{title}</Text>
+                <Text style={styles.title} numberOfLines={1} ellipsizeMode="middle" >{name}</Text>
                 <Text style={styles.address} numberOfLines={1} ellipsizeMode="middle" >{address}</Text>
             </View>
         );

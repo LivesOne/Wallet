@@ -169,7 +169,7 @@ class AssetsScreen extends Component<Props, State> {
                         right={selectImg}
                         onRightPress={this.onPressSelectWallet}
                     />
-                    <LVWalletHeader title={wallet.name} address={wallet.address} />
+                    <LVWalletHeader name={wallet.name} address={wallet.address} />
                 </View>
 
                 <AssetsBalanceList style={styles.list} balances={balance_list} refreshing={this.state.refreshing} onRefresh={this.refreshBalance.bind(this)} onPressItem={this.onPressAssetsDetail.bind(this)} />
