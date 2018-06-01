@@ -294,9 +294,8 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                 <LVKeyboardSpacer/>
                 </ScrollView>
                 <LVConfirmDialog ref={'deleteConfirm'} 
-                            title={''}  
+                            title={LVStrings.contact_confirm_delete_contact}  
                             dismissAfterConfirm = {true}
-                            message={LVStrings.contact_confirm_delete_contact} 
                             onConfirm={this.onDeleteContact} />
                 </TouchableOpacity>
             </View>
