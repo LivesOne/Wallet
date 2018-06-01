@@ -193,7 +193,6 @@ export class WalletDetailsPage extends Component<Props, State> {
             setTimeout(async ()=>{
                 try {
                     await backupWallet(wallet, password);
-                    this.refs.disclaimer.show();
                 } catch (error) {
                     this.refs.toast.dismiss();
                     if(error === 'cancelled') {
@@ -297,7 +296,7 @@ export class WalletDetailsPage extends Component<Props, State> {
                         isEmptyButtonType={true}
                         rounded
                         onPress={() => {
-                            this.onPressExportOrDeleteButton(SHOW_INPUT_FOR_BACKUP);
+                            this.refs.disclaimer.show();
                         }}
                     />
                     <MXButton
@@ -315,11 +314,14 @@ export class WalletDetailsPage extends Component<Props, State> {
                     ref={'disclaimer'}
                     height={230}
                     title={LVStrings.wallet_disclaimer}
-                    titleStyle={{ color: 'red' }}
+                    titleStyle={{ color: LVColor.text.grey2,fontSize: 18,fontWeight: '500' }}
                     message={LVStrings.wallet_disclaimer_content}
                     buttonTitle={LVStrings.common_confirm}
                     onPress={() => {
                         this.refs.disclaimer.dismiss();
+                        setTimeout(() => {
+                            this.onPressExportOrDeleteButton(SHOW_INPUT_FOR_BACKUP);
+                        }, 300);
                     }}
                 />
                 <LVDialog

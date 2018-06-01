@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     message: {
         paddingLeft: 25,
         paddingRight: 25,
-        color: '#697485',
+        color: '#697585',
         fontSize: 16,
         textAlign: 'center',
         lineHeight: 20
