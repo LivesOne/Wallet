@@ -518,10 +518,10 @@ class TransferScreen extends Component<Props, State> {
                         onVerifyResult={this.onVerifyResult.bind(this)} />
                     <LVConfirmDialog
                         ref={'insufficientDialog'}
-                        height={200}
                         title={LVStrings.alert_hint}  
-                        message={this.state.balanceTip} 
-                        onConfirm={()=>{this.props.navigation.navigate("ReceiveTip")}} />
+                        onConfirm={()=>{this.props.navigation.navigate("ReceiveTip")}} >
+                        <Text>{this.state.balanceTip}</Text>
+                    </LVConfirmDialog>
 
                 </TouchableOpacity>
             </View>
