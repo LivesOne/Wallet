@@ -86,16 +86,16 @@ export function beautifyBalanceShow(balance: Big, unit: ?string) {
     return {result : result + (unit ? (' ' + unit) : ''), hasShrink: hasShrink};
 }
 
-// lvt 为0，显示 eth 否则显示 lvt
-export function adjust(lvtAmount: Big, ethAmount: Big) {
+// lvtc 为0，显示 eth 否则显示 lvtc
+export function adjust(lvtcAmount: Big, ethAmount: Big) {
     if (Platform.OS === 'ios') {
-        if (lvtAmount.eq(0)) {
+        if (lvtcAmount.eq(0)) {
             return beautifyBalanceShow(ethAmount, 'ETH').result;
         } else {
-            return beautifyBalanceShow(lvtAmount, 'LVT').result;
+            return beautifyBalanceShow(lvtcAmount, 'LVTC').result;
         }
     } else {
-        return beautifyBalanceShow(lvtAmount, 'LVT').result;
+        return beautifyBalanceShow(lvtcAmount, 'LVTC').result;
     }
 }
 

@@ -53,6 +53,7 @@ import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 
 var Big = require('big.js');
 import LVBig from '../../logic/LVBig';
+import LVWallet from '../../logic/LVWallet';
 
 const addImg = require('../../assets/images/transfer_add_contracts.png');
 const scanImg = require('../../assets/images/transfer_scan.png');
@@ -64,7 +65,7 @@ type Props = {
 };
 
 type State = {
-    wallet: ?Object,
+    wallet: LVWallet,
     password: string,
     transactionParams: ?Object;
     curETH: number,
@@ -95,14 +96,14 @@ class TransferScreen extends Component<Props, State> {
         const wallet = LVWalletManager.getSelectedWallet();
         console.log(JSON.stringify(wallet));
         this.state = {
-            wallet: wallet,
+            wallet: wallet || LVWallet.emptyWallet(),
             password: '',
             transactionParams: null,
             curETH: wallet != null ? wallet.eth: 0,
             addressIn: '',
             amount: LVBig.getInitBig(),
             amountText: '',
-            balance: wallet != null ? wallet.lvt: 0,
+            balance: wallet != null ? wallet.lvtc: 0,
             minGap: 0,
             maxGap:0,
             showModal: false,
@@ -189,7 +190,7 @@ class TransferScreen extends Component<Props, State> {
         const newWallet = LVWalletManager.getSelectedWallet();
         const isSelect = oldWallet && newWallet && oldWallet.address !== newWallet.address;
         if (isSelect) {
-            TransferUtils.log('wallet selected, new address = ' + newWallet.address);
+            TransferUtils.log('wallet selected, new address = ' + (newWallet ? newWallet.address : '') );
             this.resetUIState();
         }
     }
@@ -218,7 +219,7 @@ class TransferScreen extends Component<Props, State> {
             let amount = new Big(newAmountText);
             this.setState({amount: amount})
             const wallet = this.state.wallet;
-            if (wallet && amount.gt(wallet.lvt) && Platform.OS === 'ios') {
+            if (wallet && amount.gt(wallet.lvtc) && Platform.OS === 'ios') {
                 this.setState({alertMessage:LVStrings.transfer_amount_insufficient });
                 this.refs.refAmount.clearFocus();
                 this.refs.alert.show();
@@ -250,7 +251,7 @@ class TransferScreen extends Component<Props, State> {
             this.setState({
                 wallet: wallet,
                 curETH: wallet.eth,
-                balance: wallet.lvt,
+                balance: wallet.lvtc,
             });
         }
     }
@@ -474,7 +475,7 @@ class TransferScreen extends Component<Props, State> {
                                 keyboardType = {'numeric'}
                                 withUnderLine={false}
                                 inputContainerStyle={{marginTop:isAndroid ? 0 : 15}}
-                                boarderLineHeight={Platform.OS === 'android' ? 1 : null}
+                                boarderLineHeight={Platform.OS === 'android' ? 1 : 0}
                                 onTextChanged={this.onAmountChanged.bind(this)}/>
                             
                             <View style={styles.curEth} />

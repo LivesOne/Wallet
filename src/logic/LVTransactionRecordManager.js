@@ -30,12 +30,12 @@ class LVTransactionRecord {
     remarks: string;
     state: string; // ok, failed, waiting
 
-    constructor(json: any, state: string = 'ok') {
+    constructor(json: any, state: string = 'ok', token: string) {
         this.block = json.block;
         this.hash  = json.transactionHash;
         this.from  = this.pureAddress(json.from);
         this.to    = this.pureAddress(json.to);
-        this.token = json.token || 'lvt';
+        this.token = json.token || token;
         this.state = state;
 
         if (state === 'waiting') {
@@ -125,7 +125,7 @@ export default class LVTransactionRecordManager {
     async handleTransactionCreated(json: ?Object) {
         const wallet = LVWalletManager.getSelectedWallet();
         if (json && wallet) {
-            const record = new LVTransactionRecord(json, 'waiting');
+            const record = new LVTransactionRecord(json, 'waiting', json.token);
             LVTransactionRecordManager.records.unshift(record);
             LVTransactionRecordManager.unfinish_records.push(record);
 
@@ -154,7 +154,7 @@ export default class LVTransactionRecordManager {
         if (wallet) {
             const uObjects = await LVPersistent.getObject(LVTransactionUnfinishedRecords + '_' + wallet.address);
             if (uObjects && uObjects.length > 0) {
-                const uRecords = uObjects.map(json => new LVTransactionRecord(json, json.state));
+                const uRecords = uObjects.map(json => new LVTransactionRecord(json, json.state, json.token));
                 return uRecords;
             }
         }
@@ -170,10 +170,9 @@ export default class LVTransactionRecordManager {
             let _preUsedEth = 0;
 
             const value = await LVNetworking.fetchTransactionHistory(wallet.address, token);
-            console.log(value);
 
             if (value && value.length > 0) {
-                _finishedRecords = value.map(record => new LVTransactionRecord(record, wallet.address));
+                _finishedRecords = value.map(record => new LVTransactionRecord(record, wallet.address, token));
 
                 for (var index = 0; index < _finishedRecords.length; index++) {
                     var element = _finishedRecords[index];

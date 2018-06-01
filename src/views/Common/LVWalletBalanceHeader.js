@@ -17,12 +17,12 @@ import LVBalanceShowView from '../Common/LVBalanceShowView';
 const walletIcon = require('../../assets/images/assets_wallet.png');
 
 const tokenImageIcons = {
-    lvt: require('../../assets/images/lvt_large.png'),
+    LVTC: require('../../assets/images/lvt_large.png'),
     eth: require('../../assets/images/eth_large.png')
 };
 
 const totalAmountStrings = {
-    lvt: LVStrings.total_lvt,
+    LVTC: LVStrings.total_lvt,
     eth: LVStrings.total_eth
 }
 

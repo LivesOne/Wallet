@@ -22,8 +22,8 @@ import MXButton from './../../../components/MXButton';
 import MXCrossTextInput from '../../../components/MXCrossTextInput';
 import LVStrings from '../../../assets/localization';
 import { WalletExportModal } from './WalletExportModal';
+import LVWallet from '../../../logic/LVWallet';
 import LVWalletManager from '../../../logic/LVWalletManager';
-import {  adjust } from '../../../utils/MXStringUtils';
 import LVLoadingToast from '../../Common/LVLoadingToast';
 import Toast from 'react-native-root-toast';
 import LVNotificationCenter from '../../../logic/LVNotificationCenter';
@@ -68,12 +68,11 @@ const SHOW_INPUT_FOR_DELETE = 'for_delete';
 const SHOW_INPUT_FOR_BACKUP = 'for_backup';
 
 type State = {
-    displayTitle: string,
     walletAddress: string,
     showExportModal: boolean,
     privateKey: string,
     walletName: string,
-    wallet: ?Object,
+    wallet: LVWallet,
     walletTitle: string,
     showExportModal: boolean,
     alertMessage: string,
@@ -95,8 +94,7 @@ export class WalletDetailsPage extends Component<Props, State> {
     constructor() {
         super();
         this.state = {
-            displayTitle: '',
-            wallet: null,
+            wallet: LVWallet.emptyWallet(),
             walletTitle: '',
             walletAddress: '',
             privateKey: '',
@@ -117,7 +115,6 @@ export class WalletDetailsPage extends Component<Props, State> {
         const wallet = params.wallet;
         this.setState({
             wallet: wallet,
-            displayTitle: adjust(wallet.lvt, wallet.eth),
             walletAddress: wallet.address,
             walletName: wallet.name
         });
@@ -129,7 +126,6 @@ export class WalletDetailsPage extends Component<Props, State> {
             console.log('new wallet = ' + JSON.stringify(wallet));
             this.setState({
                 wallet: wallet,
-                displayTitle: adjust(wallet.lvt, wallet.eth),
                 walletName: wallet.name
             });
         }
