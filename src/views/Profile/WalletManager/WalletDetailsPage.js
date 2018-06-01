@@ -235,6 +235,7 @@ export class WalletDetailsPage extends Component<Props, State> {
                     break;
             }
         } else {
+            this.refs.passwordConfirm.dismiss();
             setTimeout(() => {
                 this.setState({
                     alertMessage: !password ? LVStrings.password_verify_required : LVStrings.inner_error_password_mismatch
