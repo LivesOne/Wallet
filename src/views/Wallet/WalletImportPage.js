@@ -350,50 +350,48 @@ export default class AssetsImportPage extends React.Component<Props, State> {
       return (
         <View style={{ flex : 1}}>
         <LVKeyboardAvoidingView behavior='padding' style={{height : 500}}>
-          <ScrollView style={{ flex: 1}}>
-            <TextInput
-              textAlignVertical={'top'}
-              multiline= {true}
-              value={this.state.privateKey}
-              onChangeText={(newText)=>{this.setState({privateKey: newText})}}
-              placeholder={ LVStrings.wallet_import_plain_private_key_hint }
-              underlineColorAndroid = {'transparent'}
-              style={ styles.textInput }
-            />
+            <PrivateKeyImportContentView style={{ flex: 1}}>
+              <TextInput
+                textAlignVertical={'top'}
+                multiline= {true}
+                value={this.state.privateKey}
+                onChangeText={(newText)=>{this.setState({privateKey: newText})}}
+                placeholder={ LVStrings.wallet_import_plain_private_key_hint }
+                underlineColorAndroid = {'transparent'}
+                style={ styles.textInput }
+              />
 
-            <MXCrossTextInput
-              style={[styles.crossTextInputStyle, {marginTop: 15}]}
-              secureTextEntry={true}
-              returnKeyType={'next'}
-              withUnderLine={false}
-              titleText={LVStrings.wallet_import_private_password_lable}
-              onTextChanged={(newText)=>{this.setState({privateKeyPwd: newText})}}
-              placeholder={LVStrings.wallet_import_private_password_hint}
-            />
+              <MXCrossTextInput
+                style={[styles.crossTextInputStyle, {marginTop: 15}]}
+                secureTextEntry={true}
+                returnKeyType={'next'}
+                withUnderLine={false}
+                titleText={LVStrings.wallet_import_private_password_lable}
+                onTextChanged={(newText)=>{this.setState({privateKeyPwd: newText})}}
+                placeholder={LVStrings.wallet_import_private_password_hint}
+              />
 
-            <MXCrossTextInput
-              style={styles.crossTextInputStyle}
-              secureTextEntry={true}
-              titleText={LVStrings.wallet_import_private_password_repeat_lable}
-              onTextChanged={(newText)=>{this.setState({privateKeyPwdAgain: newText})}}
-              placeholder={LVStrings.wallet_import_private_pwd_confirm_hint}
-            />
-            <MXButton
-              rounded
-              style={styles.importButtonStyle}
-              title={LVStrings.wallet_import}
-              onPress={ this.onPrivateImportPress.bind(this) }
-            />
-          </ScrollView>
-        </LVKeyboardAvoidingView>
+              <MXCrossTextInput
+                style={styles.crossTextInputStyle}
+                secureTextEntry={true}
+                titleText={LVStrings.wallet_import_private_password_repeat_lable}
+                onTextChanged={(newText)=>{this.setState({privateKeyPwdAgain: newText})}}
+                placeholder={LVStrings.wallet_import_private_pwd_confirm_hint}
+              />
+              <MXButton
+                rounded
+                style={styles.importButtonStyle}
+                title={LVStrings.wallet_import}
+                onPress={ this.onPrivateImportPress.bind(this) }
+              />
+            </PrivateKeyImportContentView>
+          </LVKeyboardAvoidingView>
         </View>
       );
     }
-
-
-
  }
 
+ const PrivateKeyImportContentView = (Platform.OS === 'ios') ? View : ScrollView;
  const LVKeyboardAvoidingView = (Platform.OS === 'ios') ? KeyboardAvoidingView : View;
  const KeyboardDismissView = (Platform.OS === 'ios') ? LVKeyboardDismissView : View;
 

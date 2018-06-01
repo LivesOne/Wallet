@@ -156,7 +156,7 @@ class AssetsScreen extends Component<Props, State> {
         const wallet = this.state.wallet || LVWallet.emptyWallet();
 
         // only support LVT in this version.
-        const balance_list = wallet.balance_list.filter((value) => { return value.token === 'lvt' || value.token === 'eth' });
+        const balance_list = wallet.balance_list.filter((value) => { return value.token === 'lvt' });
 
         return (
             <View style={styles.container}>

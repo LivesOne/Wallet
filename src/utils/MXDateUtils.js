@@ -41,9 +41,9 @@ export function getTimePastFromNow(time: string): string {
     } else if (diff.days === 1) {
         return LVStrings.time_pass_yesterday;
     } else if (diff.hours > 0) {
-        return diff.days + ' ' + LVStrings.time_pass_hours_ago;
+        return diff.hours + ' ' + LVStrings.time_pass_hours_ago;
     } else if (diff.minutes > 0) {
-        return diff.days + ' ' + LVStrings.time_pass_minutes_ago
+        return diff.minutes + ' ' + LVStrings.time_pass_minutes_ago
     } else {
         return LVStrings.time_pass_a_moment_ago;
     }
