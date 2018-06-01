@@ -25,6 +25,9 @@ type Props = {
     onTextChanged?: Function,
     withUnderLine?: boolean,
     keyboardType?: string,
+    onSubmitEditing?: Function,
+    blurOnSubmit?:boolean,
+    returnKeyType?:string,
     withClearButton?: boolean,
     rightComponent?: any,
     setFocusWhenMounted?: boolean,
@@ -65,6 +68,10 @@ class MXCrossTextInput extends Component<Props,State> {
         }
     }
 
+    focus(){
+        this.refs.textinput.focus();
+    }
+
     setText(newText: string) {
         this.setState({text: newText, hasFocus: true});
         this.props.onTextChanged && this.props.onTextChanged(newText);
@@ -96,7 +103,7 @@ class MXCrossTextInput extends Component<Props,State> {
     }
 
     render() {
-        const { rounded, style, placeholder, secureTextEntry, withUnderLine, keyboardType, textAlignCenter, boarderLineHeight,titleText,inputContainerStyle } = this.props;
+        const { rounded, style, placeholder, secureTextEntry, withUnderLine, keyboardType, textAlignCenter, boarderLineHeight,titleText,inputContainerStyle,returnKeyType,blurOnSubmit,onSubmitEditing } = this.props;
 
         const theme = this.getTheme();
 
@@ -138,10 +145,15 @@ class MXCrossTextInput extends Component<Props,State> {
                             selectTextOnFocus={this.firstMounted && this.props.setFocusWhenMounted}
                             tintColor={LVColor.primary}
                             keyboardType={keyboardType}
+                            blurOnSubmit={blurOnSubmit}
+                            returnKeyType={returnKeyType}
                             style={[Base.label, theme.label]}
                             secureTextEntry={secureTextEntry}
                             clearButtonMode={this.props.withClearButton ? 'while-editing' : 'never'}
                             onChangeText={this.onChangeText.bind(this)}
+                            onSubmitEditing= {()=>{
+                                onSubmitEditing && onSubmitEditing();
+                            }}
                             onFocus={() => this.setState({ hasFocus: true })}
                             onEndEditing={() => this.setState({ hasFocus: false })}
                         />

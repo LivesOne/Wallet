@@ -16,7 +16,6 @@ import LVUtils from '../../utils';
 import LVStrings from '../../assets/localization';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVWalletBalanceHeader from '../Common/LVWalletBalanceHeader';
-import LVFullScreenModalView from '../Common/LVFullScreenModalView';
 import LVConfiguration from '../../logic/LVConfiguration';
 import LVWallet from '../../logic/LVWallet';
 import LVWalletManager from '../../logic/LVWalletManager';
@@ -26,9 +25,6 @@ import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVT
 
 import TransactionRecordList from './TransactionRecordList';
 import TransactionDetailsScreen from './TransactionDetailsScreen';
-
-import ReceiveNavigator from '../Receive/ReceiveNavigator';
-import TransferNavigator from '../Transfer/TransferNavigator';
 
 const receiverIcon = require('../../assets/images/assets_receive.png');
 const transferIcon = require('../../assets/images/assets_transfer.png');
@@ -133,11 +129,12 @@ class AssetsDetailsScreen extends Component<Props, State> {
     }
 
     onReceiverButtonPressed = () => {
-        this.refs.receiveScreen.show();
+        this.props.navigation.navigate('Receive');
     };
 
     onTransferButtonPressed = () => {
-        this.refs.transferScreen.show();
+        const { token } = this.props.navigation.state.params;
+        this.props.navigation.navigate('Transfer', { token: token });
     };
 
     render() {
@@ -206,26 +203,6 @@ class AssetsDetailsScreen extends Component<Props, State> {
                         </TouchableOpacity>
                     </View>
                 </View>
-
-                <LVFullScreenModalView ref={'receiveScreen'}>
-                    <ReceiveNavigator
-                        screenProps={{
-                            dismiss: () => {
-                                this.refs.receiveScreen.dismiss();
-                            }
-                        }}
-                    />
-                </LVFullScreenModalView>
-                <LVFullScreenModalView ref={'transferScreen'}>
-                    <TransferNavigator
-                        screenProps={{
-                            dismiss: () => {
-                                this.refs.transferScreen.dismiss();
-                            },
-                            token: token
-                        }}
-                    />
-                </LVFullScreenModalView>
             </View>
         );
     }

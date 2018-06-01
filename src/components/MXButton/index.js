@@ -15,11 +15,11 @@ type State = {
 
 type Props = {
     title: string,
-    rounded: boolean,
+    rounded?: boolean,
 	disabled?: boolean,
 	isEmptyButtonType?:boolean,
-    style: ViewPropTypes.style,
-    onPress: Function
+    style?: ViewPropTypes.style,
+    onPress?: Function
 };
 
 class MXButton extends Component<Props,State> {

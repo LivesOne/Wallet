@@ -60,8 +60,8 @@ const scanImg = require('../../assets/images/transfer_scan.png');
 const isAndroid = Platform.OS === 'android';
 
 type Props = {
-    screenProps: Object,
-     navigation: Object };
+    navigation: Object 
+};
 
 type State = {
     wallet: ?Object,
@@ -84,7 +84,8 @@ type State = {
 
 class TransferScreen extends Component<Props, State> {
     static navigationOptions = {
-        header: null
+        header: null,
+        tabBarVisible: false
     };
 
     onSelectedContact: Function;
@@ -121,10 +122,10 @@ class TransferScreen extends Component<Props, State> {
         LVNotificationCenter.addObserver(this, LVNotification.networkStatusChanged, this.handleNeworkChange);
         this.refreshWalletDatas();
         // this.fixAndroidPaste();
-        const {address} = this.props.screenProps;
+        const { address } = this.props.navigation.state.params;
         if (address != null || address != undefined) {
             this.refs.refAddressIn.setText(address);
-            this.setState({addressIn: address});
+            this.setState({ addressIn: address });
         }
     }
 
@@ -143,8 +144,8 @@ class TransferScreen extends Component<Props, State> {
 
     async tryFetchParams() {
         const {wallet, amount, addressIn} = this.state;
-        const {token} = this.props.screenProps;
-        console.log(JSON.stringify(this.props.screenProps));
+        const {token} = this.props.navigation.state.params;
+
         if (wallet && amount.gt(0) && addressIn && TransferUtils.isValidAddress(addressIn)) {
             try {
                 let params = await TransferLogic.fetchTransactionParam(wallet.address, addressIn, amount, token);
@@ -293,11 +294,6 @@ class TransferScreen extends Component<Props, State> {
             return;
         }
 
-        if (this.minerGap === 0) {
-            this.setState({alertMessage:LVStrings.transfer_miner_gap_not_access });
-            this.refs.alert.show();
-            return;
-        }
 
         if (balance.lt(amount) || (wallet && wallet.eth.lt(this.minerGap))) {
             if(balance.lt(amount) && (wallet && wallet.eth.lt(this.minerGap))) {
@@ -308,6 +304,12 @@ class TransferScreen extends Component<Props, State> {
                 this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
             }
             this.refs.insufficientDialog.show();
+            return;
+        }
+
+        if (this.minerGap === 0) {
+            this.setState({alertMessage:LVStrings.transfer_miner_gap_not_access });
+            this.refs.alert.show();
             return;
         }
 
@@ -361,7 +363,7 @@ class TransferScreen extends Component<Props, State> {
             }, 500);
         }
         setTimeout(async ()=> {
-            const {token} = this.props.screenProps;
+            const {token} = this.props.navigation.state.params;
             let gasPrice = this.userHasSetGap ? TransferUtils.getSetGasPriceHexStr(this.minerGap, transactionParams.gasLimit) : transactionParams.gasPrice;
             let rst = await TransferLogic.transaction(addressIn, password, amount, transactionParams.nonce,
                 transactionParams.gasLimit, gasPrice, transactionParams.token, transactionParams.chainID, wallet, token);
@@ -412,16 +414,13 @@ class TransferScreen extends Component<Props, State> {
         //alert(PixelRatio.get());
         //TransferUtils.log('minerGap = ' + this.minerGap + " userHasSet = " + this.userHasSetGap.toString());
         const {transactionParams} = this.state;
-        const {address} = this.props.screenProps;
-        if (address != null || address != undefined) {
-        }
         return (
             <View style={{flexDirection: 'column', flex: 1, justifyContent: 'space-between'}}>
                 <StatusBar barStyle="dark-content"/>
                 {this.state.showModal && <TransferDetailModal
                     isOpen= {this.state.showModal}
                     address= {this.state.addressIn}
-                    type={this.props.screenProps.token}
+                    type={this.props.navigation.state.params.token}
                     amount= {parseFloat(this.state.amount.toFixed())}
                     minerGap= {this.minerGap}
                     onClosed = {()=>{this.setState({ showModal: false })}}
@@ -443,11 +442,7 @@ class TransferScreen extends Component<Props, State> {
                         title={LVStrings.transaction_details}
                         titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
                         onLeftPress={() => {
-                            if (this.props.screenProps.dismiss) {
-                                this.props.screenProps.dismiss();
-                            } else {
-                                this.props.navigation.goBack();
-                            }
+                            this.props.navigation.goBack();
                         }}
                         />
                     <View style= { styles.headerBelow }>
@@ -523,6 +518,7 @@ class TransferScreen extends Component<Props, State> {
                         onVerifyResult={this.onVerifyResult.bind(this)} />
                     <LVConfirmDialog
                         ref={'insufficientDialog'}
+                        height={200}
                         title={LVStrings.alert_hint}  
                         message={this.state.balanceTip} 
                         onConfirm={()=>{this.props.navigation.navigate("ReceiveTip")}} />

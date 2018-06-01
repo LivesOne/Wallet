@@ -206,7 +206,7 @@ export class LVConfirmDialog extends React.Component<ConfirmDialogProps> {
                 <View style={styles.dialog}>
                     <View style={styles.confirmDialogTopPanel}>
                         {this.props.title && (
-                            <Text style={[styles.title, this.props.titleStyle]}>{this.props.title}</Text>
+                            <Text style={[styles.confirmTitle, this.props.titleStyle , {marginBottom : this.props.children ? 10 : 0}]}>{this.props.title}</Text>
                         )}
                         <View style={{justifyContent: 'center', alignItems: 'center'}}>{this.props.children}</View>
                     </View>
@@ -251,6 +251,10 @@ const styles = StyleSheet.create({
         fontSize: 15,
         marginBottom: 15
     },
+    confirmTitle : {
+        color: LVColor.text.grey2,
+        fontSize: 15,
+    },
     message: {
         paddingLeft: 25,
         paddingRight: 25,
@@ -271,10 +275,10 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     confirmDialogTopPanel: {
-        flex:0.7,
+        flex:1,
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     dialogContent: {
         flex: 0.3,
@@ -285,7 +289,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     confirmDialogBottomPanel: {
-        flex: 0.3,
+        height : 64,
         width: '100%',
         flexDirection: 'column',
         justifyContent: 'center',

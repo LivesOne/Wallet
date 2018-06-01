@@ -16,8 +16,6 @@ import TransferUtils from '../Transfer/TransferUtils';
 import { converAddressToDisplayableText} from '../../utils/MXStringUtils';
 import MXButton from '../../components/MXButton';
 import * as MXUtils from "../../utils/MXUtils";
-import LVFullScreenModalView from '../Common/LVFullScreenModalView';
-import TransferNavigator from '../Transfer/TransferNavigator';
 
 const AvatarIcon = require('../../assets/images/contact_detail_avatar.png');
 
@@ -77,7 +75,7 @@ export default class LVTContactDetailPage extends Component<Props,State>{
     };
 
     onAccountTransferDone = ()=> {
-        this.refs.transferScreen.show();
+        this.props.navigation.navigate('Transfer', { address: this.state.address });
     };
 
     renderRow({item,index}: any) {
@@ -143,16 +141,6 @@ export default class LVTContactDetailPage extends Component<Props,State>{
                     /> 
                 </View>
             </ScrollView>
-            <LVFullScreenModalView ref={'transferScreen'}>
-                    <TransferNavigator
-                        screenProps={{
-                            dismiss: () => {
-                                this.refs.transferScreen.dismiss();
-                            },
-                            address: this.state.address
-                        }}
-                    />
-            </LVFullScreenModalView>
             
             </View>
        );
