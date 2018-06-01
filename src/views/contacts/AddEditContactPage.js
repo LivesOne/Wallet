@@ -50,7 +50,7 @@ export default class AddEditContactPage extends Component<Props, State> {
     };
 
     onAddingDone : Function;
-
+    onSubmitEditing: Function;
     constructor(props: any) {
         super();
 
@@ -84,6 +84,7 @@ export default class AddEditContactPage extends Component<Props, State> {
         }
        
         this.onAddingDone = this.onAddingDone.bind(this);
+        this.onSubmitEditing = this.onSubmitEditing.bind(this);
     }
 
     async onAddingDone() {
@@ -151,16 +152,20 @@ export default class AddEditContactPage extends Component<Props, State> {
         params.callback();
     }
 
+    onSubmitEditing=(textInput:string)=>{
+        if (textInput === 'addressTextInput') {
+            this.refs.addressTextInput.focus();
+        } else if (textInput === 'phone') {
+            this.refs.phone.focus();
+        }
+    }
+
     onPressScan() {
         Keyboard.dismiss();
         this.setState({
             showQrScanModal:true
         });
     }
-
-    onPressButton = () => {
-     
-    };
 
     render() {
         return (
@@ -181,7 +186,12 @@ export default class AddEditContactPage extends Component<Props, State> {
                             placeholder={LVStrings.contact_add_place_holder_nickname}
                             withClearButton
                             defaultValue={this.state.name}
+                            returnKeyType= {'next'}
                             withUnderLine = {false}
+                            onSubmitEditing={()=>{
+                                this.onSubmitEditing('addressTextInput');
+                            }}
+                            blurOnSubmit={false}
                             titleText={LVStrings.contact_add_place_nickname}
                             onTextChanged= {(text) => this.setState({name: text})}/>
                         <MXCrossTextInput ref={'addressTextInput'}
@@ -189,7 +199,12 @@ export default class AddEditContactPage extends Component<Props, State> {
                             placeholder={LVStrings.contact_add_place_holder_address}
                             withClearButton={true}
                             defaultValue={this.state.address}
+                            returnKeyType= {'next'}
                             withUnderLine = {false}
+                            onSubmitEditing={()=>{
+                                this.onSubmitEditing('phone');
+                            }}
+                            blurOnSubmit={false}
                             titleText={LVStrings.contact_add_place_address}
                             rightComponent={<MXTouchableImage source={scanImg} onPress={ async () => {
                                 if (Platform.OS === 'android') {
@@ -199,9 +214,11 @@ export default class AddEditContactPage extends Component<Props, State> {
                                 }} />}
                             onTextChanged= {(text) => this.setState({address: text})}/>
                         <MXCrossTextInput style={styles.textInputStyle} 
+                            ref = {'phone'}
                             placeholder={LVStrings.contact_add_place_holder_cellphone}
                             withClearButton
                             keyboardType = {'phone-pad'}
+                            returnKeyType= {'next'}
                             defaultValue={this.state.cellPhone}
                             withUnderLine = {false}
                             titleText={LVStrings.contact_add_place_cellphone}
@@ -210,6 +227,7 @@ export default class AddEditContactPage extends Component<Props, State> {
                             placeholder={LVStrings.contact_add_place_holder_email}
                             withClearButton
                             keyboardType = {'email-address'}
+                            returnKeyType= {'done'}
                             defaultValue={this.state.email}
                             withUnderLine = {false}
                             titleText={LVStrings.contact_add_place_email}
