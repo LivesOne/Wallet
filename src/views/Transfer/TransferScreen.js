@@ -16,7 +16,8 @@ import {
     TextInput,
     Platform,
     PixelRatio,
-    NetInfo
+    NetInfo,
+    StatusBar
 } from 'react-native';
 import { TransferHeader } from './TransferHeader';
 import MXCrossTextInput from './../../components/MXCrossTextInput';
@@ -416,6 +417,7 @@ class TransferScreen extends Component<Props, State> {
         }
         return (
             <View style={{flexDirection: 'column', flex: 1, justifyContent: 'space-between'}}>
+                <StatusBar barStyle="dark-content"/>
                 {this.state.showModal && <TransferDetailModal
                     isOpen= {this.state.showModal}
                     address= {this.state.addressIn}
