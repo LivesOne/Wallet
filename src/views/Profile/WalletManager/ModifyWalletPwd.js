@@ -172,6 +172,7 @@ export class ModifyWalletPwd extends React.Component<Props, State> {
     }
 
     render() {
+        const thisPage = this;
         return (
             <LVKeyboardDismissView style={{ backgroundColor: 'white', flex: 1}}>
                 <MXNavigatorHeader
@@ -225,11 +226,11 @@ export class ModifyWalletPwd extends React.Component<Props, State> {
                 <LVDialog ref={'doneTips'} title={LVStrings.alert_hint} message={LVStrings.wallet_edit_save_success} buttonTitle={LVStrings.alert_ok} onPress={this.onDoneTipsPress.bind(this)} />
                 <LVFullScreenModalView ref={'importPage'}>
                     <LVWalletImportNavigator screenProps={{dismiss: (state: string) => {
-                        this.refs.importPage.dismiss();
+                        thisPage.refs.importPage.dismiss();
                         if (state === 'success') {
                             setTimeout(() => {
-                                this.setState({alertMessage:LVStrings.wallet_import_success });
-                                this.refs.alert.show();
+                                thisPage.setState({alertMessage:LVStrings.wallet_import_success });
+                                thisPage.refs.alert.show();
                             }, 500);
                         }
                     } , from: WalletUtils.OPEN_IMPORT_FROM_MODIFY_PASSWORD
