@@ -264,7 +264,7 @@ export class WalletDetailsPage extends Component<Props, State> {
                         onLeftPress={() => {
                             this.props.navigation.goBack();
                     }}/>
-                    <LVWalletHeader title={this.state.walletName} 
+                    <LVWalletHeader name={this.state.walletName} 
                                     address={this.state.walletAddress}/>
                 </View>
                 
