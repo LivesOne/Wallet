@@ -25,6 +25,7 @@ type Props = {
 
 type State = {
     text:string,
+    hasFocus:boolean
 }
 
 export default class MXSearchBar extends Component<Props,State> {
@@ -33,6 +34,7 @@ export default class MXSearchBar extends Component<Props,State> {
         super(props);
         this.state = {
             text:'',
+            hasFocus:false
         };
     }
 
@@ -74,16 +76,32 @@ export default class MXSearchBar extends Component<Props,State> {
                             onFocus={() => {
                                 onFocus && onFocus();
                                 this.refs.searchtextinput.focus();
+                                this.setState({
+                                    hasFocus:true
+                                })
                             }}
                             onEndEditing={() => {
                                 onEndEditing && onEndEditing();
                                 this.refs.searchtextinput.blur();
+                                this.setState({
+                                    hasFocus:false
+                                })
                             }}
-                        />	
+                        />
+                <View style={{justifyContent:'center'}}>
+                        { (Platform.OS === 'android') &&
+                            this.state.text !== null &&
+                            this.state.text !== '' && 
+                            this.state.text !== undefined &&
+                            this.state.hasFocus && (
+                                <TouchableOpacity style={{}} onPress={this.onPressClear.bind(this)}>
+                                    <Image source={require('../../assets/images/edit_clear.png')} />
+                                </TouchableOpacity>
+                            )}
+                    </View>	
             </View>
         );
     }
-
 }
 
 const styles = StyleSheet.create({
@@ -101,8 +119,9 @@ const styles = StyleSheet.create({
         fontSize: 17,
         textAlign:'left',
         fontWeight: '500',
-        width: MXUtils.getDeviceWidth() - 18 * PixelRatio.get() - 40,
+        // width: MXUtils.getDeviceWidth() - 18 * PixelRatio.get() - 40,
         marginLeft:5,
-        color:LVColor.primary
+        color:LVColor.primary,
+        flex:1
     },
 });
