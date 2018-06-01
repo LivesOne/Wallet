@@ -28,6 +28,7 @@ const localized_strings = {
     receive_name:'钱包地址',
     receive_name_suffix : "的钱包",
     receive_copy:'复制钱包地址',
+    receive_copy_success: '复制成功',
     receive_save:'保存二维码',
     receive_empty:'您还未添加钱包',
     receive_save_finish:'保存完成',

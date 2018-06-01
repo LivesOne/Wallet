@@ -211,7 +211,7 @@ class ReceiveScreen extends Component {
 
     onCopyWalletAddress(){
         Clipboard.setString(TransferUtils.convertToHexHeader(this.state.wallet.address));
-        Toast.show(LVStrings.common_done)
+        Toast.show(LVStrings.receive_copy_success)
     };
 
   
