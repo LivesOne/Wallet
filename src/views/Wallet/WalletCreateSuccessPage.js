@@ -84,7 +84,7 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
     }
 
     onPressWalletBackupButton() {
-        this.refs.passwordConfirm.show();
+        this.refs.disclaimer.show();
     }
 
     onPressBackupLaterButton() {
@@ -136,14 +136,19 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
                         isEmptyButtonType={true}
                     />
                     <LVDialog
-                        ref={'disclaimer'}
-                        height={230}
-                        title={LVStrings.wallet_disclaimer}
-                        titleStyle={{ color: 'red' }}
-                        message={LVStrings.wallet_disclaimer_content}
-                        buttonTitle={LVStrings.common_confirm}
-                        onPress={() => this.refs.disclaimer.dismiss()}
-                    />
+                    ref={'disclaimer'}
+                    height={230}
+                    title={LVStrings.wallet_disclaimer}
+                    titleStyle={{ color: LVColor.text.grey2,fontSize: 18,fontWeight: '500' }}
+                    message={LVStrings.wallet_disclaimer_content}
+                    buttonTitle={LVStrings.common_confirm}
+                    onPress={() => {
+                        this.refs.disclaimer.dismiss();
+                        setTimeout(() => {
+                            this.refs.passwordConfirm.show();
+                        }, 300);
+                    }}
+                />
                     <LVPasswordDialog
                         ref={'passwordConfirm'}
                         verify={this.verifyPassword.bind(this)}
