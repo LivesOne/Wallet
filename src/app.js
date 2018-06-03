@@ -179,22 +179,24 @@ class VenusApp extends Component<Props, State> {
 
     renderAndroidMainScreen() {
         return <View style={{flex: 1}}>
+                {this.getMainScreen()}
                 <LVConfirmDialog
                     ref={'exitDialog'}
                     title={LVStrings.alert_hint}  
-                    message={LVStrings.exit_app_prompt} 
-                    onConfirm={()=> {BackHandler.exitApp()}} />
-                    {this.getMainScreen()}
-                  <LVConfirmDialog
+                    onConfirm={()=> {BackHandler.exitApp()}} >
+                        <Text>{LVStrings.exit_app_prompt}</Text>
+                </LVConfirmDialog>
+                <LVConfirmDialog
                     ref={'update'}
                     title={LVStrings.update_title}  
-                    message={LVStrings.update_text} 
                     confirmTitle = {LVStrings.update_ok}
                     cancelTitle = {LVStrings.update_cancel}
                     onConfirm={()=> {
                         this.state.needUpdate(true);
                         this.refs.update.dismiss();
-                    }} />
+                    }} >
+                        <Text>{LVStrings.update_text}</Text>
+                </LVConfirmDialog>
             </View>
     }
 
