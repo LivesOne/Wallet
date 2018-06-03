@@ -12,13 +12,14 @@ import LVStrings from './../../assets/localization';
 import { LightStyles } from '../../components/MXCrossTextInput/styles';
 import MXTouchableImage from './../../components/MXTouchableImage';
 import TransferUtils from './TransferUtils';
+import { converAddressToDisplayableText } from '../../utils/MXStringUtils';
 const CloseIcon = require('../../assets/images/close_modal.png');
 
 const DetailItem = ({leftText, rightText}) => 
 (<View
     style={[styles.detailContainer, leftText === LVStrings.transfer_address_in ? {height: 60} : null]}>
     <Text style={styles.left}>{leftText}</Text>
-    <Text style={[styles.right, leftText === LVStrings.transfer_address_in ? {width: '50%'} : null]}>{rightText}</Text>
+    <Text style={[styles.right, leftText === LVStrings.transfer_address_in ? {width: '80%'} : null]}>{rightText}</Text>
 </View>);
 
 type Props = {
@@ -45,6 +46,10 @@ export class TransferDetailModal extends Component<Props> {
         }
     };
 
+    getShowAddress= (address: string) => {
+        return converAddressToDisplayableText(TransferUtils.removeHexHeader(address),9,9)
+    }
+
     render() {
         const {isOpen, onClosed, address, amount, minerGap, onTransferConfirmed, type} = this.props;
         return (
@@ -63,7 +68,7 @@ export class TransferDetailModal extends Component<Props> {
                     <Text style={styles.title}> {LVStrings.transfer_payment_details}</Text>
                     <MXTouchableImage style={{position:'absolute', right:20}} source={CloseIcon} onPress={this.onClosed}></MXTouchableImage>
                   </View>
-                  <DetailItem leftText={LVStrings.transfer_address_in} rightText={address}></DetailItem>
+                  <DetailItem leftText={LVStrings.transfer_address_in} rightText={this.getShowAddress(address)}></DetailItem>
                   <DetailItem leftText={LVStrings.transfer_amount} rightText={amount + ' ' + type.toUpperCase()}></DetailItem>
                   <DetailItem leftText={LVStrings.transfer_miner_tips} rightText={TransferUtils.convertMinnerGap(minerGap) + ' ETH'}></DetailItem>
                   {/* <DetailItem leftText={LVStrings.transfer_remarks} rightText={remarks}></DetailItem> */}
