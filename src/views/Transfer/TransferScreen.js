@@ -68,12 +68,13 @@ type State = {
     wallet: LVWallet,
     password: string,
     transactionParams: ?Object;
-    curETH: number,
+    curETH: Big,
+    token: string, // 这里指 type (LVTC 或者 ETC)
     addressIn: string,
     amount: Big,
     minGap: number,
     maxGap:number,
-    balance: Big,
+    curLVTC: Big,
     showModal: boolean,
     openSelectWallet: boolean,
     showQrScanModal: boolean,
@@ -98,12 +99,13 @@ class TransferScreen extends Component<Props, State> {
         this.state = {
             wallet: wallet || LVWallet.emptyWallet(),
             password: '',
+            token: '',
             transactionParams: null,
-            curETH: wallet != null ? wallet.eth: 0,
+            curETH: LVBig.getInitBig(),
+            curLVTC: LVBig.getInitBig(),
             addressIn: '',
             amount: LVBig.getInitBig(),
             amountText: '',
-            balance: wallet != null ? wallet.lvtc: 0,
             minGap: 0,
             maxGap:0,
             showModal: false,
@@ -121,13 +123,17 @@ class TransferScreen extends Component<Props, State> {
         LVNotificationCenter.addObserver(this, LVNotification.balanceChanged, this.handlerBalanceChange);
         LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.refreshWalletDatas);
         LVNotificationCenter.addObserver(this, LVNotification.networkStatusChanged, this.handleNeworkChange);
-        this.refreshWalletDatas();
+        
         // this.fixAndroidPaste();
-        const { address } = this.props.navigation.state.params;
+        const { address, token } = this.props.navigation.state.params;
         if (address != null || address != undefined) {
+            // 从联系人进入转账界面
             this.refs.refAddressIn.setText(address);
-            this.setState({ addressIn: address });
+            this.setState({ addressIn: address, token: token});
+        } else {
+            this.setState({ token: token});
         }
+        this.refreshWalletDatas();
     }
 
     fixAndroidPaste() {
@@ -144,9 +150,8 @@ class TransferScreen extends Component<Props, State> {
     }
 
     async tryFetchParams() {
-        const {wallet, amount, addressIn} = this.state;
-        const {token} = this.props.navigation.state.params;
-
+        const {wallet, amount, addressIn, token} = this.state;
+        console.log("token = " + token);
         if (wallet && amount.gt(0) && addressIn && TransferUtils.isValidAddress(addressIn)) {
             try {
                 let params = await TransferLogic.fetchTransactionParam(wallet.address, addressIn, amount, token);
@@ -251,13 +256,13 @@ class TransferScreen extends Component<Props, State> {
             this.setState({
                 wallet: wallet,
                 curETH: wallet.eth,
-                balance: wallet.lvtc,
+                curLVTC: wallet.lvtc,
             });
         }
     }
 
     async onTransferPresse() {
-        const { wallet, addressIn, amount, balance, amountText} = this.state;
+        const { wallet, addressIn, amount, curLVTC, curETH, amountText, token} = this.state;
 
         if (!addressIn) {
             this.setState({alertMessage:LVStrings.transfer_address_required });
@@ -295,15 +300,14 @@ class TransferScreen extends Component<Props, State> {
             return;
         }
 
-
-        if (balance.lt(amount) || (wallet && wallet.eth.lt(this.minerGap))) {
-            if(balance.lt(amount) && (wallet && wallet.eth.lt(this.minerGap))) {
-                this.setState({balanceTip:LVStrings.transfer_lvt_and_eth_insufficient});
-            }else if(balance.lt(amount)) {
-                this.setState({balanceTip:LVStrings.transfer_lvt_insufficient});
-            }else {
-                this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
-            }
+        let isInsufficient = "LVTC" === token.toUpperCase() ? (curLVTC.lt(amount)) : (curETH.lt(amount));
+        if (wallet && curETH.lt(this.minerGap)) {
+            this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
+            this.refs.insufficientDialog.show();
+            return;
+        } else if (isInsufficient) {
+            this.setState({balanceTip: "LVTC" === token.toUpperCase() ? 
+            LVStrings.transfer_lvt_insufficient : LVStrings.transfer_eth_insufficient});
             this.refs.insufficientDialog.show();
             return;
         }
@@ -349,7 +353,7 @@ class TransferScreen extends Component<Props, State> {
     }
 
     async onTransfer() {
-        const {wallet, password, addressIn, amount, balance, transactionParams} = this.state;
+        const {wallet, password, addressIn, amount, balance, transactionParams, token} = this.state;
         if (!transactionParams) {
             TransferUtils.log('transaction params is null');
             this.setState({alertMessage:LVStrings.transfer_fail });
@@ -364,7 +368,6 @@ class TransferScreen extends Component<Props, State> {
             }, 500);
         }
         setTimeout(async ()=> {
-            const {token} = this.props.navigation.state.params;
             let gasPrice = this.userHasSetGap ? TransferUtils.getSetGasPriceHexStr(this.minerGap, transactionParams.gasLimit) : transactionParams.gasPrice;
             let rst = await TransferLogic.transaction(addressIn, password, amount, transactionParams.nonce,
                 transactionParams.gasLimit, gasPrice, transactionParams.token, transactionParams.chainID, wallet, token);
@@ -421,7 +424,7 @@ class TransferScreen extends Component<Props, State> {
                 {this.state.showModal && <TransferDetailModal
                     isOpen= {this.state.showModal}
                     address= {this.state.addressIn}
-                    type={this.props.navigation.state.params.token}
+                    type={this.state.token}
                     amount= {parseFloat(this.state.amount.toFixed())}
                     minerGap= {this.minerGap}
                     onClosed = {()=>{this.setState({ showModal: false })}}
