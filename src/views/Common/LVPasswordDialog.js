@@ -116,7 +116,7 @@ export class LVPasswordDialog extends React.Component<Props, State> {
                             style={{width: 210, height: 50}}
                             inputContainerStyle = {{borderWidth : 1 , borderColor : "#C3C8D4" , height : 40 , width : "100%" , paddingLeft : 10 , paddingRight : 10 , borderRadius: 4}}
                             secureTextEntry={true}
-                            withUnderLine={true}
+                            withUnderLine={false}
                             onTextChanged={newText => {
                                 this.setState({ inputPwd: newText.trim() });
                             }}

@@ -8,7 +8,7 @@
 import Big from 'big.js';
 
 class LVBalance {
-    token: string;
+    token: string; // token 区分大小写
     value: Big;
 
     constructor(token: string, value: number | string | Big) {
@@ -30,12 +30,12 @@ class LVWallet {
         this.balance_list = [];
     }
 
-    get lvt(): Big {
-        return this.getBalance('lvt');
+    get lvtc(): Big {
+        return this.getBalance('LVTC');
     }
 
-    set lvt(value: number | string | Big) {
-        this.setBalance('lvt', value);
+    set lvtc(value: number | string | Big) {
+        this.setBalance('LVTC', value);
     }
 
     get eth(): Big {
@@ -43,13 +43,12 @@ class LVWallet {
     }
 
     set eth(value: number | string | Big) {
-        this.setBalance('lvt', value);
+        this.setBalance('eth', value);
     }
 
     getBalance(token: string) : Big {
-        const lowerCaseToken = token.toLowerCase();
         var balance = this.balance_list.find(((value, index, arr) => {
-            return value.token === lowerCaseToken;
+            return value.token === token;
         }));
         return balance ? balance.value : Big(0);
     }
@@ -65,7 +64,7 @@ class LVWallet {
         var isNotFound = true;
         for (var i = 0; i < this.balance_list.length; i++) {
             var balance = this.balance_list[i];
-            if (balance.token === token.toLowerCase()) {
+            if (balance.token === token) {
                 balance.value = Big(value);
                 isNotFound = false;
                 break;

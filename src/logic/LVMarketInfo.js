@@ -16,7 +16,7 @@ class LVMarketInfo {
     constructor() {}
 
     static usd_per_eth = 0;
-    static lvt_per_eth = 0;
+    static lvtc_per_eth = 0;
 
     static async updateExchangeRateIfNecessary() {
         const lastFetchTime = await LVPersistent.getNumber(LastExchangeRateFethTimeKey);
@@ -26,7 +26,7 @@ class LVMarketInfo {
             try {
                 const rate = await LVNetworking.fetchMarketExchangeRates();
                 this.usd_per_eth = rate.eth_usd;
-                this.lvt_per_eth = rate.eth_lvt;
+                this.lvtc_per_eth = rate.eth_lvtc;
                 await LVPersistent.setObject(LastExchangeRateKey, rate);
                 await LVPersistent.setNumber(LastExchangeRateFethTimeKey, currentTime);
             } catch (error) {
@@ -36,7 +36,7 @@ class LVMarketInfo {
             const rate = await LVPersistent.getObject(LastExchangeRateKey);
             if (rate) {
                 this.usd_per_eth = rate.eth_usd;
-                this.lvt_per_eth = rate.eth_lvt;
+                this.lvtc_per_eth = rate.eth_lvtc;
             }
         }
     }

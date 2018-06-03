@@ -31,7 +31,7 @@ export default class TransferLogic {
         let from = TransferUtils.convertToHexHeader(wallet.address);
         let v = TransferUtils.convert2BNHex(value);
         return new Promise((resolve, reject) => {
-            let params = {from: from, to: to, value: v, nonce: nonce, gasLimit: gasLimit, gasPrice: gasPrice, lvt: wallet.lvt, eth: wallet.eth};
+            let params = {from: from, to: to, value: v, nonce: nonce, gasLimit: gasLimit, gasPrice: gasPrice, lvtc: wallet.lvtc, eth: wallet.eth};
             TransferUtils.log('transfer params = '+ JSON.stringify(params));
             let result = this.innerTransaction(to, password, v, nonce, gasLimit, gasPrice, token, chainId, wallet, type);
             resolve(result);

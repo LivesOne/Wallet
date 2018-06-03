@@ -44,7 +44,7 @@ class WalletManager {
                 this.wallets = [];
                 walletsInfo.wallets.forEach((w) => {
                     var new_wallet = new LVWallet(w.name, w.keystore);
-                    new_wallet.setBalance('lvt', w.lvt);
+                    new_wallet.setBalance('LVTC', w.lvt);
                     new_wallet.setBalance('eth', w.eth);
                     this.wallets.push(new_wallet);
                 });
@@ -131,7 +131,8 @@ class WalletManager {
         const wallet = this.getSelectedWallet();
         if (wallet) {
             try {
-                const tokens = ['lvt', 'eth'];
+                const tokens_except_eth = await LVNetworking.fetchTokenList();
+                const tokens = ['eth', ...tokens_except_eth];
                 const balances = await LVNetworking.fetchBalances(wallet.address, tokens);
                 console.log(balances);
                 tokens.forEach((token) => {

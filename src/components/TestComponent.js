@@ -158,7 +158,7 @@ class TestComponent extends Component {
         // const testcases = [
         // '3783469098783433478828372.99999999461031936'];
         for (var i = 0; i< testcases.length; i++) {
-            console.log('old=' + testcases[i] + ' new = ' + beautifyBalanceShow(new Big(testcases[i]), 'LVT').result);
+            console.log('old=' + testcases[i] + ' new = ' + beautifyBalanceShow(new Big(testcases[i]), 'LVTC').result);
         }
     }
 
@@ -210,7 +210,7 @@ class TestComponent extends Component {
         // WalletUtils.log('list =' + JSON.stringify(result1));
 
         WalletUtils.log('test fetch balances');
-        const result1 = await LVNetworking.fetchBalances(wallet.address, ["lvt", "eth"]);
+        const result1 = await LVNetworking.fetchBalances(wallet.address, ["LVTC", "eth"]);
         WalletUtils.log('balances =' + JSON.stringify(result1));
 
         // WalletUtils.log('get app config');

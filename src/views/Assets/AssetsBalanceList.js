@@ -17,7 +17,7 @@ const left_shadow = require('../../assets/images/assets_card_left_shadow.png');
 const right_shadow = require('../../assets/images/assets_card_right_shadow.png');
 
 const tokenImageIcons = {
-    lvt: require('../../assets/images/lvt.png'),
+    LVTC: require('../../assets/images/lvt.png'),
     eth: require('../../assets/images/eth.png')
 };
 

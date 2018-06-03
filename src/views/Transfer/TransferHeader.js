@@ -58,7 +58,7 @@ export class TransferHeader extends Component<Props> {
                     <Text style= {[styles.textCommon,]}>{ LVStrings.transfer_purse_balance }</Text>
                     <LVBalanceShowView
                         title={LVStrings.show_LVT_balance} 
-                        unit={'LVT'}
+                        unit={'LVTC'}
                         balance = {balance}
                         textStyle= {[styles.textCommon, {fontSize: this.getBalanceSize(), fontWeight: '600'}]}>
                     </LVBalanceShowView>

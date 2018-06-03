@@ -21,7 +21,6 @@ import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVWallet from '../../logic/LVWallet';
 import LVWalletManager from '../../logic/LVWalletManager';
-import LVMarketInfo from '../../logic/LVMarketInfo';
 import LVNetworking from '../../logic/LVNetworking';
 import LVPersistent from '../../logic/LVPersistent';
 import LVNotification from '../../logic/LVNotification';
@@ -154,9 +153,7 @@ class AssetsScreen extends Component<Props, State> {
 
     render() {
         const wallet = this.state.wallet || LVWallet.emptyWallet();
-
-        // only support LVT in this version.
-        const balance_list = wallet.balance_list.filter((value) => { return value.token === 'lvt' });
+        const balance_list = wallet.balance_list;
 
         return (
             <View style={styles.container}>
