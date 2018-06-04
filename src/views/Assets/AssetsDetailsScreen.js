@@ -101,17 +101,8 @@ class AssetsDetailsScreen extends Component<Props, State> {
     };
 
     handleTranscationRecordsChanged = () => {
-        this.setState({ records: LVTransactionRecordManager.records });
-    }
-
-    async loadTransactionRecords() {
-        try {
-            console.log('load records');
-            await LVTransactionRecordManager.refreshTransactionRecords(this.state.token, false);
-            this.setState({ records: LVTransactionRecordManager.records });
-        } catch (error) {
-            console.log(error);
-        }
+        const records = LVTransactionRecordManager.records.filter( r => r.token === this.state.token );
+        this.setState({ records: records });
     }
 
     async refreshRecords(forceUpdate: boolean = true) {
