@@ -40,8 +40,6 @@ class MXButton extends Component<Props,State> {
     if (disabled) {
       return InActiveStyles;
     } else {
-		  console.log(this.props.isEmptyButtonType);
-		  console.log(this.props.isEmptyButtonType);
      	 return this.state.pressStatus ? (this.props.isEmptyButtonType? ActiveEmptyStyles: ActiveStyles) : (this.props.isEmptyButtonType? NormalEmptyStyles: NormalStyles);
     }
   }

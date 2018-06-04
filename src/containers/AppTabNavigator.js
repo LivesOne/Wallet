@@ -81,8 +81,12 @@ export default () => (
             const preScreen = getRouteName(prevState);
             const curScreen = getRouteName(currentState);
 
+            console.log('preScreen:'+ preScreen + ' -> ' + curScreen);
+
             // set statusBarStyle to light in native
-            if (curScreen === 'Assets' || curScreen === 'AssetsDetails' || curScreen === 'WalletDetailsPage') {
+            if (curScreen === 'Assets' 
+            || curScreen === 'AssetsDetails' 
+            || curScreen === 'WalletDetailsPage') {
                 StatusBar.setBarStyle('light-content', true);
             } else {
                 StatusBar.setBarStyle('default', true);
