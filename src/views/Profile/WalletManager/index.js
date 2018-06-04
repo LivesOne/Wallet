@@ -6,7 +6,7 @@
  */
 
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Image, ScrollView, Button,TouchableHighlight, FlatList } from 'react-native';
+import { Text, View, StyleSheet, Image, ScrollView, Button,TouchableHighlight, FlatList, StatusBar } from 'react-native';
 import { Cell } from 'react-native-tableview-simple';
 import MXNavigatorHeader from './../../../components/MXNavigatorHeader';
 import LVStrings from '../../../assets/localization';
@@ -156,6 +156,7 @@ export class WalletManagerScreen extends Component<Props, State> {
                 </View>
                 <LVFullScreenModalView ref={'creationPage'}>
                     <LVWalletCreationNavigator screenProps={{dismiss: ()=> {
+                        console.log('dissmissing');
                         this.refs.creationPage.dismiss()
                         this.handleWalletChange();
                     } 

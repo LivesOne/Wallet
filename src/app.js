@@ -219,16 +219,12 @@ class VenusApp extends Component<Props, State> {
     getMainScreen() {
         const { loading, needShowGuide, hasAnyWallets } = this.state;
         if (needShowGuide) {
-            StatusBar.setBarStyle('default', false);
             return <AppGuideScreen callback={this.handleAppGuideCallback} />;
         } else if (loading) {
-            StatusBar.setBarStyle('default', false);
             return <LVAppLoadingView />;
         } else if (hasAnyWallets) {
-            StatusBar.setBarStyle('light-content', false);
             return <AppTabNavigator/>
         } else {
-            StatusBar.setBarStyle('default', false);
             return <WalletCreateOrImportPage />;
         }
     }

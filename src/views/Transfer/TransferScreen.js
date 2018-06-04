@@ -523,6 +523,7 @@ class TransferScreen extends Component<Props, State> {
                     <LVConfirmDialog
                         ref={'insufficientDialog'}
                         title={LVStrings.alert_hint}  
+                        dismissAfterConfirm = {true}
                         onConfirm={()=>{this.props.navigation.navigate("ReceiveTip")}} >
                         <Text>{this.state.balanceTip}</Text>
                     </LVConfirmDialog>
