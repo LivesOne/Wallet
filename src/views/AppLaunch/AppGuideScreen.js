@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, View, ImageBackground, Text } from 'react-native';
+import { StyleSheet, View, ImageBackground, Text, StatusBar } from 'react-native';
 import PropTypes from 'prop-types';
 import Swiper from 'react-native-swiper';
 import LVColor from '../../styles/LVColor';
@@ -28,6 +28,10 @@ export default class AppGuideScreen extends Component<Props> {
             this.props.callback();
         }
     };
+
+    componentWillMount() {
+        StatusBar.setBarStyle('default', true);
+    }
 
     render() {
         return (
