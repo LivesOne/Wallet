@@ -59,6 +59,7 @@
     "react-native-localization": "^1.0.9",
     "react-native-modalbox": "^1.4.2",
     "react-native-os": "^1.2.1",
+    "react-native-permissions": "^1.1.1",
     "react-native-progress": "^3.4.0",
     "react-native-qrcode": "^0.2.6",
     "react-native-qrcode-scanner": "0.0.22",

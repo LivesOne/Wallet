@@ -21,18 +21,19 @@ const localized_strings = {
     common_done: '完成',
     common_delete: '删除',
     common_camera_not_authorized: '相机权限未开启',
-    common_next: "下一步",
+    common_next: '下一步',
+    common_open_ettings: '设置',
 
     //receive
-    receive_title:'收款',
-    receive_name:'钱包地址',
-    receive_name_suffix : "的钱包",
-    receive_copy:'复制钱包地址',
+    receive_title: '收款',
+    receive_name: '钱包地址',
+    receive_name_suffix: '的钱包',
+    receive_copy: '复制钱包地址',
     receive_copy_success: '复制成功',
-    receive_save:'保存二维码',
-    receive_empty:'您还未添加钱包',
-    receive_save_finish:'保存完成',
-    
+    receive_save: '保存二维码',
+    receive_empty: '您还未添加钱包',
+    receive_save_finish: '保存完成',
+
     // Wallet
     wallet_import: '导入',
     wallet_import_header: '导入钱包',
@@ -40,9 +41,9 @@ const localized_strings = {
     wallet_import_private_key: '导入私钥',
     wallet_import_plain_private_key_hint: '明文私钥',
     wallet_import_keystore_hint: 'Keystore 文本内容',
-    wallet_import_private_password_lable:'设置密码',
+    wallet_import_private_password_lable: '设置密码',
     wallet_import_private_password_hint: '输入6~12位字母数字组合',
-    wallet_import_private_password_repeat_lable: "重复密码",
+    wallet_import_private_password_repeat_lable: '重复密码',
     wallet_import_private_pwd_confirm_hint: '重复输入你的密码',
     wallet_import_keystore_password_label: 'Keystore密码',
     wallet_import_keystore_password_hint: '请输入Keystore密码',
@@ -53,15 +54,15 @@ const localized_strings = {
     wallet_import_private_key_required: '私钥不能为空！',
     wallet_import_success: '导入成功！',
     wallet_import_fail: '导入失败！',
-    wallet_import_tip_keystore_password : "Keystore密码",
-    
+    wallet_import_tip_keystore_password: 'Keystore密码',
+
     wallet_create_wallet: '创建钱包',
     wallet_create_hint_message: '注意，钱包的密码是单独存在，每个钱包都有自己的密码',
     wallet_creating_wallet: '创建钱包中...',
     wallet_create_name: '钱包名称',
     wallet_create_password_label: '钱包密码',
     wallet_create_confirm_password_label: '确认密码',
-    wallet_create_explaination:'该密码用来加密钱包地址，请尽量设置复杂密码完成加密',
+    wallet_create_explaination: '该密码用来加密钱包地址，请尽量设置复杂密码完成加密',
     wallet_create_password: '设置钱包密码（6-12位字母数字组合）',
     wallet_create_password_verify: '重复输入密码',
     wallet_create_comment: '该密码用来加密钱包地址，请尽量设置复杂密码完成加密。',
@@ -77,11 +78,11 @@ const localized_strings = {
     wallet_backuping: '备份钱包中...',
     wallet_backup_failed: '备份钱包失败，请确认输入的密码是否正确',
     wallet_backup_title_suffix: '钱包备份',
-    wallet_default_name_prefix: "默认钱包",
+    wallet_default_name_prefix: '默认钱包',
 
     wallet_disclaimer: '免责声明',
-    wallet_disclaimer_content: '请确认已经导出的钱包备份的安全性，任何钱包的丢失、被盗、忘记密码等行为产生的损失均与平台无关',
-
+    wallet_disclaimer_content:
+        '请确认已经导出的钱包备份的安全性，任何钱包的丢失、被盗、忘记密码等行为产生的损失均与平台无关',
 
     // inner error
     inner_common_error: '内部错误',
@@ -91,14 +92,14 @@ const localized_strings = {
     //wallet edit
     wallet_edit_save_failed: '保存失败',
     wallet_edit_save_success: '保存成功',
-    wallet_edit_cur_pwd_required : '当前密码密码不能为空',
-    wallet_edit_cur_pwd_error : '当前密码不正确',
-    wallet_edit_new_pwd_required : '新密码不能为空',
-    wallet_edit_new_name_required : '名称不能为空',
+    wallet_edit_cur_pwd_required: '当前密码密码不能为空',
+    wallet_edit_cur_pwd_error: '当前密码不正确',
+    wallet_edit_new_pwd_required: '新密码不能为空',
+    wallet_edit_new_name_required: '名称不能为空',
     wallet_edit_password_same: '新旧密码不能相同',
-    wallet_edit_equal_to_old : '名称跟原名称相同',
-    wallet_editing : '正在修改中...',
-    wallet_exporting : '正在导出中...',
+    wallet_edit_equal_to_old: '名称跟原名称相同',
+    wallet_editing: '正在修改中...',
+    wallet_exporting: '正在导出中...',
     wallet_export_private_key_copied_to_clipboard: '私钥已经复制到剪切板',
     wallet_delete_hint: '确认删除该钱包？',
     wallet_delete_success: '删除钱包成功',
@@ -139,11 +140,11 @@ const localized_strings = {
     transaction_failure_message: '该交易无人打包，已失败。矿工费退回原钱包。',
 
     // Transfer 转账
-    transfer_lvt_insufficient:'您的LVT余额不足，请充值！',
-    transfer_lvt_and_eth_insufficient:'您的LVT、ETH均不足，请充值！',
-    transfer_eth_insufficient:'您的ETH余额不足，请充值！',
+    transfer_lvt_insufficient: '您的LVT余额不足，请充值！',
+    transfer_lvt_and_eth_insufficient: '您的LVT、ETH均不足，请充值！',
+    transfer_eth_insufficient: '您的ETH余额不足，请充值！',
     transfer_amount_insufficient: '您的余额不足，请充值',
-    transfer_insufficient: '您的钱包余额不足，无法完成转账，请转账至此钱包', 
+    transfer_insufficient: '您的钱包余额不足，无法完成转账，请转账至此钱包',
     transfer_address_required: '收款人地址不能为空',
     transfer_address_invalid: '请输入有效的收款人地址',
     transfer_amount_required: '转账金额不能为空',
@@ -215,7 +216,7 @@ const localized_strings = {
     transfer_hint: '执行交易后将扣除您当前钱包中的ETH。交易打包后，矿工费用将不予退还。',
     transfer_payment_details: '支付详情',
     transfer_address_in: '转入地址',
-    
+
     // qr scan
     qrScan_title: '扫一扫',
     qrScan_hint: '将钱包二维码放入方框内扫描',
@@ -255,25 +256,28 @@ const localized_strings = {
     network_timeout: '网络超时',
 
     // exit
-    exit_app_prompt: "退出钱包？",
-    exit: "退出",
+    exit_app_prompt: '退出钱包？',
+    exit: '退出',
 
-     // total title
-     total_lvt: 'LVT 总额',
-     total_eth: 'ETH 总额',
-     show_detail_amount: '交易金额',
-     show_LVT_balance: 'LVT 余额',
+    // total title
+    total_lvt: 'LVT 总额',
+    total_eth: 'ETH 总额',
+    show_detail_amount: '交易金额',
+    show_LVT_balance: 'LVT 余额',
 
-     // over 18 limit
-     over_limit_hint: '转账金额仅支持小数点后18位',
+    // over 18 limit
+    over_limit_hint: '转账金额仅支持小数点后18位',
 
-     //update
-     update_title: '更新提醒',
-     update_text: '发现新版本,快去体验吧!',
-     update_ok: '立即更新',
-     update_cancel: '以后再说',
-     update_download_tip: '后台下载最新的版本',
+    //update
+    update_title: '更新提醒',
+    update_text: '发现新版本,快去体验吧!',
+    update_ok: '立即更新',
+    update_cancel: '以后再说',
+    update_download_tip: '后台下载最新的版本',
 
+    // Permissions
+    can_not_access_camera: '无法访问相机',
+    please_set_camera_author: '请到系统的⌜隐私设置⌟中，允许 共生钱包 访问⌜相机⌟'
 };
 
 export default localized_strings;
