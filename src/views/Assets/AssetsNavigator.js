@@ -25,7 +25,7 @@ const AssetsNavigator = StackNavigator({
     TransactionDetails: { screen: TransactionDetailsScreen },
     Receive: { screen: ReceiveScreen },
     Transfer: { screen: TransferScreen },
-    ReceiveTip: { screen: ReceiveTip },
+    ReceiveTip: { screen: ReceiveScreen },
     ContactList: { screen: ContactsManagerPage },
     AddEditContactPage: { screen: AddEditContactPage },
     LVTContactDetailPage: { screen: LVTContactDetailPage },

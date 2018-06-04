@@ -23,6 +23,7 @@ import LVTContactDetailPage from '../contacts/LVTContactDetailPage';
 import AssetsDetailsScreen from '../Assets/AssetsDetailsScreen'
 import TransactionDetailsScreen from '../Assets/TransactionDetailsScreen';
 import ReceiveTip from '../Receive/ReceiveTip';
+import ReceiveScreen from '../Receive/ReceiveScreen';
 import TransferScreen from '../Transfer/TransferScreen';
 
 const ProfileNavigator = StackNavigator(
@@ -41,7 +42,7 @@ const ProfileNavigator = StackNavigator(
         AssetsDetails: { screen: AssetsDetailsScreen },
         TransactionDetails: { screen: TransactionDetailsScreen },
         Transfer: { screen: TransferScreen },
-        ReceiveTip: { screen: ReceiveTip },
+        ReceiveTip: { screen: ReceiveScreen },
     },
     {
         headerMode: 'none',

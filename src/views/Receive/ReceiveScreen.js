@@ -25,13 +25,13 @@ import LVNotification from '../../logic/LVNotification';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import { StringUtils } from '../../utils';
 
-// import QRCode from 'react-native-qrcode-svg';
+import QRCode from 'react-native-qrcode-svg';
 import RNFS from "react-native-fs"
 import Toast from 'react-native-root-toast';
 import TransferUtils from '../Transfer/TransferUtils';
 
 
-import QRCode from 'react-native-qrcode';
+// import QRCode from 'react-native-qrcode';
 const receive_share = require("../../assets/images/receive_share.png");
 const lvt = require("../../assets/images/lvt.png");
 const receive_change_wallet = require("../../assets/images/receive_change_wallet.png");
@@ -234,14 +234,15 @@ class ReceiveScreen extends Component {
                         <Text ellipsizeMode="middle" numberOfLines={1} style={styles.address}>
                             {StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 11)}
                         </Text>
-
-                        <QRCode
-                        getRef={(c) => (this.svg = c)}
-                        style={styles.qrcode_pic}
-                        value={TransferUtils.convertAddr2Iban(this.state.wallet.address)}
-                        size={162}
-                        bgColor='white'
-                        fgColor='black'/>
+                        <View style = {{marginLeft : 25}}>
+                            <QRCode
+                            getRef={(c) => (this.svg = c)}
+                            style={styles.qrcode_pic}
+                            value={TransferUtils.convertAddr2Iban(this.state.wallet.address)}
+                            size={162}
+                            bgColor='white'
+                            fgColor='black'/>
+                        </View>
 
                         <MXButton
                             rounded = {true}
