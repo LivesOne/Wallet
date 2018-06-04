@@ -18,59 +18,70 @@ import TransferUtils from '../views/Transfer/TransferUtils';
 class LVTransactionRecord {
     block: number;
     hash: string;
-    
+
     from: string;
     to: string;
-    
+
     token: string;
-    amount: Object;
-    minnerFee: Object;
-    
+    amount: Big;
+    minnerFee: Big;
+
     timestamp: number;
     remarks: string;
     state: string; // ok, failed, waiting
 
-    constructor(json: any, state: string = 'ok', token: string) {
-        this.block = json.block;
-        this.hash  = json.transactionHash;
-        this.from  = this.pureAddress(json.from);
-        this.to    = this.pureAddress(json.to);
-        this.token = json.token || token;
-        this.state = state;
-
-        if (state === 'waiting') {
-            this.amount = json.amount ? new Big(json.amount) : Big(0);
-            this.minnerFee = json.fee ? new Big(json.fee) : Big(0);
-            this.timestamp = json.timestamp;
-        } else if (state !== 'failed'){
-            try {
-                this.amount = new Big(json.value).times(new Big(10).pow(-18));
-            } catch (e) {
-                TransferUtils.log('error = ' + e.message + " value = " + json.value);
-            }
-        }
+    constructor() {
     }
 
     get type(): string {
         const wallet = LVWalletManager.getSelectedWallet();
-        return this.isEqualAddress(this.to, wallet ? wallet.address : '') ? 'in' : 'out';
+        return LVTransactionRecord.isEqualAddress(this.to, wallet ? wallet.address : '') ? 'in' : 'out';
     }
 
     get datetime(): string {
         return this.timestamp ? Moment(this.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss') : '';
     }
 
-    unfinishedRecordJson() {
-        return {
-            transactionHash: this.hash,
-            from: this.from,
-            to: this.to,
-            token: this.token,
-            amount: this.amount,
-            fee: this.minnerFee,
-            timestamp: this.timestamp,
-            state: this.state
-        };
+    static recordFromObject(obj: Object) {
+        var record = new LVTransactionRecord();
+
+        record.block    = obj.block;
+        record.hash     = obj.hash;
+        record.from     = obj.from;
+        record.to       = obj.to;
+        record.token    = obj.token;
+        record.amount   = Big(obj.amount);
+        record.minnerFee= Big(obj.minnerFee);
+        record.timestamp= obj.timestamp;
+        record.remarks  = obj.remarks;
+        record.state    = obj.state;
+
+        return record;
+    }
+
+    static recordFromJson(json: any, token: string, state: string = 'ok') {
+        var record = new LVTransactionRecord();
+
+        record.block = json.block;
+        record.hash = json.transactionHash;
+        record.from = this.pureAddress(json.from);
+        record.to = this.pureAddress(json.to);
+        record.token = json.token || token;
+        record.state = state;
+
+        if (state === 'waiting') {
+            record.amount = json.amount ? new Big(json.amount) : Big(0);
+            record.minnerFee = json.fee ? new Big(json.fee) : Big(0);
+            record.timestamp = json.timestamp;
+        } else if (state !== 'failed') {
+            try {
+                record.amount = new Big(json.value).times(new Big(10).pow(-18));
+            } catch (e) {
+                TransferUtils.log('error = ' + e.message + ' value = ' + json.value);
+            }
+        }
+
+        return record;
     }
 
     setRecordDetail(detailJson: any) {
@@ -88,7 +99,7 @@ class LVTransactionRecord {
         }
     }
 
-    pureAddress(addr: string): string {
+    static pureAddress(addr: string): string {
         if (addr.substr(0, 2).toLowerCase() == '0x') {
             return addr.substr(2);
         } else {
@@ -96,126 +107,100 @@ class LVTransactionRecord {
         }
     }
 
-    isEqualAddress(addr1: string, addr2: string): boolean {
+    static isEqualAddress(addr1: string, addr2: string): boolean {
         return this.pureAddress(addr1).toLowerCase() == this.pureAddress(addr2).toLowerCase();
     }
 }
 
-const LVTransactionUnfinishedRecords = '@Venus:UnfinishedRecordsV1';
+const lv_transcation_records_key = '@Venus:LVTransactionRecordsV1';
 
 export default class LVTransactionRecordManager {
     static records: Array<LVTransactionRecord> = [];
-    static unfinish_records: Array<LVTransactionRecord> = [];
-    static in_using_balances: Array<LVBalance> = [];
 
     constructor() {
-        LVNotificationCenter.addObserver(
-            this,
-            LVNotification.transcationCreated,
-            this.handleTransactionCreated.bind(this)
-        );
+        LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChanged.bind(this));
+        LVNotificationCenter.addObserver(this, LVNotification.transcationCreated, this.handleRecordCreated.bind(this));
     }
 
     static clear() {
         this.records = [];
-        this.unfinish_records = [];
-        this.in_using_balances = [];
     }
 
-    async handleTransactionCreated(json: ?Object) {
+    async handleWalletChanged() {
+        await LVTransactionRecordManager.clear();
+    }
+
+    async handleRecordCreated(json: ?Object) {
         const wallet = LVWalletManager.getSelectedWallet();
         if (json && wallet) {
-            const record = new LVTransactionRecord(json, 'waiting', json.token);
+            const record = LVTransactionRecord.recordFromJson(json, json.token, 'waiting');
             LVTransactionRecordManager.records.unshift(record);
-            LVTransactionRecordManager.unfinish_records.push(record);
-
-            //LVTransactionRecordManager.in_using_balances.push(new LVBalance(record.token, record.amount));
-            //LVTransactionRecordManager.in_using_balances.push(new LVBalance('eth', record.minnerFee));
-
-            //wallet.minusBalance(record.token, record.amount);
-            //wallet.minusBalance('eth', record.minnerFee);
-
-            await LVTransactionRecordManager.saveUnfinishedTransactionRecords();
-
+            LVTransactionRecordManager.saveRecordsToLocal();
             LVNotificationCenter.postNotification(LVNotification.transcationRecordsChanged);
         }
     }
 
-    static async saveUnfinishedTransactionRecords() {
+    static async saveRecordsToLocal() {
         const wallet = LVWalletManager.getSelectedWallet();
         if (wallet) {
-            const objects = this.unfinish_records.map(record => record.unfinishedRecordJson());
-            await LVPersistent.setObject(LVTransactionUnfinishedRecords + '_' + wallet.address, objects);
+            const key = lv_transcation_records_key + '_' + wallet.address;
+            await LVPersistent.setObject(key, this.records);
         }
     }
 
-    static async fetchSavedUnfinishedTransactionRecords() {
+    static async loadRecordsFromLocal() {
         const wallet = LVWalletManager.getSelectedWallet();
         if (wallet) {
-            const uObjects = await LVPersistent.getObject(LVTransactionUnfinishedRecords + '_' + wallet.address);
-            if (uObjects && uObjects.length > 0) {
-                const uRecords = uObjects.map(json => new LVTransactionRecord(json, json.state, json.token));
-                return uRecords;
+            const key = lv_transcation_records_key + '_' + wallet.address;
+            const objects: ?Array<Object> = await LVPersistent.getObject(key);
+            if (objects && objects.length > 0) {
+                const records = objects.map( (obj) => LVTransactionRecord.recordFromObject(obj) );
+                this.records = records;
             }
         }
-        return null;
     }
 
-    static async refreshTransactionRecords(token: string) {
-        const wallet = LVWalletManager.getSelectedWallet();
-        if (wallet) {
-            let _finishedRecords = [];
-            let _unfinishedRecords = [];
-            let _preUsedLvt = 0;
-            let _preUsedEth = 0;
-
-            const value = await LVNetworking.fetchTransactionHistory(wallet.address, token);
-
-            if (value && value.length > 0) {
-                _finishedRecords = value.map(record => new LVTransactionRecord(record, wallet.address, token));
-
-                for (var index = 0; index < _finishedRecords.length; index++) {
-                    var element = _finishedRecords[index];
-                    const detail = await LVNetworking.fetchTransactionDetail(element.hash);
-                    element.setRecordDetail(detail);
-                }
-            }
-
-            const uRecords = await this.fetchSavedUnfinishedTransactionRecords();
-            if (uRecords) {
-                _unfinishedRecords.push(...uRecords);
-            }
-
-            for (var index = _unfinishedRecords.length - 1; index >= 0; index--) {
-                var element = _unfinishedRecords[index];
-                const found = _finishedRecords.findIndex(r => r.hash == element.hash) != -1;
-                if (found) {
-                    _unfinishedRecords.pop();
-                } else {
-                    const detail = await LVNetworking.fetchTransactionDetail(element.hash);
-                    element.setRecordDetail(detail);
-
-                    if (element.state === 'waiting') {
-                        _preUsedLvt += element.amount;
-                        _preUsedEth += element.minnerFee;
-                    }
-                }
-            }
-
-            this.records = [];
-            this.unfinish_records = [];
-
-            this.records.push(..._finishedRecords);
-            this.unfinish_records.push(..._unfinishedRecords);
-
-            await this.saveUnfinishedTransactionRecords();
-
-            this.records.push(...this.unfinish_records);
-            this.records.sort((a, b) => b.timestamp - a.timestamp);
-
-            //this.preUsedLvt = new Big(_preUsedLvt);
-            //this.preUsedEth = new Big(_preUsedEth);
+    static async refreshTransactionRecords(token: string, forceUpdate: boolean) {
+        if (this.records.length === 0) {
+            await this.loadRecordsFromLocal();
         }
+
+        if (!forceUpdate && this.records.length > 0) return;
+
+        const wallet = LVWalletManager.getSelectedWallet();
+        if (wallet === null || wallet === undefined) return;
+
+        var address = wallet.address;
+        if (address.substr(0, 2).toLowerCase() != '0x') {
+            address = '0x' + address;
+        }
+
+        const history: ?Array<any> = await LVNetworking.fetchTransactionHistory(address, token);
+        if (history === null || history === undefined) return;
+
+        const trans_records: ?Array<LVTransactionRecord> = history.map(json => LVTransactionRecord.recordFromJson(json, token));
+        if (trans_records === null || trans_records === undefined || trans_records.length === 0) return;
+
+        for (var record of trans_records) {
+            const find_index = this.records.findIndex(r => r.hash === record.hash);
+
+            if (find_index === -1) {
+                const detail = await LVNetworking.fetchTransactionDetail(record.hash);
+                record.setRecordDetail(detail);
+                this.records.push(record);
+            } else {
+                const cached_record = this.records[find_index];
+                if (cached_record.state != 'ok') {
+                    const detail = await LVNetworking.fetchTransactionDetail(record.hash);
+                    record.setRecordDetail(detail);
+                    this.records[find_index] = record;
+                }
+            }
+        }
+
+        this.records.sort((a, b) => b.timestamp - a.timestamp);
+
+        await this.saveRecordsToLocal();
     }
 }
 

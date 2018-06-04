@@ -92,8 +92,10 @@ export class LVPasswordDialog extends React.Component<Props, State> {
                 onConfirm={()=>{
                     if (!this.state.inputPwd) {
                         Keyboard.dismiss();
-                        onVerifyResult(false, inputPwd)
-                        this.dismiss();
+                        setTimeout(() => {
+                            onVerifyResult(false, inputPwd)
+                            this.dismiss();
+                        }, 200)
                     } else {
                         Keyboard.dismiss();
                     setTimeout(async ()=>{

@@ -184,7 +184,7 @@ class VenusApp extends Component<Props, State> {
                     ref={'exitDialog'}
                     title={LVStrings.alert_hint}  
                     onConfirm={()=> {BackHandler.exitApp()}} >
-                        <Text>{LVStrings.exit_app_prompt}</Text>
+                        <Text style={{color: '#697585', fontSize: 16,}}>{LVStrings.exit_app_prompt}</Text>
                 </LVConfirmDialog>
                 <LVConfirmDialog
                     ref={'update'}
@@ -195,7 +195,7 @@ class VenusApp extends Component<Props, State> {
                         this.state.needUpdate(true);
                         this.refs.update.dismiss();
                     }} >
-                        <Text>{LVStrings.update_text}</Text>
+                        <Text style={{color: '#697585', fontSize: 16,}}>{LVStrings.update_text}</Text>
                 </LVConfirmDialog>
             </View>
     }

@@ -31,11 +31,12 @@ const transferIcon = require('../../assets/images/assets_transfer.png');
 
 type Props = { navigation: Object };
 type State = {
+    token: string,
     wallet: LVWallet,
+    records: Array<LVTransactionRecord>,
+    refreshing: boolean,
     startDate: string,
     endDate: string,
-    refreshing: boolean,
-    transactionRecords: ?Array<LVTransactionRecord>
 };
 
 class AssetsDetailsScreen extends Component<Props, State> {
@@ -48,11 +49,12 @@ class AssetsDetailsScreen extends Component<Props, State> {
         super(props);
         const wallet = LVWalletManager.getSelectedWallet() || LVWallet.emptyWallet();
         this.state = {
+            token: props.navigation.state.params.token,
             wallet: wallet,
+            records: [],
+            refreshing: false,
             startDate: '',
             endDate: '',
-            refreshing: false,
-            transactionRecords: null
         };
         this.onStartDateChange = this.onStartDateChange.bind(this);
         this.onEndDateChange = this.onEndDateChange.bind(this);
@@ -60,9 +62,9 @@ class AssetsDetailsScreen extends Component<Props, State> {
         this.onTransferButtonPressed = this.onTransferButtonPressed.bind(this);
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.initFilterDate();
-        this.refreshRecords();
+        this.refreshRecords(false);
         LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.handleTranscationRecordsChanged);
     }
 
@@ -99,24 +101,34 @@ class AssetsDetailsScreen extends Component<Props, State> {
     };
 
     handleTranscationRecordsChanged = () => {
-        this.setState({ transactionRecords: LVTransactionRecordManager.records });
+        const records = LVTransactionRecordManager.records.filter( r => r.token === this.state.token );
+        this.setState({ records: records });
     }
 
-    async refreshRecords() {
+    async refreshRecords(forceUpdate: boolean = true) {
+        if (LVTransactionRecordManager.records.length === 0) {
+            await LVTransactionRecordManager.loadRecordsFromLocal();
+        }
+
+        const records = LVTransactionRecordManager.records.filter( r => r.token === this.state.token );
+
+        if (records.length > 0 && !forceUpdate) {
+            this.setState({ records: records });
+            return;
+        }
+
         this.setState({ refreshing: true });
         try {
-            const { token } = this.props.navigation.state.params;
-
             await LVWalletManager.updateWalletBalance();
-            await LVTransactionRecordManager.refreshTransactionRecords(token);
+            await LVTransactionRecordManager.refreshTransactionRecords(this.state.token, true);
 
-            const records = LVTransactionRecordManager.records; 
+            const records = LVTransactionRecordManager.records.filter( r => r.token === this.state.token );
             const wallet = LVWalletManager.getSelectedWallet();
 
             if (wallet) {
-                this.setState({ wallet: wallet, transactionRecords: records });
+                this.setState({ wallet: wallet, records: records });
             } else {
-                this.setState({ transactionRecords: records });
+                this.setState({ records: records });
             }
 
             setTimeout(async () => {
@@ -138,15 +150,12 @@ class AssetsDetailsScreen extends Component<Props, State> {
     };
 
     render() {
-        const { wallet, startDate, endDate, transactionRecords } = this.state;
-        const { token } = this.props.navigation.state.params;
+        const { token, wallet, records, startDate, endDate } = this.state;
 
         const startTimestamp = Moment(startDate, 'YYYY-MM-DD').format('X');
         const endTimestamp = Moment(endDate, 'YYYY-MM-DD').add(1, 'days').format('X');
 
-        const filteredRecords = transactionRecords
-            ? transactionRecords.filter(item => item.token === token && item.timestamp >= startTimestamp && item.timestamp <= endTimestamp)
-            : null;
+        const filteredRecords = records.filter(r => r.timestamp >= startTimestamp && r.timestamp <= endTimestamp);
 
         return (
             <View style={styles.container}>
