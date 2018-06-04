@@ -323,7 +323,8 @@ export default class AssetsImportPage extends React.Component<Props, State> {
           <TextInput
             textAlignVertical={'top'}
             multiline= {true}
-            value={this.state.keyStore}
+			value={this.state.keyStore}
+			keyboardType = {'ascii-capable'}
             placeholder={ LVStrings.wallet_import_keystore_hint }
             underlineColorAndroid = {'transparent'}
             onChangeText={(newText)=>{this.setState({keyStore: newText})}}
