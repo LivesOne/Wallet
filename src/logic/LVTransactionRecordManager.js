@@ -170,7 +170,12 @@ export default class LVTransactionRecordManager {
         const wallet = LVWalletManager.getSelectedWallet();
         if (wallet === null || wallet === undefined) return;
 
-        const history: ?Array<any> = await LVNetworking.fetchTransactionHistory(wallet.address, token);
+        var address = wallet.address;
+        if (address.substr(0, 2).toLowerCase() != '0x') {
+            address = '0x' + address;
+        }
+
+        const history: ?Array<any> = await LVNetworking.fetchTransactionHistory(address, token);
         if (history === null || history === undefined) return;
 
         const trans_records: ?Array<LVTransactionRecord> = history.map(json => LVTransactionRecord.recordFromJson(json, token));
