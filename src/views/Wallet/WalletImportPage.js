@@ -350,7 +350,9 @@ export default class AssetsImportPage extends React.Component<Props, State> {
       return (
         <View style={{ flex : 1}}>
         <LVKeyboardAvoidingView behavior='padding' style={{height : 500}}>
-            <PrivateKeyImportContentView style={{ flex: 1}}>
+            <PrivateKeyImportContentView style={{ flex: 1}}
+              keyboardShouldPersistTaps = 'handled'
+              >
               <TextInput
                 textAlignVertical={'top'}
                 multiline= {true}
