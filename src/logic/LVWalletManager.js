@@ -132,7 +132,7 @@ class WalletManager {
         if (wallet) {
             try {
                 const tokens_except_eth = await LVNetworking.fetchTokenList();
-                const tokens = ['eth', ...tokens_except_eth];
+                const tokens = [...tokens_except_eth, 'eth'];
                 const balances = await LVNetworking.fetchBalances(wallet.address, tokens);
                 console.log(balances);
                 tokens.forEach((token) => {

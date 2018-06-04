@@ -15,7 +15,6 @@ import LVUtils from '../../utils';
 import LVStrings from '../../assets/localization';
 import LVDialog from '../Common/LVDialog';
 import LVWalletHeader from '../Common/LVWalletHeader';
-import LVDetailTextCell from '../Common/LVDetailTextCell';
 import LVRefreshIndicator from '../Common/LVRefreshIndicator';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';

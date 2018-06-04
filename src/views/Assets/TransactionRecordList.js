@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     amountText: {
         color: LVColor.text.grey2,
         fontSize: 15,
-        fontWeight: '600',
+        fontFamily: 'DINAlternate-Bold',
         textAlign: 'right'
     },
     statusText: {

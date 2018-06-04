@@ -3,6 +3,7 @@
 import {
     NativeModules,
     Platform,
+    Linking,
 } from 'react-native';
 import RNFS from 'react-native-fs';
 import DeviceInfo from 'react-native-device-info';
@@ -134,7 +135,8 @@ class AppUpdate {
         this.options.needUpdateApp((isUpdate) => {
           if (isUpdate) {
             // RNAppUpdate.installFromAppStore(trackViewUrl);
-            // TODO 添加跳转到ios应用商店
+            const APP_STORE_LINK = 'https://itunes.apple.com/app/' + this.options.iosAppId;
+            Linking.openURL(APP_STORE_LINK).catch(err => console.error('An error occurred', err));
           }
         });
       }
