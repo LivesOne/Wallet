@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { AppState, StyleSheet, Dimensions, Platform, ListView, RefreshControl, View, Text } from 'react-native';
+import { AppState, StyleSheet, Dimensions, Platform, StatusBar, ListView, RefreshControl, View, Text } from 'react-native';
 import Toast from 'react-native-root-toast';
 import Moment from 'moment';
 import LVSize from '../../styles/LVFontSize';
@@ -157,6 +157,7 @@ class AssetsScreen extends Component<Props, State> {
 
         return (
             <View style={styles.container}>
+                <StatusBar barStyle="light-content"/>
                 <View style={styles.topPanel}>
                     <MXNavigatorHeader
                         style={{ backgroundColor: 'transparent' }}
