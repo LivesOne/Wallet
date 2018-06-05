@@ -472,7 +472,7 @@ class TransferScreen extends Component<Props, State> {
 
                     <MXNavigatorHeader
                         style={{ backgroundColor: LVColor.white }}
-                        title={LVStrings.transaction_details}
+                        title={LVStrings.transfer}
                         titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
                         onLeftPress={() => {
                             this.props.navigation.goBack();
