@@ -213,7 +213,7 @@ const localized_strings = {
     transfer_slow: '慢',
     transfer_fast: '快',
     transfer_current_eth: '当前钱包ETH',
-    transfer_hint: '执行交易后将扣除您当前钱包中的ET, 交易打包后, 矿工费用将不予退还.',
+    transfer_hint: '执行交易后将扣除您当前钱包中的ETH, 交易打包后, 矿工费用将不予退还.',
     transfer_payment_details: '支付详情',
     transfer_address_in: '转入地址',
 
@@ -260,10 +260,10 @@ const localized_strings = {
     exit: '退出',
 
     // total title
-    total_lvt: 'LVT 总额',
+    total_lvt: 'LVTC 总额',
     total_eth: 'ETH 总额',
     show_detail_amount: '交易金额',
-    show_LVT_balance: 'LVT 余额',
+    show_LVT_balance: 'LVTC 余额',
 
     // over 18 limit
     over_limit_hint: '转账金额仅支持小数点后18位',

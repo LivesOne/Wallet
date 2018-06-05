@@ -279,6 +279,10 @@ class TransferScreen extends Component<Props, State> {
         }
     }
 
+    componentWillMount() {
+        StatusBar.setBarStyle('default', true);
+    }
+
     refreshWalletDatas = async (needUpdateBalance: boolean = true) => {
         if (needUpdateBalance) {
             await LVWalletManager.updateWalletBalance();
@@ -454,7 +458,6 @@ class TransferScreen extends Component<Props, State> {
         const {transactionParams} = this.state;
         return (
             <View style={{flexDirection: 'column', flex: 1, justifyContent: 'space-between'}}>
-                <StatusBar barStyle="dark-content"/>
                 {this.state.showModal && <TransferDetailModal
                     ref={'detailModal'}
                     isOpen= {this.state.showModal}
@@ -556,7 +559,7 @@ class TransferScreen extends Component<Props, State> {
                         title={LVStrings.alert_hint}  
                         dismissAfterConfirm = {true}
                         onConfirm={()=>{this.props.navigation.navigate("ReceiveTip")}} >
-                        <Text style={{color: '#697585',fontSize: 16,}}>{this.state.balanceTip}</Text>
+                        <Text style={{color: '#697585',fontSize: 16, padding: 4}}>{this.state.balanceTip}</Text>
                     </LVConfirmDialog>
 
                 </TouchableOpacity>

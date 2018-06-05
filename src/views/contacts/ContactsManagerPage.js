@@ -7,7 +7,7 @@
 "use strict";
 
 import React, { Component } from 'react'
-import { Dimensions, Text, View, StyleSheet, Image,TouchableHighlight, FlatList ,PixelRatio,ScrollView,TouchableOpacity} from 'react-native';
+import { Dimensions, Text,StatusBar, View, StyleSheet, Image,TouchableHighlight, FlatList ,PixelRatio,ScrollView,TouchableOpacity} from 'react-native';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVStrings from '../../assets/localization';
 import LVColor from '../../styles/LVColor';
@@ -74,6 +74,10 @@ export default class ContactsManagerPage extends  Component<Props, State> {
         this.onDeleteContact = this.onDeleteContact.bind(this);
         this.onChangedText = this.onChangedText.bind(this);
         this.onSelectedItem = this.onSelectedItem.bind(this);
+    }
+
+    componentWillMount() {
+        StatusBar.setBarStyle('default', true);
     }
 
     onSelectedItem = (item:any,index:number) => {
