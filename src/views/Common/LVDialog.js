@@ -203,14 +203,13 @@ export class LVConfirmDialog extends React.Component<ConfirmDialogProps> {
                 backdropPressToClose={this.props.tapToClose === true}
                 easing={Easing.elastic(0.75)}
             >
-                <View style={styles.dialog}>
+                <View style={styles.confirmDialog}>
                     <View style={styles.confirmDialogTopPanel}>
                         {this.props.title && (
-                            <Text style={[styles.confirmTitle, this.props.titleStyle , {marginBottom : this.props.children ? 10 : 0}]}>{this.props.title}</Text>
+                            <Text style={[styles.confirmTitle, this.props.titleStyle]}>{this.props.title}</Text>
                         )}
-                        <View style={{justifyContent: 'center', alignItems: 'center'}}>{this.props.children}</View>
                     </View>
-                    
+                    <View style={{flex:1,justifyContent: 'center', alignItems: 'center'}}>{this.props.children}</View>
                     <View style={styles.confirmDialogBottomPanel} onPress={this.props.onPressContent}>
                         <View style={{ flex : 1}}>
                             <View style={buttonPanelStyle}>
@@ -268,6 +267,12 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'column'
     },
+    confirmDialog: {
+        flex: 1,
+        width: '100%',
+        flexDirection: 'column',
+        justifyContent: 'space-between'
+    },
     dialogTopPanel: {
         flex:0.7,
         flexDirection: 'column',
@@ -275,10 +280,10 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     confirmDialogTopPanel: {
-        flex:1,
+        height:44,
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     dialogContent: {
         flex: 0.3,
@@ -289,7 +294,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     confirmDialogBottomPanel: {
-        height : 64,
+        height : 54,
         width: '100%',
         flexDirection: 'column',
         justifyContent: 'center',
