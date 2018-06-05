@@ -18,7 +18,8 @@ import {
     Platform,
     PixelRatio,
     NetInfo,
-    StatusBar
+    StatusBar,
+    BackHandler
 } from 'react-native';
 import MXCrossTextInput from './../../components/MXCrossTextInput';
 import MXTouchableImage from '../../components/MXTouchableImage';
@@ -125,6 +126,9 @@ class TransferScreen extends Component<Props, State> {
         LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.refreshWalletDatas);
         LVNotificationCenter.addObserver(this, LVNotification.networkStatusChanged, this.handleNeworkChange);
         
+        BackHandler.addEventListener('hardwareBackPress', () =>  {
+            this.setState({showQrScanModal: false, showModal: false});
+        });
         // this.fixAndroidPaste();
         const { address, token } = this.props.navigation.state.params;
         if (address != null || address != undefined) {
@@ -410,11 +414,13 @@ class TransferScreen extends Component<Props, State> {
                     fee: this.minerGap,
                     timestamp: Moment().format('X'),
                 });
+                this.props.navigation.navigate('AssetsDetails', {
+                    token: token
+                });
                 await this.resetUIState();
             }
             await this.refs.loading.dismiss();
             setTimeout(() => {
-                this.setState({alertMessage: success ? LVStrings.transfer_success : LVStrings.transfer_fail });
                 Toast.show(success ? LVStrings.transfer_success : LVStrings.transfer_fail, { duration: Toast.durations.LONG });
             }, 500);
         },500);
@@ -450,6 +456,7 @@ class TransferScreen extends Component<Props, State> {
             <View style={{flexDirection: 'column', flex: 1, justifyContent: 'space-between'}}>
                 <StatusBar barStyle="dark-content"/>
                 {this.state.showModal && <TransferDetailModal
+                    ref={'detailModal'}
                     isOpen= {this.state.showModal}
                     address= {this.state.addressIn}
                     type={this.state.token}
@@ -458,6 +465,7 @@ class TransferScreen extends Component<Props, State> {
                     onClosed = {()=>{this.setState({ showModal: false })}}
                     onTransferConfirmed = {()=> {
                         this.setState({ showModal: false });
+                        this.refs.detailModal.dismiss();
                         this.onTransfer() }}
                 />}
                 <TouchableOpacity  style={ styles.container } activeOpacity={1} onPress={Keyboard.dismiss} >

@@ -9,6 +9,7 @@
 #import "LVReactExport.h"
 #include "libscrypt.h"
 #import "NSString+LVHexStringToBinary.h"
+#import "LVConfiguration.h"
 
 @implementation LVReactExport
 
@@ -79,13 +80,24 @@ RCT_EXPORT_METHOD(libscrypt:(NSString *)password
   callback(@[result]);
 }
 
+RCT_EXPORT_METHOD(updateAppConfig:(NSDictionary *)appConfig)
+{
+    if (appConfig) {
+        NSString *manifest = [appConfig objectForKey:@"manifest"];
+        if (manifest && manifest.length > 0) {
+            LVConfiguration.enterpriseClientManifestURL = manifest;
+        }
+    }
+}
+
 - (NSDictionary *)constantsToExport
 {
   return @{
            @"isAdHoc": @([self isAdHoc]),
            @"isAppStore" : @([self isAppStore]),
            @"isDebug": @([self isDebug]),
-           @"isRelease": @([self isRelease])
+           @"isRelease": @([self isRelease]),
+           @"isEnterprise": @([self isEnterprise]),
            };
 }
 
@@ -115,6 +127,15 @@ RCT_EXPORT_METHOD(libscrypt:(NSString *)password
 
 - (BOOL)isRelease {
   return !([self isDebug] || [self isAdHoc] || [self isAppStore]);
+}
+
+- (BOOL)isEnterprise {
+#ifdef ENTERPRISE
+    return YES;
+#else
+    return NO;
+#endif
+
 }
 
 @end
