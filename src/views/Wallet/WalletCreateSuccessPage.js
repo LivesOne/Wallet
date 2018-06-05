@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Dimensions, View, Share, Image, StatusBar, Text, NativeModules, Platform, ActionSheetIOS } from 'react-native';
+import { Dimensions, View, Share, Image, StatusBar, Text, NativeModules, Platform, ActionSheetIOS, BackHandler } from 'react-native';
 import MXButton from '../../components/MXButton';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
