@@ -239,7 +239,7 @@ class TransferScreen extends Component<Props, State> {
     }
 
    async  onAddressChanged(address: string) {
-        await this.setState({addressIn: address});
+        await this.setState({addressIn: address.trim()});
         setTimeout(() => {
             this.tryFetchParams();
         }, 100);
