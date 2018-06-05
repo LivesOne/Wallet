@@ -3,7 +3,6 @@
 import {
     NativeModules,
     Platform,
-    Linking,
 } from 'react-native';
 import RNFS from 'react-native-fs';
 import DeviceInfo from 'react-native-device-info';
@@ -99,10 +98,6 @@ class AppUpdate {
   }
 
   getAppStoreVersion() {
-    // if (!this.options.iosAppId) {
-    //   console.log("iosAppId doesn't exist.");
-    //   return;
-    // }
     if (jobId !== -1) {
       return;
     }
@@ -110,41 +105,13 @@ class AppUpdate {
       console.log("apkVersionUrl doesn't exist.");
       return;
     }
-    // this.GET(this.options.apkVersionUrl, this.getApkVersionSuccess.bind(this), this.getVersionError.bind(this));
-    this.GET(this.options.apkVersionUrl, this.getAppStoreCheckVersionSuccess.bind(this), this.getVersionError.bind(this));
+    if (NativeModules.LVReactExport.isEnterprise) {
+      this.GET(this.options.apkVersionUrl, this.getAppStoreCheckVersionSuccess.bind(this), this.getVersionError.bind(this));
+    }
   }
 
   getAppStoreCheckVersionSuccess(remote) {
-    const versionName = remote.result.ios.versionName
-    const versionCode = remote.result.ios.versionCode
-    const appid = remote.result.ios.iosAppId
-    const local_version = DeviceInfo.getReadableVersion();
-    const local_versionCode = DeviceInfo.getBuildNumber();
-
-    if(local_versionCode<versionCode) {
-      this.GET("https://itunes.apple.com/lookup?id=" + appid, this.getAppStoreVersionSuccess.bind(this), this.getVersionError.bind(this));
-    }
-  }
-
-  getAppStoreVersionSuccess(data) {
-    if (data.resultCount < 1) {
-      console.log("iosAppId is wrong.");
-      return;
-    }
-    const result = data.results[0];
-    const version = result.version;
-    const trackViewUrl = result.trackViewUrl;
-    if (version !== DeviceInfo.getReadableVersion()) {
-      if (this.options.needUpdateApp) {
-        this.options.needUpdateApp((isUpdate) => {
-          if (isUpdate) {
-            // RNAppUpdate.installFromAppStore(trackViewUrl);
-            const APP_STORE_LINK = 'https://itunes.apple.com/app/' + this.options.iosAppId;
-            Linking.openURL(APP_STORE_LINK).catch(err => console.error('An error occurred', err));
-          }
-        });
-      }
-    }
+    NativeModules.LVReactExport.updateAppConfig(remote.result.ios);
   }
 
   getVersionError(err) {
@@ -160,7 +127,7 @@ class AppUpdate {
     if (Platform.OS === 'android') {
       this.getApkVersion();
     } else {
-      // this.getAppStoreVersion();
+      this.getAppStoreVersion();
     }
   }
 }
