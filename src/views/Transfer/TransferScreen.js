@@ -180,7 +180,7 @@ class TransferScreen extends Component<Props, State> {
 
     async tryFetchParams() {
         const {wallet, amount, addressIn, token} = this.state;
-        console.log("token = " + token);
+        console.log("token = " + token + " amount = " + amount);
         if (wallet && amount.gt(0) && addressIn && TransferUtils.isValidAddress(addressIn)) {
             try {
                 let params = await TransferLogic.fetchTransactionParam(wallet.address, addressIn, amount, token);
@@ -272,7 +272,7 @@ class TransferScreen extends Component<Props, State> {
         } else {
             this.minerGap = 0;
             this.userHasSetGap = false;
-            this.setState({transactionParams: null})
+            this.setState({transactionParams: null, amount:LVBig.getInitBig()})
         }
     }
 
