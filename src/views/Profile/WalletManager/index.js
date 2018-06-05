@@ -63,6 +63,7 @@ export class WalletManagerScreen extends Component<Props, State> {
 
     componentWillMount() {
         LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange.bind(this));
+        LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletChange.bind(this));
     }
 
 
