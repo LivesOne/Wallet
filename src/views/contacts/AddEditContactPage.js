@@ -24,6 +24,7 @@ import TransferUtils from '../Transfer/TransferUtils';
 import MXButton from '../../components/MXButton';
 import * as MXUtils from "../../utils/MXUtils";
 import LVKeyboardSpacer from '../Common/LVKeyboardSpacer';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const scanImg = require('../../assets/images/transfer_scan.png');
 const navButtonEnableColor = '#FFAE1F';
@@ -156,7 +157,7 @@ export default class AddEditContactPage extends Component<Props, State> {
     componentWillMount() {
         StatusBar.setBarStyle('default', true);
     }
-    
+
     onSubmitEditing=(textInput:string)=>{
         if (textInput === 'addressTextInput') {
             this.refs.addressTextInput.focus();
@@ -202,7 +203,7 @@ export default class AddEditContactPage extends Component<Props, State> {
                     titleStyle={styles.navTitle}
                     onLeftPress={ () => {this.props.navigation.goBack() }}
                 />
-                <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
+                <KeyboardAwareScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
                 <TouchableOpacity activeOpacity={1.0} onPress={()=>{
                     dismissKeyboard();
                 }}>
@@ -267,7 +268,7 @@ export default class AddEditContactPage extends Component<Props, State> {
                     </View>
                     <LVKeyboardSpacer/>
                     </TouchableOpacity>
-                </ScrollView>
+                </KeyboardAwareScrollView>
                 <LVQrScanModal 
                     barcodeReceived={(data)=>{
                         this.refs.addressTextInput.setText(data);
