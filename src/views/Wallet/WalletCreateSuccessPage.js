@@ -74,9 +74,7 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
         setTimeout(async ()=>{
             try {
                 await backupWallet(wallet, password);
-                setTimeout(() => {
-                    this.refs.disclaimer.show();
-                }, 600);
+                this.goBack();
             } catch (error) {
                 if(error === 'cancelled') {
                     return;
@@ -96,6 +94,10 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
     }
 
     onPressBackupLaterButton() {
+        this.goBack();
+    }
+
+    goBack() {
         if (this.props.screenProps.dismiss) {
             this.props.screenProps.dismiss();
         } else {
