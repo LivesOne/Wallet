@@ -5222,9 +5222,16 @@ react-native-fs@^2.9.12:
     Base64 "~0.2.0"
     inherits "~2.0.1"
 
-react-native-iphone-x-helper@^1.0.3:
+react-native-iphone-x-helper@^1.0.1, react-native-iphone-x-helper@^1.0.3:
   version "1.0.3"
   resolved "http://registry.npm.taobao.org/react-native-iphone-x-helper/download/react-native-iphone-x-helper-1.0.3.tgz#7a2f1e0574e899a0f1d426e6167fd98990083214"
+
+react-native-keyboard-aware-scroll-view@^0.5.0:
+  version "0.5.0"
+  resolved "http://registry.npm.taobao.org/react-native-keyboard-aware-scroll-view/download/react-native-keyboard-aware-scroll-view-0.5.0.tgz#57ab933089375bf62f4324797e8be949ad97849d"
+  dependencies:
+    prop-types "^15.6.0"
+    react-native-iphone-x-helper "^1.0.1"
 
 react-native-level-fs@^3.0.1:
   version "3.0.1"

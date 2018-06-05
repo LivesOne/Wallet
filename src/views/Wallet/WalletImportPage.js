@@ -41,6 +41,7 @@ import { LVKeyboardDismissView } from '../Common/LVKeyboardDismissView';
 import { MXCrossInputHeight } from '../../styles/LVStyleSheet';
 import * as MXUtils from "../../utils/MXUtils";
 import LVFontSize from '../../styles/LVFontSize';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 const foundation = require('../../foundation/wallet.js');
 
 type Props = {
@@ -328,18 +329,20 @@ export default class AssetsImportPage extends React.Component<Props, State> {
             right={ require("../../assets/images/transfer_scan.png") }
             onRightPress = { this.onPressScanButton.bind(this) }
             />
-            <View style={styles.contentContainer}>
-              <MXSwitchTab
-                leftText={ LVStrings.wallet_import_keyStore }
-                rightText={ LVStrings.wallet_import_private_key }
-                onTabSwitched={this._onHeaderPressed.bind(this)}
-              />
-              {this.state.leftPressed && this._renderKeystore()}
-              {!this.state.leftPressed && this._renderPrivateKey()}
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+              <View style={styles.contentContainer}>
+                <MXSwitchTab
+                  leftText={ LVStrings.wallet_import_keyStore }
+                  rightText={ LVStrings.wallet_import_private_key }
+                  onTabSwitched={this._onHeaderPressed.bind(this)}
+                />
+                {this.state.leftPressed && this._renderKeystore()}
+                {!this.state.leftPressed && this._renderPrivateKey()}
 
-              <LVLoadingToast ref={'toast'} title={LVStrings.wallet_import_header}/>
-              <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage || ''} buttonTitle={LVStrings.alert_ok}/>
-            </View>
+                <LVLoadingToast ref={'toast'} title={LVStrings.wallet_import_header}/>
+                <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage || ''} buttonTitle={LVStrings.alert_ok}/>
+              </View>
+            </KeyboardAwareScrollView>
         </KeyboardDismissView>
       )
     }
@@ -377,52 +380,44 @@ export default class AssetsImportPage extends React.Component<Props, State> {
     _renderPrivateKey = ()=> {
       return (
         <View style={{ flex : 1}}>
-        <LVKeyboardAvoidingView behavior='padding' style={{height : 500}}>
-            <PrivateKeyImportContentView style={{ flex: 1}}
-              keyboardShouldPersistTaps = 'handled'
-              >
-              <TextInput
-                textAlignVertical={'top'}
-                multiline= {true}
-                value={this.state.privateKey}
-                onChangeText={(newText)=>{this.setState({privateKey: newText})}}
-                placeholder={ LVStrings.wallet_import_plain_private_key_hint }
-                underlineColorAndroid = {'transparent'}
-                style={ styles.textInput }
-              />
+            <TextInput
+              textAlignVertical={'top'}
+              multiline= {true}
+              value={this.state.privateKey}
+              onChangeText={(newText)=>{this.setState({privateKey: newText})}}
+              placeholder={ LVStrings.wallet_import_plain_private_key_hint }
+              underlineColorAndroid = {'transparent'}
+              style={ styles.textInput }
+            />
 
-              <MXCrossTextInput
-                style={[styles.crossTextInputStyle, {marginTop: 15}]}
-                secureTextEntry={true}
-                returnKeyType={'next'}
-                withUnderLine={false}
-                titleText={LVStrings.wallet_import_private_password_lable}
-                onTextChanged={(newText)=>{this.setState({privateKeyPwd: newText})}}
-                placeholder={LVStrings.wallet_import_private_password_hint}
-              />
+            <MXCrossTextInput
+              style={[styles.crossTextInputStyle, {marginTop: 15}]}
+              secureTextEntry={true}
+              returnKeyType={'next'}
+              withUnderLine={false}
+              titleText={LVStrings.wallet_import_private_password_lable}
+              onTextChanged={(newText)=>{this.setState({privateKeyPwd: newText})}}
+              placeholder={LVStrings.wallet_import_private_password_hint}
+            />
 
-              <MXCrossTextInput
-                style={styles.crossTextInputStyle}
-                secureTextEntry={true}
-                titleText={LVStrings.wallet_import_private_password_repeat_lable}
-                onTextChanged={(newText)=>{this.setState({privateKeyPwdAgain: newText})}}
-                placeholder={LVStrings.wallet_import_private_pwd_confirm_hint}
-              />
-              <MXButton
-                rounded
-                style={styles.importButtonStyle}
-                title={LVStrings.wallet_import}
-                onPress={ this.onPrivateImportPress.bind(this) }
-              />
-            </PrivateKeyImportContentView>
-          </LVKeyboardAvoidingView>
+            <MXCrossTextInput
+              style={styles.crossTextInputStyle}
+              secureTextEntry={true}
+              titleText={LVStrings.wallet_import_private_password_repeat_lable}
+              onTextChanged={(newText)=>{this.setState({privateKeyPwdAgain: newText})}}
+              placeholder={LVStrings.wallet_import_private_pwd_confirm_hint}
+            />
+            <MXButton
+              rounded
+              style={styles.importButtonStyle}
+              title={LVStrings.wallet_import}
+              onPress={ this.onPrivateImportPress.bind(this) }
+            />
         </View>
       );
     }
  }
 
- const PrivateKeyImportContentView = (Platform.OS === 'ios') ? View : ScrollView;
- const LVKeyboardAvoidingView = (Platform.OS === 'ios') ? KeyboardAvoidingView : View;
  const KeyboardDismissView = (Platform.OS === 'ios') ? LVKeyboardDismissView : View;
 
 const styles = LVStyleSheet.create({

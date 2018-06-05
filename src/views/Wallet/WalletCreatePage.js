@@ -25,6 +25,7 @@ import { LVKeyboardDismissView } from '../Common/LVKeyboardDismissView';
 import LVFontSize from '../../styles/LVFontSize';
 import * as MXUtils from "../../utils/MXUtils";
 import { MXCrossInputHeight } from '../../styles/LVStyleSheet';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 const backImg = require('../../assets/images/back.png');
 
 type Props = {
@@ -126,7 +127,8 @@ export default class WalletCreatePage extends Component<Props,State> {
 
     render() {
         return (
-            <LVKeyboardDismissView style={styles.container}>
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+                <LVKeyboardDismissView style={styles.container}>
                 <MXNavigatorHeader
                     left={ greyNavigationBackIcon }
                     title={ LVStrings.wallet_create_wallet }
@@ -136,7 +138,7 @@ export default class WalletCreatePage extends Component<Props,State> {
                         } else {
                             this.props.navigation.goBack();
                         }
-                     }}
+                    }}
                 />
                 <View style={styles.content}>
                     <View style={styles.textInputContainer}>
@@ -186,6 +188,7 @@ export default class WalletCreatePage extends Component<Props,State> {
                     width={280}
                     height={180}/>
             </LVKeyboardDismissView>
+        </KeyboardAwareScrollView>  
         )
     }
 }
