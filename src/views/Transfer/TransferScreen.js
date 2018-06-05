@@ -20,7 +20,6 @@ import {
     NetInfo,
     StatusBar
 } from 'react-native';
-import { TransferHeader } from './TransferHeader';
 import MXCrossTextInput from './../../components/MXCrossTextInput';
 import MXTouchableImage from '../../components/MXTouchableImage';
 
@@ -239,7 +238,7 @@ class TransferScreen extends Component<Props, State> {
     }
 
    async  onAddressChanged(address: string) {
-        await this.setState({addressIn: address});
+        await this.setState({addressIn: address.trim()});
         setTimeout(() => {
             this.tryFetchParams();
         }, 100);
