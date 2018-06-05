@@ -212,7 +212,7 @@ const localized_strings = {
     transfer_hint:
         'The ETH in your current wallet will be deducted after the transaction is executed. The miner’s fees will not be refunded after the transaction is packaged.',
     transfer_payment_details: 'Payment details',
-    transfer_address_in: 'Receiver Wallet Address',
+    transfer_address_in: 'Receiver Address',
 
     // App Guide Message
     guide_button_title: 'Enter now',
