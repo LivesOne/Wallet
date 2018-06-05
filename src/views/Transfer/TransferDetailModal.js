@@ -40,6 +40,10 @@ export class TransferDetailModal extends Component<Props> {
         this.onClosed = this.onClosed.bind(this);
     }
 
+    dismiss() {
+        this.refs.dialog.close();
+    }
+
     onClosed = () => {
         if (this.props.onClosed) {
             this.props.onClosed();
@@ -53,7 +57,8 @@ export class TransferDetailModal extends Component<Props> {
     render() {
         const {isOpen, onClosed, address, amount, minerGap, onTransferConfirmed, type} = this.props;
         return (
-            <Modal 
+            <Modal
+                ref={'dialog'} 
                 isOpen={isOpen}
                 style={styles.modal}
                 position={'bottom'}
