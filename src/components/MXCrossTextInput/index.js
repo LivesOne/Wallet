@@ -78,9 +78,6 @@ class MXCrossTextInput extends Component<Props,State> {
     }
 
     onChangeText = function(newText: string) {
-        this.setState({
-            text: newText
-        });
         this.props.onTextChanged && this.props.onTextChanged(newText);
     };
 
@@ -149,7 +146,7 @@ class MXCrossTextInput extends Component<Props,State> {
                             style={[Base.label, theme.label , {padding : 0}]}
                             secureTextEntry={secureTextEntry}
                             clearButtonMode={this.props.withClearButton ? 'while-editing' : 'never'}
-                            onChangeText={this.onChangeText.bind(this)}
+                            onChangeText={this.onChangeText}
                             onSubmitEditing= {()=>{
                                 onSubmitEditing && onSubmitEditing();
                             }}
