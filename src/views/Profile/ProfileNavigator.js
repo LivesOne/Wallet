@@ -46,7 +46,7 @@ const ProfileNavigator = StackNavigator(
     },
     {
         headerMode: 'none',
-        mode: Platform.OS === 'ios' ? 'card' : 'modal',
+        mode: Platform.OS === 'ios' ? 'card' : 'card',
         navigationOptions: {
             gesturesEnabled: true
         },
