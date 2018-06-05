@@ -50,7 +50,14 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
     componentDidMount() {
         StatusBar.setBarStyle('default', true);
         LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
+        if (Platform.OS === 'android') {
+            BackHandler.addEventListener("hardwareBackPress", this.handleBack.bind(this));
+        }
     }
+
+    handleBack = () => {
+        LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
+    };
 
     onVerifyResult(success: boolean, password: string) {
         this.refs.passwordConfirm.dismiss();

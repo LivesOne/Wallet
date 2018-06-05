@@ -56,10 +56,6 @@ type Props = {
 };
 
 class VenusApp extends Component<Props, State> {
-       
-   
-
-
     constructor() {
         super();
 
@@ -113,7 +109,7 @@ class VenusApp extends Component<Props, State> {
             this.refs.exitDialog.show();
             return true;
         }
-      };
+    };
 
     componentDidMount() {
         SplashScreen.hide();
