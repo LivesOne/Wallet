@@ -267,10 +267,10 @@ const localized_strings = {
     exit: 'Exit',
 
     // total title
-    total_lvt: 'Total LVT Amount',
+    total_lvt: 'Total LVTC Amount',
     total_eth: 'Total ETH Amount',
     show_detail_amount: 'Transaction Amount',
-    show_LVT_balance: 'LVT Balance',
+    show_LVT_balance: 'LVTC Balance',
 
     // over 18 limit
     over_limit_hint: 'Transfer Amount Only Support 18 Decimal Places',
