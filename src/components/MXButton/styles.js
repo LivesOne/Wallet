@@ -56,7 +56,7 @@ const NormalEmptyStyles = StyleSheet.create({
   main: {
     backgroundColor: LVColor.white,
     borderColor: LVColor.button.buttonEmptyBorder,
-    borderWidth: StyleSheet.hairlineWidth,
+    borderWidth: 1,
   },
   label: {
     color: LVColor.primary,

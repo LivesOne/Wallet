@@ -16,7 +16,11 @@ class AppUpdate {
   }
 
   GET(url, success, error) {
-    fetch(url)
+    fetch(url , {
+      headers : {
+        'Cache-Control':'no-cache',
+      }
+    })
       .then((response) => response.json())
       .then((json) => {
         success && success(json);
@@ -156,7 +160,7 @@ class AppUpdate {
     if (Platform.OS === 'android') {
       this.getApkVersion();
     } else {
-      this.getAppStoreVersion();
+      // this.getAppStoreVersion();
     }
   }
 }
