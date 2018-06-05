@@ -213,7 +213,7 @@ const localized_strings = {
     transfer_slow: '慢',
     transfer_fast: '快',
     transfer_current_eth: '当前钱包ETH',
-    transfer_hint: '执行交易后将扣除您当前钱包中的ETH。交易打包后，矿工费用将不予退还。',
+    transfer_hint: '执行交易后将扣除您当前钱包中的ET, 交易打包后, 矿工费用将不予退还.',
     transfer_payment_details: '支付详情',
     transfer_address_in: '转入地址',
 
