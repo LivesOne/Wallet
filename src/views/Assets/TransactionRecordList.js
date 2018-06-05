@@ -17,6 +17,7 @@ import {
     TouchableOpacity,
     RefreshControl
 } from 'react-native';
+import Big from 'big.js';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
@@ -125,7 +126,7 @@ const LVEmptyListComponent = () => {
 type ItemProps = {
     type: string,
     token: string,
-    balance: Object,
+    balance: Big,
     address: string,
     datetime: string,
     state: ?string,
