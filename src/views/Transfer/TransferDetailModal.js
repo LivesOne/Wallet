@@ -51,7 +51,7 @@ export class TransferDetailModal extends Component<Props> {
     };
 
     getShowAddress= (address: string) => {
-        return converAddressToDisplayableText(TransferUtils.removeHexHeader(address),9,9)
+        return converAddressToDisplayableText(TransferUtils.removeHexHeader(address),8,8)
     }
 
     render() {
@@ -125,9 +125,11 @@ const styles = StyleSheet.create({
     },
     left: {
         color: LVColor.text.grey1, 
-        fontSize: 16
+        fontSize: 16,
+        marginRight: 20,
     },
     right: {
+        flex: 1,
         color: LVColor.text.grey1, 
         fontSize: 16,  
         textAlign: 'right',

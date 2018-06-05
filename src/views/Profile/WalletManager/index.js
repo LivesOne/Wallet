@@ -43,7 +43,8 @@ type State = {
 export class WalletManagerScreen extends Component<Props, State> {
     static navigationOptions = {
         header: null,
-        tabBarVisible: false
+        tabBarVisible: false,
+        gesturesEnabled: false
     };
 
     onCreateWalletPressed : Function;
