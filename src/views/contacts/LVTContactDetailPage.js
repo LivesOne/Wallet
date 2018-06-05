@@ -7,7 +7,7 @@
 "use strict";
 
 import React, { Component } from 'react'
-import { Dimensions, Text, View, StyleSheet, Image,TouchableHighlight, FlatList,PixelRatio,ScrollView } from 'react-native';
+import { Dimensions, Text,StatusBar, View, StyleSheet, Image,TouchableHighlight, FlatList,PixelRatio,ScrollView } from 'react-native';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVStrings from '../../assets/localization';
 import LVColor from '../../styles/LVColor';
@@ -73,6 +73,10 @@ export default class LVTContactDetailPage extends Component<Props,State>{
         this.renderRow = this.renderRow.bind(this);
         this.onAccountTransferDone = this.onAccountTransferDone.bind(this);
     };
+
+    componentWillMount() {
+        StatusBar.setBarStyle('default', true);
+    }
 
     onAccountTransferDone = ()=> {
         this.props.navigation.navigate('Transfer', { address: this.state.address, token: 'LVTC' });

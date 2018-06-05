@@ -6,7 +6,7 @@
  * @flow
  */
 import React, { Component } from 'react'
-import { Alert, TextInput, View, StyleSheet,TouchableOpacity, ScrollView, Keyboard, Platform,PixelRatio } from 'react-native';
+import { Alert, TextInput, View, StatusBar, StyleSheet,TouchableOpacity, ScrollView, Keyboard, Platform,PixelRatio } from 'react-native';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import MXCrossTextInput from '../../components/MXCrossTextInput';
 import {greyNavigationBackIcon} from '../../assets/LVIcons';
@@ -153,6 +153,10 @@ export default class AddEditContactPage extends Component<Props, State> {
         params.callback();
     }
 
+    componentWillMount() {
+        StatusBar.setBarStyle('default', true);
+    }
+    
     onSubmitEditing=(textInput:string)=>{
         if (textInput === 'addressTextInput') {
             this.refs.addressTextInput.focus();
