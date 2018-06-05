@@ -111,7 +111,7 @@ export class LVPasswordDialog extends React.Component<Props, State> {
                 cancelTitleStyle={verifying ? {color: LVColor.text.grey4} : null}
                 width={300}
                 >
-                    <View style = {{height : 40}}>
+                    <View>
                         {!verifying && 
                         <MXCrossTextInput
                             ref={'textinput'}

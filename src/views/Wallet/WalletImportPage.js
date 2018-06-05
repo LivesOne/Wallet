@@ -6,6 +6,7 @@
 
  import React, { Component } from 'react'
  import {
+    Alert,
     Text,
     View,
     TouchableOpacity,
@@ -26,6 +27,7 @@ import MXCrossTextInput from './../../components/MXCrossTextInput';
 import MXButton from './../../components/MXButton';
 import { MXSwitchTab } from './../../components/MXSwitchTab';
 import { LVQrScanModal } from '../Common/LVQrScanModal';
+import Permissions from 'react-native-permissions';
 import LVWalletManager from '../../logic/LVWalletManager';
 import LVLoadingToast from '../Common/LVLoadingToast';
 import LVDialog from '../Common/LVDialog';
@@ -278,6 +280,33 @@ export default class AssetsImportPage extends React.Component<Props, State> {
 
     }
 
+    async onPressScanButton() {
+      if (Platform.OS === 'android') {
+          await Keyboard.dismiss();
+          this.setState({ showModal: true });
+      }
+      else if (Platform.OS === 'ios') {
+          const response = await Permissions.request('camera');
+          // Response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+          if (response === 'authorized') {
+              this.setState({ showModal: true });
+          } else {
+              Alert.alert(
+                  LVStrings.can_not_access_camera,
+                  LVStrings.please_set_camera_author,
+                  [
+                      {
+                          text: LVStrings.common_cancel,
+                          onPress: () => console.log('Permission denied'),
+                          style: 'cancel',
+                      },
+                      { text: LVStrings.common_open_ettings, onPress: Permissions.openSettings },
+                  ],
+              )
+          }
+      }
+  }
+
     render() {
       const {keyboardHeight} = this.state;
       return (
@@ -297,9 +326,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
                 }
             }}
             right={ require("../../assets/images/transfer_scan.png") }
-            onRightPress = {
-              () => { Keyboard.dismiss(); this.setState({showModal: true}) }
-            }
+            onRightPress = { this.onPressScanButton.bind(this) }
             />
             <View style={styles.contentContainer}>
               <MXSwitchTab

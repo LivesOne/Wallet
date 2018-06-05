@@ -6,7 +6,7 @@
  * @flow
  */
 import React, { Component } from 'react'
-import { TextInput, View, StyleSheet,TouchableOpacity, ScrollView, Keyboard, Platform,PixelRatio } from 'react-native';
+import { Alert, TextInput, View, StyleSheet,TouchableOpacity, ScrollView, Keyboard, Platform,PixelRatio } from 'react-native';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import MXCrossTextInput from '../../components/MXCrossTextInput';
 import {greyNavigationBackIcon} from '../../assets/LVIcons';
@@ -17,6 +17,7 @@ import { checkValidPhone, checkValidEmail, isEmptyString, isNotEmptyString } fro
 import { isAddress, getCharLength } from '../../utils/MXStringUtils';
 import LVDialog from '../Common/LVDialog';
 import LVQrScanModal from '../Common/LVQrScanModal';
+import Permissions from 'react-native-permissions';
 import LVLocalization from '../../assets/localization';
 import MXTouchableImage from '../../components/MXTouchableImage';
 import TransferUtils from '../Transfer/TransferUtils';
@@ -160,11 +161,31 @@ export default class AddEditContactPage extends Component<Props, State> {
         }
     }
 
-    onPressScan() {
-        Keyboard.dismiss();
-        this.setState({
-            showQrScanModal:true
-        });
+    async onPressScan() {
+        if (Platform.OS === 'android') {
+            await Keyboard.dismiss();
+            this.setState({ showQrScanModal: true });
+        }
+        else if (Platform.OS === 'ios') {
+            const response = await Permissions.request('camera');
+            // Response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+            if (response === 'authorized') {
+                this.setState({ showQrScanModal: true });
+            } else {
+                Alert.alert(
+                    LVStrings.can_not_access_camera,
+                    LVStrings.please_set_camera_author,
+                    [
+                        {
+                            text: LVStrings.common_cancel,
+                            onPress: () => console.log('Permission denied'),
+                            style: 'cancel',
+                        },
+                        { text: LVStrings.common_open_ettings, onPress: Permissions.openSettings },
+                    ],
+                )
+            }
+        }
     }
 
     render() {

@@ -7,6 +7,7 @@
 
 import React, { Component } from 'react';
 import {
+    Alert,
     StyleSheet,
     View,
     Text,
@@ -36,6 +37,7 @@ import { TransferDetailModal } from './TransferDetailModal';
 import { ImageTextInput } from './ImageTextInput';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 import { LVQrScanModal } from '../Common/LVQrScanModal';
+import Permissions from 'react-native-permissions';
 import TransferUtils from './TransferUtils';
 import LVWalletManager from '../../logic/LVWalletManager';
 import LVDialog, { LVConfirmDialog } from '../Common/LVDialog';
@@ -149,9 +151,36 @@ class TransferScreen extends Component<Props, State> {
         }
     }
 
+    async onPressScanButton() {
+        if (Platform.OS === 'android') {
+            await Keyboard.dismiss();
+            this.setState({ showQrScanModal: true });
+        }
+        else if (Platform.OS === 'ios') {
+            const response = await Permissions.request('camera');
+            // Response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+            if (response === 'authorized') {
+                this.setState({ showQrScanModal: true });
+            } else {
+                Alert.alert(
+                    LVStrings.can_not_access_camera,
+                    LVStrings.please_set_camera_author,
+                    [
+                        {
+                            text: LVStrings.common_cancel,
+                            onPress: () => console.log('Permission denied'),
+                            style: 'cancel',
+                        },
+                        { text: LVStrings.common_open_ettings, onPress: Permissions.openSettings },
+                    ],
+                )
+            }
+        }
+    }
+
     async tryFetchParams() {
         const {wallet, amount, addressIn, token} = this.state;
-        console.log("token = " + token);
+        console.log("token = " + token + " amount = " + amount);
         if (wallet && amount.gt(0) && addressIn && TransferUtils.isValidAddress(addressIn)) {
             try {
                 let params = await TransferLogic.fetchTransactionParam(wallet.address, addressIn, amount, token);
@@ -210,7 +239,7 @@ class TransferScreen extends Component<Props, State> {
     }
 
    async  onAddressChanged(address: string) {
-        await this.setState({addressIn: address});
+        await this.setState({addressIn: address.trim()});
         setTimeout(() => {
             this.tryFetchParams();
         }, 100);
@@ -243,7 +272,7 @@ class TransferScreen extends Component<Props, State> {
         } else {
             this.minerGap = 0;
             this.userHasSetGap = false;
-            this.setState({transactionParams: null})
+            this.setState({transactionParams: null, amount:LVBig.getInitBig()})
         }
     }
 
@@ -353,7 +382,7 @@ class TransferScreen extends Component<Props, State> {
     }
 
     async onTransfer() {
-        const {wallet, password, addressIn, amount, balance, transactionParams, token} = this.state;
+        const {wallet, password, addressIn, amount, transactionParams, token} = this.state;
         if (!transactionParams) {
             TransferUtils.log('transaction params is null');
             this.setState({alertMessage:LVStrings.transfer_fail });
@@ -443,7 +472,7 @@ class TransferScreen extends Component<Props, State> {
 
                     <MXNavigatorHeader
                         style={{ backgroundColor: LVColor.white }}
-                        title={LVStrings.transaction_details}
+                        title={LVStrings.transfer}
                         titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
                         onLeftPress={() => {
                             this.props.navigation.goBack();
@@ -461,12 +490,7 @@ class TransferScreen extends Component<Props, State> {
                             rightComponent={
                                 <View style={{flexDirection:'row', justifyContent: 'space-between', width: 65}}>
                                     <MXTouchableImage source={addImg} onPress={() => {this.props.navigation.navigate('ContactList',{readonly:true, callback:this.onSelectedContact})}}/>
-                                    <MXTouchableImage source={scanImg} onPress={async() => {
-                                        if (Platform.OS === 'android') {
-                                            await Keyboard.dismiss();
-                                        }
-                                        this.setState({ showQrScanModal: true 
-                                        })}}/>
+                                    <MXTouchableImage source={scanImg} onPress={this.onPressScanButton.bind(this)}/>
                                 </View>
                             }
                             onTextChanged= {this.onAddressChanged.bind(this)}/>
