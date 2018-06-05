@@ -414,6 +414,9 @@ class TransferScreen extends Component<Props, State> {
                     fee: this.minerGap,
                     timestamp: Moment().format('X'),
                 });
+                this.props.navigation.navigate('AssetsDetails', {
+                    token: token
+                });
                 await this.resetUIState();
             }
             await this.refs.loading.dismiss();
