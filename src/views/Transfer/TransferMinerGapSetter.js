@@ -86,7 +86,6 @@ export class TransferMinerGapSetter extends Component<Props, State> {
     isBadAndroidDevices() {
         if (Platform.OS === 'android') {
             const al = DeviceInfo.getAPILevel();
-            TransferUtils.log('api level = ' + al);
             if (al === 19) {
                 return true;
             }
@@ -144,7 +143,7 @@ const styles = StyleSheet.create({
     },
     tipsContainner: {
         height: 35,
-        width: 130,
+        width: 180,
         backgroundColor: LVColor.text.yellow,
         justifyContent: 'center',
         alignItems: 'center',

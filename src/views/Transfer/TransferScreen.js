@@ -20,7 +20,6 @@ import {
     NetInfo,
     StatusBar
 } from 'react-native';
-import { TransferHeader } from './TransferHeader';
 import MXCrossTextInput from './../../components/MXCrossTextInput';
 import MXTouchableImage from '../../components/MXTouchableImage';
 
