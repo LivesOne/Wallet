@@ -559,7 +559,7 @@ class TransferScreen extends Component<Props, State> {
                         title={LVStrings.alert_hint}  
                         dismissAfterConfirm = {true}
                         onConfirm={()=>{this.props.navigation.navigate("ReceiveTip")}} >
-                        <Text style={{color: '#697585',fontSize: 16, padding: 4}}>{this.state.balanceTip}</Text>
+                        <Text style={{color: '#697585',fontSize: 16, padding: 4 , textAlign : 'center'}}>{this.state.balanceTip}</Text>
                     </LVConfirmDialog>
 
                 </TouchableOpacity>
