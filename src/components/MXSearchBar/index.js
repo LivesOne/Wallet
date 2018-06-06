@@ -43,14 +43,17 @@ export default class MXSearchBar extends Component<Props,State> {
     setText = (text:string)=>{
         this.setState({
             currentText: text,
+            hasFocus: true
         });
         this.props.onTextChanged && this.props.onTextChanged(text);
     };
     
     onChangeText = (newText:string) => {
-        this.setState({
-            currentText: newText,
-        });
+       if (Platform.OS === 'android') {
+            this.setState({
+                currentText: newText,
+            });
+       };
         this.props.onTextChanged && this.props.onTextChanged(newText);
     };
 
@@ -70,7 +73,7 @@ export default class MXSearchBar extends Component<Props,State> {
                             placeholder={placeholder}
                             underlineColorAndroid={'transparent'}
                             placeholderTextColor={LVColor.text.placeHolder}
-                            value={text}
+                            value={this.state.currentText}
                             keyboardType={keyboardType}
                             style={styles.textInput}
                             clearButtonMode={'while-editing'}
@@ -91,7 +94,8 @@ export default class MXSearchBar extends Component<Props,State> {
                             }}
                         />
                 <View style={{justifyContent:'center'}}>
-                        { (Platform.OS === 'android') &&
+                        { 
+                            (Platform.OS === 'android') &&
                             this.state.currentText !== null &&
                             this.state.currentText !== '' && 
                             this.state.currentText !== undefined &&
