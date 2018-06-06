@@ -37,7 +37,6 @@ type Props = {navigation: Object };
 type State =  {
         contacts: Array<Object>,
         toDeDeletedContactName: ?string,
-        scrollEnabled: boolean,
         readonly: boolean,
         callback: Function,
         searchContacts:Array<Object>,
@@ -63,7 +62,6 @@ export default class ContactsManagerPage extends  Component<Props, State> {
         this.state = {
             contacts: [],
             toDeDeletedContactName: null,
-            scrollEnabled: true,
             readonly: params.readonly,
             callback: params.callback,
             searchContacts:[],
@@ -188,7 +186,6 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                 autoClose={true}
                 buttonWidth={50}
                 disabled = {this.state.readonly}
-                scroll={ (scrollEnabled)=> {this.setState({scrollEnabled: scrollEnabled});}}
                 close={!(this.state.toDeDeletedContactName == item.name)}
                 onOpen={(sectionID, rowID) => {
                     this.setState({
@@ -283,7 +280,7 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                     />
                 <View style={styles.listContainer}>
                     <FlatList
-                        scrollEnabled={this.state.scrollEnabled}
+                        scrollEnabled={true}
                         extraData={this.state}
                         data={isSearchingStatus?searchContacts:contacts}
                         keyExtractor={(item,index)=> item.name}
@@ -296,12 +293,15 @@ export default class ContactsManagerPage extends  Component<Props, State> {
                         }/>
                 </View>
                 <LVKeyboardSpacer/>
+                <View style = {{height: 80}}>
+                </View>
                 </ScrollView>
+                </TouchableOpacity>
                 <LVConfirmDialog ref={'deleteConfirm'} 
-                            title={LVStrings.contact_confirm_delete_contact}  
+                            title = {''}
+                            children = {<Text style = {{fontSize:15,color:LVColor.text.grey2}}>{LVStrings.contact_confirm_delete_contact}</Text>}
                             dismissAfterConfirm = {true}
                             onConfirm={this.onDeleteContact} />
-                </TouchableOpacity>
             </View>
         );
     }

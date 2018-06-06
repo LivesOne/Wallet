@@ -90,7 +90,7 @@ export class LVQrScanModal extends React.Component<Props, State> {
                                 height: CAMERA_HEIGHT,
                                 flexDirection: 'column',
                                 width: CAMERA_WIDTH,
-                                top: platform.OS === 'ios' ? -CAMERA_HEIGHT : -CAMERA_HEIGHT + 20,
+                                top: platform.OS === 'ios' ? -CAMERA_HEIGHT : (-CAMERA_HEIGHT + 20),
                                 backgroundColor: 'transparent'
                             }}
                         >
