@@ -274,7 +274,8 @@ const styles = StyleSheet.create({
     },
     cellWalletNameTextStyle: {
         fontSize: 16,
-        color: '#677384'
+        color: '#677384',
+        width: '100%'
     },
     cellWalletAddressTextStyle: {
         fontSize: 12,
