@@ -40,12 +40,12 @@ class WalletManager {
         const walletsInfo = await LVPersistent.getObject(WalletsKey);
         if (walletsInfo) {
             console.log(walletsInfo);
-            if (walletsInfo.wallets.length > 0 && walletsInfo.wallets[0].hasOwnProperty("lvt")) { //old persistent
+            if (walletsInfo.wallets.length > 0 && walletsInfo.wallets[0].hasOwnProperty('lvt')) { //old persistent
                 this.wallets = [];
                 walletsInfo.wallets.forEach((w) => {
                     var new_wallet = new LVWallet(w.name, w.keystore);
-                    new_wallet.setBalance('LVTC', w.lvt);
-                    new_wallet.setBalance('eth', w.eth);
+                    new_wallet.setBalance(LVWallet.LVTC_TOKEN, w.lvt);
+                    new_wallet.setBalance(LVWallet.ETH_TOKEN, w.eth);
                     this.wallets.push(new_wallet);
                 });
             } else {
@@ -132,9 +132,9 @@ class WalletManager {
         if (wallet) {
             try {
                 const tokens_except_eth = await LVNetworking.fetchTokenList();
-                const tokens = [...tokens_except_eth, 'eth'];
+                const tokens = [...tokens_except_eth, LVWallet.ETH_TOKEN];
                 const balances = await LVNetworking.fetchBalances(wallet.address, tokens);
-                console.log(balances);
+                
                 tokens.forEach((token) => {
                     wallet.setBalance(token, balances[token]);
                 });
