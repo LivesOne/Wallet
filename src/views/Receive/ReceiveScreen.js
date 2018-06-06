@@ -234,7 +234,7 @@ class ReceiveScreen extends Component {
                         <Text ellipsizeMode="middle" numberOfLines={1} style={styles.address}>
                             {StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 11)}
                         </Text>
-                        <View style = {{marginLeft : 25}}>
+                        <View style = {{marginLeft : Platform.OS === "ios" ? 0 : 25}}>
                             <QRCode
                             getRef={(c) => (this.svg = c)}
                             style={styles.qrcode_pic}
