@@ -56,6 +56,7 @@ import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 var Big = require('big.js');
 import LVBig from '../../logic/LVBig';
 import LVWallet from '../../logic/LVWallet';
+import { LVBalanceShowView } from '../Common/LVBalanceShowView';
 
 const addImg = require('../../assets/images/transfer_add_contracts.png');
 const scanImg = require('../../assets/images/transfer_scan.png');
@@ -463,7 +464,7 @@ class TransferScreen extends Component<Props, State> {
                     isOpen= {this.state.showModal}
                     address= {this.state.addressIn}
                     type={this.state.token}
-                    amount= {parseFloat(this.state.amount.toFixed())}
+                    amount= {parseFloat(this.state.amount.toFixed(18))}
                     minerGap= {this.minerGap}
                     onClosed = {()=>{this.setState({ showModal: false })}}
                     onTransferConfirmed = {()=> {
@@ -535,7 +536,13 @@ class TransferScreen extends Component<Props, State> {
                                 style = {styles.setter}/>
                         <View style= { styles.curEth }>
                             <Text style = {styles.text}>{LVStrings.transfer_current_eth}</Text>
-                            <Text style = {styles.textCurEth}>{StringUtils.convertAmountToCurrencyString(this.state.curETH, ',', 8)}</Text>
+                            <LVBalanceShowView
+                                title={LVStrings.total_eth}
+                                unit={"ETH"}
+                                balance={this.state.curETH}
+                                textStyle={styles.textCurEth}
+                                showSeparator={true}
+                            />
                         </View>   
                         <Text style = {styles.textHint}>{LVStrings.transfer_hint}</Text>
                         <View style = {styles.btnContainer}>

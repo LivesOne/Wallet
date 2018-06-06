@@ -127,7 +127,8 @@ export default class WalletCreatePage extends Component<Props,State> {
 
     render() {
         return (
-            <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{backgroundColor:LVColor.white}}>
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{backgroundColor:LVColor.white}}
+            keyboardShouldPersistTaps = {'handled'}>
                 <LVKeyboardDismissView style={styles.container}>
                 <MXNavigatorHeader
                     left={ greyNavigationBackIcon }
