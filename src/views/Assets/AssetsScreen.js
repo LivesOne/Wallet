@@ -15,7 +15,6 @@ import LVUtils from '../../utils';
 import LVStrings from '../../assets/localization';
 import LVDialog from '../Common/LVDialog';
 import LVWalletHeader from '../Common/LVWalletHeader';
-import LVRefreshIndicator from '../Common/LVRefreshIndicator';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVWallet from '../../logic/LVWallet';
@@ -103,19 +102,13 @@ class AssetsScreen extends Component<Props, State> {
         this.setState({ openSelectWallet: false });
     };
 
-    handleWalletChange = async () => {
-        await LVWalletManager.updateWalletBalance();
-
-        const wallet = LVWalletManager.getSelectedWallet();
-        const newAddress = wallet ? wallet.address : '';
-        const curAddress = this.state.wallet ? this.state.wallet.address : '';
-
-        this.setState({ wallet: wallet });
+    handleWalletChange = () => {
+        this.setState({ wallet: LVWalletManager.getSelectedWallet() });
+        LVWalletManager.updateWalletBalance();
     };
 
     handleBalanceChange = () => {
-        const wallet = LVWalletManager.getSelectedWallet();
-        this.setState({ wallet: wallet });
+        this.setState({ wallet: LVWalletManager.getSelectedWallet() });
     }
 
     _processing_assets_detail_pressed = false;
