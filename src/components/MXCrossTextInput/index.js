@@ -78,6 +78,9 @@ class MXCrossTextInput extends Component<Props,State> {
     }
 
     onChangeText = function(newText: string) {
+        if (Platform.OS === 'android') {
+            this.setState({text: newText});
+        }
         this.props.onTextChanged && this.props.onTextChanged(newText);
     };
 

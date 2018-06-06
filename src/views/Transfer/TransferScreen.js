@@ -474,8 +474,16 @@ class TransferScreen extends Component<Props, State> {
                 <TouchableOpacity  style={ styles.container } activeOpacity={1} onPress={Keyboard.dismiss} >
                     <LVQrScanModal
                         barcodeReceived={(data)=>{
-                            this.setState({addressIn: data});
-                            this.refs.refAddressIn.setText(data);
+                                if (!TransferUtils.isValidAddress(data)) {
+                                    this.setState({alertMessage:LVStrings.transfer_address_invalid });
+                                    setTimeout(()=> {
+                                        this.refs.alert.show();
+                                    }, 500);
+                                    return;
+                                } else {
+                                    this.setState({addressIn: data});
+                                    this.refs.refAddressIn.setText(data);
+                                }
                             }}
                         isOpen= {this.state.showQrScanModal}
                         onClosed = {()=>{this.setState({ showQrScanModal: false })}}/>
@@ -559,7 +567,7 @@ class TransferScreen extends Component<Props, State> {
                         title={LVStrings.alert_hint}  
                         dismissAfterConfirm = {true}
                         onConfirm={()=>{this.props.navigation.navigate("ReceiveTip")}} >
-                        <Text style={{color: '#697585',fontSize: 16, padding: 4}}>{this.state.balanceTip}</Text>
+                        <Text style={{color: '#697585',fontSize: 16, padding: 4 , textAlign : 'center'}}>{this.state.balanceTip}</Text>
                     </LVConfirmDialog>
 
                 </TouchableOpacity>
