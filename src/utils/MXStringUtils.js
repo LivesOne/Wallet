@@ -14,7 +14,7 @@ const FRAGMENT_LENGTH = 3;
 export function convertAmountToCurrencyString(amount: number|string|Big, thousandsSeparator: ?string, precision: number = 0, keepZero: boolean = false): string {
     const bigAmounts = amount ? Big(amount) : Big(0);
     const sep = thousandsSeparator || ',';
-    const arr = (precision > 0 ? bigAmounts.toFixed(precision) : amount.toString()).split('.');
+    const arr = (precision > 0 ? bigAmounts.toFixed(precision) : bigAmounts.toFixed()).split('.');
 
     let result = '';
     let num = (arr[0] || 0).toString();
@@ -29,7 +29,8 @@ export function convertAmountToCurrencyString(amount: number|string|Big, thousan
 
     if (arr.length === 2) {
         if (keepZero === false) {
-            const val = parseFloat('0.' + decimal).toString();
+            const str = '0.' + decimal;
+            const val = decimal.length > 18 ? Big(str).toFixed(18) : Big(str).toFixed();
             const dec = val.split('.')[1] || '';
             result = (val == '0') ? result : result + '.' + dec;
         } else {
