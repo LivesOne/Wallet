@@ -140,8 +140,8 @@ const localized_strings = {
     transaction_failure_message: '该交易无人打包，已失败。矿工费退回原钱包。',
 
     // Transfer 转账
-    transfer_lvt_insufficient: '您的LVT余额不足，请充值！',
-    transfer_lvt_and_eth_insufficient: '您的LVT、ETH均不足，请充值！',
+    transfer_lvt_insufficient: '您的LVTC余额不足，请充值！',
+    transfer_lvt_and_eth_insufficient: '您的LVTC、ETH均不足，请充值！',
     transfer_eth_insufficient: '您的ETH余额不足，请充值！',
     transfer_amount_insufficient: '您的余额不足，请充值',
     transfer_insufficient: '您的钱包余额不足，无法完成转账，请转账至此钱包',
