@@ -167,7 +167,7 @@ class LVTransactionRecordItem extends React.PureComponent<ItemProps> {
                         )}
                     </View>
                     <View style={styles.recordInfoLine}>
-                        <Text style={styles.nicknameText}>{nickName}</Text>
+                        <Text style={styles.nicknameText} numberOfLines={1} ellipsizeMode="middle">{nickName}</Text>
                         <Text style={styles.timeText}>{timePast}</Text>
                     </View>
                 </View>
@@ -231,11 +231,13 @@ const styles = StyleSheet.create({
         textAlign: 'right'
     },
     nicknameText: {
+        flex: 3,
         fontSize: 12,
         textAlign: 'left',
         color: LVColor.text.placeHolder,
     },
     timeText: {
+        flex: 2,
         fontSize: 12,
         textAlign: 'right',
         color: LVColor.text.placeHolder,
