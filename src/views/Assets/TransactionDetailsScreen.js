@@ -14,6 +14,7 @@ import LVStrings from '../../assets/localization';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVTransactionRecordManager';
 import LVUtils, { StringUtils } from '../../utils';
+import { LVBalanceShowView } from '../Common/LVBalanceShowView';
 
 const failureImg = require('../../assets/images/transaction_failure.png');
 const waitingImg = require('../../assets/images/transaction_wating.png');
@@ -95,8 +96,15 @@ export default class TransactionDetailsScreen extends Component<Props> {
 const LVTransDetailBalanceView = ({ prifix, balance, token }) => (
     <View style={{ alignSelf: 'flex-end', marginLeft: 15, marginBottom: 20 }}>
         <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.balance} >{prifix + StringUtils.convertAmountToCurrencyString(balance)}</Text>
-            <Text style={styles.token} >{token.toUpperCase()}</Text>
+            <LVBalanceShowView
+                title={LVStrings.show_detail_amount}
+                unit={token.toUpperCase()}
+                symble={prifix}
+                balance={balance}
+                textStyle={styles.balance}
+                showSeparator={true}
+            />
+            <Text style={styles.token}>{token.toUpperCase()}</Text>
         </View>
     </View>
 );
@@ -157,7 +165,7 @@ const styles = StyleSheet.create({
         color: LVColor.text.grey1,
         alignSelf: 'flex-end',
         marginLeft: 5,
-        marginBottom: 3,
+        marginBottom: 3
     },
     failureText: {
         fontSize: LVSize.xsmall,

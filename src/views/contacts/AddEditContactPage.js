@@ -266,7 +266,6 @@ export default class AddEditContactPage extends Component<Props, State> {
                                 onPress={this.onAddingDone}
                         />    
                     </View>
-                    <LVKeyboardSpacer/>
                     </TouchableOpacity>
                 </KeyboardAwareScrollView>
                 <LVQrScanModal 
