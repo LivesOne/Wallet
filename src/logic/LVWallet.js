@@ -23,27 +23,33 @@ class LVWallet {
     keystore: Object;
     balance_list: Array<LVBalance>;
 
+    static ETH_TOKEN = 'eth';
+    static LVTC_TOKEN = 'LVTC';
+
     constructor(name: string, keystore: Object) {
         this.name = name;
         this.address = keystore.address;
         this.keystore = keystore;
         this.balance_list = [];
+        
+        this.lvtc = 0;
+        this.eth = 0;
     }
 
     get lvtc(): Big {
-        return this.getBalance('LVTC');
+        return this.getBalance(LVWallet.LVTC_TOKEN);
     }
 
     set lvtc(value: number | string | Big) {
-        this.setBalance('LVTC', value);
+        this.setBalance(LVWallet.LVTC_TOKEN, value);
     }
 
     get eth(): Big {
-        return this.getBalance('eth');
+        return this.getBalance(LVWallet.ETH_TOKEN);
     }
 
     set eth(value: number | string | Big) {
-        this.setBalance('eth', value);
+        this.setBalance(LVWallet.ETH_TOKEN, value);
     }
 
     getBalance(token: string) : Big {
