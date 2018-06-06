@@ -127,7 +127,7 @@ export default class WalletCreatePage extends Component<Props,State> {
 
     render() {
         return (
-            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{backgroundColor:LVColor.white}}>
                 <LVKeyboardDismissView style={styles.container}>
                 <MXNavigatorHeader
                     left={ greyNavigationBackIcon }
@@ -148,7 +148,7 @@ export default class WalletCreatePage extends Component<Props,State> {
                             titleText={LVStrings.wallet_create_name}
                             textAlignCenter={true}
                             withUnderLine={false}
-                            onTextChanged= {(text) => this.setState({name: text})}/>
+                            onTextChanged= {(text) => this.setState({name: text.trim()})}/>
                         <MXCrossTextInput
                             style={styles.crossInputStyle}
                             placeholder={LVStrings.wallet_create_password}
