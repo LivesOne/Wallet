@@ -21,11 +21,12 @@ type Props = {
     onTextChanged?:Function,
     onFocus?:Function,
     onEndEditing?:Function,
-    text?:string
+    text?:string,
 }
 
 type State = {
-    hasFocus:boolean
+    hasFocus:boolean,
+    currentText:string
 }
 
 export default class MXSearchBar extends Component<Props,State> {
@@ -34,15 +35,22 @@ export default class MXSearchBar extends Component<Props,State> {
         super(props);
         this.state = {
             text:'',
-            hasFocus:false
+            hasFocus:false,
+            currentText:''
         };
     }
 
     setText = (text:string)=>{
+        this.setState({
+            currentText: text,
+        });
         this.props.onTextChanged && this.props.onTextChanged(text);
     };
     
     onChangeText = (newText:string) => {
+        this.setState({
+            currentText: newText,
+        });
         this.props.onTextChanged && this.props.onTextChanged(newText);
     };
 
@@ -84,9 +92,9 @@ export default class MXSearchBar extends Component<Props,State> {
                         />
                 <View style={{justifyContent:'center'}}>
                         { (Platform.OS === 'android') &&
-                            this.state.text !== null &&
-                            this.state.text !== '' && 
-                            this.state.text !== undefined &&
+                            this.state.currentText !== null &&
+                            this.state.currentText !== '' && 
+                            this.state.currentText !== undefined &&
                             this.state.hasFocus && (
                                 <TouchableOpacity style={{}} onPress={this.onPressClear.bind(this)}>
                                     <Image source={require('../../assets/images/edit_clear.png')} />
