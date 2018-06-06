@@ -90,12 +90,14 @@ export default class LVTContactDetailPage extends Component<Props,State>{
         return (
                     <View style={styles.cellContentContainer}>
                         <View style={styles.cellLeftContentContainer}>
-                            <Text style = {styles.cellNameText}>
+                            <Text style = {styles.cellNameText}
+                            >
                                 {item.name}
                             </Text>
                         </View>
                         <View style = {styles.cellRightContentContainer}>
-                            <Text style = {styles.cellNameValueText}>
+                            <Text style = {styles.cellNameValueText}
+                            numberOfLines = {1}>
                             {nameV}
                             </Text>
                         </View>
@@ -173,7 +175,9 @@ const styles = StyleSheet.create({
         height: 60
     },
     nameTitle:{
-        marginTop: 8
+        marginTop: 8,
+        paddingLeft: 15,
+        paddingRight:15
     },
     nameTitleText:{
         fontSize: 18,
@@ -204,13 +208,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
+        width:MXUtils.getDeviceWidth() - 18 * PixelRatio.get() - 100
     },
-    flatList:{marginTop: 0,
+    flatList:{
+        marginTop: 0,
         height: 4 * 60,
         width: '100%'
     },
-    cellNameText:{fontSize:15,
-        color:LVColor.text.grey2
+    cellNameText:{
+        fontSize:15,
+        color:LVColor.text.grey2,
     },
     cellNameValueText:{
         fontSize: 14,
