@@ -136,6 +136,10 @@ export default class LVTransactionRecordManager {
             const record = LVTransactionRecord.recordFromJson(json, json.token, 'waiting');
             LVTransactionRecordManager.records.unshift(record);
             LVTransactionRecordManager.saveRecordsToLocal();
+
+            wallet.addHoldingBalance(record.token, record.amount);
+            wallet.addHoldingBalance(LVWallet.ETH_TOKEN, record.minnerFee);
+
             LVNotificationCenter.postNotification(LVNotification.transcationRecordsChanged);
         }
     }
@@ -177,6 +181,7 @@ export default class LVTransactionRecordManager {
 
         const history: ?Array<any> = await LVNetworking.fetchTransactionHistory(address, token);
         if (history === null || history === undefined) return;
+        console.log(history);
 
         const trans_records: ?Array<LVTransactionRecord> = history.map(json => LVTransactionRecord.recordFromJson(json, token));
         if (trans_records === null || trans_records === undefined || trans_records.length === 0) return;
@@ -190,9 +195,15 @@ export default class LVTransactionRecordManager {
                 this.records.push(record);
             } else {
                 const cached_record = this.records[find_index];
-                if (cached_record.state != 'ok') {
+                if (cached_record.state !== 'ok') {
                     const detail = await LVNetworking.fetchTransactionDetail(record.hash);
                     record.setRecordDetail(detail);
+
+                    if (cached_record.state === 'waiting' && record.state !== 'waiting') {
+                        wallet.minusHoldingBalance(record.token, record.amount);
+                        wallet.minusHoldingBalance(LVWallet.ETH_TOKEN, record.minnerFee);
+                    }
+
                     this.records[find_index] = record;
                 }
             }

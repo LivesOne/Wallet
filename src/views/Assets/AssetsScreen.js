@@ -145,7 +145,6 @@ class AssetsScreen extends Component<Props, State> {
 
     render() {
         const wallet = this.state.wallet || LVWallet.emptyWallet();
-        const balance_list = wallet.balance_list;
 
         return (
             <View style={styles.container}>
@@ -162,7 +161,7 @@ class AssetsScreen extends Component<Props, State> {
                     <LVWalletHeader name={wallet.name} address={wallet.address} />
                 </View>
 
-                <AssetsBalanceList style={styles.list} balances={balance_list} refreshing={this.state.refreshing} onRefresh={this.refreshBalance.bind(this)} onPressItem={this.onPressAssetsDetail.bind(this)} />
+                <AssetsBalanceList style={styles.list} wallet={wallet} refreshing={this.state.refreshing} onRefresh={this.refreshBalance.bind(this)} onPressItem={this.onPressAssetsDetail.bind(this)} />
 
                 <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
             </View>

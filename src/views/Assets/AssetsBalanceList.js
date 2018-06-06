@@ -10,6 +10,7 @@ import { StyleSheet, View, ViewPropTypes, FlatList, Text, Image, TouchableOpacit
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
+import LVWallet from '../../logic/LVWallet';
 import { StringUtils } from '../../utils';
 import LVBalanceShowView from '../Common/LVBalanceShowView';
 
@@ -23,7 +24,7 @@ const tokenImageIcons = {
 
 type Props = {
     style?: ViewPropTypes.style,
-    balances: ?Array<Object>,
+    wallet: LVWallet,
     refreshing: boolean,
     onRefresh: Function,
     onPressItem: Function
@@ -46,7 +47,7 @@ export default class AssetsBalanceList extends React.Component<Props> {
     _renderItem = ({ item }) => (
         <LVWalletBalanceCard
             token={item.token}
-            balance={item.value}
+            amount={item.amount}
             onPressItem={() => {
                 this._onPressItem(item);
             }}
@@ -60,13 +61,16 @@ export default class AssetsBalanceList extends React.Component<Props> {
     };
 
     render() {
-        const { style, balances } = this.props;
+        const { style, wallet } = this.props;
+        const data = wallet.balance_list.map((balance) => {
+            return { token: balance.token, amount: wallet.getBalance(balance.token) };    
+        });
 
         return (
             <FlatList
                 ref={'list'}
                 style={style}
-                data={balances}
+                data={data}
                 extraData={this.state}
                 keyExtractor={this._keyExtractor}
                 renderItem={this._renderItem}
@@ -83,16 +87,16 @@ export default class AssetsBalanceList extends React.Component<Props> {
 
 type BalanceCardProps = {
     token: string,
-    balance: Object,
+    amount: Object,
     onPressItem: Function
 };
 
 class LVWalletBalanceCard extends React.Component<BalanceCardProps> {
     render() {
-        const { token, balance } = this.props;
+        const { token, amount } = this.props;
         const tokenImage = tokenImageIcons[token];
 
-        const value = StringUtils.beautifyBalanceShow(balance);
+        const value = StringUtils.beautifyBalanceShow(amount);
         const balanceString = StringUtils.convertAmountToCurrencyString(value.result, ',', 0, true);
 
         return (
