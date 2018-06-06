@@ -224,7 +224,7 @@ class ReceiveScreen extends Component {
                 <ReceiveHeader callback={() => {this.onWalletShare(this.state.wallet)}} navigation={this.props.navigation} />
 
                 <View style={styles.mainContainer2}>
-                    <ScrollView showsVerticalScrollIndicator={false} style={{ width:'100%', }}  contentContainerStyle={styles.contentContainer}>
+                    <ScrollView showsVerticalScrollIndicator={false} style={{ width:'100%', height : "100%"}}  contentContainerStyle={styles.contentContainer}>
                     <View style={styles.mainContainer}>
 
                         <Text style={styles.name} >
@@ -253,15 +253,15 @@ class ReceiveScreen extends Component {
                             themeStyle={"active"}
                             /> 
                     </View>
-                    <View style={styles.share_container}>
-                        {/* <MxImage source={receive_share}
+                    {/* <View style={styles.share_container}>
+                        <MxImage source={receive_share}
                             onPress = { () => {
 
                                 this.onWalletShare();
                             }
                             }
-                        ></MxImage> */}
-                    </View>
+                        ></MxImage>
+                    </View> */}
                     </ScrollView>
                 </View>
 
@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
     contentContainer: {
         // paddingVertical: 20,
         // backgroundColor: 'blue',
-        // height:'100%',
+        height:'100%',
         alignItems: 'center',
         justifyContent:'center',
     },
@@ -359,8 +359,13 @@ const styles = StyleSheet.create({
         shadowColor: 'black',
         shadowOpacity: 0.2,
         shadowRadius: 3,
+
+        borderRadius : 7,
+        
         padding:30,
         marginTop: 30,
+        marginBottom : 30,
+
      },
 
      mainContainer2:{
