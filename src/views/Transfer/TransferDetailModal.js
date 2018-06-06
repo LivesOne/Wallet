@@ -14,7 +14,7 @@ import MXTouchableImage from './../../components/MXTouchableImage';
 import TransferUtils from './TransferUtils';
 import { converAddressToDisplayableText } from '../../utils/MXStringUtils';
 const CloseIcon = require('../../assets/images/close_modal.png');
-
+var Big = require('big.js');
 const DetailItem = ({leftText, rightText}) => 
 (<View
     style={[styles.detailContainer, leftText === LVStrings.transfer_address_in ? {height: 60} : null]}>
@@ -56,6 +56,8 @@ export class TransferDetailModal extends Component<Props> {
 
     render() {
         const {isOpen, onClosed, address, amount, minerGap, onTransferConfirmed, type} = this.props;
+        let amoutBig = Big(amount);
+        
         return (
             <Modal
                 ref={'dialog'} 
@@ -74,7 +76,7 @@ export class TransferDetailModal extends Component<Props> {
                     <MXTouchableImage style={{position:'absolute', right:20}} source={CloseIcon} onPress={this.onClosed}></MXTouchableImage>
                   </View>
                   <DetailItem leftText={LVStrings.transfer_address_in} rightText={this.getShowAddress(address)}></DetailItem>
-                  <DetailItem leftText={LVStrings.transfer_amount} rightText={amount + ' ' + type.toUpperCase()}></DetailItem>
+                  <DetailItem leftText={LVStrings.transfer_amount} rightText={amoutBig.toFixed() + ' ' + type.toUpperCase()}></DetailItem>
                   <DetailItem leftText={LVStrings.transfer_miner_tips} rightText={TransferUtils.convertMinnerGap(minerGap) + ' ETH'}></DetailItem>
                   {/* <DetailItem leftText={LVStrings.transfer_remarks} rightText={remarks}></DetailItem> */}
                   <View style={styles.btnContainer}>
