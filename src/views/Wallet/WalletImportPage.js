@@ -357,7 +357,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
 			keyboardType = {'ascii-capable'}
             placeholder={ LVStrings.wallet_import_keystore_hint }
             underlineColorAndroid = {'transparent'}
-            onChangeText={(newText)=>{this.setState({keyStore: newText})}}
+            onChangeText={(newText)=>{this.setState({keyStore: newText.trim()})}}
             style={ styles.textInput }
           />
 
@@ -384,7 +384,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
               textAlignVertical={'top'}
               multiline= {true}
               value={this.state.privateKey}
-              onChangeText={(newText)=>{this.setState({privateKey: newText})}}
+              onChangeText={(newText)=>{this.setState({privateKey: newText.trim()})}}
               placeholder={ LVStrings.wallet_import_plain_private_key_hint }
               underlineColorAndroid = {'transparent'}
               style={ styles.textInput }
