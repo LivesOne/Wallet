@@ -22,6 +22,7 @@ class LVWallet {
     address: string;
     keystore: Object;
     balance_list: Array<LVBalance>;
+    holding_list: Array<LVBalance>; // withholding balacne list
 
     static ETH_TOKEN = 'eth';
     static LVTC_TOKEN = 'LVTC';
@@ -31,7 +32,8 @@ class LVWallet {
         this.address = keystore.address;
         this.keystore = keystore;
         this.balance_list = [];
-        
+        this.holding_list = [];
+
         this.lvtc = 0;
         this.eth = 0;
     }
@@ -52,46 +54,61 @@ class LVWallet {
         this.setBalance(LVWallet.ETH_TOKEN, value);
     }
 
-    getBalance(token: string) : Big {
-        var balance = this.balance_list.find(((value, index, arr) => {
-            return value.token === token;
-        }));
-        return balance ? balance.value : Big(0);
+    getBalance(token: string): Big {
+        const holding: Big = get_balance_from_list(token, this.holding_list);
+        const balance: Big = get_balance_from_list(token, this.balance_list);
+        return balance.minus(holding);
     }
 
     setBalance(token: string, value: number | string | Big) {
-        if (token === null || token === undefined || token.length === 0) {
-            return;
-        }
-        if (value === null || value === undefined) {
-            return;
-        }
-
-        var isNotFound = true;
-        for (var i = 0; i < this.balance_list.length; i++) {
-            var balance = this.balance_list[i];
-            if (balance.token === token) {
-                balance.value = Big(value);
-                isNotFound = false;
-                break;
-            }
-        }
-
-        if (isNotFound) {
-            this.balance_list.push(new LVBalance(token, value));
-        }
+        set_balance_for_list(token, value, this.balance_list);
     }
 
-    minusBalance(token: string, amount: number | string | Big) {
-        var b = this.getBalance(token);
-        b.minus(amount);
-        this.setBalance(token, b);
+    addHoldingBalance(token: string, value: number | string | Big) {
+        var balance: Big = get_balance_from_list(token, this.holding_list);
+        balance = balance.plus(value);
+        set_balance_for_list(token, balance, this.holding_list);
     }
 
-    static emptyWallet() : LVWallet {
+    minusHoldingBalance(token: string, value: number | string | Big) {
+        var balance: Big = get_balance_from_list(token, this.holding_list);
+        balance = balance.minus(value);
+        set_balance_for_list(token, balance.cmp(0) > 0 ? balance : 0, this.holding_list);
+    }
+
+    static emptyWallet(): LVWallet {
         return new LVWallet('', { address: '' });
     }
-};
+}
+
+function get_balance_from_list(token: string, list: Array<LVBalance>): Big {
+    var balance = list.find((value, index, arr) => {
+        return value.token === token;
+    });
+    return balance ? balance.value : Big(0);
+}
+
+function set_balance_for_list(token: string, value: number | string | Big, list: Array<LVBalance>) {
+    if (token === null || token === undefined || token.length === 0) {
+        return;
+    }
+    if (value === null || value === undefined) {
+        return;
+    }
+
+    var isNotFound = true;
+    for (var balance of list) {
+        if (balance.token === token) {
+            balance.value = Big(value);
+            isNotFound = false;
+            break;
+        }
+    }
+
+    if (isNotFound) {
+        list.push(new LVBalance(token, value));
+    }
+}
 
 export default LVWallet;
 export { LVBalance };

@@ -132,7 +132,7 @@ export class WalletDetailsPage extends Component<Props, State> {
     }
 
     componentWillUnmount() {
-        LVNotificationCenter.removeObserver(this);
+        LVNotificationCenter.removeObservers(this);
     }
 
     showExportModal(password:string) {

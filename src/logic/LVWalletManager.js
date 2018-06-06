@@ -37,28 +37,28 @@ class WalletManager {
      * load wallets from disk storage.
      */
     async loadLocalWallets() {
-        const walletsInfo = await LVPersistent.getObject(WalletsKey);
-        if (walletsInfo) {
-            console.log(walletsInfo);
-            if (walletsInfo.wallets.length > 0 && walletsInfo.wallets[0].hasOwnProperty('lvt')) { //old persistent
+        const storageValue = await LVPersistent.getObject(WalletsKey);
+        if (storageValue) {
+            console.log(storageValue);
+            if (storageValue.wallets.length > 0 && storageValue.wallets[0].hasOwnProperty('lvt')) {
+                //old persistent
                 this.wallets = [];
-                walletsInfo.wallets.forEach((w) => {
-                    var new_wallet = new LVWallet(w.name, w.keystore);
-                    new_wallet.setBalance(LVWallet.LVTC_TOKEN, w.lvt);
-                    new_wallet.setBalance(LVWallet.ETH_TOKEN, w.eth);
-                    this.wallets.push(new_wallet);
+                storageValue.wallets.forEach(obj => {
+                    var wallet = new LVWallet(obj.name, obj.keystore);
+                    wallet.setBalance(LVWallet.LVTC_TOKEN, obj.lvt);
+                    wallet.setBalance(LVWallet.ETH_TOKEN, obj.eth);
+                    this.wallets.push(wallet);
                 });
             } else {
                 this.wallets = [];
-                walletsInfo.wallets.forEach((w) => {
-                    var new_wallet = new LVWallet(w.name, w.keystore);
-                    w.balance_list.forEach((b) => {
-                        new_wallet.setBalance(b.token, b.value);
-                    });
-                    this.wallets.push(new_wallet);
+                storageValue.wallets.forEach(obj => {
+                    var wallet = new LVWallet(obj.name, obj.keystore);
+                    obj.balance_list && obj.balance_list.forEach(b => wallet.setBalance(b.token, b.value));
+                    obj.holding_list && obj.holding_list.forEach(b => wallet.setBalance(b.token, b.value));
+                    this.wallets.push(wallet);
                 });
             }
-            this.selectedIndex = Math.max(0,Math.min(this.wallets.length - 1, walletsInfo.selectedIndex));
+            this.selectedIndex = Math.max(0, Math.min(this.wallets.length - 1, storageValue.selectedIndex));
         }
     }
 
@@ -73,8 +73,8 @@ class WalletManager {
         await LVConfiguration.setAnyWalletAvailable(this.wallets.length > 0);
         await LVPersistent.setObject(WalletsKey, walletInfo);
     }
-    
-    getWallets() : Array<LVWallet> {
+
+    getWallets(): Array<LVWallet> {
         return [].concat(this.wallets).reverse();
     }
 
@@ -83,17 +83,17 @@ class WalletManager {
      * @param  {string} address
      * @returns bool
      */
-    setSelectedWallet(address : string) : bool {
-        const index = this.wallets.findIndex((w) => {
+    setSelectedWallet(address: string): boolean {
+        const index = this.wallets.findIndex(w => {
             return address === w.address;
         });
 
-        if(index === -1) {
+        if (index === -1) {
             console.log('attempt to set selected wallet by using a invalid address');
             return false;
         }
 
-        if(this.selectedIndex === index) {
+        if (this.selectedIndex === index) {
             console.log('nothing happens as current selected index is same as the target selection index.');
             return false;
         }
@@ -111,17 +111,15 @@ class WalletManager {
                     balance: 0 //the balance of the wallet.
                 }
      */
-    getSelectedWallet() : ?LVWallet {
-        if(this.selectedIndex < this.wallets.length) {
+    getSelectedWallet(): ?LVWallet {
+        if (this.selectedIndex < this.wallets.length) {
             return this.wallets[this.selectedIndex];
         }
         return null;
     }
 
-    isWalletNameAvailable(name : string) : bool {
-        const index =
-        
-        this.wallets.findIndex((w) => {
+    isWalletNameAvailable(name: string): boolean {
+        const index = this.wallets.findIndex(w => {
             return w.name === name;
         });
         return index === -1;
@@ -134,8 +132,9 @@ class WalletManager {
                 const tokens_except_eth = await LVNetworking.fetchTokenList();
                 const tokens = [...tokens_except_eth, LVWallet.ETH_TOKEN];
                 const balances = await LVNetworking.fetchBalances(wallet.address, tokens);
-                
-                tokens.forEach((token) => {
+                console.log(balances);
+
+                tokens.forEach(token => {
                     wallet.setBalance(token, balances[token]);
                 });
 
@@ -152,15 +151,14 @@ class WalletManager {
      * @param  {string} password
      */
     async exportPrivateKey(wallet: LVWallet, password: string): Promise<string> {
-        const promise = new Promise(function(resolve, reject){
+        const promise = new Promise(function(resolve, reject) {
             try {
-                foundation.exportPrivateKey(password, wallet.keystore,(privateKey,error) => {
-                    if(error) {
+                foundation.exportPrivateKey(password, wallet.keystore, (privateKey, error) => {
+                    if (error) {
                         reject(error);
                     } else {
                         resolve(privateKey);
                     }
-                    
                 });
             } catch (e) {
                 reject(e);
@@ -169,17 +167,17 @@ class WalletManager {
 
         return promise;
     }
-    
+
     /**
      * create a wallet
      * @param  {string} name
      * @param  {string} password
      * @returns Promise
      */
-    async createWallet(name : string, password : string) : Promise<LVWallet> {
-        const promise = new Promise(function(resolve, reject){
-            foundation.createKeyStore(password, null, function(keystore, error){
-                if(error) {
+    async createWallet(name: string, password: string): Promise<LVWallet> {
+        const promise = new Promise(function(resolve, reject) {
+            foundation.createKeyStore(password, null, function(keystore, error) {
+                if (error) {
                     reject(error);
                     return;
                 }
@@ -194,28 +192,28 @@ class WalletManager {
      * @param  {LVWallet} wallet
      * @returns bool
      */
-    addWallet(wallet : LVWallet) : bool {
-        const index = this.wallets.findIndex((w) => {
-            if(w.address === wallet.address || w.name === wallet.name) {
+    addWallet(wallet: LVWallet): boolean {
+        const index = this.wallets.findIndex(w => {
+            if (w.address === wallet.address || w.name === wallet.name) {
                 console.log('warning, attempt to add duplicate wallet');
                 return true;
             }
             return false;
         });
 
-        if(index === -1){
+        if (index === -1) {
             this.wallets.push(wallet);
             return true;
         }
         return false;
     }
 
-    updateWallet(wallet: LVWallet) : bool {
-        const index = this.wallets.findIndex((w) => {
+    updateWallet(wallet: LVWallet): boolean {
+        const index = this.wallets.findIndex(w => {
             return w.address === wallet.address;
         });
 
-        if(index === -1){
+        if (index === -1) {
             return false;
         } else {
             this.wallets[index] = wallet;
@@ -228,22 +226,22 @@ class WalletManager {
      * @param  {string} address wallet address
      * @returns bool true if delete succeeds, otherwise false.
      */
-    deleteWallet(address : string) : bool {
-        const walletIndex = this.wallets.findIndex((w)=>{
+    deleteWallet(address: string): boolean {
+        const walletIndex = this.wallets.findIndex(w => {
             return w.address === address;
         });
-        if(walletIndex === -1) {
+        if (walletIndex === -1) {
             return false;
         }
         //remove wallet from memory.
-        this.wallets.splice(walletIndex,1);
+        this.wallets.splice(walletIndex, 1);
         //make sure the selected index is in valid range.
-        this.selectedIndex = Math.max(0,Math.min(this.wallets.length - 1, this.selectedIndex));
+        this.selectedIndex = Math.max(0, Math.min(this.wallets.length - 1, this.selectedIndex));
         return true;
     }
 
-    findWalletWithAddress(address : string) : ?Object {
-        const wallet = this.wallets.find((w) => {
+    findWalletWithAddress(address: string): ?Object {
+        const wallet = this.wallets.find(w => {
             return w.address === address;
         });
 
@@ -256,11 +254,11 @@ class WalletManager {
      * @param  {string} password
      * @param  {string} privateKey
      */
-    async importWalletWithPrivatekey(name: string, password : string, privateKey : string) {
-        const promise = new Promise(function(resolve, reject){
+    async importWalletWithPrivatekey(name: string, password: string, privateKey: string) {
+        const promise = new Promise(function(resolve, reject) {
             try {
-                foundation.importWithPrivateKey(password, privateKey, function(keystore, error){
-                    if(error){
+                foundation.importWithPrivateKey(password, privateKey, function(keystore, error) {
+                    if (error) {
                         reject(error);
                         return;
                     }
@@ -281,17 +279,17 @@ class WalletManager {
      * @param  {Object} keystore
      */
     async importWalletWithKeystore(name: string, password: string, keystore: Object) {
-        const promise = new Promise(function(resolve, reject){
+        const promise = new Promise(function(resolve, reject) {
             try {
                 foundation.importWithKeyStoreObject(password, keystore, function(calcedKeystore, error) {
-                    if(error) {
+                    if (error) {
                         reject(error);
                         return;
                     }
 
-                    const walletInfo = createNewKeystore(name, password, calcedKeystore)
+                    const walletInfo = createNewKeystore(name, password, calcedKeystore);
                     resolve(walletInfo);
-                })
+                });
             } catch (e) {
                 reject(e);
             }
@@ -304,18 +302,18 @@ class WalletManager {
      * @param  {string} oldPassword
      * @param  {string} newPassword
      */
-    async modifyPassword(wallet : LVWallet, oldPassword : string, newPassword: string) {
+    async modifyPassword(wallet: LVWallet, oldPassword: string, newPassword: string) {
         const promise = new Promise(function(resolve, reject) {
             try {
-                foundation.modifyPassword(oldPassword, wallet.keystore, newPassword, function(calcedKeystore, error){
-                    if(error){
+                foundation.modifyPassword(oldPassword, wallet.keystore, newPassword, function(calcedKeystore, error) {
+                    if (error) {
                         reject(error);
                         return;
                     }
-                    
+
                     wallet.keystore = calcedKeystore;
-                    if(wallet.address !== calcedKeystore.address) {
-                        reject({error: 'internal error, keystore addresses are different.'});
+                    if (wallet.address !== calcedKeystore.address) {
+                        reject({ error: 'internal error, keystore addresses are different.' });
                     } else {
                         resolve(wallet);
                     }
@@ -330,10 +328,10 @@ class WalletManager {
     async verifyPassword(password: string, keystore: Object): Promise<boolean> {
         const promise = new Promise(function(resolve, reject) {
             try {
-                foundation.verifyPassword(password, keystore, function(isMatched: boolean, error){
+                foundation.verifyPassword(password, keystore, function(isMatched: boolean, error) {
                     WalletUtils.log('no catch and isMatched = ' + (isMatched ? 'true' : 'false'));
                     resolve(isMatched);
-                })
+                });
             } catch (error) {
                 WalletUtils.log('catch ' + error);
                 reject(false);

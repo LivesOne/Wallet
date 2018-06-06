@@ -37,6 +37,7 @@ export default class TransactionDetailsScreen extends Component<Props> {
 
         const is_failed = false;
         const prefix = type === 'in' ? '+' : '-';
+        const hasShrink = StringUtils.beautifyBalanceShow(amount).hasShrink;
         const feeString = StringUtils.convertAmountToCurrencyString(minnerFee) + ' ETH';
         const payerAddress = StringUtils.converAddressToDisplayableText(from, 9, 11);
         const receiverAddress = StringUtils.converAddressToDisplayableText(to, 9, 11);
@@ -64,7 +65,7 @@ export default class TransactionDetailsScreen extends Component<Props> {
                 />
                 <View style={styles.content}>
                     <View style={styles.header}>
-                        <LVTransDetailBalanceView prifix={prefix} balance={amount} token={token} />
+                        <LVTransDetailBalanceView prifix={prefix} balance={amount} token={token} hasShrink={hasShrink} />
                         <Image style={styles.image} source={typeImg} />
                     </View>
                     <View style={styles.details}>
@@ -93,7 +94,7 @@ export default class TransactionDetailsScreen extends Component<Props> {
     }
 }
 
-const LVTransDetailBalanceView = ({ prifix, balance, token }) => (
+const LVTransDetailBalanceView = ({ prifix, balance, token, hasShrink }) => (
     <View style={{ alignSelf: 'flex-end', marginLeft: 15, marginBottom: 20 }}>
         <View style={{ flexDirection: 'row' }}>
             <LVBalanceShowView
@@ -104,6 +105,7 @@ const LVTransDetailBalanceView = ({ prifix, balance, token }) => (
                 textStyle={styles.balance}
                 showSeparator={true}
             />
+            {hasShrink && <Text style={styles.balance}>...</Text>}
             <Text style={styles.token}>{token.toUpperCase()}</Text>
         </View>
     </View>
