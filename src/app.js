@@ -15,7 +15,8 @@ import {
     NetInfo,
     Alert,
     BackHandler,
-    Platform
+    Platform,
+    NativeModules,
 } from 'react-native';
 import LVStrings from './assets/localization';
 import LVConfiguration from './logic/LVConfiguration';
@@ -97,10 +98,19 @@ class VenusApp extends Component<Props, State> {
         this.state.update.checkUpdate();
     }
 
-    componentWillMount() {
+    async componentWillMount() {
         StatusBar.setBarStyle('light-content', false);
         LVNotificationCenter.addObserver(this, LVNotification.walletImported, this.handleWalletImportOrCreateSuccess);
         LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletImportOrCreateSuccess);
+        // 解决Android修改语言后无法立即生效问题
+        if(Platform.OS === "android"){
+            const isZh = await NativeModules.LVReactExport.isLanguageZh();
+            if(isZh){
+                LVStrings.setLanguage('zh');
+            }else{
+                LVStrings.setLanguage('en');
+            }
+        }
     }
 
     handleBack = () => {

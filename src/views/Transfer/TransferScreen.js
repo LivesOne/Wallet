@@ -463,7 +463,7 @@ class TransferScreen extends Component<Props, State> {
                     isOpen= {this.state.showModal}
                     address= {this.state.addressIn}
                     type={this.state.token}
-                    amount= {parseFloat(this.state.amount.toFixed())}
+                    amount= {parseFloat(this.state.amount.toFixed(18))}
                     minerGap= {this.minerGap}
                     onClosed = {()=>{this.setState({ showModal: false })}}
                     onTransferConfirmed = {()=> {
@@ -535,7 +535,7 @@ class TransferScreen extends Component<Props, State> {
                                 style = {styles.setter}/>
                         <View style= { styles.curEth }>
                             <Text style = {styles.text}>{LVStrings.transfer_current_eth}</Text>
-                            <Text style = {styles.textCurEth}>{StringUtils.convertAmountToCurrencyString(this.state.curETH, ',', 8)}</Text>
+                            <Text style = {styles.textCurEth}>{this.state.curETH.toFixed(8)}</Text>
                         </View>   
                         <Text style = {styles.textHint}>{LVStrings.transfer_hint}</Text>
                         <View style = {styles.btnContainer}>

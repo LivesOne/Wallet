@@ -19,6 +19,7 @@ import com.venus.CryptoUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -89,5 +90,16 @@ public class LVExportModule extends ReactContextBaseJavaModule {
 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getReactApplicationContext().getCurrentActivity().startActivity(intent);
+    }
+
+    @ReactMethod
+    public void isLanguageZh(Promise promise){
+        Locale locale = getReactApplicationContext().getResources().getConfiguration().locale;
+        String language = locale.getLanguage();
+        if (language.endsWith("zh")){
+            promise.resolve(true);
+        }else{
+            promise.resolve(false);
+        }
     }
 }

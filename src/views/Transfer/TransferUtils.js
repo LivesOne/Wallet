@@ -138,7 +138,6 @@ export default class TransferUtils {
         var bn = new BN(div.toFixed());
         this.log('origin = ' + div.toFixed());
         this.log('result = ' + bn.toString(16));
-        this.log('hex = ' + this.convert2BNHex(value))
     }
 
 }
