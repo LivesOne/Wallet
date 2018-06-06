@@ -329,7 +329,8 @@ export default class AssetsImportPage extends React.Component<Props, State> {
             right={ require("../../assets/images/transfer_scan.png") }
             onRightPress = { this.onPressScanButton.bind(this) }
             />
-            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps = {'handled'}>
               <View style={styles.contentContainer}>
                 <MXSwitchTab
                   leftText={ LVStrings.wallet_import_keyStore }
