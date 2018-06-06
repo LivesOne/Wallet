@@ -53,27 +53,23 @@ export class WalletManagerScreen extends Component<Props, State> {
 
     constructor() {
         super();
-
-        this.onCreateWalletPressed = this.onCreateWalletPressed.bind(this);
-        this.onImportWalletPressed = this.onImportWalletPressed.bind(this);
-        this.handleWalletChange = this.handleWalletChange.bind(this);
         this.state = {
             wallets: []
         };
+        this.onCreateWalletPressed = this.onCreateWalletPressed.bind(this);
+        this.onImportWalletPressed = this.onImportWalletPressed.bind(this);
+        this.handleWalletChange = this.handleWalletChange.bind(this);
     }
 
-    componentWillMount() {
-        LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange.bind(this));
-        LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletChange.bind(this));
-    }
-
-
-    componentWillUnMount() {
-        LVNotificationCenter.removeObserver(this);
-    }
-    
     componentDidMount() {
+        LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
+        LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletChange);
+
         this.handleWalletChange();
+    }
+
+    componentWillUnmount() {
+        LVNotificationCenter.removeObservers(this);
     }
     
     onCreateWalletPressed() {
@@ -85,9 +81,7 @@ export class WalletManagerScreen extends Component<Props, State> {
     }
 
     handleWalletChange() {
-        this.setState({
-            wallets: LVWalletManager.getWallets()
-        });
+        this.setState({ wallets: LVWalletManager.getWallets() });
     }
 
     render() {
