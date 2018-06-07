@@ -9,7 +9,6 @@ import LVStrings from './../../assets/localization';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import TransferUtils from '../Transfer/TransferUtils';
 import { getDeviceHeight, isIphoneX } from '../../utils/MXUtils';
-import { platform } from 'react-native-os';
 
 const CAMERA_WIDTH = Dimensions.get('window').width;
 const CAMERA_HEIGHT = getDeviceHeight();
@@ -90,7 +89,7 @@ export class LVQrScanModal extends React.Component<Props, State> {
                                 height: CAMERA_HEIGHT,
                                 flexDirection: 'column',
                                 width: CAMERA_WIDTH,
-                                top: platform.OS === 'ios' ? -CAMERA_HEIGHT : (-CAMERA_HEIGHT + 20),
+                                top: Platform.OS === 'ios' ? -CAMERA_HEIGHT : (-CAMERA_HEIGHT + 20),
                                 backgroundColor: 'transparent'
                             }}
                         >
