@@ -140,9 +140,14 @@ class WalletManager {
 
                 await this.saveToDisk();
                 LVNotificationCenter.postNotification(LVNotification.balanceChanged);
+                
+                return true;
             } catch (error) {
                 console.log('error in refresh wallet datas : ' + error);
+                return false;
             }
+        } else {
+            return true;
         }
     }
 
