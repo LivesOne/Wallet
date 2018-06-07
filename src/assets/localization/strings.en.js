@@ -48,6 +48,7 @@ const localized_strings = {
     wallet_import_keystore_hint: 'Keystore text content',
     wallet_import_private_password_lable: 'Password',
     wallet_import_private_password_hint: 'Enter 6~12 characters',
+    wallet_import_invalid_password_warning: 'Please enter the password including 6 to 12 characters (Only supports special characters under English keyboard)',
     wallet_import_private_password_repeat_lable: 'Confirm password',
     wallet_import_private_pwd_confirm_hint: 'Confirm password',
     wallet_import_keystore_password_label: 'Keystore password',
@@ -140,7 +141,7 @@ const localized_strings = {
     transaction_hash: 'Transaction number',
     transaction_time: 'Transaction time',
     transaction_failure_message:
-        'The transaction failed due to no packers. Miner fee will be returned to the original wallet.',
+        'The transaction was ready. The transaction fee is insufficient, transaction failed.',
 
     // Transfer 转账
     transfer_lvt_insufficient: 'Your LVTC balance is insufficient. Please recharge.',

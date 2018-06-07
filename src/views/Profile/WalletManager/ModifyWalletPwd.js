@@ -81,7 +81,7 @@ export class ModifyWalletPwd extends React.Component<Props, State> {
         }
 
         if (!WalletUtils.isPasswordValid(curPwd)) {
-            this.setState({alertMessage:LVStrings.wallet_import_private_password_hint });
+            this.setState({alertMessage:LVStrings.wallet_import_invalid_password_warning });
             this.refs.alert.show();
             return;
         }
@@ -93,7 +93,7 @@ export class ModifyWalletPwd extends React.Component<Props, State> {
         }
 
         if (!WalletUtils.isPasswordValid(newPwd) || !WalletUtils.isPasswordValid(newConfirmPwd)) {
-            this.setState({alertMessage:LVStrings.wallet_import_private_password_hint });
+            this.setState({alertMessage:LVStrings.wallet_import_invalid_password_warning });
             this.refs.alert.show();
             return;
         }
