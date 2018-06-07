@@ -521,7 +521,7 @@ class TransferScreen extends Component<Props, State> {
                             onTextChanged= {this.onAddressChanged.bind(this)}/>
                             <MXCrossTextInput 
                                 ref={'refAmount'}
-                                style= {[styles.textInput, {marginTop: 10}]} 
+                                style= {[styles.textInput, {marginTop: 8}]} 
                                 titleText={LVStrings.transfer_amount}
                                 placeholder={LVStrings.transfer_amount}
                                 keyboardType = {'numeric'}
@@ -628,6 +628,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: LVColor.text.grey1,
         marginTop: 10,
+        marginBottom: 15 * pixelRatio,
     },
     btnContainer: {
         flex: 1,
