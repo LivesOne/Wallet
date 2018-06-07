@@ -169,7 +169,9 @@ export default class AddEditContactPage extends Component<Props, State> {
     async onPressScan() {
         if (Platform.OS === 'android') {
             await Keyboard.dismiss();
-            this.setState({ showQrScanModal: true });
+            setTimeout(() => {
+                this.setState({ showQrScanModal: true });
+            }, 100);
         }
         else if (Platform.OS === 'ios') {
             const response = await Permissions.request('camera');

@@ -284,7 +284,9 @@ export default class AssetsImportPage extends React.Component<Props, State> {
     async onPressScanButton() {
       if (Platform.OS === 'android') {
           await Keyboard.dismiss();
-          this.setState({ showModal: true });
+          setTimeout(() => {
+            this.setState({ showModal: true });
+          }, 100);
       }
       else if (Platform.OS === 'ios') {
           const response = await Permissions.request('camera');
@@ -367,7 +369,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
             secureTextEntry={true}
             titleText={LVStrings.wallet_import_keystore_password_label}
             onTextChanged={(newText)=>{ this.setState({keyStorePwd: newText}) }}
-            placeholder={LVStrings.wallet_import_keystore_password_hint}
+            placeholder={LVStrings.wallet_import_private_password_hint}
           />
           <MXButton
             rounded
