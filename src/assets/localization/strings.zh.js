@@ -43,6 +43,7 @@ const localized_strings = {
     wallet_import_keystore_hint: 'Keystore 文本内容',
     wallet_import_private_password_lable: '设置密码',
     wallet_import_private_password_hint: '请输入6～12位密码（可输入特殊字符）',
+    wallet_import_invalid_password_warning:'请输入6～12位字符的密码（仅支持英文键盘下特殊字符 ）',
     wallet_import_private_password_repeat_lable: '重复密码',
     wallet_import_private_pwd_confirm_hint: '重复输入你的密码',
     wallet_import_keystore_password_label: 'Keystore密码',
