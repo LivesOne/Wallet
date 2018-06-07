@@ -140,8 +140,9 @@ export default class WalletUtils {
     }
 
     static log(msg: string) {
-      if (__DEV__) {
-          console.log('wallet ---> ' + msg);
-      }
+      // if (__DEV__) {
+      //     console.log('wallet ---> ' + msg);
+      // }
+      console.log('wallet ---> ' + msg);
   }
 }
