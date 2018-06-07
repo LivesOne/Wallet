@@ -369,7 +369,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
             secureTextEntry={true}
             titleText={LVStrings.wallet_import_keystore_password_label}
             onTextChanged={(newText)=>{ this.setState({keyStorePwd: newText}) }}
-            placeholder={LVStrings.wallet_import_keystore_password_hint}
+            placeholder={LVStrings.wallet_import_private_password_hint}
           />
           <MXButton
             rounded
