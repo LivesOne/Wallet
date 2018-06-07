@@ -12,7 +12,8 @@ import {
     StyleSheet,
     Image,
     Dimensions,
-    Platform
+    Platform,
+    Keyboard
 } from 'react-native';
 import LVDialog from './LVDialog';
 import LVStrings from './../../assets/localization';
@@ -51,6 +52,7 @@ export class LVBalanceShowView extends Component<Props> {
         return (
             <TouchableOpacity style = {this.props.style} activeOpacity={0.8} onPress = {()=>{
                 if (v.hasShrink) {
+                    Keyboard.dismiss();
                     this.refs.alert.open();
                 }
                 }} >
