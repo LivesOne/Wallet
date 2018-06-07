@@ -76,6 +76,9 @@ export default class TransactionDetailsScreen extends Component<Props> {
                             {state === 'failed' && (
                                 <Text style={styles.failureText}>{LVStrings.transaction_failure_message}</Text>
                             )}
+                            {state === 'notexist' && (
+                                <Text style={styles.failureText}>{LVStrings.transaction_does_not_exist_message}</Text>
+                            )}
                         </View>
                         {state === 'ok' && (
                             <View style={{ width: '100%', paddingLeft: 15, paddingRight: 15, marginBottom: 10 }}>

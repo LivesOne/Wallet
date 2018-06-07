@@ -131,6 +131,7 @@ const localized_strings = {
     transaction_records_to: 'to',
     transaction_waiting: 'In process',
     transaction_failed: 'Transaction failed',
+    transaction_does_not_exist: 'Transaction doesn\'t exist',
     transaction_details: 'Transaction details',
     transaction_payer: 'Payer',
     transaction_receiver: 'Receiver',
@@ -142,6 +143,7 @@ const localized_strings = {
     transaction_time: 'Transaction time',
     transaction_failure_message:
         'The transaction was ready. The transaction fee is insufficient, transaction failed.',
+    transaction_does_not_exist_message: 'The transaction does not exist. The transaction fee has returned to the wallet.',
 
     // Transfer 转账
     transfer_lvt_insufficient: 'Your LVTC balance is insufficient. Please recharge.',

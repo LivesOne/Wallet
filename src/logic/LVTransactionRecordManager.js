@@ -84,18 +84,23 @@ class LVTransactionRecord {
         return record;
     }
 
-    setRecordDetail(detailJson: any) {
-        const error = detailJson.error || false;
-        const timestamp = detailJson.timestamp || 0;
+    setRecordDetail(detailJson: Object) {
 
-        if (error) {
-            this.state = 'failed';
-        } else if (timestamp === 0) {
-            this.state = 'waiting';
+        if (Object.keys(detailJson).length == 0) {
+            this.state = 'notexist';
         } else {
-            this.state = 'ok';
-            this.timestamp = timestamp;
-            this.minnerFee = new Big(detailJson.gas * detailJson.gasPrice * Math.pow(10, -18));
+            const error = detailJson.error || false;
+            const timestamp = detailJson.timestamp || 0;
+
+            if (error) {
+                this.state = 'failed';
+            } else if (timestamp === 0) {
+                this.state = 'waiting';
+            } else {
+                this.state = 'ok';
+                this.timestamp = timestamp;
+                this.minnerFee = new Big(detailJson.gas * detailJson.gasPrice * Math.pow(10, -18));
+            }
         }
     }
 

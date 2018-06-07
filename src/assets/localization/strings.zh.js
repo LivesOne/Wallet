@@ -129,6 +129,7 @@ const localized_strings = {
     transaction_records_to: '至',
     transaction_waiting: '等待中',
     transaction_failed: '交易失败',
+    transaction_does_not_exist: '交易不存在',
     transaction_details: '交易详情',
     transaction_payer: '发款方',
     transaction_receiver: '收款方',
@@ -139,6 +140,7 @@ const localized_strings = {
     transaction_hash: '交易号',
     transaction_time: '交易时间',
     transaction_failure_message: '交易已打包，矿工费不足，交易失败。',
+    transaction_does_not_exist_message: '交易不存在，矿工费退回原钱包。',
 
     // Transfer 转账
     transfer_lvt_insufficient: '您的LVTC余额不足，请充值！',

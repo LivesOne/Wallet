@@ -165,6 +165,8 @@ class LVTransactionRecordItem extends React.PureComponent<ItemProps> {
                             <Text style={styles.statusText}>{LVStrings.transaction_waiting}</Text>
                         ) : state === 'failed' ? (
                             <Text style={styles.statusText}>{LVStrings.transaction_failed}</Text>
+                        ) : state === 'notexist' ? (
+                            <Text style={styles.statusText}>{LVStrings.transaction_does_not_exist}</Text>
                         ) : (
                             <View />
                         )}
