@@ -97,7 +97,7 @@ export default class WalletUtils {
     }
 
     static isPasswordValid(password: string) {
-        return /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,12}$/i.test(password);
+        return /^[a-zA-Z0-9-\\:;()$&@\"\.,\?!'\[\]{}#%^*+=_|~<>€£¥•]{6,12}$/i.test(password);
     }
 
     static isNameValid(name: string) {
