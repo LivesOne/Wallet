@@ -96,7 +96,7 @@ export default class WalletCreatePage extends Component<Props,State> {
         }
 
         if(!WalletUtils.isPasswordValid(this.state.password)) {
-            this.setState({alertMessage:LVStrings.wallet_import_private_password_hint });
+            this.setState({alertMessage:LVStrings.wallet_import_invalid_password_warning });
             this.refs.alert.show();
             return;
         }    

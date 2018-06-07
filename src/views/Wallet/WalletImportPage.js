@@ -169,7 +169,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
     }
 
     if(!WalletUtils.isPasswordValid(privateKeyPwd) || !WalletUtils.isPasswordValid(privateKeyPwdAgain)) {
-        this.setState({alertMessage:LVStrings.wallet_import_private_password_hint });
+        this.setState({alertMessage:LVStrings.wallet_import_invalid_password_warning });
         this.refs.alert.show();
         return;
     }    
@@ -229,7 +229,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
       }
 
       if(!WalletUtils.isPasswordValid(this.state.keyStorePwd)) {
-        this.setState({alertMessage: LVStrings.wallet_import_private_password_hint });
+        this.setState({alertMessage: LVStrings.wallet_import_invalid_password_warning });
         this.refs.alert.show();
         return;
       }
