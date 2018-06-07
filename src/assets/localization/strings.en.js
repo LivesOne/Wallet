@@ -140,7 +140,7 @@ const localized_strings = {
     transaction_hash: 'Transaction number',
     transaction_time: 'Transaction time',
     transaction_failure_message:
-        'The transaction failed due to no packers. Miner fee will be returned to the original wallet.',
+        'The transaction was ready. The transaction fee is insufficient, transaction failed.',
 
     // Transfer 转账
     transfer_lvt_insufficient: 'Your LVTC balance is insufficient. Please recharge.',

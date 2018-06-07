@@ -137,7 +137,7 @@ const localized_strings = {
     transaction_block_number: '区块',
     transaction_hash: '交易号',
     transaction_time: '交易时间',
-    transaction_failure_message: '该交易无人打包，已失败。矿工费退回原钱包。',
+    transaction_failure_message: '交易已打包，矿工费不足，交易失败。',
 
     // Transfer 转账
     transfer_lvt_insufficient: '您的LVTC余额不足，请充值！',
