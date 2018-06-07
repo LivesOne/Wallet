@@ -284,7 +284,9 @@ export default class AssetsImportPage extends React.Component<Props, State> {
     async onPressScanButton() {
       if (Platform.OS === 'android') {
           await Keyboard.dismiss();
-          this.setState({ showModal: true });
+          setTimeout(() => {
+            this.setState({ showModal: true });
+          }, 100);
       }
       else if (Platform.OS === 'ios') {
           const response = await Permissions.request('camera');
