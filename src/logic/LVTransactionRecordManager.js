@@ -193,6 +193,8 @@ export default class LVTransactionRecordManager {
                 const detail = await LVNetworking.fetchTransactionDetail(record.hash);
                 record.setRecordDetail(detail);
                 this.records.push(record);
+            } else {
+                this.records[find_index].block = record.block;
             }
         }
 

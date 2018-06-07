@@ -158,7 +158,9 @@ class TransferScreen extends Component<Props, State> {
     async onPressScanButton() {
         if (Platform.OS === 'android') {
             await Keyboard.dismiss();
-            this.setState({ showQrScanModal: true });
+            setTimeout(() => {
+                this.setState({ showQrScanModal: true });
+            }, 100);
         }
         else if (Platform.OS === 'ios') {
             const response = await Permissions.request('camera');
@@ -415,6 +417,8 @@ class TransferScreen extends Component<Props, State> {
                     timestamp: Moment().format('X'),
                 });
                 const isFromAsset = this.props.navigation.state.params.from === 'assets';
+                console.log('------ from assets = ');
+                console.log(isFromAsset);
                 if (isFromAsset) {
                     this.props.navigation.goBack(null, {
                         token: token

@@ -129,17 +129,17 @@ class AssetsScreen extends Component<Props, State> {
 
     async refreshBalance() {
         this.setState({ refreshing: true });
-        try {
-            await LVWalletManager.updateWalletBalance();
+
+        const success = await LVWalletManager.updateWalletBalance();
+        if (success) {
             await LVPersistent.setNumber(LVLastAssetsRefreshTimeKey, Moment().format('X'));
-    
+            
             setTimeout(async () => {
                 this.setState({ refreshing: false });
-            }, 500);
-
-        } catch (error) {
+            }, 1000);
+        } else {
             this.setState({ refreshing: false });
-            Toast.show(error.message);
+            Toast.show(LVStrings.network_error);
         }
     }
 
