@@ -37,7 +37,7 @@ type State = {
     records: Array<LVTransactionRecord>,
     refreshing: boolean,
     startDate: string,
-    endDate: string,
+    endDate: string
 };
 
 class AssetsDetailsScreen extends Component<Props, State> {
@@ -55,19 +55,23 @@ class AssetsDetailsScreen extends Component<Props, State> {
             records: [],
             refreshing: false,
             startDate: '',
-            endDate: '',
+            endDate: ''
         };
         this.onStartDateChange = this.onStartDateChange.bind(this);
         this.onEndDateChange = this.onEndDateChange.bind(this);
         this.onReceiverButtonPressed = this.onReceiverButtonPressed.bind(this);
         this.onTransferButtonPressed = this.onTransferButtonPressed.bind(this);
-        this.handleBackPress = this.handleBackPress.bind(this)
+        this.handleBackPress = this.handleBackPress.bind(this);
     }
 
     componentWillMount() {
         this.initFilterDate();
         this.refreshRecords(false);
-        LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.handleTranscationRecordsChanged);
+        LVNotificationCenter.addObserver(
+            this,
+            LVNotification.transcationRecordsChanged,
+            this.handleTranscationRecordsChanged
+        );
         BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
     }
 
@@ -105,32 +109,32 @@ class AssetsDetailsScreen extends Component<Props, State> {
     };
 
     handleTranscationRecordsChanged = () => {
-        const records = LVTransactionRecordManager.records.filter( r => r.token === this.state.token );
+        const records = LVTransactionRecordManager.records.filter(r => r.token === this.state.token);
         this.setState({ records: records });
-    }
+    };
 
     async refreshRecords(forceUpdate: boolean = true) {
         if (LVTransactionRecordManager.records.length === 0) {
             await LVTransactionRecordManager.loadRecordsFromLocal();
         }
 
-        const records = LVTransactionRecordManager.records.filter( r => r.token === this.state.token );
+        const cached_records = LVTransactionRecordManager.records.filter(r => r.token === this.state.token);
 
-        if (records.length > 0 && !forceUpdate) {
-            this.setState({ records: records });
+        if (cached_records.length > 0 && !forceUpdate) {
+            this.setState({ records: cached_records });
             return;
         }
 
         this.setState({ refreshing: true });
         try {
             await LVTransactionRecordManager.refreshTransactionRecords(this.state.token, true);
-            const records = LVTransactionRecordManager.records.filter( r => r.token === this.state.token );
+            const records = LVTransactionRecordManager.records.filter(r => r.token === this.state.token);
+            this.setState({ records: records });
 
-            await LVWalletManager.updateWalletBalance();
-            const wallet = LVWalletManager.getSelectedWallet();
-
-            if (wallet) {
-                this.setState({ wallet: wallet, records: records });
+            if (records.length > cached_records.length) {
+                await LVWalletManager.updateWalletBalance();
+                const wallet = LVWalletManager.getSelectedWallet();
+                if (wallet) this.setState({ wallet: wallet });
             }
 
             setTimeout(async () => {
@@ -148,7 +152,7 @@ class AssetsDetailsScreen extends Component<Props, State> {
 
     onTransferButtonPressed = () => {
         const { token } = this.props.navigation.state.params;
-        this.props.navigation.navigate('Transfer', { token: token , from: 'assets'});
+        this.props.navigation.navigate('Transfer', { token: token, from: 'assets' });
     };
 
     handleBackPress = () => {
@@ -159,7 +163,7 @@ class AssetsDetailsScreen extends Component<Props, State> {
         } else {
             return false;
         }
-    }
+    };
 
     render() {
         const { token, wallet, records, startDate, endDate } = this.state;
