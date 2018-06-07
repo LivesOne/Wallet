@@ -82,7 +82,7 @@ RCT_EXPORT_METHOD(libscrypt:(NSString *)password
 
 RCT_EXPORT_METHOD(updateAppConfig:(NSDictionary *)appConfig)
 {
-    if (appConfig) {
+    if (appConfig && [appConfig isKindOfClass:[NSDictionary class]]) {
         NSString *manifest = [appConfig objectForKey:@"manifest"];
         if (manifest && manifest.length > 0) {
             LVConfiguration.enterpriseClientManifestURL = manifest;
