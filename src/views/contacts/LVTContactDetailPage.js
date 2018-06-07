@@ -79,7 +79,7 @@ export default class LVTContactDetailPage extends Component<Props,State>{
     }
 
     onAccountTransferDone = ()=> {
-        this.props.navigation.navigate('Transfer', { address: this.state.address, token: 'LVTC' });
+        this.props.navigation.navigate('Transfer', { address: this.state.address, token: 'LVTC', from: 'contract'});
     };
 
     renderRow({item,index}: any) {

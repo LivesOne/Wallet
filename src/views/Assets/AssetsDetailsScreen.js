@@ -158,10 +158,13 @@ class AssetsDetailsScreen extends Component<Props, State> {
     handleBackPress = () => {
         const { params } = this.props.navigation.state;
         if (params.keyTransfer !== null) {
+            console.log("key = " + params.keyTransfer)
             this.props.navigation.goBack(params.keyTransfer);
             return true;
         } else {
-            return false;
+            console.log('-----no key');
+            this.props.navigation.goBack(null);
+            return true;
         }
     };
 

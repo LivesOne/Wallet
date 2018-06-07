@@ -417,6 +417,8 @@ class TransferScreen extends Component<Props, State> {
                     timestamp: Moment().format('X'),
                 });
                 const isFromAsset = this.props.navigation.state.params.from === 'assets';
+                console.log('------ from assets = ');
+                console.log(isFromAsset);
                 if (isFromAsset) {
                     this.props.navigation.goBack(null, {
                         token: token
