@@ -140,24 +140,27 @@ class LVTransactionRecordItem extends React.PureComponent<ItemProps> {
         const typeString = type === 'in' ? LVStrings.receive : LVStrings.transfer;
 
         const prefix = type === 'in' ? '+' : '-';
-        const amountString = prefix + StringUtils.beautifyBalanceShow(balance, token).result;
+        const amountString = prefix + StringUtils.beautifyBalanceShow(balance).result;
         const timePast = DateUtils.getTimePastFromNow(datetime);
         const addressText = StringUtils.converAddressToDisplayableText(address, 3, 4);
 
-        const contact = LVContactManager.instance.contacts.find((c) => c.address.toUpperCase() === '0X' + address.toUpperCase());
+        const contact = LVContactManager.instance.contacts.find(c => c.address.toUpperCase() === '0X' + address.toUpperCase());
         const nickName = contact ? contact.name : '';
 
         return (
             <TouchableOpacity style={[styles.record]} activeOpacity={0.7} onPress={this.props.onPressItem}>
                 <View style={styles.recordType}>
-                    <Image style={styles.typeIcon} source={typeIcon} resizeMode='contain' />
+                    <Image style={styles.typeIcon} source={typeIcon} resizeMode="contain" />
                     <Text style={styles.typeText}>{typeString}</Text>
                 </View>
                 <View style={styles.recordInfo}>
                     <View style={[styles.recordInfoLine, { height: 26 }]}>
                         <Text style={styles.addressText} numberOfLines={1} ellipsizeMode="middle">{addressText}</Text>
                         {state === 'ok' ? (
-                            <Text style={styles.amountText}>{amountString}</Text>
+                            <View style={styles.amountView}>
+                                <Text style={styles.amountText} numberOfLines={1}>{amountString}</Text>
+                                <Text style={styles.tokenText} numberOfLines={1}>{ ' ' + token}</Text>
+                            </View>
                         ) : state === 'waiting' ? (
                             <Text style={styles.statusText}>{LVStrings.transaction_waiting}</Text>
                         ) : state === 'failed' ? (
@@ -194,9 +197,9 @@ const styles = StyleSheet.create({
     },
     recordInfo: {
         flex: 1,
-        marginLeft: 10,
+        marginLeft: 5,
         marginTop: 16,
-        marginBottom: 16,
+        marginBottom: 16
     },
     recordInfoLine: {
         flexDirection: 'row',
@@ -208,24 +211,39 @@ const styles = StyleSheet.create({
         height: 26
     },
     typeText: {
-        marginLeft: 6,
+        marginLeft: 5,
         fontSize: 13,
         fontWeight: '600',
         color: LVColor.text.grey1
     },
     addressText: {
+        marginRight: 5,
         fontSize: 13,
         fontWeight: '600',
         textAlign: 'left',
         color: LVColor.text.grey1
     },
+    amountView: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
     amountText: {
+        flex: 1,
         color: LVColor.text.grey2,
         fontSize: 15,
         fontFamily: 'DINAlternate-Bold',
         textAlign: 'right'
     },
+    tokenText: {
+        color: LVColor.text.grey2,
+        fontSize: 14,
+        fontFamily: 'DINAlternate-Bold',
+        textAlign: 'right'
+    },
     statusText: {
+        flex: 1,
         color: LVColor.text.red,
         fontSize: 12,
         textAlign: 'right'
@@ -234,12 +252,12 @@ const styles = StyleSheet.create({
         flex: 3,
         fontSize: 12,
         textAlign: 'left',
-        color: LVColor.text.placeHolder,
+        color: LVColor.text.placeHolder
     },
     timeText: {
         flex: 2,
         fontSize: 12,
         textAlign: 'right',
-        color: LVColor.text.placeHolder,
-    },
+        color: LVColor.text.placeHolder
+    }
 });
