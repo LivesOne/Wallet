@@ -257,12 +257,7 @@ class TransferScreen extends Component<Props, State> {
             let amount = new Big(newAmountText);
             this.setState({amount: amount})
             const wallet = this.state.wallet;
-            if (wallet && amount.gt(wallet.lvtc) && Platform.OS === 'ios') {
-                this.setState({alertMessage:LVStrings.transfer_amount_insufficient });
-                this.refs.refAmount.clearFocus();
-                this.refs.alert.show();
-                return;
-            }
+
             if (TransferUtils.isAmountOverLimit(newAmountText)) {
                 this.setState({alertMessage:LVStrings.over_limit_hint,
                 transactionParams: null });
