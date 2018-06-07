@@ -193,18 +193,17 @@ export default class LVTransactionRecordManager {
                 const detail = await LVNetworking.fetchTransactionDetail(record.hash);
                 record.setRecordDetail(detail);
                 this.records.push(record);
-            } else {
-                const cached_record = this.records[find_index];
-                if (cached_record.state !== 'ok') {
-                    const detail = await LVNetworking.fetchTransactionDetail(record.hash);
-                    record.setRecordDetail(detail);
+            }
+        }
 
-                    if (cached_record.state === 'waiting' && record.state !== 'waiting') {
-                        wallet.minusHoldingBalance(record.token, record.amount);
-                        wallet.minusHoldingBalance(LVWallet.ETH_TOKEN, record.minnerFee);
-                    }
+        for (var record of this.records) {
+            if (record.state === 'waiting') {
+                const detail = await LVNetworking.fetchTransactionDetail(record.hash);
+                record.setRecordDetail(detail);
 
-                    this.records[find_index] = record;
+                if (record.state != 'waiting') {
+                    wallet.minusHoldingBalance(record.token, record.amount);
+                    wallet.minusHoldingBalance(LVWallet.ETH_TOKEN, record.minnerFee);
                 }
             }
         }
