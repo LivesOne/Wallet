@@ -129,13 +129,10 @@ class AssetsDetailsScreen extends Component<Props, State> {
         try {
             await LVTransactionRecordManager.refreshTransactionRecords(this.state.token, true);
             const records = LVTransactionRecordManager.records.filter(r => r.token === this.state.token);
-            this.setState({ records: records });
 
-            if (records.length > cached_records.length) {
-                await LVWalletManager.updateWalletBalance();
-                const wallet = LVWalletManager.getSelectedWallet();
-                if (wallet) this.setState({ wallet: wallet });
-            }
+            await LVWalletManager.updateWalletBalance();
+            const wallet = LVWalletManager.getSelectedWallet();
+            if (wallet) this.setState({ wallet: wallet, records: records });
 
             setTimeout(async () => {
                 this.setState({ refreshing: false });
