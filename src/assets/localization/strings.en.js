@@ -47,7 +47,7 @@ const localized_strings = {
     wallet_import_plain_private_key_hint: 'Private key plaintext',
     wallet_import_keystore_hint: 'Keystore text content',
     wallet_import_private_password_lable: 'Password',
-    wallet_import_private_password_hint: 'Enter 6~12 digit of letters + numbers',
+    wallet_import_private_password_hint: 'Enter 6~12 characters',
     wallet_import_private_password_repeat_lable: 'Confirm password',
     wallet_import_private_pwd_confirm_hint: 'Confirm password',
     wallet_import_keystore_password_label: 'Keystore password',
@@ -71,7 +71,7 @@ const localized_strings = {
     wallet_create_confirm_password_label: 'Confirm password',
     wallet_create_explaination:
         'Please set as complicated password as possible because it would be used to encrypt the address',
-    wallet_create_password: 'Password (6~12 letters/numbers)',
+    wallet_create_password: 'Password (6~12 characters)',
     wallet_create_password_verify: 'Confirm password',
     wallet_create_comment: 'The password is used to encrypt the wallet address, please try to make it complex',
     wallet_create: 'Create',
@@ -157,7 +157,7 @@ const localized_strings = {
     transfer_processing: 'Transfer processing...',
     transfer_success: 'Transfer succeed',
     transfer_fail: 'Transfer failed',
-    transfer_to_self_not_allowed: 'transfer to self is not allowed',
+    transfer_to_self_not_allowed: 'Transfer to self is not allowed',
 
     // Profile
     profile_wallet_manager: 'Wallet management',

@@ -12,7 +12,7 @@
 @import AFNetworking;
 
 static NSString * const kMXEnterpriseBundleIdentifier  = @"com.livesone.wallet";
-static NSString * const kMXEnterpriseClientManifestUrl = @"https://down-lives-one.oss-cn-beijing.aliyuncs.com/download/wallet/manifest.plist";
+static NSString * const kMXEnterpriseClientManifestUrl = @"https://down-lives-one.oss-cn-beijing.aliyuncs.com/download/wallet_IOS/manifest.plist";
 static NSString * kMXEnterpriseClientInstallationURL;
 
 static NSString * const kMXLastCheckTimeKey            = @"kLastCheckTimeKey";
