@@ -189,6 +189,8 @@ class VenusApp extends Component<Props, State> {
                 <LVConfirmDialog
                     ref={'exitDialog'}
                     title={LVStrings.alert_hint}  
+                    confirmTitle = {LVStrings.common_confirm}
+                    cancelTitle = {LVStrings.common_cancel}
                     onConfirm={()=> {BackHandler.exitApp()}} >
                         <Text style={{color: '#697585', fontSize: 16,}}>{LVStrings.exit_app_prompt}</Text>
                 </LVConfirmDialog>
