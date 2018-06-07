@@ -127,10 +127,10 @@ class TransferScreen extends Component<Props, State> {
         LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.refreshWalletDatas);
         LVNotificationCenter.addObserver(this, LVNotification.networkStatusChanged, this.handleNeworkChange);
         
-        BackHandler.addEventListener('hardwareBackPress', () =>  {
-            this.setState({showQrScanModal: false, showModal: false});
-        });
         // this.fixAndroidPaste();
+        if (this.props.navigation.state.key === null) {
+            this.props.navigation.state.key = 'keyTransfer';
+        }
         const { address, token } = this.props.navigation.state.params;
         if (address != null || address != undefined) {
             // 从联系人进入转账界面
@@ -300,7 +300,7 @@ class TransferScreen extends Component<Props, State> {
 
     async onTransferPresse() {
         const { wallet, addressIn, amount, curLVTC, curETH, amountText, token} = this.state;
-
+        
         if (!addressIn) {
             this.setState({alertMessage:LVStrings.transfer_address_required });
             this.refs.alert.show();
@@ -419,9 +419,16 @@ class TransferScreen extends Component<Props, State> {
                     fee: this.minerGap,
                     timestamp: Moment().format('X'),
                 });
-                this.props.navigation.navigate('AssetsDetails', {
-                    token: token
-                });
+                const isFromAsset = this.props.navigation.state.params.from === 'assets';
+                if (isFromAsset) {
+                    this.props.navigation.goBack(null, {
+                        token: token
+                    });
+                } else {
+                    this.props.navigation.navigate("AssetsDetails", {
+                        token: token, keyTransfer: this.props.navigation.state.key
+                    });
+                }
                 await this.resetUIState();
             }
             await this.refs.loading.dismiss();
