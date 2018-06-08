@@ -145,6 +145,8 @@ export default class LVTransactionRecordManager {
             wallet.addHoldingBalance(record.token, record.amount);
             wallet.addHoldingBalance(LVWallet.ETH_TOKEN, record.minnerFee);
 
+            LVWalletManager.saveToDisk();
+
             LVNotificationCenter.postNotification(LVNotification.transcationRecordsChanged);
         }
     }
