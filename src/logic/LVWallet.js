@@ -57,7 +57,7 @@ class LVWallet {
     getBalance(token: string): Big {
         const holding: Big = get_balance_from_list(token, this.holding_list);
         const balance: Big = get_balance_from_list(token, this.balance_list);
-        return balance.minus(holding);
+        return balance.cmp(0) === 0 ? Big(0) : balance.minus(holding);
     }
 
     setBalance(token: string, value: number | string | Big) {

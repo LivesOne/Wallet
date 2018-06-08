@@ -16,6 +16,7 @@ import LVStrings from '../../assets/localization';
 import LVDialog from '../Common/LVDialog';
 import LVWalletHeader from '../Common/LVWalletHeader';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
+import LVTransactionRecordManager from '../../logic/LVTransactionRecordManager';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVWallet from '../../logic/LVWallet';
 import LVWalletManager from '../../logic/LVWalletManager';
@@ -104,7 +105,6 @@ class AssetsScreen extends Component<Props, State> {
 
     handleWalletChange = () => {
         this.setState({ wallet: LVWalletManager.getSelectedWallet() });
-        LVWalletManager.updateWalletBalance();
     };
 
     handleBalanceChange = () => {
@@ -130,14 +130,31 @@ class AssetsScreen extends Component<Props, State> {
     async refreshBalance() {
         this.setState({ refreshing: true });
 
-        const success = await LVWalletManager.updateWalletBalance();
-        if (success) {
-            await LVPersistent.setNumber(LVLastAssetsRefreshTimeKey, Moment().format('X'));
-            
-            setTimeout(async () => {
+        try {
+            if (this.state.wallet && this.state.wallet.holding_list.length > 0) {
+                if (LVTransactionRecordManager.records.length === 0) {
+                    await LVTransactionRecordManager.loadRecordsFromLocal();
+                }
+    
+                const tokens = this.state.wallet.balance_list.map(b => b.token);
+                for (var token of tokens) {
+                    await LVTransactionRecordManager.refreshInProgressTransactionRecords(token);
+                }
+            }
+    
+            const success = await LVWalletManager.updateWalletBalance();
+            if (success) {
+                await LVPersistent.setNumber(LVLastAssetsRefreshTimeKey, Moment().format('X'));
+                
+                setTimeout(async () => {
+                    this.setState({ refreshing: false });
+                }, 1000);
+            } else {
                 this.setState({ refreshing: false });
-            }, 1000);
-        } else {
+                Toast.show(LVStrings.network_error);
+            }
+            
+        } catch (error) {
             this.setState({ refreshing: false });
             Toast.show(LVStrings.network_error);
         }

@@ -335,7 +335,7 @@ class TransferScreen extends Component<Props, State> {
         }
 
         let isInsufficient = "LVTC" === token.toUpperCase() ? (curLVTC.lt(amount)) : (curETH.lt(amount));
-        if (wallet && curETH.lt(this.minerGap)) {
+        if (wallet && curETH.lt(this.refs.gapSetter.getValue())) {
             this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
             this.refs.insufficientDialog.show();
             return;
@@ -346,7 +346,7 @@ class TransferScreen extends Component<Props, State> {
             return;
         }
 
-        if (this.minerGap === 0) {
+        if (this.refs.gapSetter.getValue() === 0) {
             this.setState({alertMessage:LVStrings.transfer_miner_gap_not_access });
             this.refs.alert.show();
             return;
@@ -402,7 +402,7 @@ class TransferScreen extends Component<Props, State> {
             }, 500);
         }
         setTimeout(async ()=> {
-            let gasPrice = this.userHasSetGap ? TransferUtils.getSetGasPriceHexStr(this.minerGap, transactionParams.gasLimit) : transactionParams.gasPrice;
+            let gasPrice = this.userHasSetGap ? TransferUtils.getSetGasPriceHexStr(this.refs.gapSetter.getValue(), transactionParams.gasLimit) : transactionParams.gasPrice;
             let rst = await TransferLogic.transaction(addressIn, password, amount, transactionParams.nonce,
                 transactionParams.gasLimit, gasPrice, transactionParams.token, transactionParams.chainID, wallet, token);
             let success = rst && rst.result;
@@ -413,7 +413,7 @@ class TransferScreen extends Component<Props, State> {
                     to: addressIn,
                     amount: amount,
                     token:token,
-                    fee: this.minerGap,
+                    fee: this.refs.gapSetter.getValue(),
                     timestamp: Moment().format('X'),
                 });
                 const isFromAsset = this.props.navigation.state.params.from === 'assets';
@@ -471,7 +471,7 @@ class TransferScreen extends Component<Props, State> {
                     address= {this.state.addressIn}
                     type={this.state.token}
                     amount= {parseFloat(this.state.amount.toFixed(18))}
-                    minerGap= {this.minerGap}
+                    minerGap= {this.refs.gapSetter.getValue()}
                     onClosed = {()=>{this.setState({ showModal: false })}}
                     onTransferConfirmed = {()=> {
                         this.setState({ showModal: false });
@@ -521,7 +521,7 @@ class TransferScreen extends Component<Props, State> {
                             onTextChanged= {this.onAddressChanged.bind(this)}/>
                             <MXCrossTextInput 
                                 ref={'refAmount'}
-                                style= {[styles.textInput, {marginTop: 10}]} 
+                                style= {[styles.textInput, {marginTop: 8}]} 
                                 titleText={LVStrings.transfer_amount}
                                 placeholder={LVStrings.transfer_amount}
                                 keyboardType = {'numeric'}
@@ -628,6 +628,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: LVColor.text.grey1,
         marginTop: 10,
+        marginBottom: 15 * pixelRatio,
     },
     btnContainer: {
         flex: 1,

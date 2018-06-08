@@ -54,7 +54,7 @@ class WalletManager {
                 storageValue.wallets.forEach(obj => {
                     var wallet = new LVWallet(obj.name, obj.keystore);
                     obj.balance_list && obj.balance_list.forEach(b => wallet.setBalance(b.token, b.value));
-                    obj.holding_list && obj.holding_list.forEach(b => wallet.setBalance(b.token, b.value));
+                    obj.holding_list && obj.holding_list.forEach(b => wallet.addHoldingBalance(b.token, b.value));
                     this.wallets.push(wallet);
                 });
             }
