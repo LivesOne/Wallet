@@ -142,7 +142,7 @@ const localized_strings = {
     transaction_hash: 'Transaction number',
     transaction_time: 'Transaction time',
     transaction_failure_message:
-        'The transaction was ready. The transaction fee is insufficient, transaction failed.',
+        'Transaction failed. Please make appropriate choice for transaction fee.',
     transaction_does_not_exist_message: 'The transaction does not exist. The transaction fee has returned to the wallet.',
 
     // Transfer 转账
