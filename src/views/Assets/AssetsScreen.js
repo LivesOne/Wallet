@@ -105,7 +105,6 @@ class AssetsScreen extends Component<Props, State> {
 
     handleWalletChange = () => {
         this.setState({ wallet: LVWalletManager.getSelectedWallet() });
-        LVWalletManager.updateWalletBalance();
     };
 
     handleBalanceChange = () => {
