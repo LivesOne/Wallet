@@ -119,6 +119,7 @@ class AssetsDetailsScreen extends Component<Props, State> {
         }
 
         const cached_records = LVTransactionRecordManager.records.filter(r => r.token === this.state.token);
+        const cached_waitings = cached_records.filter(r => r.state === 'waiting');
 
         if (cached_records.length > 0 && !forceUpdate) {
             this.setState({ records: cached_records });
@@ -129,14 +130,22 @@ class AssetsDetailsScreen extends Component<Props, State> {
         try {
             await LVTransactionRecordManager.refreshTransactionRecords(this.state.token, true);
             const records = LVTransactionRecordManager.records.filter(r => r.token === this.state.token);
+            const waitings = records.filter(r => r.state === 'waiting');
 
-            await LVWalletManager.updateWalletBalance();
-            const wallet = LVWalletManager.getSelectedWallet();
-            if (wallet) this.setState({ wallet: wallet, records: records });
+            console.log('record: ' + cached_records.length + ' -> ' + records.length);
+            console.log('waitings: ' + cached_waitings.length + ' -> ' + waitings.length);
+
+            if (records.length > cached_records.length || waitings.length < cached_waitings.length) {
+                await LVWalletManager.updateWalletBalance();
+                const wallet = LVWalletManager.getSelectedWallet();
+                if (wallet) this.setState({ wallet: wallet, records: records });
+            } else {
+                this.setState({ records: records });
+            }
 
             setTimeout(async () => {
                 this.setState({ refreshing: false });
-            }, 500);
+            }, 1000);
         } catch (error) {
             this.setState({ refreshing: false });
             console.log(error);

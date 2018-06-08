@@ -179,6 +179,8 @@ export default class LVTransactionRecordManager {
         const wallet = LVWalletManager.getSelectedWallet();
         if (wallet === null || wallet === undefined) return;
 
+        await this.refreshInProgressTransactionRecords(token);
+
         var address = wallet.address;
         if (address.substr(0, 2).toLowerCase() != '0x') {
             address = '0x' + address;
@@ -186,7 +188,6 @@ export default class LVTransactionRecordManager {
 
         const history: ?Array<any> = await LVNetworking.fetchTransactionHistory(address, token);
         if (history === null || history === undefined) return;
-        console.log(history);
 
         const trans_records: ?Array<LVTransactionRecord> = history.map(json => LVTransactionRecord.recordFromJson(json, token));
         if (trans_records === null || trans_records === undefined || trans_records.length === 0) return;
@@ -203,8 +204,17 @@ export default class LVTransactionRecordManager {
             }
         }
 
+        this.records.sort((a, b) => b.timestamp - a.timestamp);
+
+        await this.saveRecordsToLocal();
+    }
+
+    static async refreshInProgressTransactionRecords(token: string) {
+        const wallet = LVWalletManager.getSelectedWallet();
+        if (wallet === null || wallet === undefined) return;
+
         for (var record of this.records) {
-            if (record.state === 'waiting') {
+            if (record.token === token && record.state === 'waiting') {
                 const detail = await LVNetworking.fetchTransactionDetail(record.hash);
                 record.setRecordDetail(detail);
 
@@ -214,10 +224,6 @@ export default class LVTransactionRecordManager {
                 }
             }
         }
-
-        this.records.sort((a, b) => b.timestamp - a.timestamp);
-
-        await this.saveRecordsToLocal();
     }
 }
 
