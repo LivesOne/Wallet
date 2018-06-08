@@ -77,7 +77,7 @@ const localized_strings = {
     wallet_create_comment: 'The password is used to encrypt the wallet address, please try to make it complex',
     wallet_create: 'Create',
     wallet_create_hint_message:
-        'Attention, the password of the wallet exists exclusively, each wallet has its own password.',
+        'Please keep your password safe! LivesOne Wallet does not save or provide any function of regaining/resetting the user password.',
     wallet_create_name_required: 'Please enter wallet name',
     wallet_create_password_required: 'Please enter password',
     wallet_create_confimpassword_required: 'Confirm your password',
