@@ -21,15 +21,19 @@ const localized_strings = {
     common_done: '完成',
     common_delete: '删除',
     common_camera_not_authorized: '相机权限未开启',
+    common_next: '下一步',
+    common_open_ettings: '设置',
 
     //receive
-    receive_title:'我的收款码',
-    receive_name:'钱包地址',
-    receive_copy:'复制地址',
-    receive_save:'保存二维码',
-    receive_empty:'您还未添加钱包',
-    receive_save_finish:'保存完成',
-    
+    receive_title: '收款',
+    receive_name: '钱包地址',
+    receive_name_suffix: '的钱包',
+    receive_copy: '复制钱包地址',
+    receive_copy_success: '复制成功',
+    receive_save: '保存二维码',
+    receive_empty: '您还未添加钱包',
+    receive_save_finish: '保存完成',
+
     // Wallet
     wallet_import: '导入',
     wallet_import_header: '导入钱包',
@@ -37,8 +41,12 @@ const localized_strings = {
     wallet_import_private_key: '导入私钥',
     wallet_import_plain_private_key_hint: '明文私钥',
     wallet_import_keystore_hint: 'Keystore 文本内容',
-    wallet_import_private_password_hint: '输入6~12位字母数字组合',
+    wallet_import_private_password_lable: '设置密码',
+    wallet_import_private_password_hint: '请输入6～12位密码（可输入特殊字符）',
+    wallet_import_invalid_password_warning:'请输入6～12位字符的密码（仅支持英文键盘下特殊字符 ）',
+    wallet_import_private_password_repeat_lable: '重复密码',
     wallet_import_private_pwd_confirm_hint: '重复输入你的密码',
+    wallet_import_keystore_password_label: 'Keystore密码',
     wallet_import_keystore_password_hint: '请输入Keystore密码',
     wallet_importing_wallet: '导入钱包中...',
     wallet_import_private_key_error: '私钥格式错误',
@@ -47,11 +55,16 @@ const localized_strings = {
     wallet_import_private_key_required: '私钥不能为空！',
     wallet_import_success: '导入成功！',
     wallet_import_fail: '导入失败！',
-    
+    wallet_import_tip_keystore_password: 'Keystore密码',
+
     wallet_create_wallet: '创建钱包',
+    wallet_create_hint_message: '注意，钱包的密码是单独存在，每个钱包都有自己的密码',
     wallet_creating_wallet: '创建钱包中...',
     wallet_create_name: '钱包名称',
-    wallet_create_password: '设置钱包密码（6-12位字母数字组合）',
+    wallet_create_password_label: '钱包密码',
+    wallet_create_confirm_password_label: '确认密码',
+    wallet_create_explaination: '该密码用来加密钱包地址，请尽量设置复杂密码完成加密',
+    wallet_create_password: '设置钱包密码 6～12位密码（可输入特殊字符）',
     wallet_create_password_verify: '重复输入密码',
     wallet_create_comment: '该密码用来加密钱包地址，请尽量设置复杂密码完成加密。',
     wallet_create: '创建',
@@ -61,16 +74,16 @@ const localized_strings = {
     wallet_create_confimpassword_required: '请输入确认密码',
     wallet_create_password_mismatch: '密码与确认密码不匹配',
     wallet_create_name_unavailable: '钱包名字已存在',
-    wallet_create_success_comment: '平台不储存用户的私人密码，密码无法找回或重置，强烈建议您在使用钱包前做好钱包备份！',
+    wallet_create_success_comment: '请妥善保管您的密码！共生钱包不存储用户密码，无法提供找回或重置功能',
     wallet_backup: '备份钱包',
     wallet_backuping: '备份钱包中...',
     wallet_backup_failed: '备份钱包失败，请确认输入的密码是否正确',
     wallet_backup_title_suffix: '钱包备份',
-    wallet_default_name_prefix: "默认钱包",
+    wallet_default_name_prefix: '默认钱包',
 
     wallet_disclaimer: '免责声明',
-    wallet_disclaimer_content: '请确认已经导出的钱包备份的安全性，任何钱包的丢失、被盗、忘记密码等行为产生的损失均与平台无关',
-
+    wallet_disclaimer_content:
+        '请确认已经导出的钱包备份的安全性，任何钱包的丢失、被盗、忘记密码等行为产生的损失均与平台无关',
 
     // inner error
     inner_common_error: '内部错误',
@@ -80,22 +93,22 @@ const localized_strings = {
     //wallet edit
     wallet_edit_save_failed: '保存失败',
     wallet_edit_save_success: '保存成功',
-    wallet_edit_cur_pwd_required : '当前密码密码不能为空',
-    wallet_edit_cur_pwd_error : '当前密码不正确',
-    wallet_edit_new_pwd_required : '新密码不能为空',
-    wallet_edit_new_name_required : '名称不能为空',
+    wallet_edit_cur_pwd_required: '当前密码密码不能为空',
+    wallet_edit_cur_pwd_error: '当前密码不正确',
+    wallet_edit_new_pwd_required: '新密码不能为空',
+    wallet_edit_new_name_required: '名称不能为空',
     wallet_edit_password_same: '新旧密码不能相同',
-    wallet_edit_equal_to_old : '名称跟原名称相同',
-    wallet_editing : '正在修改中...',
-    wallet_exporting : '正在导出中...',
+    wallet_edit_equal_to_old: '名称跟原名称相同',
+    wallet_editing: '正在修改中...',
+    wallet_exporting: '正在导出中...',
     wallet_export_private_key_copied_to_clipboard: '私钥已经复制到剪切板',
     wallet_delete_hint: '确认删除该钱包？',
     wallet_delete_success: '删除钱包成功',
     wallet_password_incorrect: '密码错误',
-    wallet_name_hint: '输入名称（少于20个字）',
+    wallet_name_hint: '最多输入40位字符或20个汉字',
     wallet_name_invalid: '名称格式错误',
-    wallet_name_exceeds_limit: '钱包名称超过20个字',
-
+    wallet_name_exceeds_limit: '钱包名称超过40位字符或20个汉字',
+    wallet_detail: '详情',
     //password verify
     password_verify_title: '密码验证',
     password_verifying: '密码验证中...',
@@ -105,17 +118,18 @@ const localized_strings = {
     total_amount: '总金额',
 
     // Assets
-    assets_title: '我的资产',
+    assets_title: '资产',
     recent_records: '最近交易记录',
     view_all_records: '查看全部记录',
 
     // Transaction record
     transaction_records: '交易记录',
-    transaction_records_no_data: '暂无交易',
+    transaction_records_no_data: '暂无记录',
     transaction_records_time: '时间',
     transaction_records_to: '至',
     transaction_waiting: '等待中',
     transaction_failed: '交易失败',
+    transaction_does_not_exist: '交易不存在',
     transaction_details: '交易详情',
     transaction_payer: '发款方',
     transaction_receiver: '收款方',
@@ -125,14 +139,15 @@ const localized_strings = {
     transaction_block_number: '区块',
     transaction_hash: '交易号',
     transaction_time: '交易时间',
-    transaction_failure_message: '该交易无人打包，已失败。矿工费退回原钱包。',
+    transaction_failure_message: '转账失败，请合理配置矿工费。',
+    transaction_does_not_exist_message: '交易不存在，矿工费退回原钱包。',
 
     // Transfer 转账
-    transfer_lvt_insufficient:'您的LVT余额不足，请充值！',
-    transfer_lvt_and_eth_insufficient:'您的LVT、ETH均不足，请充值！',
-    transfer_eth_insufficient:'您的ETH余额不足，请充值！',
+    transfer_lvt_insufficient: '您的LVTC余额不足，请充值！',
+    transfer_lvt_and_eth_insufficient: '您的LVTC、ETH均不足，请充值！',
+    transfer_eth_insufficient: '您的ETH余额不足，请充值！',
     transfer_amount_insufficient: '您的余额不足，请充值',
-    transfer_insufficient: '您的钱包余额不足，无法完成转账，请转账至此钱包', 
+    transfer_insufficient: '您的钱包余额不足，无法完成转账，请转账至此钱包',
     transfer_address_required: '收款人地址不能为空',
     transfer_address_invalid: '请输入有效的收款人地址',
     transfer_amount_required: '转账金额不能为空',
@@ -166,6 +181,7 @@ const localized_strings = {
     profile_wallet_import_right_now: '马上导入',
     profile_wallet_export: '导出私钥',
     profile_wallet_backup: '备份Keystore',
+    profile_wallet_backup_later: '稍后备份',
     profile_wallet_delete_wallet: '删除钱包',
     profile_wallet_save: '保存',
     profile_wallet_my_private_key: '我的私钥',
@@ -200,10 +216,10 @@ const localized_strings = {
     transfer_slow: '慢',
     transfer_fast: '快',
     transfer_current_eth: '当前钱包ETH',
-    transfer_hint: '执行交易将扣除您当前钱包中的ETH。该交易可执行，交易成功后，将扣除矿工费用。',
+    transfer_hint: '执行交易后将扣除您当前钱包中的ETH, 交易打包后, 矿工费用将不予退还.',
     transfer_payment_details: '支付详情',
     transfer_address_in: '转入地址',
-    
+
     // qr scan
     qrScan_title: '扫一扫',
     qrScan_hint: '将钱包二维码放入方框内扫描',
@@ -212,10 +228,10 @@ const localized_strings = {
     contact_list_nav_title: '联系人',
     contact_add_nav_title: '添加联系人',
     contact_edit_nav_title: '编辑联系人',
-    contact_add_place_holder_nickname: '联系人昵称',
-    contact_add_place_holder_address: '钱包地址',
-    contact_add_place_holder_cellphone: '手机号码',
-    contact_add_place_holder_email: '邮箱',
+    contact_add_place_holder_nickname: '请输入联系人昵称',
+    contact_add_place_holder_address: '请输入钱包地址',
+    contact_add_place_holder_cellphone: '请输入电话',
+    contact_add_place_holder_email: '请输入邮箱',
     contact_add_place_holder_remarks: '备注',
     contact_alert_name_required: '名字不能为空',
     contact_alert_address_required: '钱包地址不能为空',
@@ -223,8 +239,19 @@ const localized_strings = {
     contact_alert_contact_exists: '联系人已存在',
     contact_alert_name_exceeds_limit: '联系人名称超过20个字',
     contact_alert_remarks_exceeds_limit: '备注长度超过限制',
-    contact_confirm_delete_contact: '确认删除联系人？',
+    contact_alert_Email_invalid: '邮箱格式错误',
+    contact_alert_Phone_invalid: '电话格式错误',
+    contact_confirm_delete_contact: '是否要删除',
     contact_empty_list_demonstration: '您还未添加联系人',
+    contact_add_nav_right: '添加',
+    contact_add_place_nickname: '昵称',
+    contact_add_place_address: '钱包地址',
+    contact_add_place_cellphone: '电话',
+    contact_add_place_email: '邮箱',
+    contact_add_remarks: '备注',
+    contact_Detail_Button: '账户转账',
+    contact_Search_Empty_Button: '未找到此联系人',
+    contact_Detail_Title: '的钱包',
 
     // Network
     network_error: '网络请求失败，请重试!',
@@ -232,17 +259,28 @@ const localized_strings = {
     network_timeout: '网络超时',
 
     // exit
-    exit_app_prompt: "退出钱包？",
-    exit: "退出",
+    exit_app_prompt: '退出钱包？',
+    exit: '退出',
 
-     // total title
-     total_lvt: 'LVT 总额',
-     total_eth: 'ETH 总额',
-     show_detail_amount: '交易金额',
-     show_LVT_balance: 'LVT 余额',
+    // total title
+    total_lvt: 'LVTC 总额',
+    total_eth: 'ETH 总额',
+    show_detail_amount: '交易金额',
+    show_LVT_balance: 'LVTC 余额',
 
-     // over 18 limit
-     over_limit_hint: '转账金额仅支持小数点后18位',
+    // over 18 limit
+    over_limit_hint: '转账金额仅支持小数点后18位',
+
+    //update
+    update_title: '更新提醒',
+    update_text: '发现新版本,快去体验吧!',
+    update_ok: '立即更新',
+    update_cancel: '以后再说',
+    update_download_tip: '后台下载最新的版本',
+
+    // Permissions
+    can_not_access_camera: '无法访问相机',
+    please_set_camera_author: '请到系统的⌜隐私设置⌟中，允许 共生钱包 访问⌜相机⌟'
 };
 
 export default localized_strings;

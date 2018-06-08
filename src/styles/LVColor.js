@@ -18,10 +18,11 @@ const LVColor = {
     // Tab Bar
     tabBar: {
         background: '#fff',
-        tintColor: '#FF892E'
+        tintColor: '#667283',
+        shadowColor:'#6B7A9F',
     },
     // 分隔线
-    separateLine: '#EEEFF2',
+    separateLine: '#F5F6FA',
     // Progress Bar
     progressBar: {
         fill: '#7dcd40',
@@ -31,19 +32,34 @@ const LVColor = {
     // 给文本使用
     text: {
         white: '#fff',
+        lightWhite: '#FEFEFE',
         dot3: '#333333',
         grey1: '#667383',
         grey2: '#677384',
         grey3: '#bec4d0',
         grey4: '#c3c8d3',
+        yellow : '#FFAE1F',
         red: '#f25656',
-        editTextContent: '#677384',
-        placeHolder: '#bfc5d1'
+        editTextContent: '#27347D',
+        placeHolder: '#bfc5d1',
+        editTextNomal: '#677384',
+        buttonInActiveText: '#E0E3F1',
+    },
+    button:{
+        // button inActive 颜色
+        buttonInActive: '#B6BDDD',
+        buttonActive: '#1B2768',
+        buttoneEmptyActive: '#ECEEF2',
+        buttonEmptyBorder: '#C3C8D4',
+    },
+    searchBar:{
+        background:'#F9F9FA',
     },
     // 背景色
     background: {
         white: '#fff',
         datePanel: '#f4f5f9',
+        assets: '#F8F9FE',
         grey1: '#ddd',
         grey2: '#eee',
         grey3: '#f7f7f7'
@@ -56,7 +72,7 @@ const LVColor = {
         editTextBottomBoarder: '#bfc5d1',
     },
     //profile nav background color
-    profileNavBack: '#F8F9FB',
+    profileNavBack: '#FFFFFF',
     profileNavTitleColor: '#6d798a'
 };
 

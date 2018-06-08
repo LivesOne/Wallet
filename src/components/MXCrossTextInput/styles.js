@@ -7,16 +7,17 @@ import { StyleSheet, PixelRatio, Platform } from 'react-native';
 import * as MXUtils from "../../utils/MXUtils";
 let LVStyleSheet = require('../../styles/LVStyleSheet');
 import LVColor from '../../styles/LVColor'
+import { MXCrossInputHeight } from '../../styles/LVStyleSheet';
 
 const Base = LVStyleSheet.create({
   main: {
-    height: 46,
-    width: MXUtils.getDeviceWidth() - 17 * PixelRatio.get(),
+    height: MXCrossInputHeight,
+    width: MXUtils.getDeviceWidth() - 18 * PixelRatio.get(),
     backgroundColor: LVColor.white,
+    justifyContent:'center',
   },
   content: {
-    flex: 1,
-    flexDirection: 'row',
+    // justifyContent:'center',
   },
   rounded: {
     phone: {
@@ -27,14 +28,25 @@ const Base = LVStyleSheet.create({
     }
   },
 
+  titleLabel: {
+      fontSize: 12,
+      color: LVColor.text.grey2,
+  },
+
+  textInputView:{
+	flexDirection: 'row',
+    alignItems: 'center'
+},
+
   textArea: {
     flex: 1,
-    justifyContent: 'flex-end', 
-    paddingBottom: 6
   },
 
   label: {
     fontSize: 15,
+    textAlign:'left',
+    paddingLeft: 0,
+    fontWeight: '500'
   },
 
   buttonArea: {
@@ -42,22 +54,20 @@ const Base = LVStyleSheet.create({
     justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
     alignItems: 'center',
     alignSelf: Platform.OS === 'ios' ? 'flex-end' : 'center',
-    marginBottom: 6,
   },
 
   clearButton: {
   },
 
   rightComponent: {
-    marginLeft: 6
+    marginLeft: 6,
   }
 
 });
 
 const TextAlignCenterStyles = StyleSheet.create({
   textArea: {
-    flex: 1,
-    justifyContent: 'center', 
+    flex:1,
   },
   buttonArea: {
     flexDirection: 'row',

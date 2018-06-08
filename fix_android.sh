@@ -1,6 +1,6 @@
 #!/bin/bash
 
-yarn add https://github.com/rebeccahughes/react-native-device-info.git
+# yarn add https://github.com/rebeccahughes/react-native-device-info.git
 
 file2='node_modules/react-native-splash-screen/android/src/main/java/com/cboy/rn/splashscreen/SplashScreenReactPackage.java'
 

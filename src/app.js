@@ -15,7 +15,8 @@ import {
     NetInfo,
     Alert,
     BackHandler,
-    Platform
+    Platform,
+    NativeModules,
 } from 'react-native';
 import LVStrings from './assets/localization';
 import LVConfiguration from './logic/LVConfiguration';
@@ -29,29 +30,87 @@ import SplashScreen from "react-native-splash-screen";
 import console from 'console-browserify';
 import { LVConfirmDialog } from './views/Common/LVDialog';
 import { loadavg } from 'react-native-os';
+import codePush from "react-native-code-push";
+import LVNetworking  from './logic/LVNetworking';
+import Toast from 'react-native-root-toast';
+import AppUpdate from './utils/MxAppUpdate';
+import { YellowBox } from 'react-native'
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated'])
 
-class VenusApp extends Component {
-    state: {
-        loading: boolean,
-        needShowGuide: boolean,
-        hasAnyWallets: boolean
-    };
 
+
+let codePushOptions = { 
+    checkFrequency: codePush.CheckFrequency.ON_APP_RESUME, 
+    installMode: codePush.InstallMode.ON_NEXT_RESUME  
+};
+
+type State = {
+    loading: boolean,
+    needShowGuide: boolean,
+    hasAnyWallets: boolean,
+    update: ?Object,
+    needUpdate: ?Object
+
+};
+
+type Props = {
+};
+
+class VenusApp extends Component<Props, State> {
     constructor() {
         super();
+
+        const appUpdate = new AppUpdate({
+            iosAppId: '123456',
+            apkVersionUrl: LVNetworking.getAppConfigURL(),
+            needUpdateApp: (needUpdate) => {
+               this.setState({needUpdate:needUpdate});
+               this.refs.update.show();
+            },
+            forceUpdateApp: () => {
+              console.log("Force update will start")
+            },
+            notNeedUpdateApp: () => {
+              console.log("App is up to date")
+            },
+            downloadApkStart: () => { 
+                Toast.show(LVStrings.update_download_tip);
+                console.log("Start") 
+            },
+
+            downloadApkProgress: (progress) => { console.log(`Downloading ${progress}%...`) },
+            downloadApkEnd: () => { console.log("End") },
+            onError: () => { console.log("downloadApkError") }
+          }); 
+    
         this.state = {
             loading: true,
             needShowGuide: false,
-            hasAnyWallets: false
+            hasAnyWallets: false,
+            update: appUpdate,
+            needUpdate: this.initUpdateApp
+
         };
         this.handleAppGuideCallback = this.handleAppGuideCallback.bind(this);
         this.handleWalletImportOrCreateSuccess = this.handleWalletImportOrCreateSuccess.bind(this);
+        // this.initUpdateApp = this.initUpdateApp.bind(this);
+        // this.initUpdateApp();
+        this.state.update.checkUpdate();
     }
 
-    componentWillMount() {
+    async componentWillMount() {
         StatusBar.setBarStyle('light-content', false);
         LVNotificationCenter.addObserver(this, LVNotification.walletImported, this.handleWalletImportOrCreateSuccess);
         LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletImportOrCreateSuccess);
+        // 解决Android修改语言后无法立即生效问题
+        if(Platform.OS === "android"){
+            const isZh = await NativeModules.LVReactExport.isLanguageZh();
+            if(isZh){
+                LVStrings.setLanguage('zh');
+            }else{
+                LVStrings.setLanguage('en');
+            }
+        }
     }
 
     handleBack = () => {
@@ -60,7 +119,7 @@ class VenusApp extends Component {
             this.refs.exitDialog.show();
             return true;
         }
-      };
+    };
 
     componentDidMount() {
         SplashScreen.hide();
@@ -103,6 +162,11 @@ class VenusApp extends Component {
         }
     }
 
+    initUpdateApp = () => {
+        
+        //   this.setState({ update: appUpdate});
+    }
+
     handleAppGuideCallback = () => {
         this.setState({ needShowGuide: false });
         LVConfiguration.setAppGuidesHasBeenDisplayed();
@@ -116,18 +180,48 @@ class VenusApp extends Component {
     render() {
         const { loading, needShowGuide, hasAnyWallets } = this.state;
         return Platform.OS === 'android' ? 
-            this.getAndroidMainScreen() : this.getMainScreen();
+            this.renderAndroidMainScreen() : this.renderIOSMainScreen();
     }
 
-    getAndroidMainScreen() {
+    renderAndroidMainScreen() {
         return <View style={{flex: 1}}>
+                {this.getMainScreen()}
                 <LVConfirmDialog
                     ref={'exitDialog'}
                     title={LVStrings.alert_hint}  
-                    message={LVStrings.exit_app_prompt} 
-                    onConfirm={()=> {BackHandler.exitApp()}} />
-                    {this.getMainScreen()}
+                    confirmTitle = {LVStrings.common_confirm}
+                    cancelTitle = {LVStrings.common_cancel}
+                    onConfirm={()=> {BackHandler.exitApp()}} >
+                        <Text style={{color: '#697585', fontSize: 16,}}>{LVStrings.exit_app_prompt}</Text>
+                </LVConfirmDialog>
+                <LVConfirmDialog
+                    ref={'update'}
+                    title={LVStrings.update_title}  
+                    confirmTitle = {LVStrings.update_ok}
+                    cancelTitle = {LVStrings.update_cancel}
+                    onConfirm={()=> {
+                        this.state.needUpdate(true);
+                        this.refs.update.dismiss();
+                    }} >
+                        <Text style={{color: '#697585', fontSize: 16,}}>{LVStrings.update_text}</Text>
+                </LVConfirmDialog>
             </View>
+    }
+
+    renderIOSMainScreen() {
+        return <View style={{ flex: 1 }}>
+
+            <LVConfirmDialog
+                ref={'update'}
+                title={LVStrings.update_title}
+                message={LVStrings.update_text}
+                confirmTitle={LVStrings.update_ok}
+                cancelTitle={LVStrings.update_cancel}
+                onConfirm={() => {
+                    this.state.needUpdate(true);
+                }} />
+            {this.getMainScreen()}
+        </View>
     }
 
     getMainScreen() {
@@ -150,5 +244,7 @@ const LVAppLoadingView = () => {
         </View>
     );
 };
+
+VenusApp = codePush(codePushOptions)(VenusApp);
 
 export default VenusApp;

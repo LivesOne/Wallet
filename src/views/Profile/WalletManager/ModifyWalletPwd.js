@@ -18,21 +18,29 @@ import LVFullScreenModalView from '../../Common/LVFullScreenModalView';
 import LVWalletImportNavigator from '../../Wallet/LVWalletImportNavigator';
 import Toast from 'react-native-root-toast';
 import { LVKeyboardDismissView } from '../../Common/LVKeyboardDismissView';
+import MXButton from './../../../components/MXButton';
+import FontSize from '../../../styles/LVFontSize';
 
-export class ModifyWalletPwd extends Component {
+type Props = {
+    navigation: Object
+};
+
+type State = {
+    wallet: ?Object,
+    curPwd: string,
+    newPwd: string,
+    newConfirmPwd: string,
+    alertMessage: string
+};
+
+export class ModifyWalletPwd extends React.Component<Props, State> {
 
     static navigationOptions = {
         header: null,
         tabBarVisible: false
     };
 
-    state: {
-        wallet: ?Object,
-        curPwd: string,
-        newPwd: string,
-        newConfirmPwd: string,
-        alertMessage: string
-    }
+    onSavePressed: Function;
 
     constructor() {
         super();
@@ -44,6 +52,8 @@ export class ModifyWalletPwd extends Component {
             newConfirmPwd: '',
             alertMessage: ''
         }
+        
+        this.onSavePressed = this.onSavePressed.bind(this);
     }
 
     componentWillMount() {
@@ -71,7 +81,7 @@ export class ModifyWalletPwd extends Component {
         }
 
         if (!WalletUtils.isPasswordValid(curPwd)) {
-            this.setState({alertMessage:LVStrings.wallet_import_private_password_hint });
+            this.setState({alertMessage:LVStrings.wallet_import_invalid_password_warning });
             this.refs.alert.show();
             return;
         }
@@ -83,7 +93,7 @@ export class ModifyWalletPwd extends Component {
         }
 
         if (!WalletUtils.isPasswordValid(newPwd) || !WalletUtils.isPasswordValid(newConfirmPwd)) {
-            this.setState({alertMessage:LVStrings.wallet_import_private_password_hint });
+            this.setState({alertMessage:LVStrings.wallet_import_invalid_password_warning });
             this.refs.alert.show();
             return;
         }
@@ -162,63 +172,65 @@ export class ModifyWalletPwd extends Component {
     }
 
     render() {
+        const thisPage = this;
         return (
             <LVKeyboardDismissView style={{ backgroundColor: 'white', flex: 1}}>
                 <MXNavigatorHeader
                     left={ IconBack }
-                    style={{backgroundColor:'#F8F9FB'}}
+                    style={{backgroundColor:LVColor.white}}
                     title={ LVStrings.profile_wallet_modify_password }
                     titleStyle={{color:'#6d798a'}}
                     onLeftPress={ () => {
                         Keyboard.dismiss();
-                        this.props.navigation.goBack() }}
-                    right = { LVStrings.profile_wallet_save }
-                    rightTextColor = { LVColor.primary }
-                    onRightPress={ this.onSavePressed.bind(this) }/>
-                <View style= {{ paddingHorizontal:12.5}}>
-                    <Text style={styles.text}>  
-                    { LVStrings.profile_wallet_cur_password }</Text>
+                        this.props.navigation.goBack() }}/>
+                <View style= {styles.container}>
                     <MXCrossTextInput
                         style={styles.textInput}
                         secureTextEntry={true}
+                        withUnderLine={false}
+                        titleText={LVStrings.profile_wallet_cur_password}
                         placeholder= { LVStrings.profile_wallet_cur_password }
-                        onTextChanged={ this.onCurPwdChanged.bind(this) }
-                    />
-                    <Text style={styles.text}>
-                    { LVStrings.profile_wallet_new_password }</Text>
+                        onTextChanged={ this.onCurPwdChanged.bind(this) }/>
                     <MXCrossTextInput
                         style={styles.textInput}
                         secureTextEntry={true}
+                        withUnderLine={false}
+                        titleText={LVStrings.profile_wallet_new_password}
                         placeholder= { LVStrings.wallet_import_private_password_hint }
                         onTextChanged={ this.onNewPwdChanged.bind(this) }
                     />
-                    <Text style={styles.text}>
-                    { LVStrings.profile_wallet_password_confirm }</Text>
                     <MXCrossTextInput
                         style={styles.textInput}
                         secureTextEntry={true}
+                        titleText={LVStrings.profile_wallet_password_confirm}
                         placeholder= { LVStrings.wallet_import_private_pwd_confirm_hint }
                         onTextChanged={ this.onConfirmPwdChanged.bind(this) }
                     />
-                    <View style={{ marginTop: 25, flexDirection: 'row'}}>
-                        <Text style={{color: LVColor.text.editTextContent}}>{ LVStrings.profile_wallet_password_hint }
-                            <Text style={{marginLeft: 10, color: '#1f7fff'}}
+                    <View style={{ marginTop: 16, flexDirection: 'row'}}>
+                        <Text style={{color: LVColor.text.grey2, fontSize:FontSize.xsmall}}>{ LVStrings.profile_wallet_password_hint }
+                            <Text style={{marginLeft: 10, color: '#FFAE1F',fontSize:FontSize.xsmall}}
                                 onPress={this.onImportRightNow.bind(this)}>
                                 { LVStrings.profile_wallet_import_right_now }
                             </Text>
                         </Text>
                     </View>
+                    <MXButton
+                        rounded                
+                        title={LVStrings.profile_wallet_save}
+                        onPress = {this.onSavePressed}
+                        themeStyle={"active"}
+                        style={styles.saveButton}/>
                 </View>
                 <LVLoadingToast ref={'toast'} title={LVStrings.wallet_editing}/>
                 <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
                 <LVDialog ref={'doneTips'} title={LVStrings.alert_hint} message={LVStrings.wallet_edit_save_success} buttonTitle={LVStrings.alert_ok} onPress={this.onDoneTipsPress.bind(this)} />
                 <LVFullScreenModalView ref={'importPage'}>
                     <LVWalletImportNavigator screenProps={{dismiss: (state: string) => {
-                        this.refs.importPage.dismiss();
+                        thisPage.refs.importPage.dismiss();
                         if (state === 'success') {
                             setTimeout(() => {
-                                this.setState({alertMessage:LVStrings.wallet_import_success });
-                                this.refs.alert.show();
+                                thisPage.setState({alertMessage:LVStrings.wallet_import_success });
+                                thisPage.refs.alert.show();
                             }, 500);
                         }
                     } , from: WalletUtils.OPEN_IMPORT_FROM_MODIFY_PASSWORD
@@ -229,6 +241,14 @@ export class ModifyWalletPwd extends Component {
     }
 }
 const styles = StyleSheet.create({
+    container: {
+        flex:1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        marginLeft: 15, 
+        marginRight:15,
+        marginTop: 11
+    },
     text: {
         marginTop: 15, 
         marginBottom:5, 
@@ -236,7 +256,12 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     textInput: {
-        width: '100%'
+        width: '100%',
+        height: 80
+    },
+    saveButton: {
+        width: '100%',
+        marginTop:94
     }
 });
 export default ModifyWalletPwd

@@ -6,7 +6,7 @@
  */
 
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Image, ScrollView, Button,TouchableHighlight, FlatList } from 'react-native';
+import { Text, View, StyleSheet, Image, ScrollView, Button,TouchableHighlight, FlatList, StatusBar } from 'react-native';
 import { Cell } from 'react-native-tableview-simple';
 import MXNavigatorHeader from './../../../components/MXNavigatorHeader';
 import LVStrings from '../../../assets/localization';
@@ -25,18 +25,27 @@ import LVNotificationCenter from '../../../logic/LVNotificationCenter';
 import LVNotification from '../../../logic/LVNotification';
 import LVNetworking from '../../../logic/LVNetworking';
 import LVBig from '../../../logic/LVBig';
+import { ifIphoneX } from 'react-native-iphone-x-helper'
+import { iPhoneX_Bottom_Inset } from '../../../utils/MXUtils';
 const WalletIcon = require('../../../assets/images/wallet_grey.png');
 const ShowDetailsIcon = require('../../../assets/images/show_detail_arrow.png');
+const CreateWalletIcon = require('../../../assets/images/wm_create_wallet.png');
+const ImportWalletIcon = require('../../../assets/images/wm_import_wallet.png');
 
-export class WalletManagerScreen extends Component {
+type Props = {
+    navigation: Object
+};
+
+type State = {
+    wallets: Array<Object>
+};
+
+export class WalletManagerScreen extends Component<Props, State> {
     static navigationOptions = {
         header: null,
-        tabBarVisible: false
+        tabBarVisible: false,
+        gesturesEnabled: false
     };
-
-    state: {
-        wallets: Array<Object>
-    }
 
     onCreateWalletPressed : Function;
     onImportWalletPressed : Function;
@@ -44,27 +53,23 @@ export class WalletManagerScreen extends Component {
 
     constructor() {
         super();
-
-        this.onCreateWalletPressed = this.onCreateWalletPressed.bind(this);
-        this.onImportWalletPressed = this.onImportWalletPressed.bind(this);
-        this.handleWalletChange = this.handleWalletChange.bind(this);
         this.state = {
             wallets: []
         };
+        this.onCreateWalletPressed = this.onCreateWalletPressed.bind(this);
+        this.onImportWalletPressed = this.onImportWalletPressed.bind(this);
+        this.handleWalletChange = this.handleWalletChange.bind(this);
     }
 
-    componentWillMount() {
-        LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange.bind(this));
-        LVNotificationCenter.addObserver(this, LVNotification.balanceChanged, this.handleBalanceChange.bind(this));
-    }
-
-
-    componentWillUnMount() {
-        LVNotificationCenter.removeObserver(this);
-    }
-    
     componentDidMount() {
+        LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
+        LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletChange);
+
         this.handleWalletChange();
+    }
+
+    componentWillUnmount() {
+        LVNotificationCenter.removeObservers(this);
     }
     
     onCreateWalletPressed() {
@@ -76,28 +81,7 @@ export class WalletManagerScreen extends Component {
     }
 
     handleWalletChange() {
-        this.setState({
-            wallets: LVWalletManager.getWallets()
-        });
-    }
-
-    handleBalanceChange(wallet: Object) {
-        setTimeout(async ()=> {
-            if (wallet) {
-                try {
-                    WalletUtils.log('balance wallet =  ' + JSON.stringify(wallet));
-                    const lvt = await LVNetworking.fetchBalance(wallet.address, 'lvt');
-                    const eth = await LVNetworking.fetchBalance(wallet.address, 'eth');
-                    wallet.lvt = LVBig.convert2Big(lvt);
-                    wallet.eth = LVBig.convert2Big(eth);
-                    await LVWalletManager.updateWallet(wallet);
-                    await LVWalletManager.saveToDisk();
-                    this.handleWalletChange();
-                } catch (error) {
-                    WalletUtils.log(error.message);
-                }
-            }
-        }, 300);
+        this.setState({ wallets: LVWalletManager.getWallets() });
     }
 
     render() {
@@ -138,12 +122,6 @@ export class WalletManagerScreen extends Component {
                                                 </View>
                                                 <Image source={ShowDetailsIcon} style={styles.cellRightTopShowDetailsIconStyle}/>
                                             </View>
-                                            <View style={styles.cellRightSeparatorStyle}/>
-                                            <View style={styles.cellRightBottomPanelStyle}>
-                                                <View style={styles.cellRightBottomContainerStyle}>
-                                                    <Text style={styles.cellRightBottomNumberStyle}>{adjust(item.lvt, item.eth)}</Text>
-                                                </View>
-                                            </View>
                                         </View>
                                     </View>
                                 </View>
@@ -151,23 +129,30 @@ export class WalletManagerScreen extends Component {
                                 }
                         />
                 </View>
-                <LVGradientPanel style={styles.bottomPanel}>
+                <View style={styles.bottomPanel}>
                     <View style={styles.bottomContainer}>
                         <TouchableHighlight style={styles.bottomButtonContainer} 
                                             onPress={this.onCreateWalletPressed}
                                             underlayColor={LVColor.primary}>
-                            <Text style={styles.bottomButtonText}>{LVStrings.wallet_create_wallet}</Text>
+                            <View style={styles.bottomButtonContainer}>
+                                <Image source={CreateWalletIcon} style={styles.bottomIconStyle}/>
+                                <Text style={styles.bottomButtonText}>{LVStrings.wallet_create_wallet}</Text>
+                            </View>
                         </TouchableHighlight>
                         <View style={styles.bottomSeparator}></View>
                         <TouchableHighlight style={styles.bottomButtonContainer} 
                                             onPress={this.onImportWalletPressed}
                                             underlayColor={LVColor.primary}>
-                            <Text style={styles.bottomButtonText}>{LVStrings.wallet_import_header}</Text>
+                            <View style={styles.bottomButtonContainer}>
+                                <Image source={ImportWalletIcon} style={styles.bottomIconStyle}/>
+                                <Text style={styles.bottomButtonText}>{LVStrings.wallet_import_header}</Text>
+                            </View>
                         </TouchableHighlight>
                     </View>
-                </LVGradientPanel>
+                </View>
                 <LVFullScreenModalView ref={'creationPage'}>
                     <LVWalletCreationNavigator screenProps={{dismiss: ()=> {
+                        console.log('dissmissing');
                         this.refs.creationPage.dismiss()
                         this.handleWalletChange();
                     } 
@@ -200,11 +185,16 @@ const styles = StyleSheet.create({
         fontSize: LVFontSize.large
     },
     bottomPanel: {
-        height: 50
+        ...ifIphoneX({height: 55 + iPhoneX_Bottom_Inset},{height: 55}),
+        backgroundColor: '#FFFFFF',
+        shadowColor: '#6B7A9F',
+        shadowOpacity: 0.1,
+        shadowRadius: 5
     },
     bottomContainer: {
         flex: 1,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        ...ifIphoneX({marginBottom: iPhoneX_Bottom_Inset}, {marginBottom:0})
     },
     bottomButtonContainer: {
         flex: 1,
@@ -212,14 +202,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    bottomIconStyle: {
+        marginRight: 5
+    },
     bottomSeparator: {
         width: 1,
         height: 20,
         marginTop:15,
-        backgroundColor: LVColor.white
+        backgroundColor: '#F5F6FA'
     },
     bottomButtonText: {
-        color: LVColor.white,
+        color: '#657182',
         fontSize: 15
     },
     listContainerStyle: {
@@ -229,7 +222,7 @@ const styles = StyleSheet.create({
         flex:1
     },
     cellContentViewContainer: {
-        height:110, 
+        height:90, 
         marginBottom:15,
         backgroundColor: LVColor.white,
         shadowOffset: {width: 0, height: -1},
@@ -244,11 +237,10 @@ const styles = StyleSheet.create({
     cellLeftContentStyle: {
         flex:0.215, 
         flexDirection: 'column', 
-        justifyContent: 'flex-start', 
+        justifyContent: 'center', 
         alignItems: 'center'
     },
     cellLeftImageStyle: {
-        marginTop: 15, 
         width:50, 
         height:50
     },
@@ -275,8 +267,9 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start'
     },
     cellWalletNameTextStyle: {
-        fontSize: 15,
-        color: '#677384'
+        fontSize: 16,
+        color: '#677384',
+        width: '100%'
     },
     cellWalletAddressTextStyle: {
         fontSize: 12,

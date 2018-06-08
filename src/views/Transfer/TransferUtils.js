@@ -13,9 +13,9 @@ export default class TransferUtils {
     constructor() {}
 
     static isValidAmountStr(amountStr: string) : bool {
-        let result = parseFloat(amountStr);
+        let result = amountStr.trim();
         console.log(result);
-        let isPositive = !isNaN(result) && result > 0;
+        let isPositive = !isNaN(result) && parseFloat(result) > 0;
         if (!isPositive) {
             return false;
         } else {
@@ -90,7 +90,7 @@ export default class TransferUtils {
     // value : Big Object 
     static convert2BNHex(value: Object) : string {
         let r = new BN(value.times(new Big(10).pow(18)).toFixed());
-        return '0x' + r.toString(16);
+        return '0x' + r.toString(16).toLowerCase();
     }
 
     // 显示八位小数
@@ -99,11 +99,11 @@ export default class TransferUtils {
     }
 
     static convertToHexHeader(hexStr: string) {
-        return '0x' === hexStr.substr(0, 2) ? hexStr : '0x' + hexStr;
+        return '0x' === hexStr.substr(0, 2).toLowerCase() ? hexStr.toLowerCase() : '0x' + hexStr.toLowerCase();
     }
 
     static removeHexHeader(addr: string) {
-        return '0x' === addr.substr(0, 2) ? addr.slice(2) : addr;
+        return '0x' === addr.substr(0, 2).toLowerCase() ? addr.slice(2).toLowerCase() : addr.toLowerCase();
     }
 
     static getSetGasPriceHexStr(setGasPrice: number, gasLimit: string) : string {
@@ -116,6 +116,7 @@ export default class TransferUtils {
         if (__DEV__) {
             console.log('transfer ---> ' + msg);
         }
+        // console.log('transfer ---> ' + msg);
     }
 
     static testBN() {
@@ -138,7 +139,6 @@ export default class TransferUtils {
         var bn = new BN(div.toFixed());
         this.log('origin = ' + div.toFixed());
         this.log('result = ' + bn.toString(16));
-        this.log('hex = ' + this.convert2BNHex(value))
     }
 
 }

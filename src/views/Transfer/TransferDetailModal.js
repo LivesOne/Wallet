@@ -12,29 +12,36 @@ import LVStrings from './../../assets/localization';
 import { LightStyles } from '../../components/MXCrossTextInput/styles';
 import MXTouchableImage from './../../components/MXTouchableImage';
 import TransferUtils from './TransferUtils';
+import { converAddressToDisplayableText } from '../../utils/MXStringUtils';
 const CloseIcon = require('../../assets/images/close_modal.png');
-
+var Big = require('big.js');
 const DetailItem = ({leftText, rightText}) => 
 (<View
     style={[styles.detailContainer, leftText === LVStrings.transfer_address_in ? {height: 60} : null]}>
     <Text style={styles.left}>{leftText}</Text>
-    <Text style={[styles.right, leftText === LVStrings.transfer_address_in ? {width: '50%'} : null]}>{rightText}</Text>
+    <Text style={[styles.right, leftText === LVStrings.transfer_address_in ? {width: '80%'} : null]}>{rightText}</Text>
 </View>);
 
-export class TransferDetailModal extends Component {
-    static propTypes = {
-        isOpen: PropTypes.bool,
-        onClosed: PropTypes.func,
-        address: PropTypes.string,
-        amount: PropTypes.number,
-        minerGap: PropTypes.number,
-        //remarks: PropTypes.string,
-        onTransferConfirmed: PropTypes.func,
-    };
+type Props = {
+    isOpen: bool,
+    onClosed: Function,
+    address: string,
+    amount: number,
+    minerGap: number,
+    type: string,
+    //remarks: PropTypes.string,
+    onTransferConfirmed: Function,
+};
+
+export class TransferDetailModal extends Component<Props> {
 
     constructor(props: any) {
         super(props);
         this.onClosed = this.onClosed.bind(this);
+    }
+
+    dismiss() {
+        this.refs.dialog.close();
     }
 
     onClosed = () => {
@@ -43,10 +50,17 @@ export class TransferDetailModal extends Component {
         }
     };
 
+    getShowAddress= (address: string) => {
+        return converAddressToDisplayableText(TransferUtils.removeHexHeader(address),8,8)
+    }
+
     render() {
-        const {isOpen, onClosed, address, amount, minerGap, remarks, onTransferConfirmed } = this.props;
+        const {isOpen, onClosed, address, amount, minerGap, onTransferConfirmed, type} = this.props;
+        let amoutBig = Big(amount);
+        
         return (
-            <Modal 
+            <Modal
+                ref={'dialog'} 
                 isOpen={isOpen}
                 style={styles.modal}
                 position={'bottom'}
@@ -58,15 +72,17 @@ export class TransferDetailModal extends Component {
                 >
                 <View style={styles.container}>
                   <View style={ styles.titleContainer }>
-                    <View style={{width: 40}}></View>
                     <Text style={styles.title}> {LVStrings.transfer_payment_details}</Text>
-                    <MXTouchableImage style={{width: 40}} source={CloseIcon} onPress={this.onClosed}></MXTouchableImage>
+                    <MXTouchableImage style={{position:'absolute', right:20}} source={CloseIcon} onPress={this.onClosed}></MXTouchableImage>
                   </View>
-                  <DetailItem leftText={LVStrings.transfer_address_in} rightText={address}></DetailItem>
-                  <DetailItem leftText={LVStrings.transfer_amount} rightText={amount + ' LVT'}></DetailItem>
+                  <DetailItem leftText={LVStrings.transfer_address_in} rightText={this.getShowAddress(address)}></DetailItem>
+                  <DetailItem leftText={LVStrings.transfer_amount} rightText={amoutBig.toFixed() + ' ' + type.toUpperCase()}></DetailItem>
                   <DetailItem leftText={LVStrings.transfer_miner_tips} rightText={TransferUtils.convertMinnerGap(minerGap) + ' ETH'}></DetailItem>
                   {/* <DetailItem leftText={LVStrings.transfer_remarks} rightText={remarks}></DetailItem> */}
-                <MXButton title={LVStrings.transfer} rounded={true} style={styles.btn} onPress = {onTransferConfirmed}></MXButton>
+                  <View style={styles.btnContainer}>
+                    <MXButton title={LVStrings.transfer} rounded={true} style={styles.btn} onPress = {onTransferConfirmed}></MXButton>
+                  </View>
+                
                 </View>
             </Modal>
         )
@@ -76,51 +92,62 @@ export class TransferDetailModal extends Component {
 const styles = StyleSheet.create({
     modal: {
         justifyContent: 'center',
-        height: '60%'
+        height: '50%'
       },
     container: {
-        flex: 1,
         height: '100%',
         width: '100%',
         backgroundColor: 'white',
         borderRadius: 20, 
     },
     titleContainer: {
+        flex:1,
         flexDirection: 'row', 
-        justifyContent: 'space-between', 
-        height: 50, 
-        alignItems: 'center', 
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: MXUtils.getDeviceHeight() / 6, 
         borderWidth: StyleSheet.hairlineWidth,  
         borderColor: 'transparent', 
+        paddingHorizontal: 20,
         borderBottomColor: LVColor.border.editTextBottomBoarder
     },
     title: {
-        fontSize: 18, 
+        fontSize: 16, 
         color: LVColor.text.grey1,
+        alignSelf: 'center',
     },
     detailContainer: {
+        flex:1,
         flexDirection: 'row', 
-        height: 50, 
+        alignItems: 'center',
         justifyContent: 'space-between', 
-        alignItems: 'center', 
-        borderWidth: StyleSheet.hairlineWidth, 
-        borderColor: 'transparent', 
-        borderBottomColor: LVColor.border.editTextBottomBoarder,
+        height: MXUtils.getDeviceHeight() / 6, 
+        
         marginHorizontal: 20,
     },
     left: {
         color: LVColor.text.grey1, 
-        fontSize: 16
+        fontSize: 16,
+        marginRight: 20,
     },
     right: {
+        flex: 1,
         color: LVColor.text.grey1, 
         fontSize: 16,  
         textAlign: 'right',
         textAlignVertical: 'center',
     },
+    btnContainer: {
+        flex:2,
+        alignItems: 'center',
+        justifyContent: 'center', 
+        marginHorizontal: 20,
+        borderWidth: StyleSheet.hairlineWidth, 
+        borderColor: 'transparent', 
+        borderTopColor: LVColor.border.editTextBottomBoarder,
+    },
     btn: {
-        alignSelf: 'center',
-        marginTop: 30
+        width: '100%',
     }
 });
 

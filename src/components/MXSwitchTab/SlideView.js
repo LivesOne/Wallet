@@ -8,17 +8,17 @@ import * as MXUtils from "../../utils/MXUtils";
 const SPRING_CONFIG = {tension: 2, friction: 5};
 const SLIDE_VIEW_WIDTH = 20;
 
-export class MXSlideView extends Component {
+type Props = { 
+    style: View.style,
+    };
+type State = {
+    pan: any
+};
 
-    state: {
-        pan: any
-    }
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            pan: new Animated.ValueXY()
-        };
-    }
+export class MXSlideView extends Component<Props,State> {
+    state = {
+        pan: new Animated.ValueXY()
+    };
 
     getStyle() {
         return [

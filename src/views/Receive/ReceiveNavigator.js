@@ -13,7 +13,7 @@ import ReceiveTip from './ReceiveTip';
 
 const ReceiveNavigator = StackNavigator({
     Receive: { screen: ReceiveScreen },
-    ReceiveTip: { screen:ReceiveTip},
+    ReceiveTip: { screen:ReceiveScreen},
 });
 
 export default ReceiveNavigator;

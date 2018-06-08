@@ -2,7 +2,7 @@
 'use strict'
 
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Platform } from 'react-native';
+import { Text, View, StyleSheet, Platform, ViewPropTypes} from 'react-native';
 import Slider from "react-native-slider";
 
 import PropTypes from 'prop-types';
@@ -13,12 +13,20 @@ import * as MXUtils from '../../utils/MXUtils'
 import TransferUtils from './TransferUtils';
 var DeviceInfo = require('react-native-device-info');
 
-export class TransferMinerGapSetter extends Component {
+type Props = {
+    enable: bool,
+    minimumValue: number,
+    maximumValue: number,
+    defaultValue: number,
+    onGapChanged: Function,
+    style: ViewPropTypes.style
+};
 
-    state: {
-        value: number,
-    }
+type State = {
+    value: number
+};
 
+export class TransferMinerGapSetter extends Component<Props, State> {
     static propTypes = {
         enable: PropTypes.bool,
         minimumValue: PropTypes.number,
@@ -59,15 +67,13 @@ export class TransferMinerGapSetter extends Component {
     }
 
     componentWillReceiveProps(nextProps: any) {
-        if (this.props.enable !== nextProps.enable) {
-            this.setState({
-                value: nextProps.enable ? nextProps.defaultValue : 0,
-            });
-        }
-        if (nextProps.enable && this.state.value !== nextProps.defaultValue) {
+        if (this.props.enable === false && nextProps.enable === true) {
             this.setState({
                 value: nextProps.defaultValue,
             });
+        }
+        if (this.props.enable && !nextProps) {
+            this.setState({value : 0})
         }
     }
 
@@ -78,7 +84,6 @@ export class TransferMinerGapSetter extends Component {
     isBadAndroidDevices() {
         if (Platform.OS === 'android') {
             const al = DeviceInfo.getAPILevel();
-            TransferUtils.log('api level = ' + al);
             if (al === 19) {
                 return true;
             }
@@ -91,9 +96,9 @@ export class TransferMinerGapSetter extends Component {
         return (
         <View style={[styles.container, this.props.style]} >
             <View style={styles.topContainer}>
-                <Text style={styles.title}>{ LVStrings.transfer_miner_tips }</Text>
+                <Text style={[styles.title, {color: LVColor.text.grey2, fontWeight:'100',}]}>{ LVStrings.transfer_miner_tips }</Text>
                 <View style={[styles.tipsContainner, {borderColor:this.props.enable ? LVColor.primary: '#DDDDDD'}]}>
-                    <Text style={[styles.tipsIndicator, {color: this.props.enable ?LVColor.primary : '#DDDDDD'}]}>{ this.calculateValue() }</Text>
+                    <Text style={[styles.tipsIndicator, {color: true ? LVColor.white : '#DDDDDD'}]}>{ this.calculateValue() }</Text>
                 </View>
             </View>
             <View style={styles.sliderContainer}>
@@ -127,35 +132,38 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
         marginTop: 20,
-        marginBottom:5,
     },
     title: {
-        fontSize: 16,
-        color: LVColor.text.editTextContent,
+        fontSize: 15,
+        color: LVColor.white,
         marginBottom:5,
+        fontWeight:'300',
     },
     tipsContainner: {
         height: 35,
-        width: 130,
+        width: 135,
+        backgroundColor: LVColor.text.yellow,
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1, 
-        borderRadius: 2, 
+        borderWidth: 0, 
+        borderRadius: 5, 
     },
     tipsIndicator: {
-        color: LVColor.primary,
+        color: LVColor.white,
     },
     sliderContainer: {
         flexDirection: 'row',
         justifyContent: "space-between",
         alignItems: "center",
+        marginTop: 20,
+        marginBottom:20,
     },
     sliderWrapper: {
         width: '75%',
     },
     text: {
-        fontSize: 16,
-        color: LVColor.text.grey3,
+        fontSize: 14,
+        color: LVColor.text.grey2,
     },
     track: {
         height: 4,

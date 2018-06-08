@@ -5,29 +5,35 @@
  */
 'use strict';
 
-import React, { Component } from 'react';
+import * as React from 'react';
 import { StyleSheet, Dimensions, View, ViewPropTypes, Text, Easing, TouchableOpacity } from 'react-native';
 import { Separator } from 'react-native-tableview-simple';
 import Modal from 'react-native-modalbox';
-import PropTypes from 'prop-types';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import MXButton from '../../components/MXButton';
 import MXCrossTextInput from '../../components/MXCrossTextInput';
 
-export default class LVDialog extends Component {
-    static propTypes = {
-        title: PropTypes.string.isRequired,
-        titleStyle: PropTypes.any,
-        message: PropTypes.string,
-        messageStyle: PropTypes.any,
-        buttonTitle: PropTypes.string,
-        onPress: PropTypes.func,
-        onPressContent: PropTypes.func,
-        tapToClose: PropTypes.bool,
-        width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        height: PropTypes.number
-    };
+type Props = {
+    style?: ViewPropTypes.style,
+    title: string,
+    titleStyle?: Text.propTypes.style,
+    message?: string,
+    messageStyle?: Text.propTypes.style,
+    buttonTitle?: string,
+    onPress?: Function,
+    onPressContent?: Function,
+    tapToClose: boolean,
+    width?: any,
+    height?: number,
+    children?: React.Element<any>,
+};
+
+export default class LVDialog extends React.Component<Props> {
+    static defaultProps = {
+        message: '',
+        tapToClose: false,
+    }
 
     show() {
         this.refs.dialog.open();
@@ -72,16 +78,20 @@ export default class LVDialog extends Component {
             >
                 <View style={styles.dialog}>
                     <View style={styles.dialogTopPanel}>
-                        <Text style={[styles.title, this.props.titleStyle]}>{this.props.title}</Text>
-                    </View>
-                    <View style={styles.dialogContent} onPress={this.props.onPressContent}>
+                        {this.props.title && (
+                            <Text style={[styles.title, this.props.titleStyle]}>{this.props.title}</Text>
+                        )}
+                        
                         {message ? <Text style={[styles.message, this.props.messageStyle]}>{message}</Text> : null}
+                    </View>
+                    
+                    <View style={styles.dialogContent} onPress={this.props.onPressContent}>
                         {this.props.children}
                         {buttonTitle ? (
                             <MXButton
-                                style={styles.button}
                                 rounded={true}
                                 title={buttonTitle}
+                                isEmptyButtonType = {true}
                                 onPress={this.onPressButton.bind(this)}
                             />
                         ) : null}
@@ -92,26 +102,36 @@ export default class LVDialog extends Component {
     }
 }
 
-export class LVConfirmDialog extends LVDialog {
 
-    static propTypes = {
-        confirmTitle: PropTypes.string,
-        cancelTitle: PropTypes.string,
-        confirmTitleStyle: PropTypes.any,
-        cancelTitleStyle: PropTypes.any,
-        onConfirm: PropTypes.func,
-        onCancel: PropTypes.func,
-        dismissAfterConfirm: PropTypes.bool,
-        disableConfirm: PropTypes.bool,
-        disableCancel: PropTypes.bool,
-    };
+type ConfirmDialogProps = Props & {
+    confirmTitle: string,
+    cancelTitle: string,
+    confirmTitleStyle?: Text.propTypes.style,
+    cancelTitleStyle?: Text.propTypes.style,
+    onConfirm: Function,
+    onCancel?: Function,
+    dismissAfterConfirm: boolean,
+    disableConfirm: boolean,
+    disableCancel: boolean
+};
+
+export class LVConfirmDialog extends React.Component<ConfirmDialogProps> {
+
+    static defaultProps = {
+        confirmTitle: LVStrings.common_confirm,
+        cancelTitle: LVStrings.common_cancel,
+        dismissAfterConfirm: false,
+        disableConfirm: false,
+        disableCancel: false,
+        tapToClose: false,
+    }
 
     show() {
-        this.refs.dialog.show();
+        this.refs.dialog.open();
     }
 
     dismiss() {
-        this.refs.dialog.dismiss();
+        this.refs.dialog.close();
     }
 
     onPressCancel() {
@@ -142,12 +162,12 @@ export class LVConfirmDialog extends LVDialog {
         const buttonPanelStyle = {
             flex: 1,
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            justifyContent: 'center',
             alignItems: 'center'
         };
         const buttonStyle = {
-            width: '50%',
-            height: '100%',
+            width:'50%',
+            height:'100%',
             justifyContent: 'center',
             alignItems: 'center'
         };
@@ -155,42 +175,62 @@ export class LVConfirmDialog extends LVDialog {
             fontSize: 16,
             color: LVColor.text.grey1
         };
+        const confirmButtonTitleStyle = {
+            fontSize: 16,
+            color: LVColor.text.yellow,
+        };
         const lineWidth = StyleSheet.hairlineWidth;
-        const lineColor = LVColor.separateLine;
+        const lineColor = "#F5F6FA";
 
-        const confirmTitle = this.props.confirmTitle || LVStrings.common_confirm;
-        const cancelTitle = this.props.cancelTitle || LVStrings.common_cancel;
-
+        const { confirmTitle, cancelTitle } = this.props;
         const childrenHeight = this.props.children ? ( this.props.children.props.height || 64) : 0;
-        const modalHeight = 50 + childrenHeight;
-
+        const modalWidth = { width: this.props.width || '90%' };
+        const modalHeight = {
+            height: this.props.height || 120 + childrenHeight
+        };
         return (
-            <LVDialog ref={'dialog'} {...this.props}>
-                <View style={{ justifyContent: 'space-between', alignItems: 'center', width: '100%', height: modalHeight }}>
-                    <View style={{justifyContent: 'center', alignItems: 'center'}}>{this.props.children}</View>
-                    <View style={{ width: '100%', height: 50 }}>
-                        <View style={{ width: '100%', height: lineWidth, backgroundColor: lineColor }} />
-                        <Separator insetLeft={0} tintColor={LVColor.separateLine} />
-                        <View style={buttonPanelStyle}>
-                            <TouchableOpacity
-                                activeOpacity={0.8}
-                                style={buttonStyle}
-                                onPress={this.onPressConfirm.bind(this)}
-                            >
-                                <Text style={[buttonTitleStyle, this.props.confirmTitleStyle]}>{confirmTitle}</Text>
-                            </TouchableOpacity>
-                            <View style={{ width: lineWidth, height: '100%', backgroundColor: lineColor }} />
-                            <TouchableOpacity
-                                activeOpacity={0.8}
-                                style={buttonStyle}
-                                onPress={this.onPressCancel.bind(this)}
-                            >
-                                <Text style={[buttonTitleStyle, this.props.cancelTitleStyle]}>{cancelTitle}</Text>
-                            </TouchableOpacity>
+            <Modal
+                ref={'dialog'}
+                isOpen={false}
+                style={[styles.modal, modalWidth, modalHeight]}
+                entry={'top'}
+                position={'center'}
+                coverScreen={true}
+                backButtonClose={true}
+                swipeToClose={false}
+                backdropOpacity={0.5}
+                animationDuration={300}
+                backdropPressToClose={this.props.tapToClose === true}
+                easing={Easing.elastic(0.75)}
+            >
+                <View style={styles.confirmDialog}>
+                    <View style={styles.confirmDialogTopPanel}>
+                        {this.props.title && (
+                            <Text style={[styles.confirmTitle, this.props.titleStyle]}>{this.props.title}</Text>
+                        )}
+                    </View>
+                    <View style={{flex:1,justifyContent: 'center', alignItems: 'center'}}>{this.props.children}</View>
+                    <View style={styles.confirmDialogBottomPanel} onPress={this.props.onPressContent}>
+                        <View style={{ flex : 1}}>
+                            <View style={buttonPanelStyle}>
+                                <TouchableOpacity
+                                    activeOpacity={0.8}
+                                    style={buttonStyle}
+                                    onPress={this.onPressCancel.bind(this)}>
+                                    <Text style={[buttonTitleStyle, this.props.cancelTitleStyle]}>{cancelTitle}</Text>
+                                </TouchableOpacity>
+                                <View style={{ width: 2, height: 20, backgroundColor: lineColor }} />
+                                <TouchableOpacity
+                                    activeOpacity={0.8}
+                                    style={buttonStyle}
+                                    onPress={this.onPressConfirm.bind(this)}>
+                                    <Text style={[confirmButtonTitleStyle, this.props.confirmTitleStyle]}>{confirmTitle}</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 </View>
-            </LVDialog>
+            </Modal>
         );
     }
 }
@@ -203,18 +243,21 @@ const Window = {
 const styles = StyleSheet.create({
     modal: {
         marginTop: -44,
-        borderRadius: 5,
-        justifyContent: 'flex-start',
-        alignItems: 'center'
+        borderRadius: 5
     },
     title: {
-        color: LVColor.text.grey1,
-        fontSize: 18
+        color: LVColor.text.grey2,
+        fontSize: 15,
+        marginBottom: 15
+    },
+    confirmTitle : {
+        color: LVColor.text.grey2,
+        fontSize: 15,
     },
     message: {
         paddingLeft: 25,
         paddingRight: 25,
-        color: '#697485',
+        color: '#697585',
         fontSize: 16,
         textAlign: 'center',
         lineHeight: 20
@@ -222,24 +265,39 @@ const styles = StyleSheet.create({
     dialog: {
         flex: 1,
         width: '100%',
+        flexDirection: 'column'
+    },
+    confirmDialog: {
+        flex: 1,
+        width: '100%',
         flexDirection: 'column',
         justifyContent: 'space-between'
     },
     dialogTopPanel: {
-        height: 50,
+        flex:0.7,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    confirmDialogTopPanel: {
+        height:44,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center'
     },
     dialogContent: {
-        flex: 1,
+        flex: 0.3,
         width: '100%',
-        marginTop: 10,
+        marginBottom: 20,
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center'
     },
-    button: {
-        marginBottom: 20
+    confirmDialogBottomPanel: {
+        height : 54,
+        width: '100%',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });

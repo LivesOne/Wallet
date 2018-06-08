@@ -19,7 +19,9 @@ import LVWalletImportNavigator from './LVWalletImportNavigator';
 
 const createImage = require("../../assets/images/create_wallet.png");
 
-export default class WalletCreateOrImportPage extends Component {    
+type Props = {};
+
+export default class WalletCreateOrImportPage extends Component<Props> {    
     componentWillMount() {
         StatusBar.setBarStyle('default', false);
     }
@@ -34,12 +36,14 @@ export default class WalletCreateOrImportPage extends Component {
                     onPress = {() => {
                         this.refs.creationPage.show();
                     }}
+                    isEmptyButtonType={true}
                     themeStyle={"active"}
                     style={styles.createButton}
                 />
                 <MXButton
                     rounded                
                     title={LVStrings.wallet_import_header}
+                    isEmptyButtonType={true}
                     onPress = {() => {
                         this.refs.importPage.show();
                     }}
@@ -71,8 +75,8 @@ const styles = LVStyleSheet.create({
         backgroundColor: LVColor.white,
     },
     image: {
-        width: 220, 
-        height: 220,
+        width: 190, 
+        height: 143,
     },
     createButton: {
         marginTop: 80,

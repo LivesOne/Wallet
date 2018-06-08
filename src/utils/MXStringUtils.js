@@ -11,10 +11,10 @@ var sha3 = require('crypto-js/sha3');
 const MAX_BALANCE_LENGTH_LIMIT = 13;
 const FRAGMENT_LENGTH = 3;
 
-export function convertAmountToCurrencyString(amount: number, thousandsSeparator: ?string, precision: ?number, keepZero: boolean = false): string {
-    const amounts = amount || 0;
+export function convertAmountToCurrencyString(amount: number|string|Big, thousandsSeparator: ?string, precision: number = 0, keepZero: boolean = false): string {
+    const bigAmounts = amount ? Big(amount) : Big(0);
     const sep = thousandsSeparator || ',';
-    const arr = (precision !== null ? amounts.toFixed(precision || 0) : (amounts + '')).split('.');
+    const arr = (precision > 0 ? bigAmounts.toFixed(precision) : amount + '').split('.');
 
     let result = '';
     let num = (arr[0] || 0).toString();
@@ -29,7 +29,8 @@ export function convertAmountToCurrencyString(amount: number, thousandsSeparator
 
     if (arr.length === 2) {
         if (keepZero === false) {
-            const val = parseFloat('0.' + decimal).toString();
+            const str = '0.' + decimal;
+            const val = decimal.length > 18 ? Big(str).toFixed(18) : Big(str).toFixed();
             const dec = val.split('.')[1] || '';
             result = (val == '0') ? result : result + '.' + dec;
         } else {
@@ -86,16 +87,16 @@ export function beautifyBalanceShow(balance: Big, unit: ?string) {
     return {result : result + (unit ? (' ' + unit) : ''), hasShrink: hasShrink};
 }
 
-// lvt 为0，显示 eth 否则显示 lvt
-export function adjust(lvtAmount: Big, ethAmount: Big) {
+// lvtc 为0，显示 eth 否则显示 lvtc
+export function adjust(lvtcAmount: Big, ethAmount: Big) {
     if (Platform.OS === 'ios') {
-        if (lvtAmount.eq(0)) {
+        if (lvtcAmount.eq(0)) {
             return beautifyBalanceShow(ethAmount, 'ETH').result;
         } else {
-            return beautifyBalanceShow(lvtAmount, 'LVT').result;
+            return beautifyBalanceShow(lvtcAmount, 'LVTC').result;
         }
     } else {
-        return beautifyBalanceShow(lvtAmount, 'LVT').result;
+        return beautifyBalanceShow(lvtcAmount, 'LVTC').result;
     }
 }
 
@@ -111,7 +112,8 @@ export function converAddressToDisplayableText(address: string, headNum: number 
         return address;
     }
 
-    const upaddr = address.toUpperCase();
+    const pureAddress = address.substr(0, 2).toLowerCase() === '0x' ? address.substring(2, address.length) : address;
+    const upaddr = pureAddress.toUpperCase();
     const head = upaddr.substr(0, headNum);
     const tail = upaddr.substr(upaddr.length - tailNum, tailNum);
     return ['0x',head,'...',tail].join('');

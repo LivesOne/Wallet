@@ -9,32 +9,28 @@ import LVColor from '../../styles/LVColor'
 import PropTypes from 'prop-types';
 import { MXSlideView } from './SlideView';
 
-export class MXSwitchTab extends Component {
 
+type Props = {
+    leftText: string,
+    rightText: string,
+    onTabSwitched: Function,
+    style: ViewPropTypes.style,
+    textStyle: ViewPropTypes.style
+}
 
-    state: {
-        leftPressed: boolean,
-        scrollToLeftPos: number,
-        scrollToRightPos: number,
+type State = {
+    leftPressed: boolean,
+    scrollToLeftPos: number,
+    scrollToRightPos: number,
+}
+
+export class MXSwitchTab extends Component<Props,State> {
+    state = {
+        leftPressed: true,
+        scrollToLeftPos: 0,
+        scrollToRightPos:0,
     }
-
-    constructor() {
-        super();
-        this.state = {
-            leftPressed: true,
-            scrollToLeftPos: 0,
-            scrollToRightPos:0,
-        }
-    }
-
-    static propTypes = {
-        leftText: PropTypes.string,
-        rightText: PropTypes.string,
-        onTabSwitched: PropTypes.func,
-        style: ViewPropTypes.style,
-        textStyle: ViewPropTypes.style
-    }
-
+    
     _onLeftPressed = () => {
         this.setState({leftPressed: true});
         this.refs.slide.offset(this.state.scrollToLeftPos);
@@ -118,12 +114,12 @@ const styles = LVStyleSheet.create({
     },
     normalText: {
         fontSize: 15,
-        color: "#bec4d0"
+        color: "#BFC5D1"
     },
 
     pressedText: {
         fontSize: 14,
-        color: "#667383"
+        color: LVColor.text.yellow,
     }
   });
 

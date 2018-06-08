@@ -11,14 +11,18 @@ import { StackNavigator } from "react-navigation";
 import TransferScreen from './TransferScreen';
 import AddEditContactPage from '../contacts/AddEditContactPage';
 import ContactsManagerPage from '../contacts/ContactsManagerPage';
+import LVTContactDetailPage from '../contacts/LVTContactDetailPage';
 
 import ReceiveTip from '../Receive/ReceiveTip';
+import ReceiveScreen from '../Receive/ReceiveScreen';
 
 const TransferNavigator = StackNavigator({
     Transfer: { screen: TransferScreen },
     ContactList: {screen: ContactsManagerPage},
-    ReceiveTip: { screen:ReceiveTip},
-    AddEditContactPage: {screen: AddEditContactPage}
+    ReceiveTip: { screen:ReceiveScreen},
+    AddEditContactPage: {screen: AddEditContactPage},
+    LVTContactDetailPage: {screen: LVTContactDetailPage},
+
 });
 
 export default TransferNavigator;

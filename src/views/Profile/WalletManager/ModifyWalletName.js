@@ -15,19 +15,26 @@ import LVDialog from '../../Common/LVDialog';
 import WalletUtils from '../../Wallet/WalletUtils';
 import Toast from 'react-native-root-toast';
 import { LVKeyboardDismissView } from '../../Common/LVKeyboardDismissView';
+import MXButton from './../../../components/MXButton';
 
-export class ModifyWalletName extends Component {
+type Props = {
+    navigation: Object
+};
+
+type State = {
+    wallet: ?Object,
+    name: ?string,
+    alertMessage: string,
+};
+
+export class ModifyWalletName extends React.Component<Props, State> {
 
     static navigationOptions = {
         header: null,
         tabBarVisible: false
     };
 
-    state: {
-        wallet: ?Object,
-        name: ?string,
-        alertMessage: string,
-    }
+    onSavePressed: Function;
 
     constructor() {
         super();
@@ -37,6 +44,7 @@ export class ModifyWalletName extends Component {
             name: '',
             alertMessage: ''
         }
+        this.onSavePressed = this.onSavePressed.bind(this);
     }
 
     componentWillMount() {
@@ -116,26 +124,28 @@ export class ModifyWalletName extends Component {
             <LVKeyboardDismissView style={{ backgroundColor: 'white', flex: 1}}>
                 <MXNavigatorHeader
                     left={ IconBack }
-                    style={{backgroundColor:'#F8F9FB'}}
+                    style={{backgroundColor:LVColor.white}}
                     title={ LVStrings.profile_wallet_modify_name }
                     titleStyle={{color:'#6d798a'}}
                     onLeftPress={ () => {
                         Keyboard.dismiss(); 
                         this.props.navigation.goBack() 
-                        }}
-                    right = { LVStrings.profile_wallet_save }
-                    rightTextColor = { LVColor.primary }
-                    onRightPress={this.onSavePressed.bind(this)}/>
-                    <View style= {{ paddingHorizontal:12.5}}>
-                        <Text style={styles.text}>
-                        { LVStrings.profile_wallet_name }</Text>
+                        }}/>
+                    <View style= {styles.container}>
                         <MXCrossTextInput
                             ref={'textinput'}
+                            titleText={LVStrings.profile_wallet_name }
                             //setFocusWhenMounted = {true}
                             style={styles.textInput}
                             placeholder= { LVStrings.wallet_name_hint }
                             onTextChanged={ this.onTextChanged.bind(this) }
                         />
+                        <MXButton
+                            rounded                
+                            title={LVStrings.profile_wallet_save}
+                            onPress = {this.onSavePressed}
+                            themeStyle={"active"}
+                            style={styles.saveButton}/>
                     </View>
                     <LVDialog ref={'alert'} 
                         title={LVStrings.alert_hint} 
@@ -147,13 +157,23 @@ export class ModifyWalletName extends Component {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex:1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        marginLeft: 15, 
+        marginRight:15,
+        marginTop: 11
+    },
     text: {
-        marginTop: 15, 
-        marginBottom:5, 
         color: LVColor.primary, 
         fontSize: 16,
     },
     textInput: {
+        width: '100%'
+    },
+    saveButton: {
+        marginTop: 126,
         width: '100%'
     }
 });

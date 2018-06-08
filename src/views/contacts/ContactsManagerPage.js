@@ -4,28 +4,47 @@
  * Author: Charles Liu
  * @flow
  */
+"use strict";
 
 import React, { Component } from 'react'
-import { Dimensions, Text, View, StyleSheet, Image,TouchableHighlight, FlatList } from 'react-native';
+import { Dimensions, Text,StatusBar, View, StyleSheet, Image,TouchableHighlight, FlatList ,PixelRatio,ScrollView,TouchableOpacity} from 'react-native';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVStrings from '../../assets/localization';
 import LVColor from '../../styles/LVColor';
 import AddEditContactPage from './AddEditContactPage';
+import LVTContactDetailPage from './LVTContactDetailPage';
 import {greyNavigationBackIcon} from '../../assets/LVIcons';
 import * as ContactLib from '../../logic/LVContactManager';
 import Swipeout from 'react-native-swipeout';
 import { Separator } from 'react-native-tableview-simple';
-import { converAddressToDisplayableText} from '../../utils/MXStringUtils';
 import { LVConfirmDialog } from '../Common/LVDialog';
 import LVLocalization from '../../assets/localization';
-import TransferUtils from '../Transfer/TransferUtils';
+import MXSearchBar from '../../components/MXSearchBar/index';
+import * as MXUtils from "../../utils/MXUtils";
+import LVKeyboardSpacer from '../Common/LVKeyboardSpacer';
 
-const AddIcon = require('../../assets/images/add_contact.png');
 const AvatarIcon = require('../../assets/images/contact_avatar.png');
 const ShowDetailsIcon = require('../../assets/images/show_detail_arrow.png');
 const EmptyContactListIndicatorIcon = require('../../assets/images/contant_list_empty.png');
+const ItemEditIcon = require('../../assets/images/contant_list_itemEdit.png');
+const ItemDeleteIcon = require('../../assets/images/contant_list_itemDelete.png');
+const ItemSelected = require('../../assets/images/contact_selected.png');
+const ItemUnselected = require('../../assets/images/contact_unSelected.png');
+const dismissKeyboard = require('dismissKeyboard');
 
-export default class ContactsManagerPage extends Component {
+type Props = {navigation: Object };
+
+type State =  {
+        contacts: Array<Object>,
+        toDeDeletedContactName: ?string,
+        readonly: boolean,
+        callback: Function,
+        searchContacts:Array<Object>,
+        isSearchingStatus:boolean,
+        currentSearchText:string,
+};
+
+export default class ContactsManagerPage extends  Component<Props, State> {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
@@ -33,6 +52,8 @@ export default class ContactsManagerPage extends Component {
 
     renderRow : Function;
     onDeleteContact: Function;
+    onChangedText:Function;
+    onSelectedItem:Function;
 
     constructor(props: any) {
         super();
@@ -41,21 +62,61 @@ export default class ContactsManagerPage extends Component {
         this.state = {
             contacts: [],
             toDeDeletedContactName: null,
-            scrollEnabled: true,
             readonly: params.readonly,
-            callback: params.callback
+            callback: params.callback,
+            searchContacts:[],
+            isSearchingStatus:false,
+            currentSearchText:'',
         };
         this.renderRow = this.renderRow.bind(this);
         this.onDeleteContact = this.onDeleteContact.bind(this);
+        this.onChangedText = this.onChangedText.bind(this);
+        this.onSelectedItem = this.onSelectedItem.bind(this);
     }
 
-    state: {
-        contacts: Array<Object>,
-        toDeDeletedContactName: ?string,
-        scrollEnabled: boolean,
-        readonly: boolean,
-        callback: Function
+    componentWillMount() {
+        StatusBar.setBarStyle('default', true);
     }
+
+    onSelectedItem = (item:any,index:number) => {
+        if (item !== null) {
+            this.state.callback(item['address']);
+        }
+        this.props.navigation.goBack()
+    };
+
+    onChangedText = async (text:string)=>{
+        const { contacts } = this.state;
+        var len = contacts.length;
+        var arr = [];
+        for(var i=0;i<len;i++){
+            //如果字符串中不包含目标字符会返回-1
+            if(contacts[i].name.toLowerCase()
+            .indexOf(text.toLowerCase()
+        )>=0){
+                arr.push(contacts[i]);
+            }
+        }
+        this.setState({
+            isSearchingStatus: true,
+            searchContacts:arr,
+            currentSearchText:text,
+        });
+    };
+
+    lostBlur = ()=>{
+        //失去焦点实现
+        dismissKeyboard();
+        if ((this.state.currentSearchText === null ||
+            this.state.currentSearchText === '' || 
+            this.state.currentSearchText === undefined) &&
+            this.state.isSearchingStatus
+        ) {
+            this.setState({
+                isSearchingStatus: false,
+            });
+        }
+    };
 
     async loadContacts (){
         await ContactLib.instance.loadLocalContacts();
@@ -77,6 +138,14 @@ export default class ContactsManagerPage extends Component {
         ContactLib.instance.remove(contact);
         ContactLib.instance.saveToDisk();
         this.loadContacts();
+        if (this.state.isSearchingStatus) {
+            const index = this.state.searchContacts.findIndex((contact)=> {
+                return contact.name === this.state.toDeDeletedContactName;
+            });
+            if (index !== -1) {
+                this.state.searchContacts.splice(index);
+            }
+        }
         this.state.toDeDeletedContactName = null;
     }
 
@@ -84,13 +153,25 @@ export default class ContactsManagerPage extends Component {
         this.loadContacts();
     }
 
-    renderRow({item, separators}) {
+    renderRow({item,index,separators}: any) {
         const swipeBts = [
             {
-                text: LVStrings.common_delete,
-                backgroundColor: '#f25656',
-                color: LVColor.white,
-                buttonWidth: 65,
+                component:<View style = {{flex:1,alignItems:"center",justifyContent:"center",marginRight:15}}>
+                <Image source={ItemEditIcon}/>
+                </View>,
+                backgroundColor: LVColor.white,
+                onPress: () => { 
+                    this.setState({toDeDeletedContactName: null});
+                    this.props.navigation.navigate('AddEditContactPage', {
+                                callback:()=> this.loadContacts(),
+                                mode: 'edit', model: item})
+                }
+            },
+            {
+                component:<View style = {{flex:1,alignItems:"center",justifyContent:"center",marginRight:15}}>
+                    <Image source={ItemDeleteIcon}/>
+                </View>,
+                backgroundColor: LVColor.white,
                 onPress: () => { 
                     this.setState({
                         toDeDeletedContactName: item.name
@@ -101,8 +182,10 @@ export default class ContactsManagerPage extends Component {
         ];
         return (
             <Swipeout right={swipeBts} 
+                backgroundColor = {LVColor.white}
                 autoClose={true}
-                scroll={ (scrollEnabled)=> {this.setState({scrollEnabled: scrollEnabled});}}
+                buttonWidth={50}
+                disabled = {this.state.readonly}
                 close={!(this.state.toDeDeletedContactName == item.name)}
                 onOpen={(sectionID, rowID) => {
                     this.setState({
@@ -114,25 +197,21 @@ export default class ContactsManagerPage extends Component {
                     onPressOut={separators.unhighlight}
                     underlayColor={LVColor.white}
                     onPress={()=>{
-                        if(this.state.callback) {
-                            this.state.callback(item.address);
-                            this.props.navigation.goBack();
+                        if (this.state.readonly) {
+                            this.onSelectedItem(item,index);
                         } else {
                             this.setState({toDeDeletedContactName: null});
-                            this.props.navigation.navigate('AddEditContactPage', {
-                                callback:()=> this.loadContacts(),
-                                mode: 'edit', model: item})
+                            this.props.navigation.navigate('LVTContactDetailPage', {
+                                 model: item});    
                         }
-                    }}>
+                }}>
                     <View style={styles.cellContentContainer}>
                         <View style={styles.cellLeftContentContainer}>
                             <Image source={AvatarIcon}/>
                             <View style={styles.cellLeftDetailsContainer}>
                                 <Text style={styles.nameTextStyle} numberOfLines={1}>{item.name}</Text>
-                                <Text style={styles.addressTextStyle}>{converAddressToDisplayableText(TransferUtils.removeHexHeader(item.address),9,9)}</Text>
                             </View>
                         </View>
-                        {!this.state.readonly && <Image source={ShowDetailsIcon}/>}
                     </View>
                 </TouchableHighlight>
             </Swipeout>
@@ -140,10 +219,8 @@ export default class ContactsManagerPage extends Component {
     }
     
     render() {
-        const { contacts } = this.state;
+        const { contacts,isSearchingStatus,searchContacts } = this.state;
         const { params } = this.props.navigation.state;
-
-        let addIcon = AddIcon;
 
         return (
             <View style={styles.rootContainer}>
@@ -152,10 +229,13 @@ export default class ContactsManagerPage extends Component {
                     style={styles.nav}
                     title={ LVStrings.contact_list_nav_title }
                     titleStyle={styles.navTitle}
-                    onLeftPress={ () => {this.props.navigation.goBack() }}
-                    right={addIcon}
+                    onLeftPress={ () => {
+                        this.props.navigation.goBack()
+                     }}
+                    right={this.state.readonly?' ':LVStrings.contact_add_nav_right}
+                    rightTextColor= {LVColor.text.grey2}
                     onRightPress={ () =>{
-                        if(!addIcon) {
+                        if(this.state.readonly) {
                             return;
                         }
                         this.setState({toDeDeletedContactName: null});
@@ -165,24 +245,63 @@ export default class ContactsManagerPage extends Component {
                         })
                     }}
                 />
+                <TouchableOpacity 
+                activeOpacity = {1}
+                onPress={this.lostBlur.bind(this)}
+                >
+                <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}
+                >
+                <MXSearchBar
+                    ref = {'searchbar'}
+                    style = {{marginTop: 10}}
+                    placeholder = {LVStrings.contact_add_place_holder_nickname}
+                    onTextChanged = {this.onChangedText}
+                    onFocus = {()=>{
+                        if (this.state.currentSearchText !== null &&
+                            this.state.currentSearchText !== '' && 
+                            this.state.currentSearchText !== undefined &&
+                            this.state.isSearchingStatus) {
+                                this.setState({
+                                    isSearchingStatus: true,
+                                });
+                        }
+                    }}
+                    onEndEditing = {() => {
+                        if ((this.state.currentSearchText === null ||
+                            this.state.currentSearchText === '' || 
+                            this.state.currentSearchText === undefined) &&
+                            this.state.isSearchingStatus
+                        ) {
+                            this.setState({
+                                isSearchingStatus: false,
+                            });
+                        }
+                    }}
+                    />
                 <View style={styles.listContainer}>
                     <FlatList
-                        scrollEnabled={this.state.scrollEnabled}
+                        scrollEnabled={true}
                         extraData={this.state}
-                        data={contacts}
+                        data={isSearchingStatus?searchContacts:contacts}
                         keyExtractor={(item,index)=> item.name}
                         renderItem={this.renderRow}
-                        ItemSeparatorComponent={()=><Separator insetLeft={0} insetRight={12.5} tintColor={LVColor.separateLine} />}
                         ListEmptyComponent={()=> 
                             <View style={styles.emptyListContainer}>
                                 <Image source={EmptyContactListIndicatorIcon}/>
-                                <Text style={styles.emptyListTextStyle}>{LVLocalization.contact_empty_list_demonstration}</Text>
+                                <Text style={styles.emptyListTextStyle}>{isSearchingStatus? LVLocalization.contact_Search_Empty_Button: LVLocalization.contact_empty_list_demonstration}</Text>
                             </View>
                         }/>
                 </View>
+
+                <LVKeyboardSpacer/>
+                <View style = {{height: 80}}>
+                </View>
+                </ScrollView>
+                </TouchableOpacity>
                 <LVConfirmDialog ref={'deleteConfirm'} 
-                            title={LVStrings.alert_hint}  
-                            message={LVStrings.contact_confirm_delete_contact} 
+                            title={LVStrings.alert_hint}
+                            children = {<Text style = {{fontSize:15,color:LVColor.text.grey2}}>{LVStrings.contact_confirm_delete_contact}</Text>}
+                            dismissAfterConfirm = {true}
                             onConfirm={this.onDeleteContact} />
             </View>
         );
@@ -202,7 +321,7 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         flex: 1,
-        paddingLeft: 12.5
+        paddingLeft: 15
     },
     cellContentContainer: {
         height: 60,
@@ -211,12 +330,18 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: LVColor.white,
-        paddingRight: 12.5
+        paddingRight: 15
     },
     cellLeftContentContainer: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
+    cellRightContentContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
         alignItems: 'center',
     },
     cellLeftDetailsContainer: {
@@ -226,8 +351,9 @@ const styles = StyleSheet.create({
     },
     nameTextStyle: {
         width: Dimensions.get('window').width - 90,
-        fontSize: 15,
-        color: LVColor.text.grey1
+        fontSize: 14,
+        color: LVColor.text.grey2,
+        fontWeight: '500'
     },
     addressTextStyle: {
         fontSize: 12,
@@ -241,8 +367,8 @@ const styles = StyleSheet.create({
         marginTop: 125
     },
     emptyListTextStyle: {
-        marginTop: 5,
-        color: LVColor.text.editTextContent,
+        marginTop: 10,
+        color: LVColor.text.editTextNomal,
         fontSize: 15
     }
 });

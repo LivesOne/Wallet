@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, View, ImageBackground, Text } from 'react-native';
+import { StyleSheet, View, ImageBackground, Text, StatusBar } from 'react-native';
 import PropTypes from 'prop-types';
 import Swiper from 'react-native-swiper';
 import LVColor from '../../styles/LVColor';
@@ -17,16 +17,21 @@ const pageImage_1 = require('../../assets/images/app_guide_page_1.jpg');
 const pageImage_2 = require('../../assets/images/app_guide_page_2.jpg');
 const pageImage_3 = require('../../assets/images/app_guide_page_3.jpg');
 
-export default class AppGuideScreen extends Component {
-    static propTypes = {
-        callback: PropTypes.func
-    };
+type Props = { 
+    callback: ?Function
+ };
+
+export default class AppGuideScreen extends Component<Props> {
 
     onPressButton = () => {
         if (this.props.callback) {
             this.props.callback();
         }
     };
+
+    componentWillMount() {
+        StatusBar.setBarStyle('default', true);
+    }
 
     render() {
         return (

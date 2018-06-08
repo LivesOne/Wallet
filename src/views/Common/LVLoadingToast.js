@@ -16,23 +16,22 @@ import {
     Platform,
     ActivityIndicator
 } from 'react-native';
-import PropTypes from 'prop-types';
 import Modal from 'react-native-modalbox';
 import { isAbsolute } from 'path-browserify';
 import LVColor from '../../styles/LVColor';
 
 const RotationCircleImage = require('../../assets/images/loading.png');
 
-export default class LVLoadingToast extends Component {
-    static propTypes = {
-        title: PropTypes.string.isRequired,
-        width: PropTypes.number,
-        height: PropTypes.number
-    };
+type Props = {
+    title: string,
+    width?: number,
+    height?: number
+};
+type State = {
+    rotation: any
+}
 
-    state: {
-        rotation: any
-    }
+export default class LVLoadingToast extends React.Component<Props, State> {
 
     constructor() {
         super();

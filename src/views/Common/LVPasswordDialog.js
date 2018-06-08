@@ -7,21 +7,19 @@ import { LVConfirmDialog } from './LVDialog';
 import MXCrossTextInput from './../../components/MXCrossTextInput';
 import LVStrings from '../../assets/localization';
 import LVColor from '../../styles/LVColor';
-import PropTypes from 'prop-types';
 import WalletUtils from '../Wallet/WalletUtils';
 
-export class LVPasswordDialog extends LVConfirmDialog {
+type Props = {
+    verify: Function,
+    onVerifyResult: Function
+};
+type State = {
+    inputPwd: string,
+    verifying: boolean, 
+    cancel: boolean,
+}
 
-    state: {
-        inputPwd: string,
-        verifying: boolean, 
-        cancel: boolean,
-    }
-
-    static propTypes = {
-        verify: PropTypes.func.isRequired,
-        onVerifyResult: PropTypes.func
-    };
+export class LVPasswordDialog extends React.Component<Props, State> {
 
     constructor() {
         super();
@@ -94,8 +92,10 @@ export class LVPasswordDialog extends LVConfirmDialog {
                 onConfirm={()=>{
                     if (!this.state.inputPwd) {
                         Keyboard.dismiss();
-                        onVerifyResult(false, inputPwd)
-                        this.dismiss();
+                        setTimeout(() => {
+                            onVerifyResult(false, inputPwd)
+                            this.dismiss();
+                        }, 200)
                     } else {
                         Keyboard.dismiss();
                     setTimeout(async ()=>{
@@ -115,9 +115,10 @@ export class LVPasswordDialog extends LVConfirmDialog {
                         {!verifying && 
                         <MXCrossTextInput
                             ref={'textinput'}
-                            style={{width: 240, alignSelf: 'center'}}
+                            style={{width: 210, height: 50}}
+                            inputContainerStyle = {{borderWidth : 1 , borderColor : "#C3C8D4" , height : 40 , width : "100%" , paddingLeft : 10 , paddingRight : 10 , borderRadius: 4}}
                             secureTextEntry={true}
-                            withUnderLine={true}
+                            withUnderLine={false}
                             onTextChanged={newText => {
                                 this.setState({ inputPwd: newText.trim() });
                             }}

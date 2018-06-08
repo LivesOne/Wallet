@@ -7,6 +7,7 @@
 
 import React, { Component } from 'react';
 import {
+    Alert,
     StyleSheet,
     View,
     Text,
@@ -16,9 +17,10 @@ import {
     TextInput,
     Platform,
     PixelRatio,
-    NetInfo
+    NetInfo,
+    StatusBar,
+    BackHandler
 } from 'react-native';
-import { TransferHeader } from './TransferHeader';
 import MXCrossTextInput from './../../components/MXCrossTextInput';
 import MXTouchableImage from '../../components/MXTouchableImage';
 
@@ -35,6 +37,7 @@ import { TransferDetailModal } from './TransferDetailModal';
 import { ImageTextInput } from './ImageTextInput';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 import { LVQrScanModal } from '../Common/LVQrScanModal';
+import Permissions from 'react-native-permissions';
 import TransferUtils from './TransferUtils';
 import LVWalletManager from '../../logic/LVWalletManager';
 import LVDialog, { LVConfirmDialog } from '../Common/LVDialog';
@@ -48,53 +51,64 @@ import { LVPasswordDialog } from '../Common/LVPasswordDialog';
 import LVGradientPanel from '../Common/LVGradientPanel';
 import Toast from 'react-native-root-toast';
 import Transaction from 'ethereumjs-tx';
+import MXNavigatorHeader from '../../components/MXNavigatorHeader';
+
 var Big = require('big.js');
 import LVBig from '../../logic/LVBig';
+import LVWallet from '../../logic/LVWallet';
+import { LVBalanceShowView } from '../Common/LVBalanceShowView';
 
 const addImg = require('../../assets/images/transfer_add_contracts.png');
 const scanImg = require('../../assets/images/transfer_scan.png');
 
 const isAndroid = Platform.OS === 'android';
 
-class TransferScreen extends Component {
+type Props = {
+    navigation: Object 
+};
+
+type State = {
+    wallet: LVWallet,
+    password: string,
+    transactionParams: ?Object;
+    curETH: Big,
+    token: string, // 这里指 type (LVTC 或者 ETC)
+    addressIn: string,
+    amount: Big,
+    minGap: number,
+    maxGap:number,
+    curLVTC: Big,
+    showModal: boolean,
+    openSelectWallet: boolean,
+    showQrScanModal: boolean,
+    alertMessage: string,
+    inputPwd: string,
+    balanceTip:string,
+    amountText: string,
+};
+
+class TransferScreen extends Component<Props, State> {
     static navigationOptions = {
-        header: null
+        header: null,
+        tabBarVisible: false
     };
 
     onSelectedContact: Function;
-
-    state: {
-        wallet: ?Object,
-        password: string,
-        transactionParams: ?Object;
-        curETH: number,
-        addressIn: string,
-        amount: Big,
-        minGap: number,
-        maxGap:number,
-        balance: Big,
-        showModal: boolean,
-        openSelectWallet: boolean,
-        showQrScanModal: boolean,
-        alertMessage: string,
-        inputPwd: string,
-        balanceTip:string,
-        amountText: string,
-    }
 
     constructor() {
         super();
         const wallet = LVWalletManager.getSelectedWallet();
         console.log(JSON.stringify(wallet));
         this.state = {
-            wallet: wallet,
+            wallet: wallet || LVWallet.emptyWallet(),
             password: '',
+            token: '',
             transactionParams: null,
-            curETH: wallet != null ? wallet.eth: 0,
+            curETH: LVBig.getInitBig(),
+            curLVTC: LVBig.getInitBig(),
             addressIn: '',
             amount: LVBig.getInitBig(),
             amountText: '',
-            balance: wallet != null ? wallet.lvt: 0,
             minGap: 0,
             maxGap:0,
             showModal: false,
@@ -112,8 +126,20 @@ class TransferScreen extends Component {
         LVNotificationCenter.addObserver(this, LVNotification.balanceChanged, this.handlerBalanceChange);
         LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.refreshWalletDatas);
         LVNotificationCenter.addObserver(this, LVNotification.networkStatusChanged, this.handleNeworkChange);
+        
+        // this.fixAndroidPaste();
+        if (this.props.navigation.state.key === null) {
+            this.props.navigation.state.key = 'keyTransfer';
+        }
+        const { address, token } = this.props.navigation.state.params;
+        if (address != null || address != undefined) {
+            // 从联系人进入转账界面
+            this.refs.refAddressIn.setText(address);
+            this.setState({ addressIn: address, token: token});
+        } else {
+            this.setState({ token: token});
+        }
         this.refreshWalletDatas();
-        this.fixAndroidPaste();
     }
 
     fixAndroidPaste() {
@@ -129,11 +155,41 @@ class TransferScreen extends Component {
         }
     }
 
+    async onPressScanButton() {
+        if (Platform.OS === 'android') {
+            await Keyboard.dismiss();
+            setTimeout(() => {
+                this.setState({ showQrScanModal: true });
+            }, 100);
+        }
+        else if (Platform.OS === 'ios') {
+            const response = await Permissions.request('camera');
+            // Response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+            if (response === 'authorized') {
+                this.setState({ showQrScanModal: true });
+            } else {
+                Alert.alert(
+                    LVStrings.can_not_access_camera,
+                    LVStrings.please_set_camera_author,
+                    [
+                        {
+                            text: LVStrings.common_cancel,
+                            onPress: () => console.log('Permission denied'),
+                            style: 'cancel',
+                        },
+                        { text: LVStrings.common_open_ettings, onPress: Permissions.openSettings },
+                    ],
+                )
+            }
+        }
+    }
+
     async tryFetchParams() {
-        const {wallet, amount, addressIn} = this.state;
+        const {wallet, amount, addressIn, token} = this.state;
+        console.log("token = " + token + " amount = " + amount);
         if (wallet && amount.gt(0) && addressIn && TransferUtils.isValidAddress(addressIn)) {
             try {
-                let params = await TransferLogic.fetchTransactionParam(wallet.address, addressIn, amount);
+                let params = await TransferLogic.fetchTransactionParam(wallet.address, addressIn, amount, token);
                 let range = TransferUtils.getMinerGapRange(params);
                 TransferUtils.log('tryFetchParams result = ' + JSON.stringify(params)
                 + ' minGap = ' +  range.min
@@ -174,7 +230,7 @@ class TransferScreen extends Component {
         const newWallet = LVWalletManager.getSelectedWallet();
         const isSelect = oldWallet && newWallet && oldWallet.address !== newWallet.address;
         if (isSelect) {
-            TransferUtils.log('wallet selected, new address = ' + newWallet.address);
+            TransferUtils.log('wallet selected, new address = ' + (newWallet ? newWallet.address : '') );
             this.resetUIState();
         }
     }
@@ -189,7 +245,7 @@ class TransferScreen extends Component {
     }
 
    async  onAddressChanged(address: string) {
-        await this.setState({addressIn: address});
+        await this.setState({addressIn: address.trim()});
         setTimeout(() => {
             this.tryFetchParams();
         }, 100);
@@ -203,12 +259,7 @@ class TransferScreen extends Component {
             let amount = new Big(newAmountText);
             this.setState({amount: amount})
             const wallet = this.state.wallet;
-            if (wallet && amount.gt(wallet.lvt) && Platform.OS === 'ios') {
-                this.setState({alertMessage:LVStrings.transfer_amount_insufficient });
-                this.refs.refAmount.clearFocus();
-                this.refs.alert.show();
-                return;
-            }
+
             if (TransferUtils.isAmountOverLimit(newAmountText)) {
                 this.setState({alertMessage:LVStrings.over_limit_hint,
                 transactionParams: null });
@@ -222,8 +273,12 @@ class TransferScreen extends Component {
         } else {
             this.minerGap = 0;
             this.userHasSetGap = false;
-            this.setState({transactionParams: null})
+            this.setState({transactionParams: null, amount:LVBig.getInitBig()})
         }
+    }
+
+    componentWillMount() {
+        StatusBar.setBarStyle('default', true);
     }
 
     refreshWalletDatas = async (needUpdateBalance: boolean = true) => {
@@ -235,14 +290,14 @@ class TransferScreen extends Component {
             this.setState({
                 wallet: wallet,
                 curETH: wallet.eth,
-                balance: wallet.lvt,
+                curLVTC: wallet.lvtc,
             });
         }
     }
 
     async onTransferPresse() {
-        const { wallet, addressIn, amount, balance, amountText} = this.state;
-
+        const { wallet, addressIn, amount, curLVTC, curETH, amountText, token} = this.state;
+        
         if (!addressIn) {
             this.setState({alertMessage:LVStrings.transfer_address_required });
             this.refs.alert.show();
@@ -279,21 +334,21 @@ class TransferScreen extends Component {
             return;
         }
 
-        if (this.minerGap === 0) {
-            this.setState({alertMessage:LVStrings.transfer_miner_gap_not_access });
-            this.refs.alert.show();
+        let isInsufficient = "LVTC" === token.toUpperCase() ? (curLVTC.lt(amount)) : (curETH.lt(amount));
+        if (wallet && curETH.lt(this.refs.gapSetter.getValue())) {
+            this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
+            this.refs.insufficientDialog.show();
+            return;
+        } else if (isInsufficient) {
+            this.setState({balanceTip: "LVTC" === token.toUpperCase() ? 
+            LVStrings.transfer_lvt_insufficient : LVStrings.transfer_eth_insufficient});
+            this.refs.insufficientDialog.show();
             return;
         }
 
-        if (balance.lt(amount) || (wallet && wallet.eth.lt(this.minerGap))) {
-            if(balance.lt(amount) && (wallet && wallet.eth.lt(this.minerGap))) {
-                this.setState({balanceTip:LVStrings.transfer_lvt_and_eth_insufficient});
-            }else if(balance.lt(amount)) {
-                this.setState({balanceTip:LVStrings.transfer_lvt_insufficient});
-            }else {
-                this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
-            }
-            this.refs.insufficientDialog.show();
+        if (this.refs.gapSetter.getValue() === 0) {
+            this.setState({alertMessage:LVStrings.transfer_miner_gap_not_access });
+            this.refs.alert.show();
             return;
         }
 
@@ -332,7 +387,7 @@ class TransferScreen extends Component {
     }
 
     async onTransfer() {
-        const {wallet, password, addressIn, amount, balance, transactionParams} = this.state;
+        const {wallet, password, addressIn, amount, transactionParams, token} = this.state;
         if (!transactionParams) {
             TransferUtils.log('transaction params is null');
             this.setState({alertMessage:LVStrings.transfer_fail });
@@ -347,24 +402,36 @@ class TransferScreen extends Component {
             }, 500);
         }
         setTimeout(async ()=> {
-            let gasPrice = this.userHasSetGap ? TransferUtils.getSetGasPriceHexStr(this.minerGap, transactionParams.gasLimit) : transactionParams.gasPrice;
+            let gasPrice = this.userHasSetGap ? TransferUtils.getSetGasPriceHexStr(this.refs.gapSetter.getValue(), transactionParams.gasLimit) : transactionParams.gasPrice;
             let rst = await TransferLogic.transaction(addressIn, password, amount, transactionParams.nonce,
-                transactionParams.gasLimit, gasPrice, transactionParams.token, transactionParams.chainID, wallet);
+                transactionParams.gasLimit, gasPrice, transactionParams.token, transactionParams.chainID, wallet, token);
             let success = rst && rst.result;
             if (success) {  
                 LVNotificationCenter.postNotification(LVNotification.transcationCreated, {
                     transactionHash: rst.transactionHash,
                     from: wallet.address,
                     to: addressIn,
-                    lvt: amount,
-                    eth: this.minerGap,
+                    amount: amount,
+                    token:token,
+                    fee: this.refs.gapSetter.getValue(),
                     timestamp: Moment().format('X'),
                 });
+                const isFromAsset = this.props.navigation.state.params.from === 'assets';
+                console.log('------ from assets = ');
+                console.log(isFromAsset);
+                if (isFromAsset) {
+                    this.props.navigation.goBack(null, {
+                        token: token
+                    });
+                } else {
+                    this.props.navigation.navigate("AssetsDetails", {
+                        token: token, keyTransfer: this.props.navigation.state.key
+                    });
+                }
                 await this.resetUIState();
             }
             await this.refs.loading.dismiss();
             setTimeout(() => {
-                this.setState({alertMessage: success ? LVStrings.transfer_success : LVStrings.transfer_fail });
                 Toast.show(success ? LVStrings.transfer_success : LVStrings.transfer_fail, { duration: Toast.durations.LONG });
             }, 500);
         },500);
@@ -399,67 +466,89 @@ class TransferScreen extends Component {
         return (
             <View style={{flexDirection: 'column', flex: 1, justifyContent: 'space-between'}}>
                 {this.state.showModal && <TransferDetailModal
+                    ref={'detailModal'}
                     isOpen= {this.state.showModal}
                     address= {this.state.addressIn}
-                    amount= {parseFloat(this.state.amount.toFixed())}
-                    minerGap= {this.minerGap}
+                    type={this.state.token}
+                    amount= {parseFloat(this.state.amount.toFixed(18))}
+                    minerGap= {this.refs.gapSetter.getValue()}
                     onClosed = {()=>{this.setState({ showModal: false })}}
                     onTransferConfirmed = {()=> {
                         this.setState({ showModal: false });
+                        this.refs.detailModal.dismiss();
                         this.onTransfer() }}
                 />}
                 <TouchableOpacity  style={ styles.container } activeOpacity={1} onPress={Keyboard.dismiss} >
                     <LVQrScanModal
                         barcodeReceived={(data)=>{
-                            this.setState({addressIn: data});
-                            this.refs.refAddressIn.setText(data);
+                                if (!TransferUtils.isValidAddress(data)) {
+                                    this.setState({alertMessage:LVStrings.transfer_address_invalid });
+                                    setTimeout(()=> {
+                                        this.refs.alert.show();
+                                    }, 500);
+                                    return;
+                                } else {
+                                    this.setState({addressIn: data});
+                                    this.refs.refAddressIn.setText(data);
+                                }
                             }}
                         isOpen= {this.state.showQrScanModal}
                         onClosed = {()=>{this.setState({ showQrScanModal: false })}}/>
-                    <TransferHeader
-                        style={styles.header}
-                        eth={this.state.curETH}
-                        balance={this.state.balance}
-                        onPressSelectWallet={()=>{this.setState({ openSelectWallet: true })}}
-                    ></TransferHeader>
+
+                    <MXNavigatorHeader
+                        style={{ backgroundColor: LVColor.white }}
+                        title={LVStrings.transfer}
+                        titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
+                        onLeftPress={() => {
+                            this.props.navigation.goBack();
+                        }}
+                        />
                     <View style= { styles.headerBelow }>
                         <MXCrossTextInput 
                             ref={'refAddressIn'}
                             style={styles.textInput} 
+                            titleText={LVStrings.transfer_payee_address}
                             placeholder={LVStrings.transfer_payee_address}
                             defaultValue={this.state.addressIn}
                             boarderLineHeight={1}
+                            withUnderLine={false}
                             rightComponent={
-                                <View style={{flexDirection:'row', justifyContent: 'space-between', width: 55}}>
+                                <View style={{flexDirection:'row', justifyContent: 'space-between', width: 65}}>
                                     <MXTouchableImage source={addImg} onPress={() => {this.props.navigation.navigate('ContactList',{readonly:true, callback:this.onSelectedContact})}}/>
-                                    <MXTouchableImage source={scanImg} onPress={async() => {
-                                        if (Platform.OS === 'android') {
-                                            await Keyboard.dismiss();
-                                        }
-                                        this.setState({ showQrScanModal: true 
-                                        })}}/>
+                                    <MXTouchableImage source={scanImg} onPress={this.onPressScanButton.bind(this)}/>
                                 </View>
                             }
                             onTextChanged= {this.onAddressChanged.bind(this)}/>
-                        <MXCrossTextInput 
-                            ref={'refAmount'}
-                            style= {styles.textInput} 
-                            placeholder={LVStrings.transfer_amount}
-                            keyboardType = {'numeric'}
-                            boarderLineHeight={Platform.OS === 'android' ? 1 : null}
-                            onTextChanged={this.onAmountChanged.bind(this)}/>
-                        <TransferMinerGapSetter 
-                            ref={'gapSetter'}
-                            enable={this.state.transactionParams !== null}
-                            minimumValue={this.state.minGap}
-                            maximumValue={this.state.maxGap}
-                            defaultValue={transactionParams !== null?
-                            TransferUtils.convertHex2Eth(transactionParams.gasPrice, transactionParams.gasLimit) : 0}
-                            onGapChanged={this.onGapChanged.bind(this)}
-                            style = {styles.setter}/>
+                            <MXCrossTextInput 
+                                ref={'refAmount'}
+                                style= {[styles.textInput, {marginTop: 8}]} 
+                                titleText={LVStrings.transfer_amount}
+                                placeholder={LVStrings.transfer_amount}
+                                keyboardType = {'numeric'}
+                                withUnderLine={false}
+                                inputContainerStyle={{marginTop:isAndroid ? 0 : 15}}
+                                boarderLineHeight={Platform.OS === 'android' ? 1 : 0}
+                                onTextChanged={this.onAmountChanged.bind(this)}/>
+                            
+                            <View style={styles.curEth} />
+                            <TransferMinerGapSetter 
+                                ref={'gapSetter'}
+                                enable={this.state.transactionParams !== null}
+                                minimumValue={this.state.minGap}
+                                maximumValue={this.state.maxGap}
+                                defaultValue={transactionParams !== null?
+                                TransferUtils.convertHex2Eth(transactionParams.gasPrice, transactionParams.gasLimit) : 0}
+                                onGapChanged={this.onGapChanged.bind(this)}
+                                style = {styles.setter}/>
                         <View style= { styles.curEth }>
                             <Text style = {styles.text}>{LVStrings.transfer_current_eth}</Text>
-                            <Text style = {styles.textCurEth}>{StringUtils.convertAmountToCurrencyString(this.state.curETH, ',', 8)}</Text>
+                            <LVBalanceShowView
+                                title={LVStrings.total_eth}
+                                unit={"ETH"}
+                                balance={this.state.curETH}
+                                textStyle={styles.textCurEth}
+                                showSeparator={true}
+                            />
                         </View>   
                         <Text style = {styles.textHint}>{LVStrings.transfer_hint}</Text>
                         <View style = {styles.btnContainer}>
@@ -467,7 +556,7 @@ class TransferScreen extends Component {
                                 rounded = {true} 
                                 style ={styles.btn} 
                                 onPress = {this.onTransferPresse.bind(this)}
-                                title={LVStrings.transfer}>
+                                title={LVStrings.common_next}>
                             </MXButton>
                         </View>
                     </View>
@@ -489,8 +578,10 @@ class TransferScreen extends Component {
                     <LVConfirmDialog
                         ref={'insufficientDialog'}
                         title={LVStrings.alert_hint}  
-                        message={this.state.balanceTip} 
-                        onConfirm={()=>{this.props.navigation.navigate("ReceiveTip")}} />
+                        dismissAfterConfirm = {true}
+                        onConfirm={()=>{this.props.navigation.navigate("ReceiveTip")}} >
+                        <Text style={{color: '#697585',fontSize: 16, padding: 4 , textAlign : 'center'}}>{this.state.balanceTip}</Text>
+                    </LVConfirmDialog>
 
                 </TouchableOpacity>
             </View>
@@ -505,7 +596,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     textInput: {
-        marginTop: 5 * pixelRatio, 
         width: '100%',
     },
     header: {
@@ -513,6 +603,7 @@ const styles = StyleSheet.create({
     },
     headerBelow: {
         flex: 7,
+        marginTop: 17,
         marginHorizontal: 15,
     },
     setter: {
@@ -524,7 +615,6 @@ const styles = StyleSheet.create({
         borderColor: 'transparent', 
         borderBottomColor: LVColor.border.editTextBottomBoarder, 
         borderWidth: StyleSheet.hairlineWidth, 
-        marginTop:10
     },
     text: {
         fontSize: 16,   
@@ -538,6 +628,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: LVColor.text.grey1,
         marginTop: 10,
+        marginBottom: 15 * pixelRatio,
     },
     btnContainer: {
         flex: 1,
@@ -548,7 +639,7 @@ const styles = StyleSheet.create({
     },
     btn: {
         alignSelf: 'center',
-        width: MXUtils.getDeviceWidth() * 2/ 3
+        width: '100%'
     }
 });
 

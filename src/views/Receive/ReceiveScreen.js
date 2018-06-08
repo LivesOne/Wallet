@@ -7,7 +7,7 @@
 
 import React, { Component } from 'react';
 
-import { StyleSheet,Share, View, Platform,Text,Image,ScrollView ,Clipboard,CameraRoll ,ActionSheetIOS} from 'react-native';
+import { StyleSheet,Share, View, Platform,Text,Image,ScrollView ,Clipboard,CameraRoll ,ActionSheetIOS , StatusBar} from 'react-native';
 
 import PropTypes from 'prop-types';
 import LVSize from '../../styles/LVFontSize';
@@ -36,6 +36,8 @@ const receive_share = require("../../assets/images/receive_share.png");
 const lvt = require("../../assets/images/lvt.png");
 const receive_change_wallet = require("../../assets/images/receive_change_wallet.png");
 const receive_wallet_blank = require("../../assets/images/wallet_blank.png");
+const goback_gray = require("../../assets/images/goback_gray.png");
+const share_qrcode = require("../../assets/images/share_qrcode.png");
 
 // var PasteBoard = require('react-native-pasteboard');
 
@@ -46,6 +48,10 @@ class ReceiveHeader extends Component {
             this.props.callback();
         }
     };
+
+    onLeftPress = ()=> {
+        this.props.navigation.goBack();
+    }
 
     static propTypes = {
         callback: PropTypes.func
@@ -59,12 +65,12 @@ class ReceiveHeader extends Component {
     render() {
         return (
             <MXNavigatorHeader
-                style={{ backgroundColor: LVColor.primaryBack }}
                 title={LVStrings.receive_title}
                 titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
-                hideLeft={true}
-                right={receive_change_wallet}
-                onRightPress={this.onPressButton.bind(this)}
+                left = {goback_gray}
+                onLeftPress = {this.onLeftPress}
+                right={share_qrcode}
+                onRightPress={this.onPressButton}
             />
 
         );
@@ -73,7 +79,8 @@ class ReceiveHeader extends Component {
 
 class ReceiveScreen extends Component {
     static navigationOptions = {
-        header: null
+        header: null,
+        tabBarVisible: false
     };
 
     
@@ -91,6 +98,7 @@ class ReceiveScreen extends Component {
     constructor(props: any) {
         super(props);
         const wallet = LVWalletManager.getSelectedWallet();
+        // const {wallet} = this.props.navigation.state.params;
         this.state = {
             wallet: wallet,
             openSelectWallet: false,
@@ -104,7 +112,7 @@ class ReceiveScreen extends Component {
 
 
     componentWillMount() {
-
+        StatusBar.setBarStyle('default', true);
     }
 
     componentDidMount() {
@@ -114,6 +122,7 @@ class ReceiveScreen extends Component {
 
     componentWillUnmount() {
         LVNotificationCenter.removeObservers(this);
+        StatusBar.setBarStyle('light-content', true);
     }
 
     refreshWalletDatas = async () => {
@@ -130,8 +139,7 @@ class ReceiveScreen extends Component {
         }
     }
 
-    onWalletShare() {
-        const wallet = this.state.wallet;
+    onWalletShare(wallet) {
 
        if (wallet && wallet.address) {
             const title: string = wallet.name + ' ' + LVStrings.wallet_backup_title_suffix;
@@ -198,7 +206,10 @@ class ReceiveScreen extends Component {
         this.setState({ openSelectWallet: false });
     };
 
-
+    onCopyWalletAddress(){
+        Clipboard.setString(TransferUtils.convertToHexHeader(this.state.wallet.address));
+        Toast.show(LVStrings.receive_copy_success)
+    };
 
   
   
@@ -210,75 +221,63 @@ class ReceiveScreen extends Component {
 
          return (
             <View style={styles.container}>
-                <ReceiveHeader callback={this.onPressSelectWallet}/>
+                <ReceiveHeader callback={() => {this.onWalletShare(this.state.wallet)}} navigation={this.props.navigation} />
 
                 <View style={styles.mainContainer2}>
-                <ScrollView showsVerticalScrollIndicator={false} style={{ width:'100%', }}  contentContainerStyle={styles.contentContainer}>
-                <View style={styles.mainContainer}>
+                    <ScrollView showsVerticalScrollIndicator={false} style={{ width:'100%', height : "100%"}}  contentContainerStyle={styles.contentContainer}>
+                    <View style={styles.mainContainer}>
 
-                <Text style={styles.name} >
-                    {LVStrings.receive_name}
+                        <Text style={styles.name} >
+                                {this.state.wallet.name + LVStrings.receive_name_suffix}
 
-                </Text>
-                <Text ellipsizeMode="middle" numberOfLines={1} style={styles.address}>
-                    {StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 9)}
-                </Text>
+                        </Text>
+                        <Text ellipsizeMode="middle" numberOfLines={1} style={styles.address}>
+                            {StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 11)}
+                        </Text>
+                        <View style = {{marginLeft : Platform.OS === "ios" ? 0 : 25}}>
+                            <QRCode
+                            getRef={(c) => (this.svg = c)}
+                            style={styles.qrcode_pic}
+                            value={TransferUtils.convertAddr2Iban(this.state.wallet.address)}
+                            size={162}
+                            bgColor='white'
+                            fgColor='black'/>
+                        </View>
 
-                <QRCode
-                getRef={(c) => (this.svg = c)}
-                style={styles.qrcode_pic}
-                value={TransferUtils.convertAddr2Iban(this.state.wallet.address)}
-                size={162}
-                /* logo={lvt} */
-                bgColor='white'
-                fgColor='black'/>
+                        <MXButton
+                            rounded = {true}
+                            style={styles.button}
+                            title={LVStrings.receive_copy}
+                            onPress = {() => {this.onCopyWalletAddress()}}
+                            isEmptyButtonType = {true}
+                            themeStyle={"active"}
+                            /> 
+                    </View>
+                    {/* <View style={styles.share_container}>
+                        <MxImage source={receive_share}
+                            onPress = { () => {
 
-                <MXButton
-                    rounded = {true}
-                    style={styles.button}
-                    title={LVStrings.receive_copy}
-                    onPress = {() => {
-                        Clipboard.setString(TransferUtils.convertToHexHeader(this.state.wallet.address));
-                        Toast.show(LVStrings.common_done)
-
-                    }}
-                    themeStyle={"active"}
-                /> 
-                <MXButton
-                    rounded = {true} 
-                    title={LVStrings.receive_save}
-                    style={styles.button_save}
-                    onPress = {() => {
-                    this.saveQrToDisk();
-                    }}
-                    themeStyle={"active"}
-                />
-                </View>
-                <View style={styles.share_container}>
-                <MxImage source={receive_share}
-                    onPress = { () => {
-
-                        this.onWalletShare();
-                    }
-                    }
-                   ></MxImage>
-                </View>
-                </ScrollView>
+                                this.onWalletShare();
+                            }
+                            }
+                        ></MxImage>
+                    </View> */}
+                    </ScrollView>
                 </View>
 
-                <LVSelectWalletModal
+                {/* <LVSelectWalletModal
                     isOpen={this.state.openSelectWallet}
                     onClosed={this.onSelectWalletClosed}
                     selectedWalletId={this.state.walletId}
                     onSelected={this.onWalletSelected}
-                />
+                /> */}
 
             </View>
         );
     }else {
         return (
             <View style={styles.container}>
-                <ReceiveHeader callback={this.onPressSelectWallet}/>
+                <ReceiveHeader callback={this.onPressSelectWallet} navigation={this.props.navigation} />
                 <View style={styles.mainContainer2}>
                 <Image source={receive_wallet_blank}/>
                 <Text >
@@ -312,14 +311,14 @@ const styles = StyleSheet.create({
     contentContainer: {
         // paddingVertical: 20,
         // backgroundColor: 'blue',
-        // height:'100%',
+        height:'100%',
         alignItems: 'center',
         justifyContent:'center',
     },
 
     button:{
         marginTop:30,
-        marginBottom:15,
+        marginBottom:75,
     },
     button_save:{
         marginBottom:15,
@@ -360,8 +359,13 @@ const styles = StyleSheet.create({
         shadowColor: 'black',
         shadowOpacity: 0.2,
         shadowRadius: 3,
+
+        borderRadius : 7,
+        
         padding:30,
-        marginTop: 10,
+        marginTop: 30,
+        marginBottom : 30,
+
      },
 
      mainContainer2:{
@@ -393,6 +397,7 @@ const styles = StyleSheet.create({
 
     share_container: {
         flex:1,
+        height:50,
         transform: [
         { translateY:-30,},
         // {'translate':[0,-30,1]

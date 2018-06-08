@@ -12,18 +12,18 @@ import {
     ActionSheetIOS,
     Share,
     ActivityIndicator,
-    Keyboard
+    Keyboard,
+    StatusBar
 } from 'react-native';
 import MXNavigatorHeader from './../../../components/MXNavigatorHeader';
-import WalletInfoView from '../../Assets/WalletInfoView';
 import LVSize from '../../../styles/LVFontSize';
 import { Cell, Section, TableView, Separator } from 'react-native-tableview-simple';
 import MXButton from './../../../components/MXButton';
 import MXCrossTextInput from '../../../components/MXCrossTextInput';
 import LVStrings from '../../../assets/localization';
 import { WalletExportModal } from './WalletExportModal';
+import LVWallet from '../../../logic/LVWallet';
 import LVWalletManager from '../../../logic/LVWalletManager';
-import {  adjust } from '../../../utils/MXStringUtils';
 import LVLoadingToast from '../../Common/LVLoadingToast';
 import Toast from 'react-native-root-toast';
 import LVNotificationCenter from '../../../logic/LVNotificationCenter';
@@ -33,6 +33,9 @@ import console from 'console-browserify';
 import { LVPasswordDialog } from '../../Common/LVPasswordDialog';
 import WalletUtils from '../../Wallet/WalletUtils';
 import { backupWallet } from '../../../utils/MXUtils';
+import * as MXUtils from "../../../utils/MXUtils";
+import LVWalletHeader from '../../Common/LVWalletHeader';
+import LVColor from '../../../styles/LVColor';
 
 const IconWalletModifyName = require('../../../assets/images/wallet_modify_name.png');
 const IconWalletModifyPwd = require('../../../assets/images/wallet_modify_pwd.png');
@@ -64,23 +67,26 @@ const SHOW_INPUT_FOR_EXPORT = 'for_export';
 const SHOW_INPUT_FOR_DELETE = 'for_delete';
 const SHOW_INPUT_FOR_BACKUP = 'for_backup';
 
-export class WalletDetailsPage extends Component {
+type State = {
+    walletAddress: string,
+    showExportModal: boolean,
+    privateKey: string,
+    walletName: string,
+    wallet: LVWallet,
+    walletTitle: string,
+    showExportModal: boolean,
+    alertMessage: string,
+    showInputFor: string
+};
+
+type Props = {
+    navigation: Object
+};
+
+export class WalletDetailsPage extends Component<Props, State> {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
-    };
-
-    state: {
-        displayTitle: string,
-        walletAddress: string,
-        showExportModal: boolean,
-        privateKey: string,
-        walletName: string,
-        wallet: ?Object,
-        walletTitle: string,
-        showExportModal: boolean,
-        alertMessage: string,
-        showInputFor: string
     };
 
     onWalletBackup: Function;
@@ -88,8 +94,7 @@ export class WalletDetailsPage extends Component {
     constructor() {
         super();
         this.state = {
-            displayTitle: '',
-            wallet: null,
+            wallet: LVWallet.emptyWallet(),
             walletTitle: '',
             walletAddress: '',
             privateKey: '',
@@ -110,7 +115,6 @@ export class WalletDetailsPage extends Component {
         const wallet = params.wallet;
         this.setState({
             wallet: wallet,
-            displayTitle: adjust(wallet.lvt, wallet.eth),
             walletAddress: wallet.address,
             walletName: wallet.name
         });
@@ -122,14 +126,13 @@ export class WalletDetailsPage extends Component {
             console.log('new wallet = ' + JSON.stringify(wallet));
             this.setState({
                 wallet: wallet,
-                displayTitle: adjust(wallet.lvt, wallet.eth),
                 walletName: wallet.name
             });
         }
     }
 
     componentWillUnmount() {
-        LVNotificationCenter.removeObserver(this);
+        LVNotificationCenter.removeObservers(this);
     }
 
     showExportModal(password:string) {
@@ -186,7 +189,6 @@ export class WalletDetailsPage extends Component {
             setTimeout(async ()=>{
                 try {
                     await backupWallet(wallet, password);
-                    this.refs.disclaimer.show();
                 } catch (error) {
                     this.refs.toast.dismiss();
                     if(error === 'cancelled') {
@@ -229,6 +231,7 @@ export class WalletDetailsPage extends Component {
                     break;
             }
         } else {
+            this.refs.passwordConfirm.dismiss();
             setTimeout(() => {
                 this.setState({
                     alertMessage: !password ? LVStrings.password_verify_required : LVStrings.inner_error_password_mismatch
@@ -242,83 +245,62 @@ export class WalletDetailsPage extends Component {
         const wallet = this.state.wallet;
         return (
             <View style={styles.container}>
+            <StatusBar barStyle="light-content"/>
                 <WalletExportModal
                     isOpen={this.state.showExportModal}
                     privateKey={this.state.privateKey}
                     onClosed={this.onExportModalClosed.bind(this)}
                 />
-                <MXNavigatorHeader
-                    left={IconBack}
-                    style={{ backgroundColor: '#F8F9FB' }}
-                    title={this.state.walletName}
-                    titleStyle={{ color: '#6d798a' }}
-                    onLeftPress={() => {
-                        this.props.navigation.goBack();
-                    }}
-                />
-                <WalletInfoView
-                    style={styles.walletInfo}
-                    title={this.state.displayTitle}
-                    address={this.state.walletAddress}
-                    titleStyle={styles.walletTitle}
-                    addressStyle={styles.walletAddress}
-                    walletIcon={IconWallet}
-                />
+                <View style={styles.topPanel}>
+                    <MXNavigatorHeader
+                        left={IconBack}
+                        style={{ backgroundColor: LVColor.primary }}
+                        title={LVStrings.wallet_detail}
+                        titleStyle={{ color: LVColor.white }}
+                        onLeftPress={() => {
+                            this.props.navigation.goBack();
+                    }}/>
+                    <LVWalletHeader name={this.state.walletName} 
+                                    address={this.state.walletAddress}/>
+                </View>
+                
                 <TableView>
-                    <Section
-                        sectionPaddingTop={9}
-                        sectionPaddingBottom={0}
-                        sectionTintColor="#f5f6fa"
-                        separatorTintColor={'transparent'}
-                        hideSeparator
-                    >
-                        <CellVariant
-                            title={LVStrings.profile_wallet_modify_name}
-                            source={IconWalletModifyName}
-                            onPress={() => {
-                                this.props.navigation.navigate('ModifyWalletName', { wallet: wallet });
-                            }}
-                        />
-                        <Separator insetRight={15} tintColor="#eeeff2" />
-                        <CellVariant
-                            title={LVStrings.profile_wallet_modify_password}
-                            source={IconWalletModifyPwd}
-                            onPress={() => {
-                                this.props.navigation.navigate('ModifyWalletPwd', { wallet: wallet });
-                            }}
-                        />
-                        <Separator insetRight={15} tintColor="#eeeff2" />
-                        <CellVariant
-                            title={LVStrings.profile_wallet_export}
-                            source={IconWalletExportPK}
-                            onPress={() => {
-                                this.onPressExportOrDeleteButton(SHOW_INPUT_FOR_EXPORT);
-                            }}
-                        />
-                        <Separator insetRight={15} tintColor="#eeeff2" />
-                    </Section>
+                    <CellVariant
+                    title={LVStrings.profile_wallet_modify_name}
+                    source={IconWalletModifyName}
+                    onPress={() => {
+                        this.props.navigation.navigate('ModifyWalletName', { wallet: wallet });
+                    }}/>
+                    <CellVariant
+                        title={LVStrings.profile_wallet_modify_password}
+                        source={IconWalletModifyPwd}
+                        onPress={() => {
+                            this.props.navigation.navigate('ModifyWalletPwd', { wallet: wallet });
+                        }}
+                    />
+                    <CellVariant
+                        title={LVStrings.profile_wallet_export}
+                        source={IconWalletExportPK}
+                        onPress={() => {
+                            this.onPressExportOrDeleteButton(SHOW_INPUT_FOR_EXPORT);
+                        }}/>
+                    <Separator insetRight={15} tintColor="#F5F6FA" />
                 </TableView>
-                <View
-                    style={{
-                        width: '100%',
-                        flex: 1,
-                        justifyContent: 'flex-end',
-                        alignItems: 'center',
-                        backgroundColor: 'white'
-                    }}
-                >
+                <View style={styles.bottomPanelStyle}>
                     <MXButton
-                        style={{ marginBottom: 15 }}
+                        style={styles.buttonStyle}
                         title={LVStrings.profile_wallet_backup}
+                        isEmptyButtonType={true}
                         rounded
                         onPress={() => {
-                            this.onPressExportOrDeleteButton(SHOW_INPUT_FOR_BACKUP);
+                            this.refs.disclaimer.show();
                         }}
                     />
                     <MXButton
-                        style={{ marginBottom: 25 }}
+                        style={styles.buttonStyle}
                         title={LVStrings.profile_wallet_delete_wallet}
                         rounded
+                        isEmptyButtonType={true}
                         onPress={() => {
                             this.onPressExportOrDeleteButton(SHOW_INPUT_FOR_DELETE);
                         }}
@@ -329,11 +311,14 @@ export class WalletDetailsPage extends Component {
                     ref={'disclaimer'}
                     height={230}
                     title={LVStrings.wallet_disclaimer}
-                    titleStyle={{ color: 'red' }}
+                    titleStyle={{ color: LVColor.text.grey2,fontSize: 18,fontWeight: '500' }}
                     message={LVStrings.wallet_disclaimer_content}
                     buttonTitle={LVStrings.common_confirm}
                     onPress={() => {
                         this.refs.disclaimer.dismiss();
+                        setTimeout(() => {
+                            this.onPressExportOrDeleteButton(SHOW_INPUT_FOR_BACKUP);
+                        }, 300);
                     }}
                 />
                 <LVDialog
@@ -360,8 +345,13 @@ const Window = {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        backgroundColor: '#F8F9FB'
+        backgroundColor: LVColor.white
+    },
+    topPanel: {
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        height: MXUtils.isIphoneX() ? 219 : 195,
+        backgroundColor:LVColor.primary
     },
     walletInfo: {
         width: Window.width,
@@ -381,6 +371,19 @@ const styles = StyleSheet.create({
         color: '#bec4d0',
         width: 170,
         fontSize: LVSize.xsmall
+    },
+    bottomPanelStyle: {
+        flex:1,
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        backgroundColor: LVColor.white,
+        marginBottom:15,
+        marginLeft:15,
+        marginRight:15
+    },
+    buttonStyle: {
+        marginBottom:15,
+        width: '100%'
     }
 });
 

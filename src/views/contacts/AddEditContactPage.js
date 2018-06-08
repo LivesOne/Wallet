@@ -6,46 +6,53 @@
  * @flow
  */
 import React, { Component } from 'react'
-import { TextInput, View, StyleSheet, ScrollView, Keyboard, Platform } from 'react-native';
+import { Alert, TextInput, View, StatusBar, StyleSheet,TouchableOpacity, ScrollView, Keyboard, Platform,PixelRatio } from 'react-native';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import MXCrossTextInput from '../../components/MXCrossTextInput';
 import {greyNavigationBackIcon} from '../../assets/LVIcons';
 import LVStrings from '../../assets/localization';
 import LVColor from '../../styles/LVColor';
 import * as ContactLib from '../../logic/LVContactManager';
-import { isEmptyString, isNotEmptyString } from '../../utils/MXUtils';
+import { checkValidPhone, checkValidEmail, isEmptyString, isNotEmptyString } from '../../utils/MXUtils';
 import { isAddress, getCharLength } from '../../utils/MXStringUtils';
 import LVDialog from '../Common/LVDialog';
 import LVQrScanModal from '../Common/LVQrScanModal';
+import Permissions from 'react-native-permissions';
 import LVLocalization from '../../assets/localization';
 import MXTouchableImage from '../../components/MXTouchableImage';
 import TransferUtils from '../Transfer/TransferUtils';
+import MXButton from '../../components/MXButton';
+import * as MXUtils from "../../utils/MXUtils";
+import LVKeyboardSpacer from '../Common/LVKeyboardSpacer';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const scanImg = require('../../assets/images/transfer_scan.png');
 const navButtonEnableColor = '#FFAE1F';
 const navButtonDisableColor = '#c3c8d3';
+const dismissKeyboard = require('dismissKeyboard');
 
-export default class AddEditContactPage extends Component {
+type Props = {navigation: Object};
+
+type State =  {
+    name: string,
+    address: string,
+    cellPhone: string,
+    email: string,
+    alertMessage: string,
+    navTitle: string,
+    mode: string,
+    editModel: ?Object,
+    showQrScanModal: boolean
+};
+
+export default class AddEditContactPage extends Component<Props, State> {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
     };
 
-    state: {
-        name: string,
-        address: string,
-        cellPhone: string,
-        email: string,
-        remarks: string,
-        alertMessage: string,
-        navTitle: string,
-        mode: string,
-        editModel: ?Object,
-        showQrScanModal: boolean
-    }
-
     onAddingDone : Function;
-
+    onSubmitEditing: Function;
     constructor(props: any) {
         super();
 
@@ -58,7 +65,6 @@ export default class AddEditContactPage extends Component {
                 address: '',
                 cellPhone: '',
                 email: '',
-                remarks: '',
                 alertMessage: '',
                 navTitle: navTitle,
                 mode: params.mode,
@@ -71,7 +77,6 @@ export default class AddEditContactPage extends Component {
                 address: model.address,
                 cellPhone: model.cellPhone,
                 email: model.email,
-                remarks: model.remarks,
                 alertMessage: '',
                 navTitle: navTitle,
                 mode: params.mode,
@@ -81,6 +86,7 @@ export default class AddEditContactPage extends Component {
         }
        
         this.onAddingDone = this.onAddingDone.bind(this);
+        this.onSubmitEditing = this.onSubmitEditing.bind(this);
     }
 
     async onAddingDone() {
@@ -104,8 +110,13 @@ export default class AddEditContactPage extends Component {
             this.refs.alert.show();
             return;
         }
-        if(isNotEmptyString(this.state.remarks) && getCharLength(this.state.remarks) > 80) {
-            this.setState({alertMessage: LVLocalization.contact_alert_remarks_exceeds_limit});
+        if (isNotEmptyString(this.state.cellPhone) && !checkValidPhone(this.state.cellPhone)) {
+            this.setState({alertMessage: LVLocalization.contact_alert_Phone_invalid});
+            this.refs.alert.show();
+            return;
+        }
+        if (isNotEmptyString(this.state.email) && !checkValidEmail(this.state.email)) {
+            this.setState({alertMessage: LVLocalization.contact_alert_Email_invalid});
             this.refs.alert.show();
             return;
         }
@@ -120,8 +131,7 @@ export default class AddEditContactPage extends Component {
             const contact = ContactLib.LVContactManager.createContact(this.state.name,
                 TransferUtils.convertToHexHeader(this.state.address),
                 this.state.cellPhone,
-                this.state.email,
-                this.state.remarks);
+                this.state.email);
             ContactLib.instance.add(contact);
         } else if(this.state.editModel) {
             const originalName = this.state.editModel.name;
@@ -136,7 +146,6 @@ export default class AddEditContactPage extends Component {
             this.state.editModel.address = this.state.address;
             this.state.editModel.cellPhone = this.state.cellPhone;
             this.state.editModel.email = this.state.email;
-            this.state.editModel.remarks = this.state.remarks;
         }
         
         await ContactLib.instance.saveToDisk();
@@ -145,21 +154,48 @@ export default class AddEditContactPage extends Component {
         params.callback();
     }
 
-    onPressScan() {
-        Keyboard.dismiss();
-        this.setState({
-            showQrScanModal:true
-        });
+    componentWillMount() {
+        StatusBar.setBarStyle('default', true);
+    }
+
+    onSubmitEditing=(textInput:string)=>{
+        if (textInput === 'addressTextInput') {
+            this.refs.addressTextInput.focus();
+        } else if (textInput === 'phone') {
+            this.refs.phone.focus();
+        }
+    }
+
+    async onPressScan() {
+        if (Platform.OS === 'android') {
+            await Keyboard.dismiss();
+            setTimeout(() => {
+                this.setState({ showQrScanModal: true });
+            }, 100);
+        }
+        else if (Platform.OS === 'ios') {
+            const response = await Permissions.request('camera');
+            // Response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+            if (response === 'authorized') {
+                this.setState({ showQrScanModal: true });
+            } else {
+                Alert.alert(
+                    LVStrings.can_not_access_camera,
+                    LVStrings.please_set_camera_author,
+                    [
+                        {
+                            text: LVStrings.common_cancel,
+                            onPress: () => console.log('Permission denied'),
+                            style: 'cancel',
+                        },
+                        { text: LVStrings.common_open_ettings, onPress: Permissions.openSettings },
+                    ],
+                )
+            }
+        }
     }
 
     render() {
-       let rightNavTextColor = navButtonDisableColor;
-       if(!isEmptyString(this.state.name) 
-            && !isEmptyString(this.state.address)
-            && isAddress(this.state.address)) {
-           rightNavTextColor = navButtonEnableColor;
-       }
-
         return (
             <View style={styles.rootView}>
                 <MXNavigatorHeader
@@ -168,22 +204,36 @@ export default class AddEditContactPage extends Component {
                     title={ this.state.navTitle }
                     titleStyle={styles.navTitle}
                     onLeftPress={ () => {this.props.navigation.goBack() }}
-                    right={LVStrings.common_done}
-                    rightTextColor={rightNavTextColor}
-                    onRightPress={this.onAddingDone}
                 />
-                <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
+                <KeyboardAwareScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
+                <TouchableOpacity activeOpacity={1.0} onPress={()=>{
+                    dismissKeyboard();
+                }}>
                     <View style={styles.container}>
                         <MXCrossTextInput style={styles.textInputStyle} 
                             placeholder={LVStrings.contact_add_place_holder_nickname}
                             withClearButton
                             defaultValue={this.state.name}
+                            returnKeyType= {'next'}
+                            withUnderLine = {false}
+                            onSubmitEditing={()=>{
+                                this.onSubmitEditing('addressTextInput');
+                            }}
+                            blurOnSubmit={false}
+                            titleText={LVStrings.contact_add_place_nickname}
                             onTextChanged= {(text) => this.setState({name: text})}/>
                         <MXCrossTextInput ref={'addressTextInput'}
                             style={styles.textInputStyle} 
                             placeholder={LVStrings.contact_add_place_holder_address}
                             withClearButton={true}
                             defaultValue={this.state.address}
+                            returnKeyType= {'next'}
+                            withUnderLine = {false}
+                            onSubmitEditing={()=>{
+                                this.onSubmitEditing('phone');
+                            }}
+                            blurOnSubmit={false}
+                            titleText={LVStrings.contact_add_place_address}
                             rightComponent={<MXTouchableImage source={scanImg} onPress={ async () => {
                                 if (Platform.OS === 'android') {
                                     await Keyboard.dismiss();
@@ -192,22 +242,34 @@ export default class AddEditContactPage extends Component {
                                 }} />}
                             onTextChanged= {(text) => this.setState({address: text})}/>
                         <MXCrossTextInput style={styles.textInputStyle} 
+                            ref = {'phone'}
                             placeholder={LVStrings.contact_add_place_holder_cellphone}
                             withClearButton
+                            keyboardType = {'phone-pad'}
+                            returnKeyType= {'next'}
                             defaultValue={this.state.cellPhone}
+                            withUnderLine = {false}
+                            titleText={LVStrings.contact_add_place_cellphone}
                             onTextChanged= {(text) => this.setState({cellPhone: text})}/>
                         <MXCrossTextInput style={styles.textInputStyle} 
                             placeholder={LVStrings.contact_add_place_holder_email}
                             withClearButton
+                            keyboardType = {'email-address'}
+                            returnKeyType= {'done'}
                             defaultValue={this.state.email}
+                            withUnderLine = {false}
+                            titleText={LVStrings.contact_add_place_email}
                             onTextChanged= {(text) => this.setState({email: text})}/>
-                        <MXCrossTextInput style={styles.textInputStyle}
-                             placeholder={LVStrings.contact_add_place_holder_remarks}
-                             withClearButton
-                             defaultValue={this.state.remarks}
-                             onTextChanged= {(text) => this.setState({remarks: text})}/>
+                        <MXButton
+                                style={styles.button}
+                                title={LVStrings.profile_wallet_save}
+                                isEmptyButtonType={false}
+                                rounded
+                                onPress={this.onAddingDone}
+                        />    
                     </View>
-                </ScrollView>
+                    </TouchableOpacity>
+                </KeyboardAwareScrollView>
                 <LVQrScanModal 
                     barcodeReceived={(data)=>{
                         this.refs.addressTextInput.setText(data);
@@ -238,6 +300,12 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     textInputStyle: {
-        height: 60
-    }
+        height: 80
+    },
+    button: {
+        height: 50,
+        width: MXUtils.getDeviceWidth() - 18 * PixelRatio.get(),
+        marginTop:125,
+        marginBottom:100,        
+    },
 });

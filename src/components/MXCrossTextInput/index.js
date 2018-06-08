@@ -4,18 +4,40 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, View, TextInput, TouchableOpacity, Image, ViewPropTypes, Keyboard, Platform } from 'react-native';
+import { StyleSheet, View, TextInput, TouchableOpacity, Image, ViewPropTypes, Keyboard, Platform ,Text} from 'react-native';
 import { Base, DefaultStyles, LightStyles, WhiteStyles, TextAlignCenterStyles } from './styles';
 
 import LVColor from '../../styles/LVColor';
-import PropTypes from 'prop-types';
 
-class MXCrossTextInput extends Component {
-    state: {
-        text: ?string,
-        defaultValue: string,
-        hasFocus: boolean,
-    };
+type State = {
+    text: ?string,
+    defaultValue: string,
+    hasFocus: boolean,
+};
+
+type Props = {
+    placeholder?: string,
+    rounded?: boolean,
+    themeStyle?: string,
+    style?: ViewPropTypes.style,
+    defaultValue?: string,
+    secureTextEntry?: boolean,
+    onTextChanged?: Function,
+    withUnderLine?: boolean,
+    keyboardType?: string,
+    onSubmitEditing?: Function,
+    blurOnSubmit?:boolean,
+    returnKeyType?:string,
+    withClearButton?: boolean,
+    rightComponent?: any,
+    setFocusWhenMounted?: boolean,
+    textAlignCenter?: boolean,
+    value?: string,
+    boarderLineHeight?: number,
+    titleText?: string,
+    inputContainerStyle ? : ViewPropTypes.style,
+};
+class MXCrossTextInput extends Component<Props,State> {
 
     constructor(props: any) {
         super(props);
@@ -29,23 +51,6 @@ class MXCrossTextInput extends Component {
 
     firstMounted = true;
 
-    static propTypes = {
-        placeholder: PropTypes.string,
-        rounded: PropTypes.bool,
-        themeStyle: PropTypes.string,
-        style: ViewPropTypes.style,
-        defaultValue: PropTypes.string,
-        secureTextEntry: PropTypes.bool,
-        onTextChanged: PropTypes.func,
-        withUnderLine: PropTypes.bool,
-        KeyboardType: PropTypes.string,
-        withClearButton: PropTypes.bool,
-        rightComponent: PropTypes.element,
-        setFocusWhenMounted: PropTypes.bool,
-        textAlignCenter: PropTypes.bool,
-        value: PropTypes.string,
-        boarderLineHeight: PropTypes.number,
-    };
 
     static defaultProps = {
         withUnderLine: true,
@@ -63,15 +68,19 @@ class MXCrossTextInput extends Component {
         }
     }
 
+    focus(){
+        this.refs.textinput.focus();
+    }
+
     setText(newText: string) {
         this.setState({text: newText, hasFocus: true});
         this.props.onTextChanged && this.props.onTextChanged(newText);
     }
 
     onChangeText = function(newText: string) {
-        this.setState({
-            text: newText
-        });
+        if (Platform.OS === 'android') {
+            this.setState({text: newText});
+        }
         this.props.onTextChanged && this.props.onTextChanged(newText);
     };
 
@@ -94,7 +103,7 @@ class MXCrossTextInput extends Component {
     }
 
     render() {
-        const { rounded, style, placeholder, secureTextEntry, withUnderLine, keyboardType, textAlignCenter, boarderLineHeight } = this.props;
+        const { rounded, style, placeholder, secureTextEntry, withUnderLine, keyboardType, textAlignCenter, boarderLineHeight,titleText,inputContainerStyle,returnKeyType,blurOnSubmit,onSubmitEditing } = this.props;
 
         const theme = this.getTheme();
 
@@ -112,9 +121,15 @@ class MXCrossTextInput extends Component {
                     !withUnderLine ? { borderBottomColor: 'transparent' } : null,
                     style,
                 ]}
-            >
+            >  
                 <View style={[Base.content]}>
-                    <TouchableOpacity style={[textAreaStyle]} activeOpacity={1} onPress={
+                    {this.props.titleText && (
+                        <Text style = {Base.titleLabel}>
+                            {titleText}
+                        </Text>
+                    )}
+                    <View style = {[Base.textInputView , inputContainerStyle]}>
+                    <TouchableOpacity style={[textAreaStyle,this.props.titleText && {marginTop:10},]} activeOpacity={1} onPress={
                         () => {
                             this.setState({hasFocus: true})
                             this.refs.textinput.focus()
@@ -129,10 +144,15 @@ class MXCrossTextInput extends Component {
                             selectTextOnFocus={this.firstMounted && this.props.setFocusWhenMounted}
                             tintColor={LVColor.primary}
                             keyboardType={keyboardType}
-                            style={[Base.label, theme.label]}
+                            blurOnSubmit={blurOnSubmit}
+                            returnKeyType={returnKeyType}
+                            style={[Base.label, theme.label , {padding : 0}]}
                             secureTextEntry={secureTextEntry}
                             clearButtonMode={this.props.withClearButton ? 'while-editing' : 'never'}
-                            onChangeText={this.onChangeText.bind(this)}
+                            onChangeText={this.onChangeText}
+                            onSubmitEditing= {()=>{
+                                onSubmitEditing && onSubmitEditing();
+                            }}
                             onFocus={() => this.setState({ hasFocus: true })}
                             onEndEditing={() => this.setState({ hasFocus: false })}
                         />
@@ -154,8 +174,9 @@ class MXCrossTextInput extends Component {
                             <View style={[Base.rightComponent]}>{this.props.rightComponent}</View>
                         )}
                     </View>
+                    </View>
                 </View>
-                <View style={{width: '100%', height: lineHeight, backgroundColor: LVColor.separateLine}} />
+                <View style={{width: '100%', height: lineHeight, backgroundColor: LVColor.separateLine,position: 'absolute',bottom: 1}} />
             </View>
         );
     }

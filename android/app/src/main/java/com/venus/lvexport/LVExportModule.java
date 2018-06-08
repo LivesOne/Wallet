@@ -1,6 +1,13 @@
 package com.venus.lvexport;
 
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.support.v4.content.FileProvider;
+import android.util.Log;
+
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -8,8 +15,12 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.venus.BuildConfig;
 import com.venus.CryptoUtils;
+import com.venus.permission.CameraPermissionChecker;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -52,5 +63,50 @@ public class LVExportModule extends ReactContextBaseJavaModule {
     public void libscrypt(String password, String saltHexStr, int n, int r, int p, int dkLen, Callback callback) throws Exception {
         String res = CryptoUtils.scrypt(password, saltHexStr, n, r, p, dkLen);
         callback.invoke(res);
+    }
+
+    @ReactMethod
+    public void installApk(String apkLocation){
+        File apkFile = new File(apkLocation);
+        Log.i("update" , "安装应用："+apkFile.getAbsolutePath());
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        //如果没有设置SDCard写权限，或者没有sdcard,apk文件保存在内存中，需要授予权限才能安装
+        try {
+            String[] command = {"chmod", "777", apkFile.toString()};
+            ProcessBuilder builder = new ProcessBuilder(command);
+            builder.start();
+        } catch (IOException ignored) {
+        }
+
+        Uri uri = FileProvider.getUriForFile(getReactApplicationContext().getApplicationContext() , "com.venus.fileprovider" , apkFile);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+        if(Build.VERSION.SDK_INT >= 24){
+            // 7。0及以上
+            intent.setDataAndType(uri , "application/vnd.android.package-archive");
+        }else{
+            intent.setDataAndType(Uri.fromFile(apkFile) , "application/vnd.android.package-archive");
+        }
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getReactApplicationContext().getCurrentActivity().startActivity(intent);
+    }
+
+    @ReactMethod
+    public void isLanguageZh(Promise promise){
+        Locale locale = getReactApplicationContext().getResources().getConfiguration().locale;
+        String language = locale.getLanguage();
+        if (language.endsWith("zh")){
+            promise.resolve(true);
+        }else{
+            promise.resolve(false);
+        }
+    }
+
+    @ReactMethod
+    public void checkCameraPermission(Promise promise){
+        boolean granted = CameraPermissionChecker.checkCameraPermission();
+        promise.resolve(granted);
     }
 }

@@ -12,38 +12,47 @@ import {
     StyleSheet,
     Image,
     Dimensions,
-    Platform
+    Platform,
+    Keyboard
 } from 'react-native';
-import PropTypes from 'prop-types';
 import LVDialog from './LVDialog';
 import LVStrings from './../../assets/localization';
 import LVColor from '../../styles/LVColor';
 import console from 'console-browserify';
-import {  beautifyBalanceShow } from '../../utils/MXStringUtils';
+import * as StringUtils from '../../utils/MXStringUtils';
 const CloseIcon = require('../../assets/images/close_modal.png');
 import Modal from 'react-native-modalbox';
 
 const MAX_BALANCE_LENGTH_LIMIT = 13;
 const FRAGMENT_LENGTH = 2;
 
-export class LVBalanceShowView extends Component {
+type Props = {
+    title: string,
+    symble?: string,
+    unit: string,
+    style?: ViewPropTypes.style,
+    textStyle: Text.propTypes.style,
+    balance: Object,
+    showSeparator?: boolean
+};
 
-    static propTypes = {
-        title: PropTypes.string,
-        symble: PropTypes.string,
-        unit: PropTypes.string,
-        style: ViewPropTypes.style,
-        textStyle: Text.propTypes.style,
-        balance: PropTypes.object.isRequired,
-    };
+export class LVBalanceShowView extends Component<Props> {
 
     render() {
-        let v = beautifyBalanceShow(this.props.balance);
+        let v = StringUtils.beautifyBalanceShow(this.props.balance);
         const {symble, title, unit} = this.props;
-        const values = symble ? symble + v.result : v.result; 
+        var values = v.result; 
+
+        if (this.props.showSeparator) {
+            values = StringUtils.convertAmountToCurrencyString(v.result, ',', 0, true);
+        }
+
+        values = symble ? symble + values : values;
+
         return (
             <TouchableOpacity style = {this.props.style} activeOpacity={0.8} onPress = {()=>{
                 if (v.hasShrink) {
+                    Keyboard.dismiss();
                     this.refs.alert.open();
                 }
                 }} >
@@ -65,7 +74,7 @@ export class LVBalanceShowView extends Component {
                                 alignItems: 'center'}} onPress={()=>{this.refs.alert.close()}}>
                             <Image style={{}} source={CloseIcon}></Image>
                         </TouchableOpacity>
-                        <Text style={{fontSize: 18,  color: LVColor.text.grey2, marginBottom: 10, marginTop: -15}}>{title}</Text>
+                        <Text style={{fontSize: 16,  color: LVColor.text.grey2, marginBottom: 10, marginTop: -15}}>{title}</Text>
                         <TextInput  
                             underlineColorAndroid = {'transparent'}
                             multiline= {true}

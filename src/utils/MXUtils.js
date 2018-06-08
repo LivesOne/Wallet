@@ -12,10 +12,17 @@ import WalletUtils from '../views/Wallet/WalletUtils';
 
 export const getDeviceHeight = () => Dimensions.get('window').height;
 export const getDeviceWidth = () => Dimensions.get('window').width;
+export const iPhoneX_Bottom_Inset = 34;
 
 export const checkValidEmail = (email: string) => {
   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email.trim());
+};
+
+export const checkValidPhone = (phone: string) => {
+  var re = /^1(3|4|5|7|8)\d{9}$/; // 手机号码
+  var re2 = /^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/; //固话
+  return re.test(phone.trim()) || re2.test(phone.trim());
 };
 
 export const checkValidPassword = (password: string) => {
@@ -59,6 +66,16 @@ export function formatCurrency(n: number) {
     });
   }
 }
+
+export const isIphoneX = () => {
+  let dimen = Dimensions.get('window');
+  return (
+      Platform.OS === 'ios' &&
+      !Platform.isPad &&
+      !Platform.isTVOS &&
+      (dimen.height === 812 || dimen.width === 812)
+  );
+};
 
 export const makeCancelable = (promise : Promise<any>) => {
   let hasCanceled_ = false;

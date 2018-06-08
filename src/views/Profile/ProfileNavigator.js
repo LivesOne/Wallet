@@ -19,8 +19,12 @@ import WalletCreatePage from '../Wallet/WalletCreatePage';
 import WalletImportPage from '../Wallet/WalletImportPage';
 import ContactsManagerPage from '../contacts/ContactsManagerPage';
 import AddEditContactPage from '../contacts/AddEditContactPage';
-import TransactionRecordsScreen from '../Assets/TransactionRecordsScreen'
+import LVTContactDetailPage from '../contacts/LVTContactDetailPage';
+import AssetsDetailsScreen from '../Assets/AssetsDetailsScreen'
 import TransactionDetailsScreen from '../Assets/TransactionDetailsScreen';
+import ReceiveTip from '../Receive/ReceiveTip';
+import ReceiveScreen from '../Receive/ReceiveScreen';
+import TransferScreen from '../Transfer/TransferScreen';
 
 const ProfileNavigator = StackNavigator(
     {
@@ -34,12 +38,15 @@ const ProfileNavigator = StackNavigator(
         WalletImportPage: { screen: WalletImportPage },
         ContactList: { screen: ContactsManagerPage },
         AddEditContactPage: { screen: AddEditContactPage },
-        TransactionRecords: { screen: TransactionRecordsScreen },
+        LVTContactDetailPage: { screen: LVTContactDetailPage },
+        AssetsDetails: { screen: AssetsDetailsScreen },
         TransactionDetails: { screen: TransactionDetailsScreen },
+        Transfer: { screen: TransferScreen },
+        ReceiveTip: { screen: ReceiveScreen },
     },
     {
         headerMode: 'none',
-        mode: Platform.OS === 'ios' ? 'card' : 'modal',
+        mode: Platform.OS === 'ios' ? 'card' : 'card',
         navigationOptions: {
             gesturesEnabled: true
         },

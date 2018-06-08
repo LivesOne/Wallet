@@ -9,13 +9,26 @@ import React from 'react';
 import { StackNavigator } from "react-navigation";
 
 import AssetsScreen from './AssetsScreen';
-import TransactionRecordsScreen from './TransactionRecordsScreen';
+import AssetsDetailsScreen from './AssetsDetailsScreen';
 import TransactionDetailsScreen from './TransactionDetailsScreen';
+
+import ReceiveScreen from '../Receive/ReceiveScreen';
+import ReceiveTip from '../Receive/ReceiveTip';
+import TransferScreen from '../Transfer/TransferScreen';
+import AddEditContactPage from '../contacts/AddEditContactPage';
+import ContactsManagerPage from '../contacts/ContactsManagerPage';
+import LVTContactDetailPage from '../contacts/LVTContactDetailPage';
 
 const AssetsNavigator = StackNavigator({
     Assets: { screen: AssetsScreen },
-    TransactionRecords: { screen: TransactionRecordsScreen },
+    AssetsDetails: { screen: AssetsDetailsScreen },
     TransactionDetails: { screen: TransactionDetailsScreen },
+    Receive: { screen: ReceiveScreen },
+    Transfer: { screen: TransferScreen },
+    ReceiveTip: { screen: ReceiveScreen },
+    ContactList: { screen: ContactsManagerPage },
+    AddEditContactPage: { screen: AddEditContactPage },
+    LVTContactDetailPage: { screen: LVTContactDetailPage },
 });
 
 export default AssetsNavigator;

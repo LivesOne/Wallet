@@ -99,6 +99,30 @@ module.exports = {
     return abi.methodID('transfer', [ 'address', 'uint256' ]).toString('hex') + abi.rawEncode([ 'address', 'uint256' ], [ to, value ]).toString('hex')
   },
 
+  generateTxDataForETH : function(privateKey, nonce, from, to, value, gasPrice, gasLimit, chainId) {
+    const EthereumTx = require('ethereumjs-tx')
+    const txParams = {
+      nonce: nonce,
+      gasPrice: gasPrice, 
+      gasLimit: gasLimit,
+      //from: from,
+      to: to, 
+      value: value, 
+      // EIP 155 chainId - mainnet: 1, ropsten: 3
+      chainId: chainId
+    };
+    const params = {
+      privateKey: privateKey,
+      toAddress: to,
+      value: value
+    };
+    console.log("test param = " + JSON.stringify(params) + ' txParams = '+ JSON.stringify(txParams) + ' value=' + value);
+    const tx = new EthereumTx(txParams)
+    tx.sign(this.str2buf(privateKey))
+    const serializedTx = tx.serialize()
+    return '0x'+serializedTx.toString('hex')
+  },
+  
   generateTxData : function(privateKey, nonce, token, from, to, value, gasPrice, gasLimit, chainId) {
     const EthereumTx = require('ethereumjs-tx')
     const txParams = {
@@ -117,6 +141,7 @@ module.exports = {
       toAddress: to,
       value: value
     };
+    console.log(JSON.stringify({to:token}));
     console.log("test param = " + JSON.stringify(params) + ' txParams = '+ JSON.stringify(txParams) + ' value=' + value);
     const tx = new EthereumTx(txParams)
     tx.sign(this.str2buf(privateKey))

@@ -6,6 +6,7 @@
 
  import React, { Component } from 'react'
  import {
+    Alert,
     Text,
     View,
     TouchableOpacity,
@@ -26,6 +27,7 @@ import MXCrossTextInput from './../../components/MXCrossTextInput';
 import MXButton from './../../components/MXButton';
 import { MXSwitchTab } from './../../components/MXSwitchTab';
 import { LVQrScanModal } from '../Common/LVQrScanModal';
+import Permissions from 'react-native-permissions';
 import LVWalletManager from '../../logic/LVWalletManager';
 import LVLoadingToast from '../Common/LVLoadingToast';
 import LVDialog from '../Common/LVDialog';
@@ -36,30 +38,36 @@ import PropTypes from 'prop-types';
 import console from 'console-browserify';
 import Toast from 'react-native-root-toast';
 import { LVKeyboardDismissView } from '../Common/LVKeyboardDismissView';
+import { MXCrossInputHeight } from '../../styles/LVStyleSheet';
+import * as MXUtils from "../../utils/MXUtils";
+import LVFontSize from '../../styles/LVFontSize';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 const foundation = require('../../foundation/wallet.js');
 
- export default class AssetsImportPage extends Component {
-    static propTypes = {
-      dismissCallback: PropTypes.func
-    };
+type Props = {
+  navigation: Object,
+  dismissCallback: Function,
+  screenProps: Object
+};
 
+type State = {
+  leftPressed: boolean,
+  showModal: boolean,
+  privateKey: string,
+  privateKeyPwd: string,
+  privateKeyPwdAgain: string,
+  keyStore: string,
+  keyStorePwd: string,
+  alertMessage: ?string,
+  fromPage: string,
+  keyboardHeight: number
+};
+
+export default class AssetsImportPage extends React.Component<Props, State> {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
     };
-
-    state: {
-      leftPressed: boolean,
-      showModal: boolean,
-      privateKey: string,
-      privateKeyPwd: string,
-      privateKeyPwdAgain: string,
-      keyStore: string,
-      keyStorePwd: string,
-      alertMessage: ?string,
-      fromPage: string,
-      keyboardHeight: number,
-    }
 
     constructor() {
       super();
@@ -161,7 +169,7 @@ const foundation = require('../../foundation/wallet.js');
     }
 
     if(!WalletUtils.isPasswordValid(privateKeyPwd) || !WalletUtils.isPasswordValid(privateKeyPwdAgain)) {
-        this.setState({alertMessage:LVStrings.wallet_import_private_password_hint });
+        this.setState({alertMessage:LVStrings.wallet_import_invalid_password_warning });
         this.refs.alert.show();
         return;
     }    
@@ -221,7 +229,7 @@ const foundation = require('../../foundation/wallet.js');
       }
 
       if(!WalletUtils.isPasswordValid(this.state.keyStorePwd)) {
-        this.setState({alertMessage: LVStrings.wallet_import_private_password_hint });
+        this.setState({alertMessage: LVStrings.wallet_import_invalid_password_warning });
         this.refs.alert.show();
         return;
       }
@@ -273,6 +281,35 @@ const foundation = require('../../foundation/wallet.js');
 
     }
 
+    async onPressScanButton() {
+      if (Platform.OS === 'android') {
+          await Keyboard.dismiss();
+          setTimeout(() => {
+            this.setState({ showModal: true });
+          }, 100);
+      }
+      else if (Platform.OS === 'ios') {
+          const response = await Permissions.request('camera');
+          // Response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+          if (response === 'authorized') {
+              this.setState({ showModal: true });
+          } else {
+              Alert.alert(
+                  LVStrings.can_not_access_camera,
+                  LVStrings.please_set_camera_author,
+                  [
+                      {
+                          text: LVStrings.common_cancel,
+                          onPress: () => console.log('Permission denied'),
+                          style: 'cancel',
+                      },
+                      { text: LVStrings.common_open_ettings, onPress: Permissions.openSettings },
+                  ],
+              )
+          }
+      }
+  }
+
     render() {
       const {keyboardHeight} = this.state;
       return (
@@ -291,20 +328,24 @@ const foundation = require('../../foundation/wallet.js');
                     this.props.navigation.goBack();
                 }
             }}
-            right={ require("../../assets/images/qrScan.png") }
-            onRightPress = {
-              () => { Keyboard.dismiss(); this.setState({showModal: true}) }
-            }
+            right={ require("../../assets/images/transfer_scan.png") }
+            onRightPress = { this.onPressScanButton.bind(this) }
             />
-            <MXSwitchTab
-              leftText={ LVStrings.wallet_import_keyStore }
-              rightText={ LVStrings.wallet_import_private_key }
-              onTabSwitched={this._onHeaderPressed.bind(this)}
-            />
-            {this.state.leftPressed && this._renderKeystore()}
-            {!this.state.leftPressed && this._renderPrivateKey()}
-            <LVLoadingToast ref={'toast'} title={LVStrings.wallet_import_header}/>
-            <LVDialog ref={'alert'} title={LVStrings.alert_hint} message={this.state.alertMessage} buttonTitle={LVStrings.alert_ok}/>
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps = {'handled'}>
+              <View style={styles.contentContainer}>
+                <MXSwitchTab
+                  leftText={ LVStrings.wallet_import_keyStore }
+                  rightText={ LVStrings.wallet_import_private_key }
+                  onTabSwitched={this._onHeaderPressed.bind(this)}
+                />
+                {this.state.leftPressed && this._renderKeystore()}
+                {!this.state.leftPressed && this._renderPrivateKey()}
+
+                <LVLoadingToast ref={'toast'} title={LVStrings.wallet_import_header}/>
+                <LVDialog ref={'alert'} title={LVStrings.alert_hint} height={225} message={this.state.alertMessage || ''} buttonTitle={LVStrings.alert_ok}/>
+              </View>
+            </KeyboardAwareScrollView>
         </KeyboardDismissView>
       )
     }
@@ -315,77 +356,81 @@ const foundation = require('../../foundation/wallet.js');
           <TextInput
             textAlignVertical={'top'}
             multiline= {true}
-            value={this.state.keyStore}
+			value={this.state.keyStore}
+			keyboardType = {'ascii-capable'}
             placeholder={ LVStrings.wallet_import_keystore_hint }
             underlineColorAndroid = {'transparent'}
-            onChangeText={(newText)=>{this.setState({keyStore: newText})}}
+            onChangeText={(newText)=>{this.setState({keyStore: newText.trim()})}}
             style={ styles.textInput }
           />
+
           <MXCrossTextInput
-            style={{marginTop: 15, marginBottom: 35}}
+            style={[styles.crossTextInputStyle, {marginTop: 15}]}
             secureTextEntry={true}
+            titleText={LVStrings.wallet_import_keystore_password_label}
             onTextChanged={(newText)=>{ this.setState({keyStorePwd: newText}) }}
-            placeholder={LVStrings.wallet_import_keystore_password_hint}
+            placeholder={LVStrings.wallet_import_private_password_hint}
           />
           <MXButton
             rounded
-            style={{alignSelf: 'center'}}
+            style={styles.importButtonStyle}
             title={LVStrings.wallet_import}
-            onPress={ this.onKeystoreImportPress.bind(this) }
-          />
+            onPress={ this.onKeystoreImportPress.bind(this) }/>
         </View>
       );
     }
 
     _renderPrivateKey = ()=> {
       return (
-        <LVKeyboardAvoidingView behavior='padding'>
-          <ScrollView style={{ flex: 1}}>
+        <View style={{ flex : 1}}>
             <TextInput
               textAlignVertical={'top'}
               multiline= {true}
               value={this.state.privateKey}
-              onChangeText={(newText)=>{this.setState({privateKey: newText})}}
+              onChangeText={(newText)=>{this.setState({privateKey: newText.trim()})}}
               placeholder={ LVStrings.wallet_import_plain_private_key_hint }
               underlineColorAndroid = {'transparent'}
               style={ styles.textInput }
             />
+
             <MXCrossTextInput
-              style={{marginTop: 15, marginBottom: 10}}
+              style={[styles.crossTextInputStyle, {marginTop: 15}]}
               secureTextEntry={true}
               returnKeyType={'next'}
+              withUnderLine={false}
+              titleText={LVStrings.wallet_import_private_password_lable}
               onTextChanged={(newText)=>{this.setState({privateKeyPwd: newText})}}
               placeholder={LVStrings.wallet_import_private_password_hint}
             />
+
             <MXCrossTextInput
-              style={{marginTop: 15, marginBottom: 35}}
+              style={styles.crossTextInputStyle}
               secureTextEntry={true}
+              titleText={LVStrings.wallet_import_private_password_repeat_lable}
               onTextChanged={(newText)=>{this.setState({privateKeyPwdAgain: newText})}}
               placeholder={LVStrings.wallet_import_private_pwd_confirm_hint}
             />
             <MXButton
               rounded
-              style={{alignSelf: 'center'}}
+              style={styles.importButtonStyle}
               title={LVStrings.wallet_import}
               onPress={ this.onPrivateImportPress.bind(this) }
             />
-          </ScrollView>
-        </LVKeyboardAvoidingView>
+        </View>
       );
     }
-
-
-
  }
 
- const LVKeyboardAvoidingView = (Platform.OS === 'ios') ? KeyboardAvoidingView : View;
  const KeyboardDismissView = (Platform.OS === 'ios') ? LVKeyboardDismissView : View;
 
-  const styles = LVStyleSheet.create({
+const styles = LVStyleSheet.create({
     container: {
       flex: 1,
-      alignItems: "center",
       backgroundColor: LVColor.white
+    },
+    contentContainer: {
+      marginLeft: 15,
+      marginRight: 15
     },
     importByContainer: {
       flexDirection: 'row',
@@ -398,12 +443,22 @@ const foundation = require('../../foundation/wallet.js');
       backgroundColor: LVColor.white
     },
     textInput: {
-      backgroundColor: "#f8f9fb",
+      backgroundColor: "#F9F9FA",
       height: 110,
       marginTop: 20,
       borderRadius: 3,
       padding: 6,
       fontSize: 14,
     },
-
+    textTip : {
+      color : "#677384" ,
+      fontSize : 12,
+    },
+    importButtonStyle: {
+      width: MXUtils.getDeviceWidth() - 30,
+      marginTop: 63
+    },
+    crossTextInputStyle: {
+      height: MXCrossInputHeight
+    }
   });

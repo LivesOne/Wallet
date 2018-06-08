@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Dimensions, View, Share, Image, Text, NativeModules, Platform, ActionSheetIOS } from 'react-native';
+import { Dimensions, View, Share, Image, StatusBar, Text, NativeModules, Platform, ActionSheetIOS, BackHandler } from 'react-native';
 import MXButton from '../../components/MXButton';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
@@ -22,7 +22,16 @@ import LVPasswordDialog from '../Common/LVPasswordDialog';
 import { backupWallet } from '../../utils/MXUtils';
 import LVWalletManager from '../../logic/LVWalletManager';
 
-export default class WalletCreateSuccessPage extends Component {
+type Props = {
+    navigation: Object,
+    screenProps: Object
+};
+
+type State = {
+    alertMessage: string
+};
+
+export default class WalletCreateSuccessPage extends Component<Props,State> {
     static navigationOptions = {
         header: null,
         tabBarVisible: false
@@ -38,8 +47,16 @@ export default class WalletCreateSuccessPage extends Component {
         };
     }
 
-    state: {
-        alertMessage: string
+    componentDidMount() {
+        StatusBar.setBarStyle('default', true);
+        LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
+        if (Platform.OS === 'android') {
+            BackHandler.addEventListener("hardwareBackPress", this.handleBack.bind(this));
+        }
+    }
+
+    handleBack = () => {
+        LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
     };
 
     onVerifyResult(success: boolean, password: string) {
@@ -57,9 +74,7 @@ export default class WalletCreateSuccessPage extends Component {
         setTimeout(async ()=>{
             try {
                 await backupWallet(wallet, password);
-                setTimeout(() => {
-                    this.refs.disclaimer.show();
-                }, 600);
+                this.goBack();
             } catch (error) {
                 if(error === 'cancelled') {
                     return;
@@ -75,7 +90,19 @@ export default class WalletCreateSuccessPage extends Component {
     }
 
     onPressWalletBackupButton() {
-        this.refs.passwordConfirm.show();
+        this.refs.disclaimer.show();
+    }
+
+    onPressBackupLaterButton() {
+        this.goBack();
+    }
+
+    goBack() {
+        if (this.props.screenProps.dismiss) {
+            this.props.screenProps.dismiss();
+        } else {
+            this.props.navigation.goBack();
+        }
     }
 
     async verifyPassword(inputPwd: string) {
@@ -93,7 +120,6 @@ export default class WalletCreateSuccessPage extends Component {
                 <MXNavigatorHeader
                     title={LVStrings.wallet_create_wallet}
                     onLeftPress={() => {
-                        LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
                         if (this.props.screenProps.dismiss) {
                             this.props.screenProps.dismiss();
                         } else {
@@ -101,36 +127,50 @@ export default class WalletCreateSuccessPage extends Component {
                         }
                     }}
                 />
-                <Image source={createSuccessImage} style={styles.image} />
-                <Text style={styles.text}>{LVStrings.wallet_create_success}</Text>
-                <Text style={styles.detailText}>{LVStrings.wallet_create_success_comment}</Text>
-                <MXButton
-                    rounded
-                    title={LVStrings.profile_wallet_backup}
-                    onPress={this.onPressWalletBackupButton.bind(this)}
-                    themeStyle={'active'}
-                    style={styles.backupButton}
-                />
-                <LVDialog
+                <View style={styles.contentContainer}>
+                    <Image source={createSuccessImage} style={styles.image} />
+                    <Text style={styles.text}>{LVStrings.wallet_create_success}</Text>
+                    <Text style={styles.detailText}>{LVStrings.wallet_create_success_comment}</Text>
+                    <MXButton
+                        rounded
+                        title={LVStrings.profile_wallet_backup}
+                        onPress={this.onPressWalletBackupButton.bind(this)}
+                        style={styles.backupButton}
+                        isEmptyButtonType={true}
+                    />
+                    <MXButton
+                        rounded
+                        title={LVStrings.profile_wallet_backup_later}
+                        onPress={this.onPressBackupLaterButton.bind(this)}
+                        style={styles.backupButton}
+                        isEmptyButtonType={true}
+                    />
+                    <LVDialog
                     ref={'disclaimer'}
                     height={230}
                     title={LVStrings.wallet_disclaimer}
-                    titleStyle={{ color: 'red' }}
+                    titleStyle={{ color: LVColor.text.grey2,fontSize: 18,fontWeight: '500' }}
                     message={LVStrings.wallet_disclaimer_content}
                     buttonTitle={LVStrings.common_confirm}
-                    onPress={() => this.refs.disclaimer.dismiss()}
+                    onPress={() => {
+                        this.refs.disclaimer.dismiss();
+                        setTimeout(() => {
+                            this.refs.passwordConfirm.show();
+                        }, 300);
+                    }}
                 />
-                <LVPasswordDialog
-                    ref={'passwordConfirm'}
-                    verify={this.verifyPassword.bind(this)}
-                    onVerifyResult={this.onVerifyResult.bind(this)}
-                />
-                <LVDialog
-                    ref={'alert'}
-                    title={LVStrings.alert_hint}
-                    message={this.state.alertMessage}
-                    buttonTitle={LVStrings.alert_ok}
-                />
+                    <LVPasswordDialog
+                        ref={'passwordConfirm'}
+                        verify={this.verifyPassword.bind(this)}
+                        onVerifyResult={this.onVerifyResult.bind(this)}
+                    />
+                    <LVDialog
+                        ref={'alert'}
+                        title={LVStrings.alert_hint}
+                        message={this.state.alertMessage}
+                        buttonTitle={LVStrings.alert_ok}
+                    />
+                </View>
             </View>
         );
     }
@@ -144,14 +184,17 @@ const Window = {
 const styles = LVStyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
         backgroundColor: LVColor.white
     },
+    contentContainer: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        marginTop: 91
+    },
     image: {
-        marginTop: Window.width < 500 ? 36 : 50,
-        width: 145,
-        height: 145
+        width: 90,
+        height: 90
     },
     text: {
         fontSize: 18,

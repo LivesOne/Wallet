@@ -109,7 +109,6 @@ class ReceiveTip extends Component {
                 style={styles.qrcode_pic}
                 value={TransferUtils.convertAddr2Iban(this.state.wallet.address)}
                 size={162}
-                //logo={lvt}
                 bgColor='white'
                 fgColor='black'/>
 
