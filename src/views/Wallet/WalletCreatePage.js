@@ -187,7 +187,7 @@ export default class WalletCreatePage extends Component<Props,State> {
                     buttonTitle={LVStrings.alert_ok}
                     messageStyle={{color:LVColor.text.yellow, marginBottom: 13}}
                     width={280}
-                    height={180}/>
+                    height={210}/>
             </LVKeyboardDismissView>
         </KeyboardAwareScrollView>  
         )
