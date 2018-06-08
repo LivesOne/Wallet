@@ -139,7 +139,7 @@ const localized_strings = {
     transaction_block_number: '区块',
     transaction_hash: '交易号',
     transaction_time: '交易时间',
-    transaction_failure_message: '交易已打包，矿工费不足，交易失败。',
+    transaction_failure_message: '转账失败，请合理配置矿工费。',
     transaction_does_not_exist_message: '交易不存在，矿工费退回原钱包。',
 
     // Transfer 转账
