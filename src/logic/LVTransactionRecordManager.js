@@ -84,18 +84,23 @@ class LVTransactionRecord {
         return record;
     }
 
-    setRecordDetail(detailJson: any) {
-        const error = detailJson.error || false;
-        const timestamp = detailJson.timestamp || 0;
+    setRecordDetail(detailJson: Object) {
 
-        if (error) {
-            this.state = 'failed';
-        } else if (timestamp === 0) {
-            this.state = 'waiting';
+        if (Object.keys(detailJson).length == 0) {
+            this.state = 'notexist';
         } else {
-            this.state = 'ok';
-            this.timestamp = timestamp;
-            this.minnerFee = new Big(detailJson.gas * detailJson.gasPrice * Math.pow(10, -18));
+            const error = detailJson.error || false;
+            const timestamp = detailJson.timestamp || 0;
+
+            if (error) {
+                this.state = 'failed';
+            } else if (timestamp === 0) {
+                this.state = 'waiting';
+            } else {
+                this.state = 'ok';
+                this.timestamp = timestamp;
+                this.minnerFee = new Big(detailJson.gas * detailJson.gasPrice * Math.pow(10, -18));
+            }
         }
     }
 
@@ -140,6 +145,8 @@ export default class LVTransactionRecordManager {
             wallet.addHoldingBalance(record.token, record.amount);
             wallet.addHoldingBalance(LVWallet.ETH_TOKEN, record.minnerFee);
 
+            LVWalletManager.saveToDisk();
+
             LVNotificationCenter.postNotification(LVNotification.transcationRecordsChanged);
         }
     }
@@ -174,6 +181,8 @@ export default class LVTransactionRecordManager {
         const wallet = LVWalletManager.getSelectedWallet();
         if (wallet === null || wallet === undefined) return;
 
+        await this.refreshInProgressTransactionRecords(token);
+
         var address = wallet.address;
         if (address.substr(0, 2).toLowerCase() != '0x') {
             address = '0x' + address;
@@ -181,7 +190,6 @@ export default class LVTransactionRecordManager {
 
         const history: ?Array<any> = await LVNetworking.fetchTransactionHistory(address, token);
         if (history === null || history === undefined) return;
-        console.log(history);
 
         const trans_records: ?Array<LVTransactionRecord> = history.map(json => LVTransactionRecord.recordFromJson(json, token));
         if (trans_records === null || trans_records === undefined || trans_records.length === 0) return;
@@ -198,8 +206,17 @@ export default class LVTransactionRecordManager {
             }
         }
 
+        this.records.sort((a, b) => b.timestamp - a.timestamp);
+
+        await this.saveRecordsToLocal();
+    }
+
+    static async refreshInProgressTransactionRecords(token: string) {
+        const wallet = LVWalletManager.getSelectedWallet();
+        if (wallet === null || wallet === undefined) return;
+
         for (var record of this.records) {
-            if (record.state === 'waiting') {
+            if (record.token === token && record.state === 'waiting') {
                 const detail = await LVNetworking.fetchTransactionDetail(record.hash);
                 record.setRecordDetail(detail);
 
@@ -209,10 +226,6 @@ export default class LVTransactionRecordManager {
                 }
             }
         }
-
-        this.records.sort((a, b) => b.timestamp - a.timestamp);
-
-        await this.saveRecordsToLocal();
     }
 }
 

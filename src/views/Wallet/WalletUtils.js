@@ -97,7 +97,7 @@ export default class WalletUtils {
     }
 
     static isPasswordValid(password: string) {
-        return /^[a-zA-Z0-9-\\:;()$&@\"\.,\?!'\[\]{}#%^*+=_|~<>€£¥•]{6,12}$/i.test(password);
+        return /^[a-zA-Z0-9-\\:;()$&@\"\.,\?!'\[\]{}#%^*+=_|~<>€£¥•\/]{6,12}$/i.test(password);
     }
 
     static isNameValid(name: string) {
@@ -140,9 +140,9 @@ export default class WalletUtils {
     }
 
     static log(msg: string) {
-      // if (__DEV__) {
-      //     console.log('wallet ---> ' + msg);
-      // }
-      console.log('wallet ---> ' + msg);
+      if (__DEV__) {
+          console.log('wallet ---> ' + msg);
+      }
+      // console.log('wallet ---> ' + msg);
   }
 }

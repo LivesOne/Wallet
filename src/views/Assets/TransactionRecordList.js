@@ -159,12 +159,14 @@ class LVTransactionRecordItem extends React.PureComponent<ItemProps> {
                         {state === 'ok' ? (
                             <View style={styles.amountView}>
                                 <Text style={styles.amountText} numberOfLines={1}>{amountString}</Text>
-                                <Text style={styles.tokenText} numberOfLines={1}>{ ' ' + token}</Text>
+                                <Text style={styles.tokenText}>{ ' ' + token}</Text>
                             </View>
                         ) : state === 'waiting' ? (
                             <Text style={styles.statusText}>{LVStrings.transaction_waiting}</Text>
                         ) : state === 'failed' ? (
                             <Text style={styles.statusText}>{LVStrings.transaction_failed}</Text>
+                        ) : state === 'notexist' ? (
+                            <Text style={styles.statusText}>{LVStrings.transaction_does_not_exist}</Text>
                         ) : (
                             <View />
                         )}

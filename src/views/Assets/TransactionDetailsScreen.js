@@ -15,6 +15,7 @@ import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVTransactionRecordManager, { LVTransactionRecord } from '../../logic/LVTransactionRecordManager';
 import LVUtils, { StringUtils } from '../../utils';
 import { LVBalanceShowView } from '../Common/LVBalanceShowView';
+import Big from 'big.js';
 
 const failureImg = require('../../assets/images/transaction_failure.png');
 const waitingImg = require('../../assets/images/transaction_wating.png');
@@ -38,7 +39,7 @@ export default class TransactionDetailsScreen extends Component<Props> {
         const is_failed = false;
         const prefix = type === 'in' ? '+' : '-';
         const hasShrink = StringUtils.beautifyBalanceShow(amount).hasShrink;
-        const feeString = StringUtils.convertAmountToCurrencyString(minnerFee) + ' ETH';
+        const feeString = Big(minnerFee).toFixed() + ' ETH';
         const payerAddress = StringUtils.converAddressToDisplayableText(from, 9, 11);
         const receiverAddress = StringUtils.converAddressToDisplayableText(to, 9, 11);
         //const remarks = transactionRecord.remarks || LVStrings.transaction_na;
@@ -75,6 +76,9 @@ export default class TransactionDetailsScreen extends Component<Props> {
                             <LVSubTitleCell title={LVStrings.transaction_minner_fee} value={feeString} />
                             {state === 'failed' && (
                                 <Text style={styles.failureText}>{LVStrings.transaction_failure_message}</Text>
+                            )}
+                            {state === 'notexist' && (
+                                <Text style={styles.failureText}>{LVStrings.transaction_does_not_exist_message}</Text>
                             )}
                         </View>
                         {state === 'ok' && (
