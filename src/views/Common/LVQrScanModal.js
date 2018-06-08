@@ -2,13 +2,14 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Easing, TextInput, Platform, Dimensions } from 'react-native';
+import { Alert,NativeModules,Text, View, StyleSheet, Easing, TextInput, Platform, Dimensions } from 'react-native';
 import Modal from 'react-native-modalbox';
 import LVColor from './../../styles/LVColor';
 import LVStrings from './../../assets/localization';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import TransferUtils from '../Transfer/TransferUtils';
 import { getDeviceHeight, isIphoneX } from '../../utils/MXUtils';
+import Permissions from 'react-native-permissions';
 
 const CAMERA_WIDTH = Dimensions.get('window').width;
 const CAMERA_HEIGHT = getDeviceHeight();
@@ -47,7 +48,32 @@ export class LVQrScanModal extends React.Component<Props, State> {
         this.onClosed();
     }
 
+    async componentWillReceiveProps(nextProps){
+        if(Platform.OS === 'android'){
+            const response = await Permissions.request('camera');
+            if(this.props.isOpen && response === 'authorized'){
+                // 兼容部分国产机型，拒绝权限之后返回的依然是允许权限
+                const granted = await NativeModules.LVReactExport.checkCameraPermission();
+                if(!granted){
+                    this.onClosed();
+                    Alert.alert(
+                        LVStrings.can_not_access_camera,
+                        LVStrings.please_set_camera_author,
+                        [
+                            {
+                                text: LVStrings.common_confirm,
+                                onPress: () => console.log('Permission denied'),
+                                style: 'cancel',
+                            },
+                        ],
+                    )
+                }
+            }
+        }
+    }
+
     render() {
+
         return (
             <Modal
                 isOpen={this.props.isOpen}
