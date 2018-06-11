@@ -76,6 +76,7 @@ export default class MXSearchBar extends Component<Props,State> {
                             value={this.state.currentText}
                             keyboardType={keyboardType}
                             style={styles.textInput}
+                            returnKeyType={'search'}
                             clearButtonMode={'while-editing'}
                             onChangeText={this.onChangeText.bind(this)}
                             onFocus={() => {
