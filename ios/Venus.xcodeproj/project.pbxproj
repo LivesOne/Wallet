@@ -94,6 +94,7 @@
 		8CA2E9C8F2416EC6F4237322 /* Pods_VenusStore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33423C8AC651D9D8C9354ED8 /* Pods_VenusStore.framework */; };
 		97934BF6F8F340A681D379B7 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C2F47B60FF6D4CAB8C47F745 /* libRNSVG.a */; };
 		AB03E44320AD61990035CD4C /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB03E44020AD5EFD0035CD4C /* libRNDeviceInfo.a */; };
+		AB3F543720CE8960002C69A0 /* VenusStore-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AB3F543620CE8960002C69A0 /* VenusStore-Info.plist */; };
 		ABA19A7D20B800D300D036BB /* libRCTCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABA19A7C20B800B200D036BB /* libRCTCamera.a */; };
 		ABB07D7120C6760400AA469B /* MXUpgradeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = ABB07D7020C6760400AA469B /* MXUpgradeTask.m */; };
 		ABB07D7420C67AFD00AA469B /* LVConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = ABB07D7320C67AFD00AA469B /* LVConfiguration.m */; };
@@ -576,7 +577,6 @@
 		5626229F1F7513E4009581B6 /* libscrypt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libscrypt.h; sourceTree = "<group>"; };
 		562622A01F7513E4009581B6 /* crypto_scrypt-hexconvert.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "crypto_scrypt-hexconvert.c"; sourceTree = "<group>"; };
 		5656774B20CA84870033349A /* VenusStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VenusStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		5656774C20CA84880033349A /* VenusStore.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = VenusStore.plist; path = ../VenusStore.plist; sourceTree = "<group>"; };
 		565857BF01262EF5909975D1 /* Pods_Venus.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Venus.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		56738E7C1F96FA7200EA481F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		56738E7E1F96FA7400EA481F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -595,6 +595,7 @@
 		A1852B34075C485E97D33AAC /* RNSVG.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		A21159CA937C483A85BE96FB /* libRNDeviceInfo-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNDeviceInfo-tvOS.a"; sourceTree = "<group>"; };
 		A51535170006A27A4CC537C9 /* Pods-Venus.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Venus.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-Venus/Pods-Venus.adhoc.xcconfig"; sourceTree = "<group>"; };
+		AB3F543620CE8960002C69A0 /* VenusStore-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "VenusStore-Info.plist"; sourceTree = "<group>"; };
 		ABA19A7720B800B100D036BB /* RCTCamera.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTCamera.xcodeproj; path = "../node_modules/react-native-camera/ios/RCTCamera.xcodeproj"; sourceTree = "<group>"; };
 		ABB07D6F20C6760400AA469B /* MXUpgradeTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXUpgradeTask.h; path = Venus/MXUpgradeTask.h; sourceTree = "<group>"; };
 		ABB07D7020C6760400AA469B /* MXUpgradeTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXUpgradeTask.m; path = Venus/MXUpgradeTask.m; sourceTree = "<group>"; };
@@ -1064,8 +1065,8 @@
 		ABBEEF9320C673A000F5CD27 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				5656774C20CA84880033349A /* VenusStore.plist */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
+				AB3F543620CE8960002C69A0 /* VenusStore-Info.plist */,
 				56738E7D1F96FA7200EA481F /* InfoPlist.strings */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
@@ -1751,6 +1752,7 @@
 			files = (
 				ABB5F98B20BD179000C8D4FE /* DIN Alternate Bold.ttf in Resources */,
 				ABB5F98A20BD179000C8D4FE /* SF-Pro-Text-Regular.otf in Resources */,
+				AB3F543720CE8960002C69A0 /* VenusStore-Info.plist in Resources */,
 				ABB5F98D20BD179000C8D4FE /* SF-Pro-Text-Medium.otf in Resources */,
 				ABB5F98C20BD179000C8D4FE /* SF-Pro-Text-Semibold.otf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
@@ -2106,7 +2108,7 @@
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)/../node_modules/react-native-appupdate/ios/RNAppUpdate",
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/VenusStore.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Supporting Files/VenusStore-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -2162,7 +2164,7 @@
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)/../node_modules/react-native-appupdate/ios/RNAppUpdate",
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/VenusStore.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Supporting Files/VenusStore-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -2218,7 +2220,7 @@
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)/../node_modules/react-native-appupdate/ios/RNAppUpdate",
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/VenusStore.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Supporting Files/VenusStore-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -2274,7 +2276,7 @@
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)/../node_modules/react-native-appupdate/ios/RNAppUpdate",
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/VenusStore.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Supporting Files/VenusStore-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
