@@ -79,7 +79,6 @@
 		5656773720CA84870033349A /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CB48482F9934199926BA833 /* libSplashScreen.a */; };
 		5656773820CA84870033349A /* libCodePush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6768EF4B6A94B0CB5CAC461 /* libCodePush.a */; };
 		5656773920CA84870033349A /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F4811B496A2549A799633CCA /* libz.tbd */; };
-		5656773A20CA84870033349A /* Pods_Venus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 565857BF01262EF5909975D1 /* Pods_Venus.framework */; };
 		5656773C20CA84870033349A /* DIN Alternate Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ABB5F98720BD179000C8D4FE /* DIN Alternate Bold.ttf */; };
 		5656773D20CA84870033349A /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = ABB5F98620BD179000C8D4FE /* SF-Pro-Text-Regular.otf */; };
 		5656773E20CA84870033349A /* SF-Pro-Text-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = ABB5F98920BD179000C8D4FE /* SF-Pro-Text-Medium.otf */; };
@@ -92,6 +91,7 @@
 		593FEE7AB69D42F295337AE6 /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CB48482F9934199926BA833 /* libSplashScreen.a */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		8CA2E9C8F2416EC6F4237322 /* Pods_VenusStore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33423C8AC651D9D8C9354ED8 /* Pods_VenusStore.framework */; };
 		97934BF6F8F340A681D379B7 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C2F47B60FF6D4CAB8C47F745 /* libRNSVG.a */; };
 		AB03E44320AD61990035CD4C /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB03E44020AD5EFD0035CD4C /* libRNDeviceInfo.a */; };
 		ABA19A7D20B800D300D036BB /* libRCTCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABA19A7C20B800B200D036BB /* libRCTCamera.a */; };
@@ -554,10 +554,12 @@
 		21EAEA210AD4432DBB010D93 /* libTcpSockets.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libTcpSockets.a; sourceTree = "<group>"; };
 		2944C8227E60490EBD4BC55C /* RNFS.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFS.xcodeproj; path = "../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; };
 		2E36C2617A944B6FBB75EACA /* ReactNativeLocalization.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeLocalization.xcodeproj; path = "../node_modules/react-native-localization/ReactNativeLocalization.xcodeproj"; sourceTree = "<group>"; };
+		33423C8AC651D9D8C9354ED8 /* Pods_VenusStore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VenusStore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F43DB565FEF45EC83B57192 /* UdpSockets.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = UdpSockets.xcodeproj; path = "../node_modules/react-native-udp/ios/UdpSockets.xcodeproj"; sourceTree = "<group>"; };
 		3F684093B72345E7B56476AC /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = SplashScreen.xcodeproj; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; };
 		42F919510AFB4FAD85DF0C09 /* libRNFS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFS.a; sourceTree = "<group>"; };
 		43B5BBBE7C4A4CE9A47D79ED /* libRNDeviceInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNDeviceInfo.a; sourceTree = "<group>"; };
+		507F3A47E0131AAA684E9C23 /* Pods-VenusStore.appstore.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VenusStore.appstore.xcconfig"; path = "Pods/Target Support Files/Pods-VenusStore/Pods-VenusStore.appstore.xcconfig"; sourceTree = "<group>"; };
 		562622921F7513E2009581B6 /* crypto_scrypt-check.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "crypto_scrypt-check.c"; sourceTree = "<group>"; };
 		562622931F7513E2009581B6 /* b64.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = b64.c; sourceTree = "<group>"; };
 		562622941F7513E2009581B6 /* crypto_scrypt-nosse.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "crypto_scrypt-nosse.c"; sourceTree = "<group>"; };
@@ -574,7 +576,7 @@
 		5626229F1F7513E4009581B6 /* libscrypt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libscrypt.h; sourceTree = "<group>"; };
 		562622A01F7513E4009581B6 /* crypto_scrypt-hexconvert.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "crypto_scrypt-hexconvert.c"; sourceTree = "<group>"; };
 		5656774B20CA84870033349A /* VenusStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VenusStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		5656774C20CA84880033349A /* VenusStore.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = VenusStore.plist; path = /Users/Charles/Work/wallet/Wallet/ios/VenusStore.plist; sourceTree = "<absolute>"; };
+		5656774C20CA84880033349A /* VenusStore.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = VenusStore.plist; path = ../VenusStore.plist; sourceTree = "<group>"; };
 		565857BF01262EF5909975D1 /* Pods_Venus.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Venus.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		56738E7C1F96FA7200EA481F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		56738E7E1F96FA7400EA481F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -583,10 +585,13 @@
 		62840C1FE64D4FB1A2C3C2EA /* TcpSockets.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = TcpSockets.xcodeproj; path = "../node_modules/react-native-tcp/ios/TcpSockets.xcodeproj"; sourceTree = "<group>"; };
 		6E3BE2A5B0B64715BCC34EAC /* RNOS.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNOS.xcodeproj; path = "../node_modules/react-native-os/ios/RNOS.xcodeproj"; sourceTree = "<group>"; };
 		6FA75BA1A16748DA970435EC /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
+		77A5988F92E874ED44C6D8A0 /* Pods-VenusStore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VenusStore.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VenusStore/Pods-VenusStore.debug.xcconfig"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		7B13E38CE0DC48F19A919406 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
 		7B3F591024AE45A5B15AAF80 /* libLRDRCTSimpleToast.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libLRDRCTSimpleToast.a; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		8D812BAF65601C633AF365AC /* Pods-VenusStore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VenusStore.release.xcconfig"; path = "Pods/Target Support Files/Pods-VenusStore/Pods-VenusStore.release.xcconfig"; sourceTree = "<group>"; };
+		95FD73CE973FC07DE310B389 /* Pods-VenusStore.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VenusStore.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-VenusStore/Pods-VenusStore.adhoc.xcconfig"; sourceTree = "<group>"; };
 		A1852B34075C485E97D33AAC /* RNSVG.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		A21159CA937C483A85BE96FB /* libRNDeviceInfo-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNDeviceInfo-tvOS.a"; sourceTree = "<group>"; };
 		A51535170006A27A4CC537C9 /* Pods-Venus.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Venus.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-Venus/Pods-Venus.adhoc.xcconfig"; sourceTree = "<group>"; };
@@ -692,7 +697,7 @@
 				5656773720CA84870033349A /* libSplashScreen.a in Frameworks */,
 				5656773820CA84870033349A /* libCodePush.a in Frameworks */,
 				5656773920CA84870033349A /* libz.tbd in Frameworks */,
-				5656773A20CA84870033349A /* Pods_Venus.framework in Frameworks */,
+				8CA2E9C8F2416EC6F4237322 /* Pods_VenusStore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1002,6 +1007,10 @@
 				C73A88ADF2702AF18F9542E4 /* Pods-Venus.release.xcconfig */,
 				60DA7B38A8183B2B1C42D94A /* Pods-Venus.appstore.xcconfig */,
 				A51535170006A27A4CC537C9 /* Pods-Venus.adhoc.xcconfig */,
+				77A5988F92E874ED44C6D8A0 /* Pods-VenusStore.debug.xcconfig */,
+				8D812BAF65601C633AF365AC /* Pods-VenusStore.release.xcconfig */,
+				507F3A47E0131AAA684E9C23 /* Pods-VenusStore.appstore.xcconfig */,
+				95FD73CE973FC07DE310B389 /* Pods-VenusStore.adhoc.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1078,6 +1087,7 @@
 			children = (
 				F4811B496A2549A799633CCA /* libz.tbd */,
 				565857BF01262EF5909975D1 /* Pods_Venus.framework */,
+				33423C8AC651D9D8C9354ED8 /* Pods_VenusStore.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1793,7 +1803,7 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Venus-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-VenusStore-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1820,7 +1830,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Venus/Pods-Venus-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-VenusStore/Pods-VenusStore-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -1829,7 +1839,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Venus/Pods-Venus-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-VenusStore/Pods-VenusStore-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		68C87C88EC00ADDF564C9BA8 /* [CP] Embed Pods Frameworks */ = {
@@ -2064,7 +2074,7 @@
 		};
 		5656774720CA84870033349A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CB36181A55D2951E8F5B8CA8 /* Pods-Venus.debug.xcconfig */;
+			baseConfigurationReference = 77A5988F92E874ED44C6D8A0 /* Pods-VenusStore.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODEPUSH_KEY = "";
@@ -2121,7 +2131,7 @@
 		};
 		5656774820CA84870033349A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C73A88ADF2702AF18F9542E4 /* Pods-Venus.release.xcconfig */;
+			baseConfigurationReference = 8D812BAF65601C633AF365AC /* Pods-VenusStore.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODEPUSH_KEY = "MCJ2YoyhzE72Y1c3Gwds3mSvvJls2f191464-b88f-45a2-a983-441dbd3101ce";
@@ -2177,7 +2187,7 @@
 		};
 		5656774920CA84870033349A /* AppStore */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 60DA7B38A8183B2B1C42D94A /* Pods-Venus.appstore.xcconfig */;
+			baseConfigurationReference = 507F3A47E0131AAA684E9C23 /* Pods-VenusStore.appstore.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODEPUSH_KEY = "VGXUb-riUCd5uppqAjhKDYETRjI82f191464-b88f-45a2-a983-441dbd3101ce";
@@ -2233,7 +2243,7 @@
 		};
 		5656774A20CA84870033349A /* Adhoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A51535170006A27A4CC537C9 /* Pods-Venus.adhoc.xcconfig */;
+			baseConfigurationReference = 95FD73CE973FC07DE310B389 /* Pods-VenusStore.adhoc.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODEPUSH_KEY = "tR1fwfZjyXDNauExZL45oxTWSoX62f191464-b88f-45a2-a983-441dbd3101ce";
