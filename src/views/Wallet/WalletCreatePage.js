@@ -26,6 +26,8 @@ import LVFontSize from '../../styles/LVFontSize';
 import * as MXUtils from "../../utils/MXUtils";
 import { MXCrossInputHeight } from '../../styles/LVStyleSheet';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import LVNotificationCenter from '../../logic/LVNotificationCenter';
+import LVNotification from '../../logic/LVNotification';
 const backImg = require('../../assets/images/back.png');
 
 type Props = {
@@ -36,7 +38,8 @@ type State = {
     name : ?string,
     password: ?string,
     confirmPassword: ?string,
-    alertMessage: ?string
+    alertMessage: ?string,
+    fromScreen: ?string,
 };
 
 export default class WalletCreatePage extends Component<Props,State> {
@@ -54,11 +57,16 @@ export default class WalletCreatePage extends Component<Props,State> {
             name: null,
             password: null,
             confirmPassword: null,
-            alertMessage: ''
+            alertMessage: '',
+            fromScreen: null
         };
     }
 
     componentDidMount() {
+        const navigation = this.props.navigation;
+        if (navigation && navigation.state && navigation.state.params) {
+            this.setState({ fromScreen: navigation.state.params.from });
+        }
         this.refs.wallet_creation_alert.show();
     }
 
@@ -121,75 +129,78 @@ export default class WalletCreatePage extends Component<Props,State> {
             LVWalletManager.addWallet(wallet);
             LVWalletManager.saveToDisk();
             this.refs.toast.dismiss();
-            setTimeout(()=>this.props.navigation.navigate('SuccessPage', {wallet: wallet}),300);
+
+            LVNotificationCenter.postNotification(LVNotification.walletChanged);
+            
+            if (this.state.fromScreen === WalletUtils.OPEN_CREATE_FROM_WALLET_MANAGER) {
+                setTimeout(()=>this.props.navigation.goBack(),300);
+            } else {
+                setTimeout(()=>this.props.navigation.navigate('SuccessPage', {wallet: wallet}),300);
+            }
         },500);
     }
 
     render() {
         return (
-            <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{backgroundColor:LVColor.white}}
-            keyboardShouldPersistTaps = {'handled'}>
-                <LVKeyboardDismissView style={styles.container}>
+            <View style={styles.container}>
                 <MXNavigatorHeader
-                    left={ greyNavigationBackIcon }
-                    title={ LVStrings.wallet_create_wallet }
-                    onLeftPress={ () => {
-                        if(this.props.screenProps.dismiss) {
-                            this.props.screenProps.dismiss();
-                        } else {
-                            this.props.navigation.goBack();
-                        }
+                    left={greyNavigationBackIcon}
+                    title={LVStrings.wallet_create_wallet}
+                    onLeftPress={() => {
+                        this.props.navigation.goBack();
                     }}
                 />
-                <View style={styles.content}>
-                    <View style={styles.textInputContainer}>
-                        <MXCrossTextInput
-                            style={styles.crossInputStyle}
-                            placeholder={LVStrings.wallet_name_hint}
-                            titleText={LVStrings.wallet_create_name}
-                            textAlignCenter={true}
-                            withUnderLine={false}
-                            onTextChanged= {(text) => this.setState({name: text.trim()})}/>
-                        <MXCrossTextInput
-                            style={styles.crossInputStyle}
-                            placeholder={LVStrings.wallet_create_password}
-                            titleText={LVStrings.wallet_create_password_label}
-                            textAlignCenter={true}
-                            secureTextEntry
-                            withUnderLine={false}
-                            onTextChanged = {(text) => this.setState({password : text})}/>
-                        <MXCrossTextInput
-                            style={styles.crossInputStyle}
-                            placeholder={LVStrings.wallet_create_password_verify}
-                            titleText={LVStrings.wallet_create_confirm_password_label}
-                            textAlignCenter={true}
-                            secureTextEntry
-                            withUnderLine = {true}
-                            onTextChanged = {(text) => this.setState({confirmPassword : text})}/>
-                    </View>
-                    <View style={styles.bottomContainer}>
-                        <Text style={styles.descriptionTextStyle}>{LVStrings.wallet_create_explaination}</Text>
-                        <MXButton
-                            rounded                
-                            title={LVStrings.wallet_create}
-                            onPress = {() => {
-                                this.createWallet();
-                            }}
-                            themeStyle={"active"}
-                            style={styles.createButton}
-                        />
-                    </View>
-                </View>
-                <LVLoadingToast ref={'toast'} title={LVStrings.wallet_creating_wallet}/>
-                <LVDialog ref={'alert'} title={LVStrings.alert_hint} height={225} message={this.state.alertMessage || ''} buttonTitle={LVStrings.alert_ok}/>
+                <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: LVColor.white }} keyboardShouldPersistTaps={'handled'}>
+                    <LVKeyboardDismissView style={styles.content}>
+                        <View style={styles.textInputContainer}>
+                            <MXCrossTextInput
+                                style={styles.crossInputStyle}
+                                placeholder={LVStrings.wallet_name_hint}
+                                titleText={LVStrings.wallet_create_name}
+                                textAlignCenter={true}
+                                withUnderLine={false}
+                                onTextChanged={(text) => this.setState({ name: text.trim() })} />
+                            <MXCrossTextInput
+                                style={styles.crossInputStyle}
+                                placeholder={LVStrings.wallet_create_password}
+                                titleText={LVStrings.wallet_create_password_label}
+                                textAlignCenter={true}
+                                secureTextEntry
+                                withUnderLine={false}
+                                onTextChanged={(text) => this.setState({ password: text })} />
+                            <MXCrossTextInput
+                                style={styles.crossInputStyle}
+                                placeholder={LVStrings.wallet_create_password_verify}
+                                titleText={LVStrings.wallet_create_confirm_password_label}
+                                textAlignCenter={true}
+                                secureTextEntry
+                                withUnderLine={true}
+                                onTextChanged={(text) => this.setState({ confirmPassword: text })} />
+                        </View>
+                        <View style={styles.bottomContainer}>
+                            <Text style={styles.descriptionTextStyle}>{LVStrings.wallet_create_explaination}</Text>
+                            <MXButton
+                                rounded
+                                title={LVStrings.wallet_create}
+                                onPress={() => {
+                                    this.createWallet();
+                                }}
+                                themeStyle={"active"}
+                                style={styles.createButton}
+                            />
+                        </View>
+                    </LVKeyboardDismissView>
+                </KeyboardAwareScrollView>
+                <LVLoadingToast ref={'toast'} title={LVStrings.wallet_creating_wallet} />
+                <LVDialog ref={'alert'} title={LVStrings.alert_hint} height={225} message={this.state.alertMessage || ''} buttonTitle={LVStrings.alert_ok} />
                 <LVDialog ref={'wallet_creation_alert'}
-                    message={LVStrings.wallet_create_hint_message} 
+                    message={LVStrings.wallet_create_hint_message}
                     buttonTitle={LVStrings.alert_ok}
-                    messageStyle={{color:LVColor.text.yellow, marginBottom: 13}}
+                    messageStyle={{ color: LVColor.text.yellow, marginBottom: 13 }}
                     width={280}
-                    height={210}/>
-            </LVKeyboardDismissView>
-        </KeyboardAwareScrollView>  
+                    height={210} />
+            </View>
+             
         )
     }
 }
