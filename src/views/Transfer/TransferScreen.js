@@ -283,7 +283,7 @@ class TransferScreen extends Component<Props, State> {
 
     refreshWalletDatas = async (needUpdateBalance: boolean = true) => {
         if (needUpdateBalance) {
-            await LVWalletManager.updateWalletBalance();
+            await LVWalletManager.updateSelectedWalletBalance();
         }
         const wallet = LVWalletManager.getSelectedWallet();
         if (wallet) {

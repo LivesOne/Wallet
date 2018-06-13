@@ -136,7 +136,7 @@ class AssetsDetailsScreen extends Component<Props, State> {
             console.log('waitings: ' + cached_waitings.length + ' -> ' + waitings.length);
 
             if (records.length > cached_records.length || waitings.length < cached_waitings.length) {
-                await LVWalletManager.updateWalletBalance();
+                await LVWalletManager.updateSelectedWalletBalance();
                 const wallet = LVWalletManager.getSelectedWallet();
                 if (wallet) this.setState({ wallet: wallet, records: records });
             } else {

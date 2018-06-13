@@ -183,10 +183,7 @@ export default class LVTransactionRecordManager {
 
         await this.refreshInProgressTransactionRecords(token);
 
-        var address = wallet.address;
-        if (address.substr(0, 2).toLowerCase() != '0x') {
-            address = '0x' + address;
-        }
+        const address = wallet.address.substr(0, 2).toLowerCase() == '0x' ? wallet.address : '0x' + wallet.address;
 
         const history: ?Array<any> = await LVNetworking.fetchTransactionHistory(address, token);
         if (history === null || history === undefined) return;

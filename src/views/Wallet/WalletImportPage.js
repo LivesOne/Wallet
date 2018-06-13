@@ -201,6 +201,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
       try {
         let defaultName = await WalletUtils.getDefaultName();
         let wallet = await LVWalletManager.importWalletWithPrivatekey(defaultName, privateKeyPwd, privateKey);
+        await LVWalletManager.updateWalletBalance(wallet);
         this.refs.toast.dismiss();
         
         const success = LVWalletManager.addWallet(wallet);
