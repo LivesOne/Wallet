@@ -147,7 +147,11 @@ export default class WalletCreatePage extends Component<Props,State> {
                     left={greyNavigationBackIcon}
                     title={LVStrings.wallet_create_wallet}
                     onLeftPress={() => {
-                        this.props.navigation.goBack();
+                        if(this.props.screenProps && this.props.screenProps.dismiss) {
+                            this.props.screenProps.dismiss();
+                        } else if(this.props.navigation){
+                            this.props.navigation.goBack();
+                        }
                     }}
                 />
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: LVColor.white }} keyboardShouldPersistTaps={'handled'}>
