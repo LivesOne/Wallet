@@ -15,6 +15,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.venus.BuildConfig;
 import com.venus.CryptoUtils;
+import com.venus.permission.CameraPermissionChecker;
 
 import java.io.File;
 import java.io.IOException;
@@ -101,5 +102,11 @@ public class LVExportModule extends ReactContextBaseJavaModule {
         }else{
             promise.resolve(false);
         }
+    }
+
+    @ReactMethod
+    public void checkCameraPermission(Promise promise){
+        boolean granted = CameraPermissionChecker.checkCameraPermission();
+        promise.resolve(granted);
     }
 }

@@ -125,27 +125,33 @@ class WalletManager {
         return index === -1;
     }
 
-    async updateWalletBalance() {
-        const wallet = this.getSelectedWallet();
+    async updateWalletBalance(wallet: LVWallet) {
+        try {
+            const tokens_except_eth = await LVNetworking.fetchTokenList();
+            const tokens = [...tokens_except_eth, LVWallet.ETH_TOKEN];
+            const address = wallet.address.substr(0, 2).toLowerCase() == '0x' ? wallet.address : '0x' + wallet.address;
+            const balances = await LVNetworking.fetchBalances(address, tokens);
+            console.log(balances);
+
+            tokens.forEach(token => {
+                wallet.setBalance(token, balances[token]);
+            });
+
+            LVNotificationCenter.postNotification(LVNotification.balanceChanged);
+            
+            return true;
+        } catch (error) {
+            console.log('error in refresh wallet datas : ' + error);
+            return false;
+        }
+    }
+
+    async updateSelectedWalletBalance() {
+        let wallet = this.getSelectedWallet();
         if (wallet) {
-            try {
-                const tokens_except_eth = await LVNetworking.fetchTokenList();
-                const tokens = [...tokens_except_eth, LVWallet.ETH_TOKEN];
-                const balances = await LVNetworking.fetchBalances(wallet.address, tokens);
-                console.log(balances);
-
-                tokens.forEach(token => {
-                    wallet.setBalance(token, balances[token]);
-                });
-
-                await this.saveToDisk();
-                LVNotificationCenter.postNotification(LVNotification.balanceChanged);
-                
-                return true;
-            } catch (error) {
-                console.log('error in refresh wallet datas : ' + error);
-                return false;
-            }
+            const success = await this.updateWalletBalance(wallet);
+            await this.saveToDisk();
+            return success;
         } else {
             return true;
         }

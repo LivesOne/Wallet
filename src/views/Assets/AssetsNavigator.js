@@ -3,10 +3,10 @@
  * File: src/views/Assets/AssetsNavigator.js
  * @flow
  */
-"use strict";
+'use strict';
 
 import React from 'react';
-import { StackNavigator } from "react-navigation";
+import { StackNavigator } from 'react-navigation';
 
 import AssetsScreen from './AssetsScreen';
 import AssetsDetailsScreen from './AssetsDetailsScreen';
@@ -19,16 +19,26 @@ import AddEditContactPage from '../contacts/AddEditContactPage';
 import ContactsManagerPage from '../contacts/ContactsManagerPage';
 import LVTContactDetailPage from '../contacts/LVTContactDetailPage';
 
-const AssetsNavigator = StackNavigator({
+const AssetsMainNavigator = StackNavigator({
     Assets: { screen: AssetsScreen },
     AssetsDetails: { screen: AssetsDetailsScreen },
-    TransactionDetails: { screen: TransactionDetailsScreen },
-    Receive: { screen: ReceiveScreen },
-    Transfer: { screen: TransferScreen },
-    ReceiveTip: { screen: ReceiveScreen },
-    ContactList: { screen: ContactsManagerPage },
-    AddEditContactPage: { screen: AddEditContactPage },
-    LVTContactDetailPage: { screen: LVTContactDetailPage },
+    TransactionDetails: { screen: TransactionDetailsScreen }
 });
+
+const AssetsNavigator = StackNavigator(
+    {
+        Assets: { screen: AssetsMainNavigator },
+        Receive: { screen: ReceiveScreen },
+        Transfer: { screen: TransferScreen },
+        ReceiveTip: { screen: ReceiveTip },
+        ContactList: { screen: ContactsManagerPage },
+        AddEditContactPage: { screen: AddEditContactPage },
+        LVTContactDetailPage: { screen: LVTContactDetailPage }
+    },
+    {
+        mode: 'modal',
+        headerMode: 'none'
+    }
+);
 
 export default AssetsNavigator;

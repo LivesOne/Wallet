@@ -93,7 +93,9 @@ export default class AssetsImportPage extends React.Component<Props, State> {
       let fromPage = WalletUtils.OPEN_IMPORT_FROM_LAUNCH;
       if (this.props.screenProps && this.props.screenProps.from) {
         fromPage = this.props.screenProps.from;
-      } 
+      } else if (this.props.navigation.state.params.from) {
+        fromPage = this.props.navigation.state.params.from;
+      }
       console.log('from = ' + fromPage);
       this.setState({fromPage: fromPage});
       if (Platform.OS === 'android') {
@@ -148,8 +150,10 @@ export default class AssetsImportPage extends React.Component<Props, State> {
       } 
       LVNotificationCenter.postNotification(LVNotification.walletChanged);
       LVNotificationCenter.postNotification(LVNotification.balanceChanged, wallet);
-      if (this.props.screenProps.dismiss) {
+      if (this.props.screenProps && this.props.screenProps.dismiss) {
         this.props.screenProps.dismiss('success');
+      } else {
+        this.props.navigation.goBack();
       }
     }
 
@@ -197,6 +201,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
       try {
         let defaultName = await WalletUtils.getDefaultName();
         let wallet = await LVWalletManager.importWalletWithPrivatekey(defaultName, privateKeyPwd, privateKey);
+        await LVWalletManager.updateWalletBalance(wallet);
         this.refs.toast.dismiss();
         
         const success = LVWalletManager.addWallet(wallet);
@@ -322,7 +327,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
           <MXNavigatorHeader
             title = {LVStrings.wallet_import_header}
             onLeftPress = {() => {
-                if(this.props.screenProps.dismiss) {
+                if(this.props.screenProps && this.props.screenProps.dismiss) {
                     this.props.screenProps.dismiss('canceled');
                 } else if(this.props.navigation){
                     this.props.navigation.goBack();

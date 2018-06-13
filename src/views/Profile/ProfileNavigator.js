@@ -20,13 +20,13 @@ import WalletImportPage from '../Wallet/WalletImportPage';
 import ContactsManagerPage from '../contacts/ContactsManagerPage';
 import AddEditContactPage from '../contacts/AddEditContactPage';
 import LVTContactDetailPage from '../contacts/LVTContactDetailPage';
-import AssetsDetailsScreen from '../Assets/AssetsDetailsScreen'
+import AssetsDetailsScreen from '../Assets/AssetsDetailsScreen';
 import TransactionDetailsScreen from '../Assets/TransactionDetailsScreen';
 import ReceiveTip from '../Receive/ReceiveTip';
 import ReceiveScreen from '../Receive/ReceiveScreen';
 import TransferScreen from '../Transfer/TransferScreen';
 
-const ProfileNavigator = StackNavigator(
+const ProfileMainNavigator = StackNavigator(
     {
         Profile: { screen: ProfileScreen },
         About: { screen: AboutScreen },
@@ -34,19 +34,17 @@ const ProfileNavigator = StackNavigator(
         WalletDetailsPage: { screen: WalletDetailsPage },
         ModifyWalletName: { screen: ModifyWalletName },
         ModifyWalletPwd: { screen: ModifyWalletPwd },
-        WalletCreatePage: { screen: WalletCreatePage },
-        WalletImportPage: { screen: WalletImportPage },
         ContactList: { screen: ContactsManagerPage },
         AddEditContactPage: { screen: AddEditContactPage },
         LVTContactDetailPage: { screen: LVTContactDetailPage },
         AssetsDetails: { screen: AssetsDetailsScreen },
         TransactionDetails: { screen: TransactionDetailsScreen },
         Transfer: { screen: TransferScreen },
-        ReceiveTip: { screen: ReceiveScreen },
+        ReceiveTip: { screen: ReceiveScreen }
     },
     {
+        mode: 'card',
         headerMode: 'none',
-        mode: Platform.OS === 'ios' ? 'card' : 'card',
         navigationOptions: {
             gesturesEnabled: true
         },
@@ -74,6 +72,18 @@ const ProfileNavigator = StackNavigator(
                 return { opacity, transform: [{ translateY }] };
             }
         })
+    }
+);
+
+const ProfileNavigator = StackNavigator(
+    {
+        Profile: { screen: ProfileMainNavigator },
+        WalletCreatePage: { screen: WalletCreatePage },
+        WalletImportPage: { screen: WalletImportPage }
+    },
+    {
+        mode: 'modal',
+        headerMode: 'none'
     }
 );
 

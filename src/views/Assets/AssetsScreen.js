@@ -142,7 +142,7 @@ class AssetsScreen extends Component<Props, State> {
                 }
             }
     
-            const success = await LVWalletManager.updateWalletBalance();
+            const success = await LVWalletManager.updateSelectedWalletBalance();
             if (success) {
                 await LVPersistent.setNumber(LVLastAssetsRefreshTimeKey, Moment().format('X'));
                 

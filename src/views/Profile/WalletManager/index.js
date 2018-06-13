@@ -14,7 +14,6 @@ import LVColor from '../../../styles/LVColor';
 import LVFontSize from '../../../styles/LVFontSize';
 import LVGradientPanel from '../../../views/Common/LVGradientPanel';
 import { converAddressToDisplayableText,adjust } from '../../../utils/MXStringUtils';
-import LVFullScreenModalView from '../../Common/LVFullScreenModalView';
 import LVWalletCreationNavigator from '../../Wallet/LVWalletCreationNavigator';
 import WalletImportPage from '../../Wallet/WalletImportPage';
 import LVWalletManager from '../../../logic/LVWalletManager';
@@ -43,8 +42,7 @@ type State = {
 export class WalletManagerScreen extends Component<Props, State> {
     static navigationOptions = {
         header: null,
-        tabBarVisible: false,
-        gesturesEnabled: false
+        tabBarVisible: false
     };
 
     onCreateWalletPressed : Function;
@@ -73,11 +71,11 @@ export class WalletManagerScreen extends Component<Props, State> {
     }
     
     onCreateWalletPressed() {
-        this.refs.creationPage.show();
+        this.props.navigation.navigate('WalletCreatePage', { from: WalletUtils.OPEN_CREATE_FROM_WALLET_MANAGER });
     }
 
     onImportWalletPressed() {
-        this.refs.importPage.show();
+        this.props.navigation.navigate('WalletImportPage', { from: WalletUtils.OPEN_IMPORT_FROM_WALLET_MANAGER });
     }
 
     handleWalletChange() {
@@ -150,21 +148,6 @@ export class WalletManagerScreen extends Component<Props, State> {
                         </TouchableHighlight>
                     </View>
                 </View>
-                <LVFullScreenModalView ref={'creationPage'}>
-                    <LVWalletCreationNavigator screenProps={{dismiss: ()=> {
-                        console.log('dissmissing');
-                        this.refs.creationPage.dismiss()
-                        this.handleWalletChange();
-                    } 
-                }}/>
-                </LVFullScreenModalView>
-                <LVFullScreenModalView ref={'importPage'}>
-                    <LVWalletImportNavigator screenProps={{dismiss: ()=> {
-                        this.refs.importPage.dismiss();
-                        this.handleWalletChange();
-                    }, from: WalletUtils.OPEN_IMPORT_FROM_WALLET_MANAGER, 
-                }}/>
-                </LVFullScreenModalView>
             </View>
         );
     }

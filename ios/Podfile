@@ -10,6 +10,10 @@ target 'Venus' do
     base_pods
 end
 
+target 'VenusStore' do
+    base_pods
+end
+
 # Other configurations
 post_install do |installer|
     installer.pods_project.targets.each do |target|

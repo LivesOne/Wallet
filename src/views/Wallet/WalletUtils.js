@@ -81,6 +81,7 @@ export default class WalletUtils {
     static OPEN_IMPORT_FROM_LAUNCH = 'open_import_from_launch';
     static OPEN_IMPORT_FROM_WALLET_MANAGER = 'open_import_from_wallet_manager';
     static OPEN_IMPORT_FROM_MODIFY_PASSWORD = 'open_import_from_modify_password';
+    static OPEN_CREATE_FROM_WALLET_MANAGER = 'open_create_from_wallet_manager';
 
     static isValidKeyStoreObj(jsonObj: Object) {
         var validate = ajv.compile(KEY_STORE_JSON_SCHEMA);
