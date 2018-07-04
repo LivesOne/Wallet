@@ -55,11 +55,11 @@ class XcodeProjectHelper:
                 return config_list
         return None
     
-    def clone_build_config(self, config, new_name):
+    def clone_build_config(self, config, name):
         obj = {
             u'_id': XCBuildConfiguration._generate_id(),
             u'isa': XCBuildConfiguration.__name__,
-            u'name': new_name,
+            u'name': name,
             u'buildSettings': config.buildSettings
             }
         base_config_ref = config['baseConfigurationReference']
@@ -131,7 +131,6 @@ def update_project(pbxPath):
 
                 for source_config in source_configs:
                     clone = helper.clone_build_config(source_config, dest_config_name)
-                    clone['name'] = dest_config_name
                     clone_key = clone.get_id()
 
                     helper._project.objects[clone_key] = clone
