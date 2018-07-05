@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     },
     tipsContainner: {
         height: 35,
-        width: 200,
+        width: 135,
         backgroundColor: LVColor.text.yellow,
         justifyContent: 'center',
         alignItems: 'center',

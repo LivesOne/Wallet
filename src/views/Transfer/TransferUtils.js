@@ -95,7 +95,7 @@ export default class TransferUtils {
 
     // 显示八位小数
     static convertMinnerGap(value: number) {
-        return value.toFixed(18);
+        return value.toFixed(8);
     }
 
     static convertToHexHeader(hexStr: string) {
