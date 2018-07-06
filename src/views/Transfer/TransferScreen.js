@@ -57,6 +57,7 @@ var Big = require('big.js');
 import LVBig from '../../logic/LVBig';
 import LVWallet from '../../logic/LVWallet';
 import { LVBalanceShowView } from '../Common/LVBalanceShowView';
+import * as _ from 'lodash'
 
 const addImg = require('../../assets/images/transfer_add_contracts.png');
 const scanImg = require('../../assets/images/transfer_scan.png');
@@ -186,7 +187,7 @@ class TransferScreen extends Component<Props, State> {
 
     async tryFetchParams() {
         const {wallet, amount, addressIn, token} = this.state;
-        console.log("token = " + token + " amount = " + amount);
+        TransferUtils.log("token = " + token + " amount = " + amount);
         if (wallet && amount.gt(0) && addressIn && TransferUtils.isValidAddress(addressIn)) {
             try {
                 let params = await TransferLogic.fetchTransactionParam(wallet.address, addressIn, amount, token);
@@ -241,14 +242,20 @@ class TransferScreen extends Component<Props, State> {
    async  onAddressChanged(address: string) {
         await this.setState({addressIn: address.trim()});
         setTimeout(() => {
+            TransferUtils.log('onAddressChanged tryFetchParams');
             this.tryFetchParams();
         }, 100);
+    }
+
+    debouncePress = (onTextChanged:Function) =>  {
+        return _.debounce(onTextChanged, 500, {leading: false, trailing: true})
     }
 
     async onAmountChanged(newAmountText:string) {
         
         await this.setState({
-            amountText: newAmountText})
+                    amountText: newAmountText})
+        
         if (!TransferUtils.isBlank(newAmountText) && TransferUtils.isValidAmountStr(newAmountText)) {
             let amount = new Big(newAmountText);
             this.setState({amount: amount})
@@ -261,9 +268,7 @@ class TransferScreen extends Component<Props, State> {
                 this.refs.alert.show();
                 return;
             }
-            setTimeout(() => {
-                this.tryFetchParams();
-            }, 100);
+            this.tryFetchParams();
         } else {
             this.setState({transactionParams: null, amount:LVBig.getInitBig()})
         }
@@ -509,7 +514,7 @@ class TransferScreen extends Component<Props, State> {
                                 withUnderLine={false}
                                 inputContainerStyle={{marginTop:isAndroid ? 0 : 15}}
                                 boarderLineHeight={Platform.OS === 'android' ? 1 : 0}
-                                onTextChanged={this.onAmountChanged.bind(this)}/>
+                                onTextChanged={this.debouncePress(this.onAmountChanged.bind(this))}/>
                             
                             <View style={styles.curEth} />
                             <TransferMinerGapSetter 
