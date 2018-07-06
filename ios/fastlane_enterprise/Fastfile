@@ -44,6 +44,7 @@ platform :ios do
     # Tag release and push to GitHub
     commit_version_bump(
       message: "Version Bump, build number bump to #{build_number}",# create a commit with a custom message
+      xcodeproj: "Venus.xcodeproj",
       force: true
     )
     push_to_git_remote(
