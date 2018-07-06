@@ -1,0 +1,8 @@
+app_identifier("com.livesone.wallet") # The bundle identifier of your app
+apple_id("bloodchen@gmail.com") # Your Apple email address
+
+itc_team_id("683111") # App Store Connect Team ID
+team_id("7RZ47C9NNN") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile
