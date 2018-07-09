@@ -522,10 +522,10 @@ class TransferScreen extends Component<Props, State> {
                                 enable={this.state.transactionParams !== null}
                                 minimumValue={this.state.minGap}
                                 maximumValue={this.state.maxGap}
-                                // defaultValue={this.state.minGap * 0.1}
+                                defaultValue={this.state.minGap * 0.1}
                                 // defaultValue={this.state.maxGap * 1.1}
-                                defaultValue={transactionParams !== null?
-                                TransferUtils.convertHex2Eth(transactionParams.gasPrice, transactionParams.gasLimit) : 0}
+                                // defaultValue={transactionParams !== null?
+                                // TransferUtils.convertHex2Eth(transactionParams.gasPrice, transactionParams.gasLimit) : 0}
                                 style = {styles.setter}/>
                         <View style= { styles.curEth }>
                             <Text style = {styles.text}>{LVStrings.transfer_current_eth}</Text>
