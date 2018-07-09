@@ -18,12 +18,12 @@ type Props = {
     minimumValue: number,
     maximumValue: number,
     defaultValue: number,
-    onGapChanged: Function,
     style: ViewPropTypes.style
 };
 
 type State = {
-    value: number
+    value: number,
+    userHasChanged: boolean
 };
 
 export class TransferMinerGapSetter extends Component<Props, State> {
@@ -32,7 +32,6 @@ export class TransferMinerGapSetter extends Component<Props, State> {
         minimumValue: PropTypes.number,
         maximumValue: PropTypes.number,
         defaultValue: PropTypes.number,
-        onGapChanged: PropTypes.func,
     }; 
 
     _beginEnable: false;
@@ -40,40 +39,84 @@ export class TransferMinerGapSetter extends Component<Props, State> {
     constructor(props: any) {
         super(props);
         this.state = {
-            value: props.defaultValue,
+            value: this.getInitValue(), 
+            userHasChanged: false
         }
-        TransferUtils.log('default value = ' + props.defaultValue);
+        TransferUtils.log('default value = ' + this.getInitValue());
+    }
+
+    getInitValue() {
+        if (this.props.defaultValue < this.props.minimumValue) {
+            return this.props.minimumValue;
+        } else if (this.props.defaultValue > this.props.maximumValue) {
+            return this.props.maximumValue;
+        } else {
+            return this.props.defaultValue;
+        }
     }
 
     calculateValue() {
         if (this.props.enable) {
-            return TransferUtils.convertMinnerGap(this.state.value) + ' ETH';
+            return TransferUtils.convertMinnerGap(this.getValue()) + ' ETH';
+            // return this.getValue() + ' ETH';
         } else {
             return '-- ETH'
         }
     }
 
     getValue() {
-        return this.state.value;
+        return this.state.userHasChanged ? this.state.value : this.props.defaultValue;
+    }
+
+    getUserHasChanged() {
+        return this.state.userHasChanged;
     }
 
     onValueChange(value: number) {
-        if (this.props.onGapChanged) {
-            this.props.onGapChanged(value);
-        }
+
         this.setState({
             value: value,
+            userHasChanged : true
         });
     }
 
     componentWillReceiveProps(nextProps: any) {
         if (this.props.enable === false && nextProps.enable === true) {
-            this.setState({
-                value: nextProps.defaultValue,
-            });
+            setTimeout(() => {
+                this.setState({
+                    value: this.getInitValue(),
+                    userHasChanged: false
+                });
+                TransferUtils.log("激活 min = " + this.props.minimumValue + " max = " + this.props.maximumValue
+                + " default = " + this.props.defaultValue 
+                + " value = " + this.getValue() + " userHasSet = " + this.getUserHasChanged());
+            }, 100);
+           
         }
+
+        if (this.props.enable && nextProps.enable) {
+            if (this.props.defaultValue != nextProps.defaultValue) {
+                setTimeout(() => {
+                    this.setState({
+                        value: this.getInitValue(),
+                        userHasChanged: false
+                    });
+                    TransferUtils.log("重新赋值 min = " + this.props.minimumValue + " max = " + this.props.maximumValue
+                + " default = " + this.props.defaultValue 
+                + " value = " + this.getValue()+ " userHasSet = " + this.getUserHasChanged());
+                }, 100);
+            }
+        }
+
+        
         if (this.props.enable && !nextProps) {
-            this.setState({value : 0})
+            setTimeout(() => {
+                this.setState({value : 0, userHasChanged: false})
+                TransferUtils.log("禁止 min = " + this.props.minimumValue + " max = " + this.props.maximumValue
+            + " default = " + this.props.defaultValue 
+            + " value = " + this.getValue()+ " userHasSet = " + this.getUserHasChanged());
+            }, 100);
+            
         }
     }
 

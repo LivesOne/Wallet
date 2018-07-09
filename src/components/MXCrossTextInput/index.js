@@ -80,6 +80,8 @@ class MXCrossTextInput extends Component<Props,State> {
     onChangeText = function(newText: string) {
         if (Platform.OS === 'android') {
             this.setState({text: newText});
+        } else if (Platform.OS === 'ios' && newText === '') {
+            this.setState({text: newText});
         }
         this.props.onTextChanged && this.props.onTextChanged(newText);
     };
@@ -99,7 +101,7 @@ class MXCrossTextInput extends Component<Props,State> {
     }
 
     onPressClear() {
-        this.setText('')
+        this.setText('');
     }
 
     render() {
@@ -149,7 +151,7 @@ class MXCrossTextInput extends Component<Props,State> {
                             style={[Base.label, theme.label , {padding : 0}]}
                             secureTextEntry={secureTextEntry}
                             clearButtonMode={this.props.withClearButton ? 'while-editing' : 'never'}
-                            onChangeText={this.onChangeText}
+                            onChangeText={this.onChangeText.bind(this)}
                             onSubmitEditing= {()=>{
                                 onSubmitEditing && onSubmitEditing();
                             }}

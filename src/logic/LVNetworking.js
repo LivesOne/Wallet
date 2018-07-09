@@ -30,7 +30,7 @@ const API = {
     GET_MARKET: HOST + '/wallet/market',
     GET_TRANSACTION_HISTORY: HOST + '/wallet/history',
     GET_TRANSACTION_DETAIL: HOST + '/wallet/tx',
-    GET_TRANSACTION_PARAM: HOST + '/wallet/param?',
+    GET_TRANSACTION_PARAM: HOST + '/wallet/param/v2?',
     POST_SIGNED_TRANSACTION: HOST + '/wallet/tx/v2',
     GET_APP_CONFIG: HOST + '/wallet/appconfig'
     // GET_APP_CONFIG: 'http://10.0.5.50:9000/uploads/u5.json'
