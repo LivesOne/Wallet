@@ -76,6 +76,10 @@ class LVWallet {
         set_balance_for_list(token, balance.cmp(0) > 0 ? balance : 0, this.holding_list);
     }
 
+    removeHoldingBalance(token: string) {
+        set_balance_for_list(token, 0, this.holding_list);
+    }
+
     static emptyWallet(): LVWallet {
         return new LVWallet('', { address: '' });
     }

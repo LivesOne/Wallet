@@ -219,7 +219,7 @@ export default class LVTransactionRecordManager {
 
                 if (record.state != 'waiting') {
                     wallet.minusHoldingBalance(record.token, record.amount);
-                    wallet.minusHoldingBalance(LVWallet.ETH_TOKEN, record.minnerFee);
+                    wallet.removeHoldingBalance(LVWallet.ETH_TOKEN);
                 }
             }
         }
