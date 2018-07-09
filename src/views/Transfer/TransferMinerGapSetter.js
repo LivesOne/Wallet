@@ -65,8 +65,7 @@ export class TransferMinerGapSetter extends Component<Props, State> {
     }
 
     getValue() {
-        //return this.state.userHasChanged ? this.state.value : this.props.defaultValue;
-        return this.state.value;
+        return this.state.userHasChanged ? this.state.value : this.props.defaultValue;
     }
 
     getUserHasChanged() {
