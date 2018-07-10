@@ -31,7 +31,6 @@ type Props = {
 };
 
 export default class AssetsBalanceList extends React.Component<Props> {
-
     constructor() {
         super();
     }
@@ -62,8 +61,10 @@ export default class AssetsBalanceList extends React.Component<Props> {
 
     render() {
         const { style, wallet } = this.props;
-        const data = wallet.balance_list.map((balance) => {
-            return { token: balance.token, amount: wallet.getBalance(balance.token) };    
+
+        const unfilted = wallet.balance_list.filter(balance => wallet.available_tokens.includes(balance.token));
+        const data = unfilted.map(balance => {
+            return { token: balance.token, amount: wallet.getBalance(balance.token) };
         });
 
         return (
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'flex-end',
+        alignItems: 'flex-end'
     },
     card: {
         flex: 1,
