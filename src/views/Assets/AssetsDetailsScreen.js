@@ -153,10 +153,12 @@ class AssetsDetailsScreen extends Component<Props, State> {
     }
 
     onReceiverButtonPressed = () => {
+        if (LVUtils.isNavigating()) { return }
         this.props.navigation.navigate('Receive');
     };
 
     onTransferButtonPressed = () => {
+        if (LVUtils.isNavigating()) { return }
         const { token } = this.props.navigation.state.params;
         this.props.navigation.navigate('Transfer', { token: token, from: 'assets' });
     };

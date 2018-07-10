@@ -126,6 +126,16 @@ export async function backupWallet(wallet: Object, password: string) {
       WalletUtils.log(JSON.stringify(r));
   }
 };
+
+var processing_navigate = false;
+export function isNavigating() {
+  if (processing_navigate) { 
+    return true; 
+  }
+  processing_navigate = true;
+  setTimeout(() => { processing_navigate = false; }, 600);
+  return false;
+}
 // const PORTRAIT = 'PORTRAIT';
 // const LANDSCAPE = 'LANDSCAPE';
 //

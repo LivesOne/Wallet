@@ -37,10 +37,20 @@ export default class AssetsBalanceList extends React.Component<Props> {
 
     _keyExtractor = (item, index) => index.toString();
 
+    _processing_on_press_item = false;
     _onPressItem = (item: Object) => {
+        if (this._processing_on_press_item) {
+            return;
+        }
+        this._processing_on_press_item = true;
+
         if (this.props.onPressItem) {
             this.props.onPressItem(item.token);
         }
+
+        setTimeout(() => {
+            this._processing_on_press_item = false;
+        }, 600);
     };
 
     _renderItem = ({ item }) => (

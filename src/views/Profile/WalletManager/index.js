@@ -25,7 +25,7 @@ import LVNotification from '../../../logic/LVNotification';
 import LVNetworking from '../../../logic/LVNetworking';
 import LVBig from '../../../logic/LVBig';
 import { ifIphoneX } from 'react-native-iphone-x-helper'
-import { iPhoneX_Bottom_Inset } from '../../../utils/MXUtils';
+import { iPhoneX_Bottom_Inset, isNavigating } from '../../../utils/MXUtils';
 const WalletIcon = require('../../../assets/images/wallet_grey.png');
 const ShowDetailsIcon = require('../../../assets/images/show_detail_arrow.png');
 const CreateWalletIcon = require('../../../assets/images/wm_create_wallet.png');
@@ -71,10 +71,12 @@ export class WalletManagerScreen extends Component<Props, State> {
     }
     
     onCreateWalletPressed() {
+        if (isNavigating()) { return }
         this.props.navigation.navigate('WalletCreatePage', { from: WalletUtils.OPEN_CREATE_FROM_WALLET_MANAGER });
     }
 
     onImportWalletPressed() {
+        if (isNavigating()) { return }
         this.props.navigation.navigate('WalletImportPage', { from: WalletUtils.OPEN_IMPORT_FROM_WALLET_MANAGER });
     }
 

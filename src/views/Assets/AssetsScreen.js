@@ -111,20 +111,10 @@ class AssetsScreen extends Component<Props, State> {
         this.setState({ wallet: LVWalletManager.getSelectedWallet() });
     }
 
-    _processing_assets_detail_pressed = false;
     onPressAssetsDetail = (token: string) => {
-        if (this._processing_showall_pressed) {
-            return;
-        }
-        this._processing_assets_detail_pressed = true;
-
         if (this.state.wallet) {
             this.props.navigation.navigate('AssetsDetails', { token: token });
         }
-
-        setTimeout(async () => {
-            this._processing_assets_detail_pressed = false;
-        }, 200);
     };
 
     async refreshBalance() {
