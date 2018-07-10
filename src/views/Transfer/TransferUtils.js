@@ -113,10 +113,10 @@ export default class TransferUtils {
     }
 
     static log(msg: string) {
-        if (__DEV__) {
-            console.log('transfer ---> ' + msg);
-        }
-        // console.log('transfer ---> ' + msg);
+        // if (__DEV__) {
+        //     console.log('transfer ---> ' + msg);
+        // }
+        console.log('transfer ---> ' + msg);
     }
 
     static testBN() {
