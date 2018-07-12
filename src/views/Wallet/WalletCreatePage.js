@@ -49,6 +49,7 @@ export default class WalletCreatePage extends Component<Props,State> {
     };
 
     createWallet : Function;
+    onValidateWalletName: Function;
 
     constructor() {
         super();
@@ -60,6 +61,8 @@ export default class WalletCreatePage extends Component<Props,State> {
             alertMessage: '',
             fromScreen: null
         };
+
+        this.onValidateWalletName = this.onValidateWalletName.bind(this);
     }
 
     componentDidMount() {
@@ -68,6 +71,15 @@ export default class WalletCreatePage extends Component<Props,State> {
             this.setState({ fromScreen: navigation.state.params.from });
         }
         this.refs.wallet_creation_alert.show();
+    }
+
+    onValidateWalletName(): ?String {
+        if(this.state.name) {
+            if (WalletUtils.getLength(this.state.name) > 40) {
+                return LVStrings.wallet_name_exceeds_limit;
+            }
+        }
+        return null;
     }
 
     async createWallet() {
@@ -163,6 +175,7 @@ export default class WalletCreatePage extends Component<Props,State> {
                                 titleText={LVStrings.wallet_create_name}
                                 textAlignCenter={true}
                                 withUnderLine={false}
+                                onValidation={()=> this.onValidateWalletName()}
                                 onTextChanged={(text) => this.setState({ name: text.trim() })} />
                             <MXCrossTextInput
                                 style={styles.crossInputStyle}

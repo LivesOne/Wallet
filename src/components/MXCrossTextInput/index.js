@@ -144,12 +144,7 @@ class MXCrossTextInput extends Component<Props,State> {
                             </Text>
                         )}
                         <View style = {[Base.defaultTextAreaStyle, inputContainerStyle]}>
-                            <TouchableOpacity style={[textAreaStyle]} activeOpacity={1} onPress={
-                                () => {
-                                    this.setState({hasFocus: true})
-                                    this.refs.textinput.focus()
-                                }
-                                } >
+                            <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                                 <TextInput
                                     ref={'textinput'}
                                     placeholder={placeholder}
@@ -161,7 +156,7 @@ class MXCrossTextInput extends Component<Props,State> {
                                     keyboardType={keyboardType}
                                     blurOnSubmit={blurOnSubmit}
                                     returnKeyType={returnKeyType}
-                                    style={[Base.label, theme.label , {padding : 0}]}
+                                    style={[Base.label, theme.label , {padding : 0,flex:1}]}
                                     secureTextEntry={secureTextEntry}
                                     clearButtonMode={this.props.withClearButton ? 'while-editing' : 'never'}
                                     onChangeText={this.onChangeText.bind(this)}
@@ -172,25 +167,24 @@ class MXCrossTextInput extends Component<Props,State> {
                                     onFocus={() => this.setState({ hasFocus: true })}
                                     onEndEditing={() => this.setState({ hasFocus: false })}
                                 />
-                            </TouchableOpacity>
+                                <View>
+                                    { (Platform.OS === 'android') && 
+                                        this.props.withClearButton &&
+                                        this.state.text !== null &&
+                                        this.state.text !== '' && 
+                                        this.state.text !== undefined &&
+                                        this.state.hasFocus && (
+                                            <TouchableOpacity style={Base.clearButton} onPress={this.onPressClear.bind(this)}>
+                                                <Image source={require('../../assets/images/edit_clear.png')} />
+                                            </TouchableOpacity>
+                                        )}
 
-                            <View style={[buttonAreaStyle]}>
-                                { (Platform.OS === 'android') && 
-                                    this.props.withClearButton &&
-                                    this.state.text !== null &&
-                                    this.state.text !== '' && 
-                                    this.state.text !== undefined &&
-                                    this.state.hasFocus && (
-                                        <TouchableOpacity style={Base.clearButton} onPress={this.onPressClear.bind(this)}>
-                                            <Image source={require('../../assets/images/edit_clear.png')} />
-                                        </TouchableOpacity>
+                                    {this.props.rightComponent && (
+                                        <View style={[Base.rightComponent]}>{this.props.rightComponent}</View>
                                     )}
-
-                                {this.props.rightComponent && (
-                                    <View style={[Base.rightComponent]}>{this.props.rightComponent}</View>
-                                )}
+                                </View>
                             </View>
-                            {this.state.errorText && (<Text style={Base.errorLabel}>this.state.errorText</Text>)}
+                            {this.state.errorText && (<Text style={Base.errorLabel}>{this.state.errorText}</Text>)}
                         </View>
                     </View>
                     <View style={[Base.bottomStyle, {height:lineHeight}]}>

@@ -12,9 +12,7 @@ import { MXCrossInputHeight } from '../../styles/LVStyleSheet';
 const Base = LVStyleSheet.create({
   main: {
     height: MXCrossInputHeight,
-    width: MXUtils.getDeviceWidth() - 18 * PixelRatio.get(),
-    backgroundColor: LVColor.white,
-    justifyContent: 'center',
+    backgroundColor: LVColor.white
   },
   content: {
     flex: 1,
@@ -24,7 +22,8 @@ const Base = LVStyleSheet.create({
   titleAndInputContainer: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    // backgroundColor: 'green'
   },
   defaultTextAreaStyle: {
     height: 25,
