@@ -95,6 +95,8 @@ const localized_strings = {
     wallet_disclaimer: 'Disclaimer',
     wallet_disclaimer_content:
         'Please make sure to keep your wallet backup safe. All losses due to wallet’s lost, stolen, and password forgotten have nothing to do with the platform.',
+    
+    wallet_details: 'Wallet details',
 
     //wallet edit
     wallet_edit_save_failed: 'Failed to save!',
