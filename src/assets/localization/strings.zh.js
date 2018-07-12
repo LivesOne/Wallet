@@ -23,6 +23,7 @@ const localized_strings = {
     common_camera_not_authorized: '相机权限未开启',
     common_next: '下一步',
     common_open_ettings: '设置',
+    common_copy: '复制',
 
     //receive
     receive_title: '收款',
@@ -84,6 +85,8 @@ const localized_strings = {
     wallet_disclaimer: '免责声明',
     wallet_disclaimer_content:
         '请确认已经导出的钱包备份的安全性，任何钱包的丢失、被盗、忘记密码等行为产生的损失均与平台无关',
+    
+    wallet_details: '钱包详情',
 
     // inner error
     inner_common_error: '内部错误',

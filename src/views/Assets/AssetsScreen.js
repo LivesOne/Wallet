@@ -18,6 +18,7 @@ import LVWalletHeader from '../Common/LVWalletHeader';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 import LVTransactionRecordManager from '../../logic/LVTransactionRecordManager';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
+import MXTouchableImage from '../../components/MXTouchableImage';
 import LVWallet from '../../logic/LVWallet';
 import LVWalletManager from '../../logic/LVWalletManager';
 import LVNetworking from '../../logic/LVNetworking';
@@ -30,6 +31,7 @@ import TransactionRecordList from './TransactionRecordList';
 import TransactionDetailsScreen from './TransactionDetailsScreen';
 
 const selectImg = require('../../assets/images/select_wallet.png');
+const addTokenImg = require('../../assets/images/assets_add_token.png');
 const LVLastAssetsRefreshTimeKey = '@Venus:LastAssetsRefreshTime';
 
 const isIOS = Platform.OS === 'ios';
@@ -109,6 +111,10 @@ class AssetsScreen extends Component<Props, State> {
 
     handleBalanceChange = () => {
         this.setState({ wallet: LVWalletManager.getSelectedWallet() });
+    };
+
+    onPressAddTokenToAssets = () => {
+
     }
 
     onPressAssetsDetail = (token: string) => {
@@ -168,6 +174,11 @@ class AssetsScreen extends Component<Props, State> {
                     <LVWalletHeader name={wallet.name} address={wallet.address} />
                 </View>
 
+                <View style={styles.listHeader}>
+                    <Text style={styles.listHeaderText}>{LVStrings.wallet_details}</Text>
+                    <MXTouchableImage style={styles.listHeaderIcon} source={addTokenImg} onPress={this.onPressAddTokenToAssets.bind(this)}/>
+                </View>
+
                 <AssetsBalanceList style={styles.list} wallet={wallet} refreshing={this.state.refreshing} onRefresh={this.refreshBalance.bind(this)} onPressItem={this.onPressAssetsDetail.bind(this)} />
 
                 <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
@@ -194,10 +205,28 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: LVColor.primary
     },
+    listHeader: {
+        height: 50,
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: LVColor.background.assets
+    },
+    listHeaderText: {
+        marginLeft: 15,
+        fontFamily: 'SFProText-Medium',
+        fontSize: LVSize.small,
+        color: LVColor.text.grey2,
+    },
+    listHeaderIcon: {
+        width: 26,
+        height: 26,
+        marginRight: 15
+    },
     list: {
         flex: 1,
         width: '100%',
-        paddingTop: 15,
         backgroundColor: LVColor.background.assets
     }
 });

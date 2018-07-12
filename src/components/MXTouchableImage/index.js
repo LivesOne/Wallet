@@ -3,16 +3,17 @@
  */
 'use strict';
 
-import React, { Component } from 'react';
+import * as React from 'react';
 import { StyleSheet, ViewPropTypes, Image, TouchableOpacity } from 'react-native';
-import PropTypes from 'prop-types';
 
-export default class MXTouchableImage extends Component {
-    static propTypes = {
-        style: ViewPropTypes.style,
-        source: PropTypes.any,
-        onPress: PropTypes.func
-    };
+type Props = {
+    style?: ViewPropTypes.style,
+    source: number | React.Element<any>,
+    onPress: Function,
+    children?: React.Element<any>,
+};
+
+export default class MXTouchableImage extends React.Component<Props> {
 
     render() {
         return (
