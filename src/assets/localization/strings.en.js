@@ -23,6 +23,7 @@ const localized_strings = {
     common_camera_not_authorized: 'Camera not authorized',
     common_next: 'Next',
     common_open_ettings: 'Open settings',
+    common_copy: 'Copy',
 
     //receive
     receive_title: 'Receive',

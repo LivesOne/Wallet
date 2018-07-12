@@ -23,6 +23,7 @@ const localized_strings = {
     common_camera_not_authorized: '相机权限未开启',
     common_next: '下一步',
     common_open_ettings: '设置',
+    common_copy: '复制',
 
     //receive
     receive_title: '收款',
