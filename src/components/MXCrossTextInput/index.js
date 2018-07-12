@@ -11,6 +11,7 @@ import LVColor from '../../styles/LVColor';
 
 type State = {
     text: ?string,
+    errorText: ?string,
     defaultValue: string,
     hasFocus: boolean,
 };
@@ -36,6 +37,7 @@ type Props = {
     boarderLineHeight?: number,
     titleText?: string,
     inputContainerStyle ? : ViewPropTypes.style,
+    onValidation?: Function
 };
 class MXCrossTextInput extends Component<Props,State> {
 
@@ -45,8 +47,10 @@ class MXCrossTextInput extends Component<Props,State> {
             defaultValue: props.defaultValue,
             text: props.value || props.defaultValue,
             hasFocus: false,
+            errorText: null
         };
         this.onChangeText = this.onChangeText.bind(this);
+        this.onValidation = this.onValidation.bind(this);
     }
 
     firstMounted = true;
@@ -86,6 +90,15 @@ class MXCrossTextInput extends Component<Props,State> {
         this.props.onTextChanged && this.props.onTextChanged(newText);
     };
 
+    onValidation = function() {
+        if(this.props.onValidation) {
+            const errorText = this.props.onValidation(this.state.text);
+            this.setState({
+                errorText: errorText
+            });
+        }
+    }
+
     componentDidMount() {
         if (this.props.setFocusWhenMounted) {
             this.refs.textinput.focus();
@@ -120,65 +133,70 @@ class MXCrossTextInput extends Component<Props,State> {
                     Base.main,
                     theme.main,
                     rounded ? Base.rounded : null,
-                    !withUnderLine ? { borderBottomColor: 'transparent' } : null,
                     style,
                 ]}
             >  
                 <View style={[Base.content]}>
-                    {this.props.titleText && (
-                        <Text style = {Base.titleLabel}>
-                            {titleText}
-                        </Text>
-                    )}
-                    <View style = {[Base.textInputView , inputContainerStyle]}>
-                    <TouchableOpacity style={[textAreaStyle,this.props.titleText && {marginTop:10},]} activeOpacity={1} onPress={
-                        () => {
-                            this.setState({hasFocus: true})
-                            this.refs.textinput.focus()
-                        }
-                         } >
-                        <TextInput
-                            ref={'textinput'}
-                            placeholder={placeholder}
-                            underlineColorAndroid={'transparent'}
-                            placeholderTextColor={LVColor.text.placeHolder}
-                            value={this.state.text}
-                            selectTextOnFocus={this.firstMounted && this.props.setFocusWhenMounted}
-                            tintColor={LVColor.primary}
-                            keyboardType={keyboardType}
-                            blurOnSubmit={blurOnSubmit}
-                            returnKeyType={returnKeyType}
-                            style={[Base.label, theme.label , {padding : 0}]}
-                            secureTextEntry={secureTextEntry}
-                            clearButtonMode={this.props.withClearButton ? 'while-editing' : 'never'}
-                            onChangeText={this.onChangeText.bind(this)}
-                            onSubmitEditing= {()=>{
-                                onSubmitEditing && onSubmitEditing();
-                            }}
-                            onFocus={() => this.setState({ hasFocus: true })}
-                            onEndEditing={() => this.setState({ hasFocus: false })}
-                        />
-                    </TouchableOpacity>
-
-                    <View style={[buttonAreaStyle]}>
-                        { (Platform.OS === 'android') && 
-                            this.props.withClearButton &&
-                            this.state.text !== null &&
-                            this.state.text !== '' && 
-                            this.state.text !== undefined &&
-                            this.state.hasFocus && (
-                                <TouchableOpacity style={Base.clearButton} onPress={this.onPressClear.bind(this)}>
-                                    <Image source={require('../../assets/images/edit_clear.png')} />
-                                </TouchableOpacity>
-                            )}
-
-                        {this.props.rightComponent && (
-                            <View style={[Base.rightComponent]}>{this.props.rightComponent}</View>
+                    <View style={Base.titleAndInputContainer}>
+                        {this.props.titleText && (
+                            <Text style = {Base.titleLabel}>
+                                {titleText}
+                            </Text>
                         )}
+                        <View style = {[Base.defaultTextAreaStyle, inputContainerStyle]}>
+                            <TouchableOpacity style={[textAreaStyle]} activeOpacity={1} onPress={
+                                () => {
+                                    this.setState({hasFocus: true})
+                                    this.refs.textinput.focus()
+                                }
+                                } >
+                                <TextInput
+                                    ref={'textinput'}
+                                    placeholder={placeholder}
+                                    underlineColorAndroid={'transparent'}
+                                    placeholderTextColor={LVColor.text.placeHolder}
+                                    value={this.state.text}
+                                    selectTextOnFocus={this.firstMounted && this.props.setFocusWhenMounted}
+                                    tintColor={LVColor.primary}
+                                    keyboardType={keyboardType}
+                                    blurOnSubmit={blurOnSubmit}
+                                    returnKeyType={returnKeyType}
+                                    style={[Base.label, theme.label , {padding : 0}]}
+                                    secureTextEntry={secureTextEntry}
+                                    clearButtonMode={this.props.withClearButton ? 'while-editing' : 'never'}
+                                    onChangeText={this.onChangeText.bind(this)}
+                                    onSubmitEditing= {()=>{
+                                        onSubmitEditing && onSubmitEditing();
+                                    }}
+                                    onBlur={()=> this.onValidation()}
+                                    onFocus={() => this.setState({ hasFocus: true })}
+                                    onEndEditing={() => this.setState({ hasFocus: false })}
+                                />
+                            </TouchableOpacity>
+
+                            <View style={[buttonAreaStyle]}>
+                                { (Platform.OS === 'android') && 
+                                    this.props.withClearButton &&
+                                    this.state.text !== null &&
+                                    this.state.text !== '' && 
+                                    this.state.text !== undefined &&
+                                    this.state.hasFocus && (
+                                        <TouchableOpacity style={Base.clearButton} onPress={this.onPressClear.bind(this)}>
+                                            <Image source={require('../../assets/images/edit_clear.png')} />
+                                        </TouchableOpacity>
+                                    )}
+
+                                {this.props.rightComponent && (
+                                    <View style={[Base.rightComponent]}>{this.props.rightComponent}</View>
+                                )}
+                            </View>
+                            {this.state.errorText && (<Text style={Base.errorLabel}>this.state.errorText</Text>)}
+                        </View>
                     </View>
+                    <View style={[Base.bottomStyle, {height:lineHeight}]}>
+                        {withUnderLine && (<View style={{flex: 1, backgroundColor: LVColor.separateLine}} />)}
                     </View>
                 </View>
-                <View style={{width: '100%', height: lineHeight, backgroundColor: LVColor.separateLine,position: 'absolute',bottom: 1}} />
             </View>
         );
     }

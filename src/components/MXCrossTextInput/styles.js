@@ -14,10 +14,36 @@ const Base = LVStyleSheet.create({
     height: MXCrossInputHeight,
     width: MXUtils.getDeviceWidth() - 18 * PixelRatio.get(),
     backgroundColor: LVColor.white,
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   content: {
+    flex: 1,
+    flexDirection: 'column',
     // justifyContent:'center',
+  },
+  titleAndInputContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center'
+  },
+  defaultTextAreaStyle: {
+    height: 25,
+    marginTop:5
+    // backgroundColor: 'red'
+  },
+  titleLabel: {
+    fontSize: 12,
+    color: LVColor.text.grey2,
+    height: 17,
+    // backgroundColor: 'yellow'
+  },
+  errorLabel: {
+    marginTop: 5,
+    fontSize: 12,
+    color: LVColor.text.red
+  },
+  bottomStyle: {
+    height: 1
   },
   rounded: {
     phone: {
@@ -27,16 +53,10 @@ const Base = LVStyleSheet.create({
       borderRadius: 35,
     }
   },
-
-  titleLabel: {
-      fontSize: 12,
-      color: LVColor.text.grey2,
-  },
-
-  textInputView:{
-	flexDirection: 'row',
+  textInputView: {
+    flexDirection: 'row',
     alignItems: 'center'
-},
+  },
 
   textArea: {
     flex: 1,
@@ -44,7 +64,7 @@ const Base = LVStyleSheet.create({
 
   label: {
     fontSize: 15,
-    textAlign:'left',
+    textAlign: 'left',
     paddingLeft: 0,
     fontWeight: '500'
   },
@@ -67,7 +87,7 @@ const Base = LVStyleSheet.create({
 
 const TextAlignCenterStyles = StyleSheet.create({
   textArea: {
-    flex:1,
+    flex: 1,
   },
   buttonArea: {
     flexDirection: 'row',
