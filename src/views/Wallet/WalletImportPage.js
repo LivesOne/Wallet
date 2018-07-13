@@ -405,9 +405,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
             onChangeText={(newText)=>{this.setState({keyStore: newText.trim()})}}
             style={ styles.textInput }
           />
-          {this.state.keystoreErrorText && (
-            <Text style={styles.errorLabelStyle} ref={'keystoreErrorMsg'}>{this.state.keystoreErrorText}</Text>
-          )}
+          <Text style={styles.errorLabelStyle} ref={'keystoreErrorMsg'}>{this.state.keystoreErrorText}</Text>
           
           <MXCrossTextInput
             ref={'keystorePasswordInput'}
@@ -439,9 +437,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
               underlineColorAndroid = {'transparent'}
               style={ styles.textInput }
             />
-            {this.state.privateKeyErrorText && (
-              <Text style={styles.errorLabelStyle} ref={'privateKeyErrorMsg'}>{this.state.privateKeyErrorText}</Text>
-            )}
+            <Text style={styles.errorLabelStyle} ref={'privateKeyErrorMsg'}>{this.state.privateKeyErrorText}</Text>
 
             <MXCrossTextInput
               ref={'privateKeyPasswordInput'}
