@@ -50,7 +50,7 @@ const ProfileMainNavigator = StackNavigator(
         },
         transitionConfig: Platform.OS === 'ios' ? () => ({
             transitionSpec: {
-                duration: 200,
+                duration: 300,
                 easing: Easing.out(Easing.poly(4)),
                 timing: Animated.timing,
               },
