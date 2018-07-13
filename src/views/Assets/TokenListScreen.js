@@ -73,11 +73,18 @@ export default class TokenListScreen extends Component<Props, State> {
         }
     };
 
-    onSearchBarTextChanged = async (text: string) => {};
+    onSearchBarTextChanged = async (text: string) => {
+        console.log(text);
+        this.setState({ searching: true, searchingText: text });
+    };
 
-    onSearchBarFocus = () => {};
+    onSearchBarFocus = () => {
+        this.setState({ searching: true, searchingText: null });
+    };
 
-    onSearchBarEndEditing = () => {};
+    onSearchBarEndEditing = () => {
+        this.setState({ searching: false, searchingText: null });
+    };
 
     loadRecordsWhileRefetchTokens = async (refetch: boolean) => {
         let tokens = LVWalletManager.supportTokens;
@@ -125,7 +132,14 @@ export default class TokenListScreen extends Component<Props, State> {
     };
 
     render() {
-        const { records, loading } = this.state;
+        const { records, loading, searching, searchingText } = this.state;
+
+        let data = records;
+
+        if (searching && searchingText != null) {
+            const text = searchingText.trim().toLowerCase();
+            data = records.filter(r => r.token.toLowerCase().match(text) != null);
+        }
 
         return (
             <View style={styles.container}>
@@ -148,7 +162,7 @@ export default class TokenListScreen extends Component<Props, State> {
                     />
                     <FlatList
                         style={{ flex: 1, paddingTop: 10 }}
-                        data={records}
+                        data={data}
                         keyExtractor={this._keyExtractor}
                         renderItem={this._renderItem}
                         showsVerticalScrollIndicator={false}
