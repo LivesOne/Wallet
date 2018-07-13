@@ -74,7 +74,6 @@ export default class WalletCreatePage extends Component<Props,State> {
         if (navigation && navigation.state && navigation.state.params) {
             this.setState({ fromScreen: navigation.state.params.from });
         }
-        this.refs.wallet_creation_alert.show();
     }
 
     onValidateWalletName(): ?string {
@@ -121,8 +120,8 @@ export default class WalletCreatePage extends Component<Props,State> {
     async createWallet() {
         Keyboard.dismiss();
         if(!this.refs.walletNameTextInput.validate() 
-            && !this.refs.passwordInput.validate()
-            && !this.refs.confirmPasswordInput.validate()) {
+            || !this.refs.passwordInput.validate()
+            || !this.refs.confirmPasswordInput.validate()) {
             return;
         }
       
@@ -192,7 +191,7 @@ export default class WalletCreatePage extends Component<Props,State> {
                                 onTextChanged={(text) => this.setState({ confirmPassword: text })} />
                         </View>
                         <View style={styles.bottomContainer}>
-                            <Text style={styles.descriptionTextStyle}>{LVStrings.wallet_create_explaination}</Text>
+                            <Text style={styles.descriptionTextStyle}>{LVStrings.wallet_create_hint_message}</Text>
                             <MXButton
                                 rounded
                                 title={LVStrings.wallet_create}
@@ -206,13 +205,6 @@ export default class WalletCreatePage extends Component<Props,State> {
                     </LVKeyboardDismissView>
                 </KeyboardAwareScrollView>
                 <LVLoadingToast ref={'toast'} title={LVStrings.wallet_creating_wallet} />
-                <LVDialog ref={'alert'} title={LVStrings.alert_hint} height={225} message={this.state.alertMessage || ''} buttonTitle={LVStrings.alert_ok} />
-                <LVDialog ref={'wallet_creation_alert'}
-                    message={LVStrings.wallet_create_hint_message}
-                    buttonTitle={LVStrings.alert_ok}
-                    messageStyle={{ color: LVColor.text.yellow, marginBottom: 13 }}
-                    width={280}
-                    height={210} />
             </View>
              
         )

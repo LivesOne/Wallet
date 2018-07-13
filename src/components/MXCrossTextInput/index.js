@@ -53,10 +53,12 @@ class MXCrossTextInput extends Component<Props,State> {
         this.onChangeText = this.onChangeText.bind(this);
         this.onValidation = this.onValidation.bind(this);
         this.validate = this.validate.bind(this);
+        this.setErrorText = this.setErrorText.bind(this);
     }
 
     firstMounted = true;
     _isValid: boolean = true;
+    setErrorText: Function;
 
     static defaultProps = {
         withUnderLine: true,
@@ -85,6 +87,13 @@ class MXCrossTextInput extends Component<Props,State> {
     setText(newText: string) {
         this.setState({text: newText, hasFocus: true});
         this.props.onTextChanged && this.props.onTextChanged(newText);
+    }
+    
+    setErrorText(newText: string) {
+        this.setState({
+            errorText: newText
+        });
+        this._isValid = newText === null;
     }
 
     onChangeText = function(newText: string) {

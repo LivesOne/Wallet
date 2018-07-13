@@ -57,7 +57,7 @@ const localized_strings = {
     wallet_importing_wallet: 'Importing wallet...',
     wallet_import_private_key_error: 'Private key format error',
     wallet_import_keystore_error: 'Keystore format error',
-    wallet_import_keystore_or_pwd_empty: "Keystore or password can't be empty",
+    wallet_import_keystore_or_pwd_empty: "Keystore can't be empty",
     wallet_import_private_key_required: 'Private key is required',
     wallet_import_success: 'Import succeed!',
     wallet_import_fail: 'Import failed!',
