@@ -10,17 +10,13 @@ import { StyleSheet, View, ViewPropTypes, FlatList, Text, Image, TouchableOpacit
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
+import LVTokenIcons from '../../assets/LVTokenIcons';
 import LVWallet from '../../logic/LVWallet';
 import { StringUtils } from '../../utils';
 import LVBalanceShowView from '../Common/LVBalanceShowView';
 
 const left_shadow = require('../../assets/images/assets_card_left_shadow.png');
 const right_shadow = require('../../assets/images/assets_card_right_shadow.png');
-
-const tokenImageIcons = {
-    LVTC: require('../../assets/images/lvt.png'),
-    eth: require('../../assets/images/eth.png')
-};
 
 type Props = {
     style?: ViewPropTypes.style,
@@ -105,7 +101,7 @@ type BalanceCardProps = {
 class LVWalletBalanceCard extends React.Component<BalanceCardProps> {
     render() {
         const { token, amount } = this.props;
-        const tokenImage = tokenImageIcons[token];
+        const tokenImage = LVTokenIcons[token];
 
         const value = StringUtils.beautifyBalanceShow(amount);
         const balanceString = StringUtils.convertAmountToCurrencyString(value.result, ',', 0, true);

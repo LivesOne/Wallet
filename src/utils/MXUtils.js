@@ -37,11 +37,11 @@ export const checkEqualPwd = (pwd: string, rePwd: string) => {
   return pwd && rePwd && pwd !== null && rePwd !== null && pwd.trim() === rePwd.trim();
 };
 
-export const isEmptyString = (str: string) => {
+export const isEmptyString = (str: ?string) => {
   return (str === null || str === undefined || str === '');
 }
 
-export const isNotEmptyString = (str: string) => {
+export const isNotEmptyString = (str: ?string) => {
   return (str !== null && str !== undefined && str !== '');
 }
 

@@ -11,6 +11,7 @@ import { StackNavigator } from 'react-navigation';
 
 import AssetsScreen from './AssetsScreen';
 import AssetsDetailsScreen from './AssetsDetailsScreen';
+import TokenListScreen from './TokenListScreen';
 import TransactionDetailsScreen from './TransactionDetailsScreen';
 
 import ReceiveScreen from '../Receive/ReceiveScreen';
@@ -23,12 +24,13 @@ import LVTContactDetailPage from '../contacts/LVTContactDetailPage';
 const AssetsMainNavigator = StackNavigator({
     Assets: { screen: AssetsScreen },
     AssetsDetails: { screen: AssetsDetailsScreen },
+    TokenList: { screen: TokenListScreen },
     TransactionDetails: { screen: TransactionDetailsScreen }
 },
 {
     transitionConfig: () => ({
         transitionSpec: {
-          duration: 200,
+          duration: 300,
           easing: Easing.out(Easing.poly(4)),
           timing: Animated.timing,
         },

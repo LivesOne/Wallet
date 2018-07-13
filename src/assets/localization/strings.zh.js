@@ -125,6 +125,10 @@ const localized_strings = {
     recent_records: '最近交易记录',
     view_all_records: '查看全部记录',
 
+    // Token List
+    token_list_title: '添加币种',
+    token_list_search_placeholder: '请输入币种名称',
+
     // Transaction record
     transaction_records: '交易记录',
     transaction_records_no_data: '暂无记录',

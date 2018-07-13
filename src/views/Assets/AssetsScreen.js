@@ -114,7 +114,8 @@ class AssetsScreen extends Component<Props, State> {
     };
 
     onPressAddTokenToAssets = () => {
-
+        if (LVUtils.isNavigating()) { return }
+        this.props.navigation.navigate('TokenList');
     }
 
     onPressAssetsDetail = (token: string) => {

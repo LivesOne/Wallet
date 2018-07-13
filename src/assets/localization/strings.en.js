@@ -124,6 +124,10 @@ const localized_strings = {
     recent_records: 'Recent transaction records',
     view_all_records: 'All records',
 
+    // Token List
+    token_list_title: 'Add token',
+    token_list_search_placeholder: 'Please enter the token name',
+
     // total amount
     total_amount: 'Total amount',
 
