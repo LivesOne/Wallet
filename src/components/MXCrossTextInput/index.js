@@ -40,6 +40,7 @@ type Props = {
     onValidation?: Function
 };
 class MXCrossTextInput extends Component<Props,State> {
+    validate: Function;
 
     constructor(props: any) {
         super(props);
@@ -51,10 +52,11 @@ class MXCrossTextInput extends Component<Props,State> {
         };
         this.onChangeText = this.onChangeText.bind(this);
         this.onValidation = this.onValidation.bind(this);
+        this.validate = this.validate.bind(this);
     }
 
     firstMounted = true;
-
+    _isValid: boolean = true;
 
     static defaultProps = {
         withUnderLine: true,
@@ -76,6 +78,10 @@ class MXCrossTextInput extends Component<Props,State> {
         this.refs.textinput.focus();
     }
 
+    isValid() {
+        return this._isValid;
+    }
+
     setText(newText: string) {
         this.setState({text: newText, hasFocus: true});
         this.props.onTextChanged && this.props.onTextChanged(newText);
@@ -90,13 +96,19 @@ class MXCrossTextInput extends Component<Props,State> {
         this.props.onTextChanged && this.props.onTextChanged(newText);
     };
 
-    onValidation = function() {
+    validate(): boolean{
         if(this.props.onValidation) {
             const errorText = this.props.onValidation(this.state.text);
             this.setState({
                 errorText: errorText
             });
+            this._isValid = errorText === null;
         }
+        return this._isValid;
+    }
+
+    onValidation = function() {
+        this.validate();
     }
 
     componentDidMount() {
