@@ -208,9 +208,11 @@ class MXCrossTextInput extends Component<Props,State> {
                             {this.state.errorText && (<Text style={Base.errorLabel}>{this.state.errorText}</Text>)}
                         </View>
                     </View>
-                    <View style={[Base.bottomStyle, {height:lineHeight}]}>
-                        {withUnderLine && (<View style={{flex: 1, backgroundColor: LVColor.separateLine}} />)}
-                    </View>
+                    {withUnderLine && (
+                        <View style={[Base.bottomStyle, {height:lineHeight}]}>
+                            <View style={{flex: 1, backgroundColor: LVColor.separateLine}} />
+                        </View>
+                    )}
                 </View>
             </View>
         );
