@@ -37,7 +37,7 @@ const Base = LVStyleSheet.create({
     // backgroundColor: 'yellow'
   },
   errorLabel: {
-    marginTop: 5,
+    flex:1,
     fontSize: 12,
     color: LVColor.text.red
   },

@@ -165,7 +165,7 @@ class MXCrossTextInput extends Component<Props,State> {
                             </Text>
                         )}
                         <View style = {[Base.defaultTextAreaStyle, inputContainerStyle]}>
-                            <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+                            <View style={{flex:1,flexDirection:'row', justifyContent:'space-between'}}>
                                 <TextInput
                                     ref={'textinput'}
                                     placeholder={placeholder}
@@ -205,6 +205,8 @@ class MXCrossTextInput extends Component<Props,State> {
                                     )}
                                 </View>
                             </View>
+                        </View>
+                        <View style={{height:12}}>
                             {this.state.errorText && (<Text style={Base.errorLabel}>{this.state.errorText}</Text>)}
                         </View>
                     </View>
