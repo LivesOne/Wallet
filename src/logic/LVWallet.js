@@ -21,9 +21,10 @@ class LVWallet {
     name: string;
     address: string;
     keystore: Object;
-    available_tokens: Array<string>;
+    
     balance_list: Array<LVBalance>;
     holding_list: Array<LVBalance>; // withholding balacne list
+    available_tokens: Array<string>;
 
     static ETH_TOKEN = 'eth';
     static LVTC_TOKEN = 'LVTC';
@@ -35,6 +36,7 @@ class LVWallet {
         this.keystore = keystore;
         this.balance_list = [];
         this.holding_list = [];
+        this.available_tokens = LVWallet.DEFAULT_AVAILABLE_TOKENS;
 
         this.lvtc = 0;
         this.eth = 0;
