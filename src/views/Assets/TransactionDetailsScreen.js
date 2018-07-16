@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { Separator } from 'react-native-tableview-simple';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
@@ -31,6 +31,14 @@ export default class TransactionDetailsScreen extends Component<Props> {
         header: null,
         tabBarVisible: false
     };
+
+    onPressCheckDetail = () => {
+        const { transactionRecord } = this.props.navigation.state.params;
+        const { hash } = transactionRecord;
+        const url = 'https://etherscan.io/tx/' + hash;
+        if (LVUtils.isNavigating()) { return; }
+        this.props.navigation.navigate('WebView', { url: url, title: 'Transaction Information' });
+    }
 
     render() {
         const { transactionRecord } = this.props.navigation.state.params;
@@ -79,6 +87,12 @@ export default class TransactionDetailsScreen extends Component<Props> {
                             )}
                             {state === 'notexist' && (
                                 <Text style={styles.failureText}>{LVStrings.transaction_does_not_exist_message}</Text>
+                            )}
+                            {state === 'waiting' && (
+                                <LVLinkText text={LVStrings.transaction_check_progress} onPress={this.onPressCheckDetail.bind(this)}/>
+                            )}
+                            {state === 'failed' && (
+                                <LVLinkText text={LVStrings.transaction_check_detail} onPress={this.onPressCheckDetail.bind(this)}/>
                             )}
                         </View>
                         {state === 'ok' && (
@@ -129,6 +143,12 @@ const LVRightDetailCell = ({ title, value }) => (
     </View>
 );
 
+const LVLinkText = ({ text, onPress }) => (
+    <TouchableOpacity style={{marginTop: 16}} activeOpacity={0.8} onPress={onPress}>
+        <Text style={styles.transDetailLink}>{text}</Text>
+    </TouchableOpacity>
+)
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -177,5 +197,10 @@ const styles = StyleSheet.create({
         fontSize: LVSize.xsmall,
         textAlign: 'left',
         color: LVColor.text.red
+    },
+    transDetailLink: {
+        fontSize: 15,
+        color: LVColor.text.yellow,
+        textDecorationLine: 'underline'
     }
 });

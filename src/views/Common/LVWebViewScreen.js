@@ -9,6 +9,7 @@ import React, { Component } from 'react';
 import { StyleSheet, WebView, View, Text } from 'react-native';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
+import LVUtils from '../../utils';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 
 type Props = {
@@ -53,11 +54,13 @@ export default class LVWebViewScreen extends Component<Props, State> {
 
     render() {
         const { url, title } = this.state;
+        const staticTitle = this.props.navigation.state.params.title;
+        const navTitle = LVUtils.isNotEmptyString(staticTitle) ? staticTitle : title;
 
         return (
             <View style={styles.container}>
                 <MXNavigatorHeader
-                    title={title}
+                    title={navTitle}
                     style={{ backgroundColor: 'transparent' }}
                     titleStyle={{ fontSize: LVSize.large, color: LVColor.text.grey2 }}
                     left={require('../../assets/images/close_modal.png')}
