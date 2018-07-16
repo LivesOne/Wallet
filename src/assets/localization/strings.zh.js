@@ -33,7 +33,8 @@ const localized_strings = {
     receive_copy_success: '复制成功',
     receive_save: '保存二维码',
     receive_empty: '您还未添加钱包',
-    receive_save_finish: '保存完成',
+    receive_save_finish: '保存到相册完成',
+    receive_qr_dialog_title: '是否保存二维码到相册？',
 
     // Wallet
     wallet_import: '导入',

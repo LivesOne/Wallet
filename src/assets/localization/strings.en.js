@@ -33,7 +33,8 @@ const localized_strings = {
     receive_copy_success: 'Successful copied',
     receive_save: 'Save the QR code',
     receive_empty: 'You haven’t add a wallet yet',
-    receive_save_finish: 'Completed',
+    receive_save_finish: 'Save to gallery Completed',
+    receive_qr_dialog_title: 'do you save code to disk？',
 
     // inner error
     inner_common_error: 'Inner error',

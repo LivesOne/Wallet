@@ -7,7 +7,20 @@
 
 import React, { Component } from 'react';
 
-import { StyleSheet,Share, View, Platform,Text,Image,ScrollView ,Clipboard,CameraRoll ,ActionSheetIOS , StatusBar} from 'react-native';
+import {
+    StyleSheet,
+    Share,
+    View,
+    Platform,
+    Text,
+    Image,
+    ScrollView,
+    Clipboard,
+    CameraRoll,
+    ActionSheetIOS,
+    StatusBar,
+    TouchableOpacity
+} from 'react-native';
 
 import PropTypes from 'prop-types';
 import LVSize from '../../styles/LVFontSize';
@@ -29,6 +42,8 @@ import QRCode from 'react-native-qrcode-svg';
 import RNFS from "react-native-fs"
 import Toast from 'react-native-root-toast';
 import TransferUtils from '../Transfer/TransferUtils';
+import LVConfiguration from '../../logic/LVConfiguration';
+import { LVConfirmDialog } from '../Common/LVDialog';
 
 
 // import QRCode from 'react-native-qrcode';
@@ -173,25 +188,32 @@ class ReceiveScreen extends Component {
 
     
     saveQrToDisk() {
+        LVConfiguration.setHasSavedQrCodeToDisk();
         this.svg.toDataURL((data) => {
             RNFS.writeFile(RNFS.CachesDirectoryPath+"/some-name.png", data, 'base64')
               .then((success) => {
                   return CameraRoll.saveToCameraRoll(RNFS.CachesDirectoryPath+"/some-name.png", 'photo')
                   .then((data) => {
-                    //   Toast.show("data:"+data);
                       Toast.show(LVStrings.receive_save_finish)
 
                   }).catch((err) => {
                       Toast.show(err.message);
-                    //   Toast.show(err.replace("Error:",""));
                   });
-                // Toast.show("ok");
               })
               .then(() => {
                   this.setState({ busy: false, imageSaved: true  })
-                //   Toast.show(LVStrings.receive_save_finish)
               })
         })
+   }
+
+   async handleSaveQr(){
+       const saved = await LVConfiguration.getHasSavedQrCodeToDisk();
+       console.log("handle save qr saved:" + saved);
+       if(saved === true){
+           this.saveQrToDisk();
+       } else {
+           this.refs.saveQrDialog.show();
+       }
    }
 
     handleWalletChange = async () => {
@@ -234,7 +256,9 @@ class ReceiveScreen extends Component {
                         <Text ellipsizeMode="middle" numberOfLines={1} style={styles.address}>
                             {StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 11)}
                         </Text>
-                        <View style = {{marginLeft : Platform.OS === "ios" ? 0 : 25}}>
+                        <TouchableOpacity 
+                            onPress = {() => {this.handleSaveQr()}}
+                            style = {{marginLeft : Platform.OS === "ios" ? 0 : 25}}>
                             <QRCode
                             getRef={(c) => (this.svg = c)}
                             style={styles.qrcode_pic}
@@ -242,7 +266,7 @@ class ReceiveScreen extends Component {
                             size={162}
                             bgColor='white'
                             fgColor='black'/>
-                        </View>
+                        </TouchableOpacity>
 
                         <MXButton
                             rounded = {true}
@@ -271,6 +295,13 @@ class ReceiveScreen extends Component {
                     selectedWalletId={this.state.walletId}
                     onSelected={this.onWalletSelected}
                 /> */}
+                <LVConfirmDialog 
+                    ref={'saveQrDialog'}
+                    title={LVStrings.receive_qr_dialog_title}  
+                    dismissAfterConfirm = {true}
+                    onConfirm={()=>{this.saveQrToDisk()}}
+                
+                />
 
             </View>
         );
