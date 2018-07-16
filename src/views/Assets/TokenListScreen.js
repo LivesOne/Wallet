@@ -68,7 +68,9 @@ export default class TokenListScreen extends Component<Props, State> {
     }
 
     openWebView = () => {
-        if (LVUtils.isNavigating()) { return }
+        if (LVUtils.isNavigating()) {
+            return;
+        }
         this.lostBlur();
         this.props.navigation.navigate('WebView', { url: 'https://lives.one' });
     };
@@ -108,9 +110,7 @@ export default class TokenListScreen extends Component<Props, State> {
         }
 
         // remove the token that has no icon
-        tokens = tokens.filter(token => {
-            return LVTokenIcons.has(token);
-        });
+        tokens = tokens.filter(token => LVTokenIcons.has(token));
 
         // record objects
         const records = tokens.map(token => {
@@ -181,7 +181,9 @@ export default class TokenListScreen extends Component<Props, State> {
                         this.props.navigation.goBack();
                     }}
                 />
-                <TouchableOpacity style={{ flex: 1 }} activeOpacity={1} onPress={this.lostBlur.bind(this)}>
+                <View style={{ flex: 1 }}>
+                    <TouchableOpacity style={styles.touchContainer} onPress={this.lostBlur.bind(this)} />
+
                     <MXSearchBar
                         ref={'searchBar'}
                         style={{ marginTop: 10 }}
@@ -190,6 +192,7 @@ export default class TokenListScreen extends Component<Props, State> {
                         onTextChanged={this.onSearchBarTextChanged}
                         onEndEditing={this.onSearchBarEndEditing}
                     />
+
                     {searchResultEmpty ? (
                         <View style={styles.searchEmpty}>
                             <Image style={styles.searchEmptyImage} source={searchEmptyIcon} />
@@ -200,7 +203,7 @@ export default class TokenListScreen extends Component<Props, State> {
                         </View>
                     ) : (
                         <FlatList
-                            style={{ flex: 1, paddingTop: 10 }}
+                            style={{ flex: 1, marginTop: 10 }}
                             data={data}
                             keyExtractor={this._keyExtractor}
                             renderItem={this._renderItem}
@@ -212,7 +215,7 @@ export default class TokenListScreen extends Component<Props, State> {
                             }
                         />
                     )}
-                </TouchableOpacity>
+                </View>
             </View>
         );
     }
@@ -252,11 +255,15 @@ class LVTokenRecordItem extends React.Component<ItemProps> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
         backgroundColor: LVColor.white
+    },
+    touchContainer: {
+        ...StyleSheet.absoluteFillObject
     },
     record: {
         height: 60,
+        marginLeft: 16,
+        marginRight: 16,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
