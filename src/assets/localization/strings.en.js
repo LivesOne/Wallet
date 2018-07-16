@@ -154,6 +154,9 @@ const localized_strings = {
         'Transaction failed. Please make appropriate choice for transaction fee.',
     transaction_does_not_exist_message: 'The transaction does not exist. The transaction fee has returned to the wallet.',
 
+    transaction_check_progress: 'Check transaction progress',
+    transaction_check_detail: 'View details',
+
     // Transfer 转账
     transfer_lvt_insufficient: 'Your LVTC balance is insufficient. Please recharge.',
     transfer_lvt_and_eth_insufficient: 'Your LVTC and ETH balance are insufficient. Please recharge.',

@@ -9,6 +9,7 @@ import React, { Component } from 'react';
 import { StyleSheet, WebView, View, Text } from 'react-native';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
+import LVUtils from '../../utils';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 
 type Props = {
@@ -19,7 +20,7 @@ type State = {
     title: string,
     loading: boolean,
     canGoBack: boolean,
-    canGoForward: boolean,
+    canGoForward: boolean
 };
 
 export default class LVWebViewScreen extends Component<Props, State> {
@@ -35,7 +36,7 @@ export default class LVWebViewScreen extends Component<Props, State> {
             title: 'WebView',
             loading: true,
             canGoBack: false,
-            canGoForward: false,
+            canGoForward: false
         };
 
         this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
@@ -47,20 +48,22 @@ export default class LVWebViewScreen extends Component<Props, State> {
             title: navState.title,
             loading: navState.loading,
             canGoBack: navState.canGoBack,
-            canGoForward: navState.canGoForward,
+            canGoForward: navState.canGoForward
         });
-    }
+    };
 
     render() {
         const { url, title } = this.state;
+        const staticTitle = this.props.navigation.state.params.title;
+        const navTitle = LVUtils.isNotEmptyString(staticTitle) ? staticTitle : title;
 
         return (
             <View style={styles.container}>
                 <MXNavigatorHeader
-                    title={title}
+                    title={navTitle}
                     style={{ backgroundColor: 'transparent' }}
                     titleStyle={{ fontSize: LVSize.large, color: LVColor.text.grey2 }}
-                    left={require('../../assets/images/back_grey.png')}
+                    left={require('../../assets/images/close_modal.png')}
                     onLeftPress={() => {
                         this.props.navigation.goBack();
                     }}
@@ -71,19 +74,22 @@ export default class LVWebViewScreen extends Component<Props, State> {
                     javaScriptEnabled={true}
                     domStorageEnabled={true}
                     startInLoadingState={true}
-                    onLoad={(e) => console.log('onLoad')}
-                    onLoadEnd={(e) => console.log('onLoadEnd')}
-                    onLoadStart={(e) => console.log('onLoadStart')}
-                    renderError={() => {
-                        console.log('renderError')
-                        return <View><Text>renderError回调了，出现错误</Text></View>
-                    }}
+                    onLoad={e => console.log('onLoad')}
+                    onLoadEnd={e => console.log('onLoadEnd')}
+                    onLoadStart={e => console.log('onLoadStart')}
+                    renderError={() => <WebViewErrorView />}
                     onNavigationStateChange={this.onNavigationStateChange}
                 />
             </View>
         );
     }
 }
+
+const WebViewErrorView = () => {
+    <View>
+        <Text>ErrorView</Text>
+    </View>;
+};
 
 const styles = StyleSheet.create({
     container: {

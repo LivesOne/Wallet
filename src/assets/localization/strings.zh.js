@@ -151,6 +151,9 @@ const localized_strings = {
     transaction_failure_message: '转账失败，请合理配置矿工费。',
     transaction_does_not_exist_message: '交易不存在，矿工费退回原钱包。',
 
+    transaction_check_progress: '查询交易进度',
+    transaction_check_detail: '查看详情',
+
     // Transfer 转账
     transfer_lvt_insufficient: '您的LVTC余额不足，请充值！',
     transfer_lvt_and_eth_insufficient: '您的LVTC、ETH均不足，请充值！',
