@@ -206,7 +206,7 @@ class MXCrossTextInput extends Component<Props,State> {
                                 </View>
                             </View>
                         </View>
-                        <View style={{height:12}}>
+                        <View style={{height:13}}>
                             {this.state.errorText && (<Text style={Base.errorLabel}>{this.state.errorText}</Text>)}
                         </View>
                     </View>
