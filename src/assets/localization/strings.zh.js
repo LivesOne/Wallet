@@ -128,6 +128,8 @@ const localized_strings = {
     // Token List
     token_list_title: '添加币种',
     token_list_search_placeholder: '请输入币种名称',
+    token_list_search_result_empty: '未找到相关Token',
+    token_list_add_token: '进行添加',
 
     // Transaction record
     transaction_records: '交易记录',

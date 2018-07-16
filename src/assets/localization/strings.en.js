@@ -127,6 +127,8 @@ const localized_strings = {
     // Token List
     token_list_title: 'Add token',
     token_list_search_placeholder: 'Please enter the token name',
+    token_list_search_result_empty: 'No relevant token',
+    token_list_add_token: 'Add',
 
     // total amount
     total_amount: 'Total amount',
