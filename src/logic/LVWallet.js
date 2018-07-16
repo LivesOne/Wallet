@@ -40,6 +40,23 @@ class LVWallet {
         this.eth = 0;
     }
 
+    isAvailable(token: string): boolean {
+        return this.available_tokens.includes(token);
+    }
+
+    addAvailableToken(token: string) {
+        if (!this.isAvailable(token)) {
+            this.available_tokens.push(token);
+        }
+    }
+
+    removeAvailableToken(token: string) {
+        const index = this.available_tokens.indexOf(token);
+        if (index >= 0) {
+            this.available_tokens.splice(index, 1);
+        }
+    }
+
     get lvtc(): Big {
         return this.getBalance(LVWallet.LVTC_TOKEN);
     }

@@ -17,14 +17,16 @@ import LVWalletManager from '../../logic/LVWalletManager';
 import MXSearchBar from '../../components/MXSearchBar';
 import MXTouchableImage from '../../components/MXTouchableImage';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
+import LVNotification from '../../logic/LVNotification';
+import LVNotificationCenter from '../../logic/LVNotificationCenter';
 
-const tokenDescriptions = {
-    eth: 'Ethereum Foundation',
-    LVTC: 'LivesToken',
-    DGD: 'Digix DAO',
-    OMG: 'OmiseGo',
-    XRP: 'Ripple',
-};
+const tokenDescriptions = new Map([
+    ['eth', 'Ethereum Foundation'],
+    ['LVTC', 'LivesToken'],
+    ['DGD', 'Digix DAO'],
+    ['OMG', 'OmiseGo'],
+    ['XRP', 'Ripple']
+]);
 
 const addTokenIcon = require('../../assets/images/add_token.png');
 const addTokenDisableIcon = require('../../assets/images/add_token_disable.png');
@@ -64,8 +66,6 @@ export default class TokenListScreen extends Component<Props, State> {
         this.loadRecordsWhileRefetchTokens(false);
     }
 
-    componentWillUnmount() {}
-
     lostBlur = () => {
         Keyboard.dismiss();
         if (LVUtils.isEmptyString(this.state.searchingText) && this.state.searching) {
@@ -74,7 +74,6 @@ export default class TokenListScreen extends Component<Props, State> {
     };
 
     onSearchBarTextChanged = async (text: string) => {
-        console.log(text);
         this.setState({ searching: true, searchingText: text });
     };
 
@@ -90,8 +89,16 @@ export default class TokenListScreen extends Component<Props, State> {
         let tokens = LVWalletManager.supportTokens;
 
         if (refetch || tokens === null || tokens === undefined || tokens.length == 0) {
-            await LVWalletManager.updateSupportTokens();
-            tokens = LVWalletManager.supportTokens;
+            try {
+                await LVWalletManager.updateSupportTokens();
+                tokens = LVWalletManager.supportTokens;
+            } catch (error) {
+                tokens = [];
+            }
+        }
+
+        if (tokens === null || tokens === undefined || tokens.length == 0) {
+            tokens = [LVWallet.LVTC_TOKEN, LVWallet.ETH_TOKEN];
         }
 
         // remove the token that has no icon
@@ -102,8 +109,8 @@ export default class TokenListScreen extends Component<Props, State> {
             return {
                 token: token,
                 image: LVTokenIcons.get(token),
-                available: this.state.wallet.available_tokens.includes(token),
-                description: tokenDescriptions[token]
+                available: this.state.wallet.isAvailable(token),
+                description: tokenDescriptions.get(token) || token.toUpperCase()
             };
         });
 
@@ -128,7 +135,18 @@ export default class TokenListScreen extends Component<Props, State> {
         />
     );
 
-    _onPressAddButton = (item: Object) => {
+    _onPressAddButton = async (item: Object) => {
+        if (item.available) {
+            this.state.wallet.removeAvailableToken(item.token);
+        }
+        else {
+            this.state.wallet.addAvailableToken(item.token);
+        }
+        
+        await LVWalletManager.saveToDisk();
+        await this.loadRecordsWhileRefetchTokens(false);
+
+        LVNotificationCenter.postNotification(LVNotification.walletChanged);
     };
 
     render() {

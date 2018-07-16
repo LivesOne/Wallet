@@ -68,7 +68,7 @@ export default class AssetsBalanceList extends React.Component<Props> {
     render() {
         const { style, wallet } = this.props;
 
-        const unfilted = wallet.balance_list.filter(balance => wallet.available_tokens.includes(balance.token));
+        const unfilted = wallet.balance_list.filter(balance => wallet.isAvailable(balance.token));
         const data = unfilted.map(balance => {
             return { token: balance.token, amount: wallet.getBalance(balance.token) };
         });
