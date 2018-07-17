@@ -36,6 +36,7 @@ type State = {
     gasValue:string,
     gasPriceValue:string,
     gasDataValue:string,
+    isShowFeeFailMessage:bool,
 };
 
 export class TransferMinerGapSetter extends Component<Props, State> {
@@ -49,6 +50,7 @@ export class TransferMinerGapSetter extends Component<Props, State> {
             gasValue:'',
             gasPriceValue:'',
             gasDataValue:'',
+            isShowFeeFailMessage:false
         }
         TransferUtils.log('default value = ' + this.getInitValue());
     }
@@ -93,10 +95,15 @@ export class TransferMinerGapSetter extends Component<Props, State> {
     }
 
     onValueChange(value: number) {
+       var flag = false;
+        if (value < this.props.defaultValue) {
+            flag = true;
+        }
 
         this.setState({
             value: value,
-            userHasChanged : true
+            userHasChanged : true,
+            isShowFeeFailMessage:flag,
         });
     }
 
@@ -226,13 +233,9 @@ export class TransferMinerGapSetter extends Component<Props, State> {
                     placeholder={LVStrings.transfer_advanced_gas_price}
                     withUnderLine={true}
                     onTextChanged={(text) => this.setState({gasPriceValue:text})}/>
-                <MXCrossTextInput
-                    style={{height:50,width:'100%'}}
-                    placeholder={LVStrings.transfer_advanced_gas_data}
-                    withUnderLine={true}
-                    onTextChanged={(text) => this.setState({gasDataValue:text})}/>
             </View>
             :
+            <View style = {{backgroundColor: LVColor.white}}>
             <View style={styles.sliderContainer}>
                 <Text style={styles.text}>{ LVStrings.transfer_slow }</Text>
                 <View  style= {styles.sliderWrapper}>
@@ -249,6 +252,15 @@ export class TransferMinerGapSetter extends Component<Props, State> {
                     />
                 </View>
                 <Text style={styles.text}>{ LVStrings.transfer_fast }</Text>
+            </View>
+            {this.state.isShowFeeFailMessage}
+              &&
+            {<View style = {{marginTop:10,justifyContent: 'center',alignItems: 'center'}}>
+                <Text style= {{fontSize:12,color:LVColor.text.red}}>
+                 {LVStrings.transfer_minner_fee_fail}
+                </Text>
+            </View>
+            }
             </View>
             }
         </View>
@@ -287,7 +299,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
         marginTop: 20,
-        marginBottom:20,
     },
     sliderWrapper: {
         width: '75%',

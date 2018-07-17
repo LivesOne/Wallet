@@ -149,6 +149,17 @@ const localized_strings = {
     transaction_failure_message: '转账失败，请合理配置矿工费。',
     transaction_does_not_exist_message: '交易不存在，矿工费退回原钱包。',
 
+    // MinnerFeeDetail
+    minnerfeedetail_title: '什么是矿工费',
+    minnerfeedetail_content: '  在以太链上，任何人都可以读写数据，数据的读取是免费的，但写入数据需要支付一定的矿工费用，网络上的任何矿工都可以参与挖矿。同时由于挖矿需要消耗一定的算力和电力，因此这也是矿工费的由来。\n  在链上进行多笔转账时，请在前一笔转账完成（状态变为转账成功或转账失败）后再发起转账，否则可能会造成失败。',
+    minnerfeedetail_transferFail: '转账失败的几种情况：',
+    minnerfeedetail_title1: '1.矿工费用过低：',
+    minnerfeedetail_content1: '  无矿工打包，转行失败，手续费退回，此时在交易记录中查询会显示交易不存在。',
+    minnerfeedetail_title2: '2.矿工费用不足：',
+    minnerfeedetail_content2: '  矿工已开始打包，打包过程中矿工费用已完全消耗（但尚未打包完成），此时交易记录中查询会显示交易失败。 ',
+    minnerfeedetail_title3: '3.连续发起多笔转账：',
+    minnerfeedetail_content3: '  在第一笔交易未完成时发起第二笔交易，若第一笔交易矿工费高于第二笔，则第二笔转账必定失败，且在交易记录中显示交易不存在；反之，第一笔交易失败。',
+
     // Transfer 转账
     transfer_lvt_insufficient: '您的LVTC余额不足，请充值！',
     transfer_lvt_and_eth_insufficient: '您的LVTC、ETH均不足，请充值！',
@@ -163,6 +174,7 @@ const localized_strings = {
     transfer_processing: '正在转账中...',
     transfer_success: '转账成功',
     transfer_fail: '转账失败',
+    transfer_minner_fee_fail: '您当前的矿工费较低，可能会转账失败',
     transfer_to_self_not_allowed: '不能给自己账户转账',
 
     // Profile

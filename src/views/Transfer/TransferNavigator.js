@@ -12,9 +12,7 @@ import TransferScreen from './TransferScreen';
 import AddEditContactPage from '../contacts/AddEditContactPage';
 import ContactsManagerPage from '../contacts/ContactsManagerPage';
 import LVTContactDetailPage from '../contacts/LVTContactDetailPage';
-import TransferMinerTips from '../Transfer/TransferMinerTips'
-
-
+import TransferMinerTips from '../Transfer/TransferMinerTips';
 import ReceiveTip from '../Receive/ReceiveTip';
 import ReceiveScreen from '../Receive/ReceiveScreen';
 

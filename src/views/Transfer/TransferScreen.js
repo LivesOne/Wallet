@@ -340,6 +340,10 @@ class TransferScreen extends Component<Props, State> {
             this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
             this.refs.insufficientDialog.show();
             return;
+        }else if (wallet && curETH.lt(this.refs.gapSetter.getValue() + Number(amountText))){
+            this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
+            this.refs.insufficientDialog.show();
+            return;
         } else if (isInsufficient) {
             this.setState({balanceTip: "LVTC" === token.toUpperCase() ? 
             LVStrings.transfer_lvt_insufficient : LVStrings.transfer_eth_insufficient});
@@ -447,8 +451,7 @@ class TransferScreen extends Component<Props, State> {
     }
 
     onMinerTipsPress = ()=>{
-        this.props.navigation.navigate("TransferMinerTips",null
-        );
+        this.props.navigation.navigate("TransferMinerTips");
     }
 
     num = 0;
@@ -612,7 +615,7 @@ const styles = StyleSheet.create({
     textHint: {
         fontSize: 12,
         color: LVColor.text.grey1,
-        marginTop: 10,
+        marginTop: 20,
         marginBottom: 15 * pixelRatio,
     },
     btnContainer: {
