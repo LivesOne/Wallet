@@ -4041,11 +4041,7 @@ lodash@^3.5.0:
   version "3.10.1"
   resolved "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
-lodash@^4.13.1, lodash@^4.14.0, lodash@^4.16.6, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0, lodash@^4.6.1:
-  version "4.17.10"
-  resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
-
-lodash@^4.17.10:
+lodash@^4.13.1, lodash@^4.14.0, lodash@^4.16.6, lodash@^4.17.10, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0, lodash@^4.6.1:
   version "4.17.10"
   resolved "http://registry.npm.taobao.org/lodash/download/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
 
@@ -5378,6 +5374,12 @@ react-native-swipeout@^2.3.3:
 react-native-swiper@^1.5.13:
   version "1.5.13"
   resolved "https://registry.npmjs.org/react-native-swiper/-/react-native-swiper-1.5.13.tgz#fa695cd4ab77b9a9df2d2bfee38ea7274dd07a2e"
+  dependencies:
+    prop-types "^15.5.10"
+
+react-native-switch-pro@^1.0.0-beta:
+  version "1.0.0-beta"
+  resolved "http://registry.npm.taobao.org/react-native-switch-pro/download/react-native-switch-pro-1.0.0-beta.tgz#f61bc1a71e9a8707e3ea3c962c9a706542a6dd66"
   dependencies:
     prop-types "^15.5.10"
 

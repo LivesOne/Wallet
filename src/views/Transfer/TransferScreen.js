@@ -52,6 +52,7 @@ import LVGradientPanel from '../Common/LVGradientPanel';
 import Toast from 'react-native-root-toast';
 import Transaction from 'ethereumjs-tx';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
+import TransferMinerTips from './TransferMinerTips';
 
 var Big = require('big.js');
 import LVBig from '../../logic/LVBig';
@@ -445,12 +446,17 @@ class TransferScreen extends Component<Props, State> {
         }
     }
 
+    onMinerTipsPress = ()=>{
+        this.props.navigation.navigate("TransferMinerTips",null
+        );
+    }
+
     num = 0;
 
     render() {
         const {transactionParams} = this.state;
         return (
-            <View style={{flexDirection: 'column', flex: 1, justifyContent: 'space-between'}}>
+            <View style={{flexDirection: 'column', flex: 1, justifyContent: 'space-between',backgroundColor:LVColor.white}}>
                 {this.state.showModal && <TransferDetailModal
                     ref={'detailModal'}
                     isOpen= {this.state.showModal}
@@ -464,6 +470,16 @@ class TransferScreen extends Component<Props, State> {
                         this.refs.detailModal.dismiss();
                         this.onTransfer() }}
                 />}
+
+                    <MXNavigatorHeader
+                        style={{ backgroundColor: LVColor.white }}
+                        title={LVStrings.transfer}
+                        titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
+                        onLeftPress={() => {
+                            this.props.navigation.goBack();
+                        }}
+                        />
+                <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
                 <TouchableOpacity  style={ styles.container } activeOpacity={1} onPress={Keyboard.dismiss} >
                     <LVQrScanModal
                         barcodeReceived={(data)=>{
@@ -480,15 +496,6 @@ class TransferScreen extends Component<Props, State> {
                             }}
                         isOpen= {this.state.showQrScanModal}
                         onClosed = {()=>{this.setState({ showQrScanModal: false })}}/>
-
-                    <MXNavigatorHeader
-                        style={{ backgroundColor: LVColor.white }}
-                        title={LVStrings.transfer}
-                        titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
-                        onLeftPress={() => {
-                            this.props.navigation.goBack();
-                        }}
-                        />
                     <View style= { styles.headerBelow }>
                         <MXCrossTextInput 
                             ref={'refAddressIn'}
@@ -522,21 +529,11 @@ class TransferScreen extends Component<Props, State> {
                                 enable={this.state.transactionParams !== null}
                                 minimumValue={this.state.minGap}
                                 maximumValue={this.state.maxGap}
-                                // defaultValue={this.state.minGap * 0.1}
-                                // defaultValue={this.state.maxGap * 1.1}
+                                curETH={this.state.curETH.toFixed()}
+                                minerTipsCallBack = {this.onMinerTipsPress.bind(this)}
                                 defaultValue={transactionParams !== null?
                                 TransferUtils.convertHex2Eth(transactionParams.gasPrice, transactionParams.gasLimit) : 0}
                                 style = {styles.setter}/>
-                        <View style= { styles.curEth }>
-                            <Text style = {styles.text}>{LVStrings.transfer_current_eth}</Text>
-                            <LVBalanceShowView
-                                title={LVStrings.total_eth}
-                                unit={"ETH"}
-                                balance={this.state.curETH}
-                                textStyle={styles.textCurEth}
-                                showSeparator={true}
-                            />
-                        </View>   
                         <Text style = {styles.textHint}>{LVStrings.transfer_hint}</Text>
                         <View style = {styles.btnContainer}>
                             <MXButton 
@@ -571,6 +568,7 @@ class TransferScreen extends Component<Props, State> {
                     </LVConfirmDialog>
 
                 </TouchableOpacity>
+                </ScrollView>
             </View>
         )
     }

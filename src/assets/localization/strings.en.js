@@ -218,6 +218,10 @@ const localized_strings = {
     transfer_miner_tips: 'Miner fee',
     transfer_slow: 'Slow',
     transfer_fast: 'Fast',
+    transfer_advanced: 'Advanced',
+    transfer_advanced_gas: 'Please enter gas',
+    transfer_advanced_gas_price: 'Please enter gas price',
+    transfer_advanced_gas_data: 'Please enter the data parameter (optional)',
     transfer_current_eth: "Current wallet's ETH",
     transfer_hint:
         'The ETH in your current wallet will be deducted after the transaction is executed. The miner’s fees will not be refunded after the transaction is packaged.',
