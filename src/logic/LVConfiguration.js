@@ -74,16 +74,7 @@ class LVConfiguration {
     static async setLastTransactionRecordsFilterEndDate(date: string) {
         await LVPersistent.setString(LV_Key_LastTransactionRecordsFilterEndDate, date);
     }
-
-    // 是否已经弹出过保存二维码到本地
-
-    static async setHasSavedQrCodeToDisk(){
-        await LVPersistent.setBoolean(LV_Key_HasSavedQrCodeToDisk, true);
-    }
-
-    static async getHasSavedQrCodeToDisk(){
-        return await LVPersistent.getBoolean(LV_Key_HasSavedQrCodeToDisk);
-    }
+    
 }
 
 export default LVConfiguration;

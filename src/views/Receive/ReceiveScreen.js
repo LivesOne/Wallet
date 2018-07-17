@@ -188,7 +188,6 @@ class ReceiveScreen extends Component {
 
     
     saveQrToDisk() {
-        LVConfiguration.setHasSavedQrCodeToDisk();
         this.svg.toDataURL((data) => {
             RNFS.writeFile(RNFS.CachesDirectoryPath+"/some-name.png", data, 'base64')
               .then((success) => {
@@ -204,16 +203,6 @@ class ReceiveScreen extends Component {
                   this.setState({ busy: false, imageSaved: true  })
               })
         })
-   }
-
-   async handleSaveQr(){
-       const saved = await LVConfiguration.getHasSavedQrCodeToDisk();
-       console.log("handle save qr saved:" + saved);
-       if(saved === true){
-           this.saveQrToDisk();
-       } else {
-           this.refs.saveQrDialog.show();
-       }
    }
 
     handleWalletChange = async () => {
@@ -257,7 +246,7 @@ class ReceiveScreen extends Component {
                             {StringUtils.converAddressToDisplayableText(this.state.wallet.address, 9, 11)}
                         </Text>
                         <TouchableOpacity 
-                            onPress = {() => {this.handleSaveQr()}}
+                            onPress = {() => {this.saveQrToDisk()}}
                             style = {{marginLeft : Platform.OS === "ios" ? 0 : 25}}>
                             <QRCode
                             getRef={(c) => (this.svg = c)}
@@ -295,14 +284,6 @@ class ReceiveScreen extends Component {
                     selectedWalletId={this.state.walletId}
                     onSelected={this.onWalletSelected}
                 /> */}
-                <LVConfirmDialog 
-                    ref={'saveQrDialog'}
-                    title={LVStrings.receive_qr_dialog_title}  
-                    dismissAfterConfirm = {true}
-                    onConfirm={()=>{this.saveQrToDisk()}}
-                
-                />
-
             </View>
         );
     }else {
