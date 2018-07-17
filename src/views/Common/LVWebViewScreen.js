@@ -78,7 +78,7 @@ export default class LVWebViewScreen extends Component<Props, State> {
                 <WebView
                     ref={'webview'}
                     style={styles.webview}
-                    source={{ uri: 'https://www.google.com' }}
+                    source={{ uri: url }}
                     javaScriptEnabled={true}
                     domStorageEnabled={true}
                     startInLoadingState={true}
