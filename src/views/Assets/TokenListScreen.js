@@ -88,7 +88,7 @@ export default class TokenListScreen extends Component<Props, State> {
     };
 
     onSearchBarFocus = () => {
-        this.setState({ searching: true, searchingText: null });
+        this.setState({ searching: true });
     };
 
     onSearchBarEndEditing = () => {};
