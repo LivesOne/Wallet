@@ -24,6 +24,7 @@ const localized_strings = {
     common_next: 'Next',
     common_open_ettings: 'Open settings',
     common_copy: 'Copy',
+    common_retry: 'Retry',
 
     //receive
     receive_title: 'Receive',
@@ -277,6 +278,9 @@ const localized_strings = {
     network_error: 'Network request failed, please try again!',
     network_error_network_lost: 'Your network is not connected, please try again!',
     network_timeout: 'Network timeout',
+
+    // WebView
+    webview_connection_failed: 'Connection failed',
 
     // exit
     exit_app_prompt: 'Exit App?',
