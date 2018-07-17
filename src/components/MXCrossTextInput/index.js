@@ -188,7 +188,7 @@ class MXCrossTextInput extends Component<Props,State> {
                                     onFocus={() => this.setState({ hasFocus: true })}
                                     onEndEditing={() => this.setState({ hasFocus: false })}
                                 />
-                                <View>
+                                <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
                                     { (Platform.OS === 'android') && 
                                         this.props.withClearButton &&
                                         this.state.text !== null &&
