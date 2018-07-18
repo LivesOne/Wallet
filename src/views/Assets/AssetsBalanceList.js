@@ -10,7 +10,7 @@ import { StyleSheet, View, ViewPropTypes, FlatList, Text, Image, TouchableOpacit
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
-import LVTokenIcons from '../../assets/LVTokenIcons';
+import LVTokens from '../../logic/LVTokens';
 import LVWallet from '../../logic/LVWallet';
 import { StringUtils } from '../../utils';
 import LVBalanceShowView from '../Common/LVBalanceShowView';
@@ -101,7 +101,7 @@ type BalanceCardProps = {
 class LVWalletBalanceCard extends React.Component<BalanceCardProps> {
     render() {
         const { token, amount } = this.props;
-        const tokenImage = LVTokenIcons.get(token);
+        const tokenImage = LVTokens.icons.get(token);
 
         const value = StringUtils.beautifyBalanceShow(amount);
         const balanceString = StringUtils.convertAmountToCurrencyString(value.result, ',', 0, true);

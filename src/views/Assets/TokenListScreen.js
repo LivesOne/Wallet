@@ -11,7 +11,7 @@ import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVUtils from '../../utils';
 import LVStrings from '../../assets/localization';
-import LVTokenIcons from '../../assets/LVTokenIcons';
+import LVTokens from '../../logic/LVTokens';
 import LVWallet from '../../logic/LVWallet';
 import LVWalletManager from '../../logic/LVWalletManager';
 import MXSearchBar from '../../components/MXSearchBar';
@@ -94,29 +94,18 @@ export default class TokenListScreen extends Component<Props, State> {
     onSearchBarEndEditing = () => {};
 
     loadRecordsWhileRefetchTokens = async (refetch: boolean) => {
-        let tokens = LVWalletManager.supportTokens;
+        let tokens = LVTokens.supported;
 
         if (refetch || tokens === null || tokens === undefined || tokens.length == 0) {
-            try {
-                await LVWalletManager.updateSupportTokens();
-                tokens = LVWalletManager.supportTokens;
-            } catch (error) {
-                tokens = [];
-            }
+            await LVTokens.updateSupportedTokens();
+            tokens = LVTokens.supported;
         }
-
-        if (tokens === null || tokens === undefined || tokens.length == 0) {
-            tokens = [LVWallet.LVTC_TOKEN, LVWallet.ETH_TOKEN];
-        }
-
-        // remove the token that has no icon
-        tokens = tokens.filter(token => LVTokenIcons.has(token));
 
         // record objects
         const records = tokens.map(token => {
             return {
                 token: token,
-                image: LVTokenIcons.get(token),
+                image: LVTokens.icons.get(token),
                 available: this.state.wallet.isAvailable(token),
                 description: tokenDescriptions.get(token) || token.toUpperCase()
             };
