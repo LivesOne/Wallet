@@ -296,7 +296,6 @@ const styles = StyleSheet.create({
     },
     container: {
         flex:1,
-        justifyContent: 'flex-start',
         marginLeft:15,
         marginRight:15,
     },
