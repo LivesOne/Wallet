@@ -228,6 +228,9 @@ const localized_strings = {
     transfer_payment_details: 'Payment details',
     transfer_address_in: 'Receiver Address',
     transfer_minner_fee_fail: '您当前的矿工费较低，可能会转账失败',
+    transfer_gas_format_hint: 'Gas值必须为大于零的数字',
+    transfer_advanced_gas_price_overLimit: '建议输入100以内的gwei',
+    transfer_gasprice_format_hint: 'GasPrice值必须为大于零的数字',
 
     // MinnerFeeDetail
     minnerfeedetail_title: 'What is a miner',

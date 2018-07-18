@@ -364,6 +364,11 @@ class TransferScreen extends Component<Props, State> {
             this.refs.alert.show();
             return;
         }
+        
+        if (this.refs.gapSetter.getAdvancedSwitchedValue() && this.refs.gapSetter.getAdvancedFailValue()) {
+            return;
+        }
+
         this.refs.inputPwdDialog.show();
     }
 
@@ -396,8 +401,13 @@ class TransferScreen extends Component<Props, State> {
         }
         setTimeout(async ()=> {
             let gasPrice = TransferUtils.getSetGasPriceHexStr(this.refs.gapSetter.getValue(), transactionParams.gasLimit);
+            let gasLimit =  transactionParams.gasLimit;
+            if (this.refs.gapSetter.getAdvancedSwitchedValue()) {
+                gasPrice = this.refs.gapSetter.getGasPriceValue + '0x'; //转化成16进制
+                gasLimit = this.refs.gapSetter.getGasValue + '0x';
+            }
             let rst = await TransferLogic.transaction(addressIn, password, amount, transactionParams.nonce,
-                transactionParams.gasLimit, gasPrice, transactionParams.token, transactionParams.chainID, wallet, token);
+                gasLimit, gasPrice, transactionParams.token, transactionParams.chainID, wallet, token);
             let success = rst && rst.result;
             if (success) {  
                 LVNotificationCenter.postNotification(LVNotification.transcationCreated, {

@@ -32,10 +32,10 @@ type Props = {
 type State = {
     value: number,
     userHasChanged: boolean,
-    advancedSwitchedValue:boolean,
+    advancedSwitchedValue:bool,
     gasValue:string,
     gasPriceValue:string,
-    gasDataValue:string,
+    isAdvancedValueFail:bool,
     isShowFeeFailMessage:bool,
 };
 
@@ -49,8 +49,8 @@ export class TransferMinerGapSetter extends Component<Props, State> {
             advancedSwitchedValue: false,
             gasValue:'',
             gasPriceValue:'',
-            gasDataValue:'',
-            isShowFeeFailMessage:false
+            isShowFeeFailMessage:false,
+            isAdvancedValueFail:true
         }
         TransferUtils.log('default value = ' + this.getInitValue());
     }
@@ -65,21 +65,26 @@ export class TransferMinerGapSetter extends Component<Props, State> {
         }
     }
 
-    gasValue = ()=>{
+    getGasValue = ()=>{
         return this.state.gasValue;
     }
 
-    gasPriceValue = ()=>{
+    getGasPriceValue = ()=>{
         return this.state.gasPriceValue;
     }
 
-    gasDataValue = ()=>{
-        return this.state.gasDataValue;
+    getAdvancedSwitchedValue = ()=>{
+        return this.state.advancedSwitchedValue;
+    }
+
+    getAdvancedFailValue = ()=>{
+        return this.state.isAdvancedValueFail;
     }
 
     calculateValue() {
         if (this.props.enable) {
-            return TransferUtils.convertMinnerGap(this.getValue()) + ' ETH';
+            let gas = TransferUtils.convertMinnerGap(this.getValue());
+            return ((isNaN(gas)?'--':gas) + ' ETH');
             // return this.getValue() + ' ETH';
         } else {
             return '-- ETH'
@@ -87,10 +92,17 @@ export class TransferMinerGapSetter extends Component<Props, State> {
     }
 
     getValue() {
+        if (this.state.advancedSwitchedValue) {
+            return parseInt(this.state.gasPriceValue) * parseInt(this.state.gasValue)/  Math.pow(10, 9);
+        }
         return this.state.userHasChanged ? this.state.value : this.props.defaultValue;
     }
 
     getUserHasChanged() {
+        if (this.state.advancedSwitchedValue) {
+            const flag = true;
+            return flag.toString();
+        }
         return this.state.userHasChanged.toString();
     }
 
@@ -99,7 +111,6 @@ export class TransferMinerGapSetter extends Component<Props, State> {
         if (value < this.props.defaultValue) {
             flag = true;
         }
-
         this.setState({
             value: value,
             userHasChanged : true,
@@ -175,21 +186,45 @@ export class TransferMinerGapSetter extends Component<Props, State> {
 
     onGasValueChange = (value:string)=>{
         this.setState({
-            gasValue:value
+            gasValue:value.trim()
         });
     }
 
     onGasPriceValueChange = (value:string)=>{
         this.setState({
-            gasPriceValue:value
+            gasPriceValue:value.trim()
         });
     }
 
-    onGasDataValueChange = (value:string)=>{
+    onValidateGasValue = (value:?string)=>{
+        if (!TransferUtils.isValidAmountStr(this.state.gasValue)) {
+            this.setState({
+                isAdvancedValueFail:true
+            });    
+            return LVStrings.transfer_gas_format_hint;
+        }
         this.setState({
-            gasDataValue:value
+            isAdvancedValueFail:false
         });
+        return null;
     }
+
+    onValidateGasPriceValue = (value:?string)=>{
+        if (!TransferUtils.isValidAmountStr(this.state.gasPriceValue)) {
+            this.setState({
+                isAdvancedValueFail:true
+            });    
+            return LVStrings.transfer_gasprice_format_hint;
+        }
+        this.setState({
+            isAdvancedValueFail:false
+        });
+        if (parseInt(this.state.gasPriceValue) > 100) {
+            return LVStrings.transfer_advanced_gas_price_overLimit;
+        }
+        return null;
+    }
+
     render() {
         const {maximumValue, minimumValue} = this.props;
         return (
@@ -227,12 +262,14 @@ export class TransferMinerGapSetter extends Component<Props, State> {
                     style={{height:50,width:'100%'}}
                     placeholder={LVStrings.transfer_advanced_gas}
                     withUnderLine={true}
-                    onTextChanged={(text) => this.setState({gasValue:text})}/>
+                    onValidation={this.onValidateGasValue.bind(this)}
+                    onTextChanged={this.onGasValueChange.bind(this)}/>
                 <MXCrossTextInput
                     style={{height:50,width:'100%'}}
                     placeholder={LVStrings.transfer_advanced_gas_price}
                     withUnderLine={true}
-                    onTextChanged={(text) => this.setState({gasPriceValue:text})}/>
+                    onValidation={this.onValidateGasPriceValue.bind(this)}
+                    onTextChanged={this.onGasPriceValueChange.bind(this)}/>
             </View>
             :
             <View style = {{backgroundColor: LVColor.white}}>
@@ -253,13 +290,14 @@ export class TransferMinerGapSetter extends Component<Props, State> {
                 </View>
                 <Text style={styles.text}>{ LVStrings.transfer_fast }</Text>
             </View>
-            {this.state.isShowFeeFailMessage}
-              &&
-            {<View style = {{marginTop:10,justifyContent: 'center',alignItems: 'center'}}>
-                <Text style= {{fontSize:12,color:LVColor.text.red}}>
-                 {LVStrings.transfer_minner_fee_fail}
-                </Text>
-            </View>
+            {
+                this.state.isShowFeeFailMessage
+                &&
+                <View style = {{marginTop:10,justifyContent: 'center',alignItems: 'center'}}>
+                    <Text style= {{fontSize:12,color:LVColor.text.red}}>
+                    {LVStrings.transfer_minner_fee_fail}
+                    </Text>
+                </View>
             }
             </View>
             }
