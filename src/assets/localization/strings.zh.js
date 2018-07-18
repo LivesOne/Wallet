@@ -24,6 +24,7 @@ const localized_strings = {
     common_next: '下一步',
     common_open_ettings: '设置',
     common_copy: '复制',
+    common_retry: '重试',
 
     //receive
     receive_title: '收款',
@@ -33,7 +34,7 @@ const localized_strings = {
     receive_copy_success: '复制成功',
     receive_save: '保存二维码',
     receive_empty: '您还未添加钱包',
-    receive_save_finish: '保存完成',
+    receive_save_finish: '已保存到相册',
 
     // Wallet
     wallet_import: '导入',
@@ -128,6 +129,8 @@ const localized_strings = {
     // Token List
     token_list_title: '添加币种',
     token_list_search_placeholder: '请输入币种名称',
+    token_list_search_result_empty: '未找到相关Token',
+    token_list_add_token: '进行添加',
 
     // Transaction record
     transaction_records: '交易记录',
@@ -148,6 +151,8 @@ const localized_strings = {
     transaction_time: '交易时间',
     transaction_failure_message: '转账失败，请合理配置矿工费。',
     transaction_does_not_exist_message: '交易不存在，矿工费退回原钱包。',
+    transaction_check_progress: '查询交易进度',
+    transaction_check_detail: '查看详情',
 
     // MinnerFeeDetail
     minnerfeedetail_title: '什么是矿工费',
@@ -283,6 +288,9 @@ const localized_strings = {
     network_error: '网络请求失败，请重试!',
     network_error_network_lost: '网络未连接，请重试!',
     network_timeout: '网络超时',
+
+    // WebView
+    webview_connection_failed: '连接失败',
 
     // exit
     exit_app_prompt: '退出钱包？',

@@ -11,7 +11,7 @@ import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVUtils from '../../utils';
 import LVStrings from '../../assets/localization';
-import LVTokenIcons from '../../assets/LVTokenIcons';
+import LVTokens from '../../logic/LVTokens';
 import LVWallet from '../../logic/LVWallet';
 import LVWalletManager from '../../logic/LVWalletManager';
 import MXSearchBar from '../../components/MXSearchBar';
@@ -30,6 +30,7 @@ const tokenDescriptions = new Map([
 
 const addTokenIcon = require('../../assets/images/add_token.png');
 const addTokenDisableIcon = require('../../assets/images/add_token_disable.png');
+const searchEmptyIcon = require('../../assets/images/search_result_empty.png');
 
 type Props = { navigation: Object };
 type State = {
@@ -66,60 +67,56 @@ export default class TokenListScreen extends Component<Props, State> {
         this.loadRecordsWhileRefetchTokens(false);
     }
 
+    openWebView = () => {
+        if (LVUtils.isNavigating()) {
+            return;
+        }
+        this.lostBlur();
+        this.props.navigation.navigate('WebView', { url: 'https://lives.one' });
+    };
+
     lostBlur = () => {
         Keyboard.dismiss();
-        if (LVUtils.isEmptyString(this.state.searchingText) && this.state.searching) {
-            this.setState({ searching: false });
-        }
     };
 
     onSearchBarTextChanged = async (text: string) => {
-        this.setState({ searching: true, searchingText: text });
+        if (LVUtils.isNotEmptyString(text)) {
+            this.setState({ searching: true, searchingText: text });
+        } else {
+            this.setState({ searching: false, searchingText: null });
+        }
     };
 
     onSearchBarFocus = () => {
-        this.setState({ searching: true, searchingText: null });
+        this.setState({ searching: true });
     };
 
-    onSearchBarEndEditing = () => {
-        this.setState({ searching: false, searchingText: null });
-    };
+    onSearchBarEndEditing = () => {};
 
     loadRecordsWhileRefetchTokens = async (refetch: boolean) => {
-        let tokens = LVWalletManager.supportTokens;
+        let tokens = LVTokens.supported;
 
         if (refetch || tokens === null || tokens === undefined || tokens.length == 0) {
-            try {
-                await LVWalletManager.updateSupportTokens();
-                tokens = LVWalletManager.supportTokens;
-            } catch (error) {
-                tokens = [];
-            }
+            await LVTokens.updateSupportedTokens();
+            tokens = LVTokens.supported;
         }
-
-        if (tokens === null || tokens === undefined || tokens.length == 0) {
-            tokens = [LVWallet.LVTC_TOKEN, LVWallet.ETH_TOKEN];
-        }
-
-        // remove the token that has no icon
-        tokens = tokens.filter((token) => { return LVTokenIcons.has(token) });
 
         // record objects
-        const records = tokens.map((token) => {
+        const records = tokens.map(token => {
             return {
                 token: token,
-                image: LVTokenIcons.get(token),
+                image: LVTokens.icons.get(token),
                 available: this.state.wallet.isAvailable(token),
                 description: tokenDescriptions.get(token) || token.toUpperCase()
             };
         });
 
         this.setState({ records: records, loading: false });
-    }
+    };
 
     _onRefresh = async () => {
         await this.loadRecordsWhileRefetchTokens(true);
-    }
+    };
 
     _keyExtractor = (item, index) => index.toString();
 
@@ -138,11 +135,10 @@ export default class TokenListScreen extends Component<Props, State> {
     _onPressAddButton = async (item: Object) => {
         if (item.available) {
             this.state.wallet.removeAvailableToken(item.token);
-        }
-        else {
+        } else {
             this.state.wallet.addAvailableToken(item.token);
         }
-        
+
         await LVWalletManager.saveToDisk();
         await this.loadRecordsWhileRefetchTokens(false);
 
@@ -153,10 +149,14 @@ export default class TokenListScreen extends Component<Props, State> {
         const { records, loading, searching, searchingText } = this.state;
 
         let data = records;
+        let searchResultEmpty = false;
 
         if (searching && searchingText != null) {
             const text = searchingText.trim().toLowerCase();
             data = records.filter(r => r.token.toLowerCase().match(text) != null);
+            if (data === null || data === undefined || data.length === 0) {
+                searchResultEmpty = true;
+            }
         }
 
         return (
@@ -170,27 +170,41 @@ export default class TokenListScreen extends Component<Props, State> {
                         this.props.navigation.goBack();
                     }}
                 />
-                <TouchableOpacity style={{ flex: 1 }} activeOpacity={1} onPress={this.lostBlur.bind(this)}>
+                <View style={{ flex: 1 }}>
+                    <TouchableOpacity style={styles.touchContainer} onPress={this.lostBlur.bind(this)} />
+
                     <MXSearchBar
+                        ref={'searchBar'}
                         style={{ marginTop: 10 }}
                         placeholder={LVStrings.token_list_search_placeholder}
                         onFocus={this.onSearchBarFocus}
                         onTextChanged={this.onSearchBarTextChanged}
                         onEndEditing={this.onSearchBarEndEditing}
                     />
-                    <FlatList
-                        style={{ flex: 1, paddingTop: 10 }}
-                        data={data}
-                        keyExtractor={this._keyExtractor}
-                        renderItem={this._renderItem}
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                        ListEmptyComponent={() => <View />}
-                        refreshControl={
-                            <RefreshControl refreshing={loading} onRefresh={this._onRefresh.bind(this)} />
-                        }
-                    />
-                </TouchableOpacity>
+
+                    {searchResultEmpty ? (
+                        <View style={styles.searchEmpty}>
+                            <Image style={styles.searchEmptyImage} source={searchEmptyIcon} />
+                            <TouchableOpacity activeOpacity={0.8} onPress={this.openWebView.bind(this)}>
+                                <Text style={styles.searchEmptyText}>{LVStrings.token_list_search_result_empty}</Text>
+                                <Text style={styles.searchEmptyText}>{LVStrings.token_list_add_token}</Text>
+                            </TouchableOpacity>
+                        </View>
+                    ) : (
+                        <FlatList
+                            style={{ flex: 1, marginTop: 10 }}
+                            data={data}
+                            keyExtractor={this._keyExtractor}
+                            renderItem={this._renderItem}
+                            showsVerticalScrollIndicator={false}
+                            showsHorizontalScrollIndicator={false}
+                            ListEmptyComponent={() => <View />}
+                            refreshControl={
+                                <RefreshControl refreshing={loading} onRefresh={this._onRefresh.bind(this)} />
+                            }
+                        />
+                    )}
+                </View>
             </View>
         );
     }
@@ -205,12 +219,11 @@ type ItemProps = {
 };
 
 class LVTokenRecordItem extends React.Component<ItemProps> {
-    
     onPressButton = () => {
         if (this.props.onPressAddButton) {
             this.props.onPressAddButton();
         }
-    }
+    };
 
     render() {
         const { token, image, available, description } = this.props;
@@ -219,10 +232,10 @@ class LVTokenRecordItem extends React.Component<ItemProps> {
             <View style={styles.record}>
                 <Image style={styles.icon} source={image} resizeMode="contain" />
                 <View style={styles.middle}>
-                    <Text style={styles.token} >{token}</Text>
-                    <Text style={styles.description} >{description}</Text>
+                    <Text style={styles.token}>{token}</Text>
+                    <Text style={styles.description}>{description}</Text>
                 </View>
-                <MXTouchableImage source={buttonIcon} onPress={this.onPressButton.bind(this)}/>
+                <MXTouchableImage source={buttonIcon} onPress={this.onPressButton.bind(this)} />
             </View>
         );
     }
@@ -231,11 +244,15 @@ class LVTokenRecordItem extends React.Component<ItemProps> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
         backgroundColor: LVColor.white
+    },
+    touchContainer: {
+        ...StyleSheet.absoluteFillObject
     },
     record: {
         height: 60,
+        marginLeft: 16,
+        marginRight: 16,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -246,8 +263,8 @@ const styles = StyleSheet.create({
         height: 29
     },
     middle: {
-        flex: 1, 
-        flexDirection: 'column', 
+        flex: 1,
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
         marginLeft: 8
@@ -263,5 +280,21 @@ const styles = StyleSheet.create({
         fontFamily: 'SFProText-Regular',
         textAlign: 'left',
         color: LVColor.text.placeHolder
+    },
+    searchEmpty: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'center'
+    },
+    searchEmptyImage: {
+        marginTop: 100,
+        marginBottom: 12
+    },
+    searchEmptyText: {
+        alignSelf: 'center',
+        marginBottom: 5,
+        fontSize: 15,
+        color: LVColor.text.yellow,
+        textDecorationLine: 'underline'
     }
 });

@@ -13,6 +13,7 @@ import AssetsScreen from './AssetsScreen';
 import AssetsDetailsScreen from './AssetsDetailsScreen';
 import TokenListScreen from './TokenListScreen';
 import TransactionDetailsScreen from './TransactionDetailsScreen';
+import LVWebViewScreen from '../Common/LVWebViewScreen';
 
 import ReceiveScreen from '../Receive/ReceiveScreen';
 import ReceiveTip from '../Receive/ReceiveTip';
@@ -26,6 +27,7 @@ const AssetsMainNavigator = StackNavigator({
     Assets: { screen: AssetsScreen },
     AssetsDetails: { screen: AssetsDetailsScreen },
     TokenList: { screen: TokenListScreen },
+    WebView: { screen: LVWebViewScreen },
     TransactionDetails: { screen: TransactionDetailsScreen }
 },
 {

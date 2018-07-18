@@ -90,6 +90,7 @@ export class LVQrScanModal extends React.Component<Props, State> {
                     style={{ flex: 1 }}
                     onRead={this.onBarcodeReceived.bind(this)}
                     showMarker={false}
+                    fadeIn = {false}
                     notAuthorizedView={
                         <View
                             style={{

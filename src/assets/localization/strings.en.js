@@ -24,6 +24,7 @@ const localized_strings = {
     common_next: 'Next',
     common_open_ettings: 'Open settings',
     common_copy: 'Copy',
+    common_retry: 'Retry',
 
     //receive
     receive_title: 'Receive',
@@ -33,7 +34,7 @@ const localized_strings = {
     receive_copy_success: 'Successful copied',
     receive_save: 'Save the QR code',
     receive_empty: 'You haven’t add a wallet yet',
-    receive_save_finish: 'Completed',
+    receive_save_finish: 'Saved in the album',
 
     // inner error
     inner_common_error: 'Inner error',
@@ -127,6 +128,8 @@ const localized_strings = {
     // Token List
     token_list_title: 'Add token',
     token_list_search_placeholder: 'Please enter the token name',
+    token_list_search_result_empty: 'No relevant token',
+    token_list_add_token: 'Add',
 
     // total amount
     total_amount: 'Total amount',
@@ -151,6 +154,9 @@ const localized_strings = {
     transaction_failure_message:
         'Transaction failed. Please make appropriate choice for transaction fee.',
     transaction_does_not_exist_message: 'The transaction does not exist. The transaction fee has returned to the wallet.',
+
+    transaction_check_progress: 'Check transaction progress',
+    transaction_check_detail: 'View details',
 
     // Transfer 转账
     transfer_lvt_insufficient: 'Your LVTC balance is insufficient. Please recharge.',
@@ -290,6 +296,9 @@ const localized_strings = {
     network_error: 'Network request failed, please try again!',
     network_error_network_lost: 'Your network is not connected, please try again!',
     network_timeout: 'Network timeout',
+
+    // WebView
+    webview_connection_failed: 'Connection failed',
 
     // exit
     exit_app_prompt: 'Exit App?',
