@@ -340,7 +340,7 @@ class TransferScreen extends Component<Props, State> {
             this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
             this.refs.insufficientDialog.show();
             return;
-        }else if (wallet && curETH.lt(this.refs.gapSetter.getValue() + Number(amountText))){
+        }else if (token.toUpperCase() === 'ETH' && wallet && curETH.lt(this.refs.gapSetter.getValue() + Number(amountText))){
             this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
             this.refs.insufficientDialog.show();
             return;

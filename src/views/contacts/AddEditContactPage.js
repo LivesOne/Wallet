@@ -92,9 +92,9 @@ export default class AddEditContactPage extends Component<Props, State> {
 
     async onAddingDone() {
         if (!this.refs.nickNameInput.validate()
-            || this.refs.addressTextInput.validate()
-            || this.refs.phone.validate()
-            ||this.refs.emailInput.validate() ) {
+            || !this.refs.addressTextInput.validate()
+            || !this.refs.phone.validate()
+            || !this.refs.emailInput.validate() ) {
             return;
         }
 
