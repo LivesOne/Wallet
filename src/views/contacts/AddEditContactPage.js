@@ -25,6 +25,7 @@ import MXButton from '../../components/MXButton';
 import * as MXUtils from "../../utils/MXUtils";
 import LVKeyboardSpacer from '../Common/LVKeyboardSpacer';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { MXCrossInputHeight } from '../../styles/LVStyleSheet';
 
 const scanImg = require('../../assets/images/transfer_scan.png');
 const navButtonEnableColor = '#FFAE1F';
@@ -294,13 +295,13 @@ const styles = StyleSheet.create({
         backgroundColor: LVColor.white
     },
     container: {
-        flex: 1,
-        flexDirection: 'column',
+        flex:1,
         justifyContent: 'flex-start',
-        alignItems: 'center'
+        marginLeft:15,
+        marginRight:15,
     },
     textInputStyle: {
-        height: 80
+        height: MXCrossInputHeight
     },
     button: {
         height: 50,
