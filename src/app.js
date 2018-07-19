@@ -61,6 +61,8 @@ type Props = {
 };
 
 class VenusApp extends Component<Props, State> {
+    appPauseTime = 0;
+
     constructor() {
         super();
 
@@ -99,6 +101,7 @@ class VenusApp extends Component<Props, State> {
         this.handleAppGuideCallback = this.handleAppGuideCallback.bind(this);
         this.handleWalletImportOrCreateSuccess = this.handleWalletImportOrCreateSuccess.bind(this);
         this.needShowAuthChange = this.needShowAuthChange.bind(this);
+        this._handleAppStateChange = this._handleAppStateChange.bind(this);
         // this.initUpdateApp = this.initUpdateApp.bind(this);
         // this.initUpdateApp();
         this.state.update.checkUpdate();
@@ -117,9 +120,28 @@ class VenusApp extends Component<Props, State> {
                 LVStrings.setLanguage('en');
             }
         }
+        AppState.addEventListener('change', this._handleAppStateChange);
     }
 
 
+    _handleAppStateChange(appState){
+        if(appState === "active"){
+            if(this.appPauseTime !== 0){
+                var currentTime = new Date().getTime();
+                var duration = currentTime - this.appPauseTime;
+                console.log("appPauseTime :" + this.appPauseTime  + "--currentTime:" + currentTime + "--duration:" + duration);
+                if(duration > 1000*60*1){
+                    this.setState({
+                        needShowAuth : true,
+                    });
+                }
+            }
+            this.appPauseTime = 0;
+        }else if(appState === "background"){
+            this.appPauseTime = new Date().getTime();
+        }
+    }
+    
     handleBack = () => {
         const { loading, needShowGuide, hasAnyWallets } = this.state;
         if (!loading && !needShowGuide) {
@@ -168,6 +190,7 @@ class VenusApp extends Component<Props, State> {
         if (Platform.OS === 'android') {
             BackHandler.removeEventListener("hardwareBackPress", this.handleBack);
         }
+        AppState.removeEventListener('change', this._handleAppStateChange);
     }
 
     initUpdateApp = () => {
@@ -219,7 +242,7 @@ class VenusApp extends Component<Props, State> {
                     }} >
                         <Text style={{color: '#697585', fontSize: 16,}}>{LVStrings.update_text}</Text>
                 </LVConfirmDialog>
-                {this.state.needShowAuth && <LVAuthView 
+                {this.state.needShowAuth && this.state.selectWallet && <LVAuthView 
                 needShowAuthChange = {this.needShowAuthChange}
                 selectWallet = {this.state.selectWallet}/>}
             </View>

@@ -196,9 +196,12 @@ export default class LVAuthView extends Component<Props> {
                 {passwordVisible && <View style = {[styles.passwordContainer]}>
                     <Image source={this.props.walletIcon || walletIcon} style={styles.img} resizeMode="contain" />
                     <Text style = {styles.nameText}>{wallet.name}</Text>
-                    <MXCrossTextInput style = {styles.passwordInput}
-                        onTextChanged = {this.onTextChanged}
-                    ></MXCrossTextInput>
+                    <TextInput style = {styles.passwordInput}
+                        secureTextEntry={true}
+                        onChangeText = {this.onTextChanged}
+                        underlineColorAndroid={"transparent"}
+                        placeholder = {LVStrings.wallet_create_password_required}
+                    ></TextInput>
                     <MXButton 
                         title = {LVStrings.common_confirm}
                         style = {{
@@ -259,6 +262,7 @@ const styles = StyleSheet.create({
         width : 240,
         height : 50,
         backgroundColor : "#fff9f9fa",
+        fontSize : 14,
     },
     bottomText : {
         alignSelf : 'center',
