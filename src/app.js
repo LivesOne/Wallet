@@ -17,6 +17,7 @@ import {
     BackHandler,
     Platform,
     NativeModules,
+    AppState
 } from 'react-native';
 import LVStrings from './assets/localization';
 import LVConfiguration from './logic/LVConfiguration';
@@ -34,6 +35,7 @@ import codePush from "react-native-code-push";
 import LVNetworking  from './logic/LVNetworking';
 import Toast from 'react-native-root-toast';
 import AppUpdate from './utils/MxAppUpdate';
+import LVAuthView from './views/Common/LVAuthView'
 import { YellowBox } from 'react-native'
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated'])
 
@@ -47,6 +49,8 @@ let codePushOptions = {
 type State = {
     loading: boolean,
     needShowGuide: boolean,
+    needShowAuth : boolean ,
+    selectWallet : ?Object,
     hasAnyWallets: boolean,
     update: ?Object,
     needUpdate: ?Object
@@ -86,13 +90,15 @@ class VenusApp extends Component<Props, State> {
         this.state = {
             loading: true,
             needShowGuide: false,
+            needShowAuth : false,
+            selectWallet : null,
             hasAnyWallets: false,
             update: appUpdate,
-            needUpdate: this.initUpdateApp
-
+            needUpdate: this.initUpdateApp,
         };
         this.handleAppGuideCallback = this.handleAppGuideCallback.bind(this);
         this.handleWalletImportOrCreateSuccess = this.handleWalletImportOrCreateSuccess.bind(this);
+        this.needShowAuthChange = this.needShowAuthChange.bind(this);
         // this.initUpdateApp = this.initUpdateApp.bind(this);
         // this.initUpdateApp();
         this.state.update.checkUpdate();
@@ -112,6 +118,7 @@ class VenusApp extends Component<Props, State> {
             }
         }
     }
+
 
     handleBack = () => {
         const { loading, needShowGuide, hasAnyWallets } = this.state;
@@ -151,7 +158,9 @@ class VenusApp extends Component<Props, State> {
         await LVConfiguration.setAppHasBeenLaunched();
 
         const hasWallets = await LVConfiguration.isAnyWalletAvailable();
-        this.setState({ loading: false, hasAnyWallets: hasWallets });
+        const wallet = LVWalletManager.getSelectedWallet();
+        console.log("authSupport , appdieFinishLaunching wallet :" + wallet.name);
+        this.setState({ loading: false, hasAnyWallets: hasWallets , needShowAuth : wallet === null ? false : true , selectWallet : wallet});
     }
 
     componentWillUnmount() {
@@ -175,6 +184,12 @@ class VenusApp extends Component<Props, State> {
     handleWalletImportOrCreateSuccess = async () => {
         const hasWallets = await LVConfiguration.isAnyWalletAvailable();
         this.setState({ hasAnyWallets: hasWallets });
+    }
+
+    needShowAuthChange(needShow){
+        this.setState({
+            needShowAuth : needShow,
+        });
     }
 
     render() {
@@ -205,6 +220,9 @@ class VenusApp extends Component<Props, State> {
                     }} >
                         <Text style={{color: '#697585', fontSize: 16,}}>{LVStrings.update_text}</Text>
                 </LVConfirmDialog>
+                {this.state.needShowAuth && <LVAuthView 
+                needShowAuthChange = {this.needShowAuthChange}
+                selectWallet = {this.state.selectWallet}/>}
             </View>
     }
 

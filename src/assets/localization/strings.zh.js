@@ -292,7 +292,14 @@ const localized_strings = {
 
     // Permissions
     can_not_access_camera: '无法访问相机',
-    please_set_camera_author: '请到系统的⌜隐私设置⌟中，允许 共生钱包 访问⌜相机⌟'
+    please_set_camera_author: '请到系统的⌜隐私设置⌟中，允许 共生钱包 访问⌜相机⌟',
+
+
+    // Auth
+    auth_wake_text : '点击唤醒验证',
+    auth_use_password : '使用钱包密码登陆',
+    auth_use_face_id : 'Face ID解锁',
+    auth_use_finger : '指纹解锁',
 };
 
 export default localized_strings;

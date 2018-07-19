@@ -4,6 +4,7 @@ import android.content.Context;
 import android.hardware.fingerprint.FingerprintManager;
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.support.v4.os.CancellationSignal;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -49,34 +50,39 @@ public class FingerHelper {
      * @return
      */
     public boolean hasEnrolledFingerprints(){
+        Log.i("authSupport" , "isSupportFinger:" + isSupportFinger());
+        Log.i("authSupport" , "hasEnrolledFingerprints :" + mFingerManager.hasEnrolledFingerprints());
         return isSupportFinger() && mFingerManager.hasEnrolledFingerprints();
     }
     
-    public void start(){
+    public void start(FingerprintManagerCompat.AuthenticationCallback callback){
         if(hasEnrolledFingerprints()){
             Toast.makeText(mContext, "开始验证指纹", Toast.LENGTH_SHORT).show();
             mCancel = new CancellationSignal();
-            mFingerManager.authenticate(null, 0, mCancel, new FingerprintManagerCompat.AuthenticationCallback() {
-                @Override
-                public void onAuthenticationError(int errMsgId, CharSequence errString) {
-                    Toast.makeText(mContext , errString , Toast.LENGTH_SHORT).show();
-                }
+            if(callback == null){
+                callback = new FingerprintManagerCompat.AuthenticationCallback() {
+                    @Override
+                    public void onAuthenticationError(int errMsgId, CharSequence errString) {
+                        Toast.makeText(mContext , errString , Toast.LENGTH_SHORT).show();
+                    }
 
-                @Override
-                public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
-                    Toast.makeText(mContext , helpString , Toast.LENGTH_SHORT).show();
-                }
+                    @Override
+                    public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
+                        Toast.makeText(mContext , helpString , Toast.LENGTH_SHORT).show();
+                    }
 
-                @Override
-                public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult result) {
-                    Toast.makeText(mContext , "验证成功" , Toast.LENGTH_SHORT).show();
-                }
+                    @Override
+                    public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult result) {
+                        Toast.makeText(mContext , "验证成功" , Toast.LENGTH_SHORT).show();
+                    }
 
-                @Override
-                public void onAuthenticationFailed() {
-                    Toast.makeText(mContext , "验证不匹配" , Toast.LENGTH_SHORT).show();
-                }
-            } , null);
+                    @Override
+                    public void onAuthenticationFailed() {
+                        Toast.makeText(mContext , "验证不匹配" , Toast.LENGTH_SHORT).show();
+                    }
+                };
+            }
+            mFingerManager.authenticate(null, 0, mCancel, callback , null);
         }
     }
     
