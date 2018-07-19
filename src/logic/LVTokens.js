@@ -20,7 +20,8 @@ class LVTokens {
             ['XRP', require('../assets/images/xrp.png')]
         ]);
         this.decimals = new Map([
-            ['eth', 18]
+            ['eth', 18],
+            ['LVTC', 18]
         ]);
         this.supported = ['eth'];
     }
