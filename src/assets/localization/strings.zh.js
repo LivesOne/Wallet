@@ -24,6 +24,7 @@ const localized_strings = {
     common_next: '下一步',
     common_open_ettings: '设置',
     common_copy: '复制',
+    common_retry: '重试',
 
     //receive
     receive_title: '收款',
@@ -150,9 +151,19 @@ const localized_strings = {
     transaction_time: '交易时间',
     transaction_failure_message: '转账失败，请合理配置矿工费。',
     transaction_does_not_exist_message: '交易不存在，矿工费退回原钱包。',
-
     transaction_check_progress: '查询交易进度',
     transaction_check_detail: '查看详情',
+
+    // MinnerFeeDetail
+    minnerfeedetail_title: '什么是矿工费',
+    minnerfeedetail_content: '  在以太链上，任何人都可以读写数据，数据的读取是免费的，但写入数据需要支付一定的矿工费用，网络上的任何矿工都可以参与挖矿。同时由于挖矿需要消耗一定的算力和电力，因此这也是矿工费的由来。\n  在链上进行多笔转账时，请在前一笔转账完成（状态变为转账成功或转账失败）后再发起转账，否则可能会造成失败。',
+    minnerfeedetail_transferFail: '转账失败的几种情况：',
+    minnerfeedetail_title1: '1.矿工费用过低：',
+    minnerfeedetail_content1: '  无矿工打包，转行失败，手续费退回，此时在交易记录中查询会显示交易不存在。',
+    minnerfeedetail_title2: '2.矿工费用不足：',
+    minnerfeedetail_content2: '  矿工已开始打包，打包过程中矿工费用已完全消耗（但尚未打包完成），此时交易记录中查询会显示交易失败。 ',
+    minnerfeedetail_title3: '3.连续发起多笔转账：',
+    minnerfeedetail_content3: '  在第一笔交易未完成时发起第二笔交易，若第一笔交易矿工费高于第二笔，则第二笔转账必定失败，且在交易记录中显示交易不存在；反之，第一笔交易失败。',
 
     // Transfer 转账
     transfer_lvt_insufficient: '您的LVTC余额不足，请充值！',
@@ -164,10 +175,13 @@ const localized_strings = {
     transfer_address_invalid: '请输入有效的收款人地址',
     transfer_amount_required: '转账金额不能为空',
     transfer_amount_format_hint: '转账金额必须为大于零的数字',
+    transfer_gas_format_hint: 'Gas值必须为大于零的数字',
+    transfer_gasprice_format_hint: 'GasPrice值必须为大于零的数字',
     transfer_miner_gap_not_access: '未获取相应矿工费数值，请检查网络',
     transfer_processing: '正在转账中...',
     transfer_success: '转账成功',
     transfer_fail: '转账失败',
+    transfer_minner_fee_fail: '您当前的矿工费较低，可能会转账失败',
     transfer_to_self_not_allowed: '不能给自己账户转账',
 
     // Profile
@@ -227,6 +241,11 @@ const localized_strings = {
     transfer_miner_tips: '矿工费用',
     transfer_slow: '慢',
     transfer_fast: '快',
+    transfer_advanced: '高级',
+    transfer_advanced_gas: '请输入gas',
+    transfer_advanced_gas_price: '请输入gas price（单位：gwei）',
+    transfer_advanced_gas_price_overLimit: '建议输入100以内的gwei',
+    transfer_advanced_gas_data: '请输入data参数（可选）',
     transfer_current_eth: '当前钱包ETH',
     transfer_hint: '执行交易后将扣除您当前钱包中的ETH, 交易打包后, 矿工费用将不予退还.',
     transfer_payment_details: '支付详情',
@@ -269,6 +288,9 @@ const localized_strings = {
     network_error: '网络请求失败，请重试!',
     network_error_network_lost: '网络未连接，请重试!',
     network_timeout: '网络超时',
+
+    // WebView
+    webview_connection_failed: '连接失败',
 
     // exit
     exit_app_prompt: '退出钱包？',

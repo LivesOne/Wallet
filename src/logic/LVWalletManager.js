@@ -10,6 +10,7 @@ import LVPersistent from './LVPersistent';
 import LVConfiguration from './LVConfiguration';
 import LVNotificationCenter from '../logic/LVNotificationCenter';
 import LVNotification from '../logic/LVNotification';
+import LVTokens from './LVTokens';
 import LVNetworking from './LVNetworking';
 import LVTransactionRecordManager from './LVTransactionRecordManager';
 import WalletUtils from '../views/Wallet/WalletUtils';
@@ -27,12 +28,10 @@ class WalletManager {
     //will return a new array that contains same elements.
     wallets: Array<LVWallet>;
     selectedIndex: number;
-    supportTokens: Array<string>;
 
     constructor() {
         this.wallets = [];
         this.selectedIndex = 0;
-        this.supportTokens = [];
     }
 
     /**
@@ -132,19 +131,14 @@ class WalletManager {
         return index === -1;
     }
 
-    async updateSupportTokens() {
-        const tokens_except_eth = await LVNetworking.fetchTokenList();
-        this.supportTokens = [...tokens_except_eth, LVWallet.ETH_TOKEN];
-    }
-
     async updateWalletBalance(wallet: LVWallet) {
         try {
-            await this.updateSupportTokens();
+            await LVTokens.updateSupportedTokens();
             const address = wallet.address.substr(0, 2).toLowerCase() == '0x' ? wallet.address : '0x' + wallet.address;
-            const balances = await LVNetworking.fetchBalances(address, this.supportTokens);
+            const balances = await LVNetworking.fetchBalances(address, LVTokens.supported);
             console.log(balances);
 
-            this.supportTokens.forEach(token => {
+            LVTokens.supported.forEach(token => {
                 wallet.setBalance(token, balances[token]);
             });
 

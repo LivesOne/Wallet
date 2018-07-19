@@ -40,7 +40,7 @@ const ProfileMainNavigator = StackNavigator(
         AssetsDetails: { screen: AssetsDetailsScreen },
         TransactionDetails: { screen: TransactionDetailsScreen },
         Transfer: { screen: TransferScreen },
-        ReceiveTip: { screen: ReceiveScreen }
+        ReceiveTip: { screen: ReceiveScreen },
     },
     {
         mode: 'card',

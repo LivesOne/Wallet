@@ -21,6 +21,7 @@ import TransferScreen from '../Transfer/TransferScreen';
 import AddEditContactPage from '../contacts/AddEditContactPage';
 import ContactsManagerPage from '../contacts/ContactsManagerPage';
 import LVTContactDetailPage from '../contacts/LVTContactDetailPage';
+import TransferMinerTips from '../Transfer/TransferMinerTips'
 
 const AssetsMainNavigator = StackNavigator({
     Assets: { screen: AssetsScreen },
@@ -64,7 +65,8 @@ const AssetsNavigator = StackNavigator(
         ReceiveTip: { screen: ReceiveTip },
         ContactList: { screen: ContactsManagerPage },
         AddEditContactPage: { screen: AddEditContactPage },
-        LVTContactDetailPage: { screen: LVTContactDetailPage }
+        LVTContactDetailPage: { screen: LVTContactDetailPage },
+        TransferMinerTips: { screen: TransferMinerTips }
     },
     {
         mode: 'modal',

@@ -25,6 +25,7 @@ import MXButton from '../../components/MXButton';
 import * as MXUtils from "../../utils/MXUtils";
 import LVKeyboardSpacer from '../Common/LVKeyboardSpacer';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { MXCrossInputHeight } from '../../styles/LVStyleSheet';
 
 const scanImg = require('../../assets/images/transfer_scan.png');
 const navButtonEnableColor = '#FFAE1F';
@@ -90,34 +91,10 @@ export default class AddEditContactPage extends Component<Props, State> {
     }
 
     async onAddingDone() {
-        if(isEmptyString(this.state.name)) {
-            this.setState({alertMessage: LVLocalization.contact_alert_name_required});
-            this.refs.alert.show();
-            return;
-        }
-        if(getCharLength(this.state.name) > 40) {
-            this.setState({alertMessage: LVLocalization.contact_alert_name_exceeds_limit});
-            this.refs.alert.show();
-            return;
-        }
-        if(isEmptyString(this.state.address)) {
-            this.setState({alertMessage: LVLocalization.contact_alert_address_required});
-            this.refs.alert.show();
-            return;
-        }
-        if(!isAddress(this.state.address)) {
-            this.setState({alertMessage: LVLocalization.contact_alert_address_invalid});
-            this.refs.alert.show();
-            return;
-        }
-        if (isNotEmptyString(this.state.cellPhone) && !checkValidPhone(this.state.cellPhone)) {
-            this.setState({alertMessage: LVLocalization.contact_alert_Phone_invalid});
-            this.refs.alert.show();
-            return;
-        }
-        if (isNotEmptyString(this.state.email) && !checkValidEmail(this.state.email)) {
-            this.setState({alertMessage: LVLocalization.contact_alert_Email_invalid});
-            this.refs.alert.show();
+        if (!this.refs.nickNameInput.validate()
+            || !this.refs.addressTextInput.validate()
+            || !this.refs.phone.validate()
+            || !this.refs.emailInput.validate() ) {
             return;
         }
 
@@ -156,6 +133,40 @@ export default class AddEditContactPage extends Component<Props, State> {
 
     componentWillMount() {
         StatusBar.setBarStyle('default', true);
+    }
+
+    onValidateNilkName = (value:?string)=>{
+        if(isEmptyString(this.state.name)) {
+            return LVLocalization.contact_alert_name_required;
+        }
+        if(getCharLength(this.state.name) > 40) {
+            return LVLocalization.contact_alert_name_exceeds_limit;
+        }
+        return null;
+    }
+
+    onValidateAddressName = (value:?string)=>{
+        if(isEmptyString(this.state.address)) {
+            return LVLocalization.contact_alert_address_required;
+        }
+        if(!isAddress(this.state.address)) {
+            return LVLocalization.contact_alert_address_invalid;
+        }
+        return null;
+    }
+
+    onValidateCellphone = (value:?string)=>{
+        if (isNotEmptyString(this.state.cellPhone) && !checkValidPhone(this.state.cellPhone)) {
+            return LVLocalization.contact_alert_Phone_invalid;
+        }
+        return null;
+    }
+
+    onValidateEmail = (value:?string)=>{
+        if (isNotEmptyString(this.state.email) && !checkValidEmail(this.state.email)) {
+            return LVLocalization.contact_alert_Email_invalid;
+        }
+        return null;
     }
 
     onSubmitEditing=(textInput:string)=>{
@@ -211,6 +222,7 @@ export default class AddEditContactPage extends Component<Props, State> {
                 }}>
                     <View style={styles.container}>
                         <MXCrossTextInput style={styles.textInputStyle} 
+                            ref = {'nickNameInput'}
                             placeholder={LVStrings.contact_add_place_holder_nickname}
                             withClearButton
                             defaultValue={this.state.name}
@@ -220,6 +232,7 @@ export default class AddEditContactPage extends Component<Props, State> {
                                 this.onSubmitEditing('addressTextInput');
                             }}
                             blurOnSubmit={false}
+                            onValidation={this.onValidateNilkName.bind(this)}
                             titleText={LVStrings.contact_add_place_nickname}
                             onTextChanged= {(text) => this.setState({name: text})}/>
                         <MXCrossTextInput ref={'addressTextInput'}
@@ -233,6 +246,7 @@ export default class AddEditContactPage extends Component<Props, State> {
                                 this.onSubmitEditing('phone');
                             }}
                             blurOnSubmit={false}
+                            onValidation={this.onValidateAddressName.bind(this)}
                             titleText={LVStrings.contact_add_place_address}
                             rightComponent={<MXTouchableImage source={scanImg} onPress={ async () => {
                                 if (Platform.OS === 'android') {
@@ -249,15 +263,18 @@ export default class AddEditContactPage extends Component<Props, State> {
                             returnKeyType= {'next'}
                             defaultValue={this.state.cellPhone}
                             withUnderLine = {false}
+                            onValidation={this.onValidateCellphone.bind(this)}
                             titleText={LVStrings.contact_add_place_cellphone}
                             onTextChanged= {(text) => this.setState({cellPhone: text})}/>
                         <MXCrossTextInput style={styles.textInputStyle} 
+                            ref = {'emailInput'}
                             placeholder={LVStrings.contact_add_place_holder_email}
                             withClearButton
                             keyboardType = {'email-address'}
                             returnKeyType= {'done'}
                             defaultValue={this.state.email}
                             withUnderLine = {false}
+                            onValidation={this.onValidateEmail.bind(this)}
                             titleText={LVStrings.contact_add_place_email}
                             onTextChanged= {(text) => this.setState({email: text})}/>
                         <MXButton
@@ -294,13 +311,12 @@ const styles = StyleSheet.create({
         backgroundColor: LVColor.white
     },
     container: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'center'
+        flex:1,
+        marginLeft:15,
+        marginRight:15,
     },
     textInputStyle: {
-        height: 80
+        height: MXCrossInputHeight
     },
     button: {
         height: 50,

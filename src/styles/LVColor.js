@@ -23,6 +23,7 @@ const LVColor = {
     },
     // 分隔线
     separateLine: '#F5F6FA',
+    separateLine2: '#EBEDF7',
     // Progress Bar
     progressBar: {
         fill: '#7dcd40',

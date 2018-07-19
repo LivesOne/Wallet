@@ -7,6 +7,7 @@
 
 import Big from 'big.js';
 import Moment from 'moment';
+import LVTokens from './LVTokens';
 import LVWallet, { LVBalance } from './LVWallet';
 import LVNetworking from './LVNetworking';
 import LVWalletManager from './LVWalletManager';
@@ -75,7 +76,8 @@ class LVTransactionRecord {
             record.timestamp = json.timestamp;
         } else if (state !== 'failed') {
             try {
-                record.amount = new Big(json.value).times(new Big(10).pow(-18));
+                const decimal = LVTokens.decimals.get(record.token) || 18;
+                record.amount = new Big(json.value).times(new Big(10).pow(-1 * decimal));
             } catch (e) {
                 TransferUtils.log('error = ' + e.message + ' value = ' + json.value);
             }
