@@ -299,6 +299,7 @@ const localized_strings = {
     // total title
     total_lvt: 'LVTC 总额',
     total_eth: 'ETH 总额',
+    total_amount: '总额',
     show_detail_amount: '交易金额',
     show_LVT_balance: 'LVTC 余额',
 

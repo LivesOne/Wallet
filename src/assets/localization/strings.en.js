@@ -307,6 +307,7 @@ const localized_strings = {
     // total title
     total_lvt: 'Total LVTC Amount',
     total_eth: 'Total ETH Amount',
+    total_amount: 'Total Amount',
     show_detail_amount: 'Transaction Amount',
     show_LVT_balance: 'LVTC Balance',
 

@@ -20,14 +20,6 @@ import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVNotification from '../../logic/LVNotification';
 import LVNotificationCenter from '../../logic/LVNotificationCenter';
 
-const tokenDescriptions = new Map([
-    ['eth', 'Ethereum Foundation'],
-    ['LVTC', 'LivesToken'],
-    ['DGD', 'Digix DAO'],
-    ['OMG', 'OmiseGo'],
-    ['XRP', 'Ripple']
-]);
-
 const addTokenIcon = require('../../assets/images/add_token.png');
 const addTokenDisableIcon = require('../../assets/images/add_token_disable.png');
 const searchEmptyIcon = require('../../assets/images/search_result_empty.png');
@@ -105,9 +97,9 @@ export default class TokenListScreen extends Component<Props, State> {
         const records = tokens.map(token => {
             return {
                 token: token,
-                image: LVTokens.icons.get(token),
+                image: LVTokens.icons.normal(token),
+                fullname: LVTokens.fullname(token),
                 available: this.state.wallet.isAvailable(token),
-                description: tokenDescriptions.get(token) || token.toUpperCase()
             };
         });
 
@@ -124,8 +116,8 @@ export default class TokenListScreen extends Component<Props, State> {
         <LVTokenRecordItem
             token={item.token.toUpperCase()}
             image={item.image}
+            fullname={item.fullname}
             available={item.available}
-            description={item.description}
             onPressAddButton={() => {
                 this._onPressAddButton(item);
             }}
@@ -214,7 +206,7 @@ type ItemProps = {
     token: string,
     image: any,
     available: boolean,
-    description: string,
+    fullname: string,
     onPressAddButton: ?Function
 };
 
@@ -226,14 +218,14 @@ class LVTokenRecordItem extends React.Component<ItemProps> {
     };
 
     render() {
-        const { token, image, available, description } = this.props;
+        const { token, image, available, fullname } = this.props;
         const buttonIcon = available ? addTokenDisableIcon : addTokenIcon;
         return (
             <View style={styles.record}>
                 <Image style={styles.icon} source={image} resizeMode="contain" />
                 <View style={styles.middle}>
                     <Text style={styles.token}>{token}</Text>
-                    <Text style={styles.description}>{description}</Text>
+                    <Text style={styles.fullname}>{fullname}</Text>
                 </View>
                 <MXTouchableImage source={buttonIcon} onPress={this.onPressButton.bind(this)} />
             </View>
@@ -275,7 +267,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         color: LVColor.text.grey2
     },
-    description: {
+    fullname: {
         fontSize: 11,
         fontFamily: 'SFProText-Regular',
         textAlign: 'left',
