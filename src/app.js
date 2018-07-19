@@ -160,7 +160,7 @@ class VenusApp extends Component<Props, State> {
         const hasWallets = await LVConfiguration.isAnyWalletAvailable();
         const wallet = LVWalletManager.getSelectedWallet();
         console.log("authSupport , appdieFinishLaunching wallet :" + wallet.name);
-        this.setState({ loading: false, hasAnyWallets: hasWallets , needShowAuth : wallet === null ? false : true , selectWallet : wallet});
+        this.setState({ loading: false, hasAnyWallets: hasWallets , needShowAuth : (wallet === null || Platform.OS === "ios") ? false : true , selectWallet : wallet});
     }
 
     componentWillUnmount() {
