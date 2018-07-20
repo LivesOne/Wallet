@@ -99,7 +99,7 @@ export default class TokenListScreen extends Component<Props, State> {
                 token: token,
                 image: LVTokens.icons.normal(token),
                 fullname: LVTokens.fullname(token),
-                available: this.state.wallet.isAvailable(token),
+                available: this.state.wallet.isAvailable(token)
             };
         });
 
@@ -114,7 +114,7 @@ export default class TokenListScreen extends Component<Props, State> {
 
     _renderItem = ({ item }) => (
         <LVTokenRecordItem
-            token={item.token.toUpperCase()}
+            token={item.token}
             image={item.image}
             fullname={item.fullname}
             available={item.available}
@@ -220,14 +220,19 @@ class LVTokenRecordItem extends React.Component<ItemProps> {
     render() {
         const { token, image, available, fullname } = this.props;
         const buttonIcon = available ? addTokenDisableIcon : addTokenIcon;
+        const showButton = token != LVWallet.ETH_TOKEN && token != LVWallet.LVTC_TOKEN;
         return (
             <View style={styles.record}>
                 <Image style={styles.icon} source={image} resizeMode="contain" />
                 <View style={styles.middle}>
-                    <Text style={styles.token}>{token}</Text>
+                    <Text style={styles.token}>{token.toUpperCase()}</Text>
                     <Text style={styles.fullname}>{fullname}</Text>
                 </View>
-                <MXTouchableImage source={buttonIcon} onPress={this.onPressButton.bind(this)} />
+                {showButton ? (
+                    <MXTouchableImage source={buttonIcon} onPress={this.onPressButton.bind(this)} />
+                ) : (
+                    <View />
+                )}
             </View>
         );
     }
