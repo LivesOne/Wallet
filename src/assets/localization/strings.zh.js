@@ -74,7 +74,7 @@ const localized_strings = {
     wallet_create_name_required: '请输入钱包名称',
     wallet_create_password_required: '请输入密码',
     wallet_create_confimpassword_required: '请输入确认密码',
-    wallet_create_password_mismatch: '密码与确认密码不匹配',
+    wallet_create_password_mismatch: '两次输入的密码不一致',
     wallet_create_name_unavailable: '钱包名字已存在',
     wallet_create_success_comment: '请妥善保管您的密码！共生钱包不存储用户密码，无法提供找回或重置功能',
     wallet_backup: '备份钱包',

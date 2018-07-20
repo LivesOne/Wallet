@@ -83,7 +83,7 @@ const localized_strings = {
     wallet_create_name_required: 'Please enter wallet name',
     wallet_create_password_required: 'Please enter password',
     wallet_create_confimpassword_required: 'Confirm your password',
-    wallet_create_password_mismatch: 'Passwords mismatch',
+    wallet_create_password_mismatch: 'Passwords do not match',
     wallet_create_name_unavailable: 'The name is unavailable',
     wallet_create_success: 'Successfully created!',
     wallet_create_success_comment:
