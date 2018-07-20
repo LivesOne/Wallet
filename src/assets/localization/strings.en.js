@@ -25,6 +25,10 @@ const localized_strings = {
     common_open_ettings: 'Open settings',
     common_copy: 'Copy',
     common_retry: 'Retry',
+    common_continue: 'Continue',
+
+    // Alerts
+    alert_has_unfinished_transaction: 'You have unfinished transaction. The transfer may fail if you continue. Continue or not?',
 
     //receive
     receive_title: 'Receive',

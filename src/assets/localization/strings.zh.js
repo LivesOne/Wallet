@@ -25,6 +25,10 @@ const localized_strings = {
     common_open_ettings: '设置',
     common_copy: '复制',
     common_retry: '重试',
+    common_continue: '继续',
+
+    // Alerts
+    alert_has_unfinished_transaction: '您目前尚有未完成交易，继续转账可能造成交易失败，是否继续操作？',
 
     //receive
     receive_title: '收款',
