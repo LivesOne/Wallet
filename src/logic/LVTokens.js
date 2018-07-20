@@ -98,7 +98,6 @@ class LVTokens {
                 }
             }
 
-            tokens = tokens.filter(token => this.icons.has(token));
             this.supported = [...tokens, 'eth'];
         } catch (error) {
             console.log('update supported tokens error - ' + error);
