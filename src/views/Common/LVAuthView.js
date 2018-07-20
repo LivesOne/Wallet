@@ -87,9 +87,9 @@ export default class LVAuthView extends Component<Props> {
             this.authSupportList.push(AUTH_TOUCH_ID);
         }
 
-        if(authSupport.password === true){
+        // if(authSupport.password === true){
             this.authSupportList.push(AUTH_PASSWORD);
-        }
+        // }
         this.currentAuthIndex = 0;
         this.setState({
             firstAuth : this.getFirstAuth(),
@@ -135,11 +135,12 @@ export default class LVAuthView extends Component<Props> {
         var verifyResult = await LVWalletManager.verifyPassword(this.state.inputPassword, this.props.selectWallet.keystore);
         console.log("authSupport , passwordAuth verifyResult :" + verifyResult)
         if(verifyResult === true){
+            this.refs.toast.dismiss();
             this.pass();
         } else {
             Toast.show(LVStrings.wallet_password_incorrect);
+            this.refs.toast.dismiss();
         }
-        this.refs.toast.dismiss();
     }
 
     onTextChanged(newText){
@@ -154,7 +155,6 @@ export default class LVAuthView extends Component<Props> {
 
     render(){
         const {firstAuth , secondAuth} = this.state;
-        console.log("authSupport , firstAuth:" + firstAuth + "--secondAuth:" + secondAuth);
 
         let bottomText = LVStrings.auth_use_password;
         let bottomVisible = false;
@@ -182,7 +182,6 @@ export default class LVAuthView extends Component<Props> {
             authVisible = false;
             passwordVisible = true;
         }
-        console.log("authSupport , authVisible:" + authVisible + "--passwordVisible:" + passwordVisible + "--wallet:" + this.props.selectWallet);
 
         const wallet = this.props.selectWallet || LVWallet.emptyWallet();
         return (
@@ -215,7 +214,7 @@ export default class LVAuthView extends Component<Props> {
                         />
                 </View>}
 
-                <MXButton style = {styles.bottomText}
+                {bottomVisible && <MXButton style = {styles.bottomText}
                     title = {bottomText}
                     isEmptyButtonType={true}
                     rounded
@@ -223,7 +222,7 @@ export default class LVAuthView extends Component<Props> {
                     onPress={() => {
                         this.switchAuth();
                     }}
-                    />
+                    />}
                     
                 <LVLoadingToast ref={'toast'} title={LVStrings.password_verifying} />
             </View>
