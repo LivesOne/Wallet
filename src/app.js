@@ -52,7 +52,7 @@ type State = {
     needShowAuth : boolean ,
     selectWallet : ?Object,
     hasAnyWallets: boolean,
-    update: ?Object,
+    update: ?AppUpdate,
     needUpdate: ?Object
 
 };
@@ -104,7 +104,10 @@ class VenusApp extends Component<Props, State> {
         this._handleAppStateChange = this._handleAppStateChange.bind(this);
         // this.initUpdateApp = this.initUpdateApp.bind(this);
         // this.initUpdateApp();
-        this.state.update.checkUpdate();
+        
+        if (this.state.update) {
+            this.state.update.checkUpdate();   
+        }
     }
 
     async componentWillMount() {
@@ -124,7 +127,7 @@ class VenusApp extends Component<Props, State> {
     }
 
 
-    _handleAppStateChange(appState){
+    _handleAppStateChange = (appState) => {
         if(appState === "active"){
             if(this.appPauseTime !== 0){
                 var currentTime = new Date().getTime();
@@ -181,7 +184,7 @@ class VenusApp extends Component<Props, State> {
 
         const hasWallets = await LVConfiguration.isAnyWalletAvailable();
         const wallet = LVWalletManager.getSelectedWallet();
-        this.setState({ loading: false, hasAnyWallets: hasWallets , needShowAuth : (wallet === null || Platform.OS === "ios") ? false : true , selectWallet : wallet});
+        this.setState({ loading: false, hasAnyWallets: hasWallets , needShowAuth : (wallet === null) ? false : true , selectWallet : wallet});
     }
 
     componentWillUnmount() {
@@ -208,7 +211,7 @@ class VenusApp extends Component<Props, State> {
         this.setState({ hasAnyWallets: hasWallets });
     }
 
-    needShowAuthChange(needShow){
+    needShowAuthChange = (needShow) => {
         this.setState({
             needShowAuth : needShow,
         });
@@ -250,17 +253,10 @@ class VenusApp extends Component<Props, State> {
 
     renderIOSMainScreen() {
         return <View style={{ flex: 1 }}>
-
-            <LVConfirmDialog
-                ref={'update'}
-                title={LVStrings.update_title}
-                message={LVStrings.update_text}
-                confirmTitle={LVStrings.update_ok}
-                cancelTitle={LVStrings.update_cancel}
-                onConfirm={() => {
-                    this.state.needUpdate(true);
-                }} />
             {this.getMainScreen()}
+            {this.state.needShowAuth && this.state.selectWallet && <LVAuthView
+                needShowAuthChange={this.needShowAuthChange}
+                selectWallet={this.state.selectWallet} />}
         </View>
     }
 

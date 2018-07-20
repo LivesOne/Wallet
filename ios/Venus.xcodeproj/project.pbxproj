@@ -95,6 +95,8 @@
 		97934BF6F8F340A681D379B7 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C2F47B60FF6D4CAB8C47F745 /* libRNSVG.a */; };
 		AB03E44320AD61990035CD4C /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB03E44020AD5EFD0035CD4C /* libRNDeviceInfo.a */; };
 		AB3F543720CE8960002C69A0 /* VenusStore-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AB3F543620CE8960002C69A0 /* VenusStore-Info.plist */; };
+		AB9B80212101CF2B00193883 /* LVDeviceAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = AB9B80202101CF2B00193883 /* LVDeviceAuthentication.m */; };
+		AB9B80222101CF2C00193883 /* LVDeviceAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = AB9B80202101CF2B00193883 /* LVDeviceAuthentication.m */; };
 		ABA19A7D20B800D300D036BB /* libRCTCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABA19A7C20B800B200D036BB /* libRCTCamera.a */; };
 		ABB07D7120C6760400AA469B /* MXUpgradeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = ABB07D7020C6760400AA469B /* MXUpgradeTask.m */; };
 		ABB07D7420C67AFD00AA469B /* LVConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = ABB07D7320C67AFD00AA469B /* LVConfiguration.m */; };
@@ -596,6 +598,8 @@
 		A21159CA937C483A85BE96FB /* libRNDeviceInfo-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNDeviceInfo-tvOS.a"; sourceTree = "<group>"; };
 		A51535170006A27A4CC537C9 /* Pods-Venus.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Venus.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-Venus/Pods-Venus.adhoc.xcconfig"; sourceTree = "<group>"; };
 		AB3F543620CE8960002C69A0 /* VenusStore-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "VenusStore-Info.plist"; sourceTree = "<group>"; };
+		AB9B801F2101CF2B00193883 /* LVDeviceAuthentication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LVDeviceAuthentication.h; path = Venus/LVDeviceAuthentication.h; sourceTree = "<group>"; };
+		AB9B80202101CF2B00193883 /* LVDeviceAuthentication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = LVDeviceAuthentication.m; path = Venus/LVDeviceAuthentication.m; sourceTree = "<group>"; };
 		ABA19A7720B800B100D036BB /* RCTCamera.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTCamera.xcodeproj; path = "../node_modules/react-native-camera/ios/RCTCamera.xcodeproj"; sourceTree = "<group>"; };
 		ABB07D6F20C6760400AA469B /* MXUpgradeTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXUpgradeTask.h; path = Venus/MXUpgradeTask.h; sourceTree = "<group>"; };
 		ABB07D7020C6760400AA469B /* MXUpgradeTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXUpgradeTask.m; path = Venus/MXUpgradeTask.m; sourceTree = "<group>"; };
@@ -778,6 +782,8 @@
 				ABBEEFEB20C674DA00F5CD27 /* LVReactExport.m */,
 				ABB07D7220C67AFD00AA469B /* LVConfiguration.h */,
 				ABB07D7320C67AFD00AA469B /* LVConfiguration.m */,
+				AB9B801F2101CF2B00193883 /* LVDeviceAuthentication.h */,
+				AB9B80202101CF2B00193883 /* LVDeviceAuthentication.m */,
 				ABB07D6F20C6760400AA469B /* MXUpgradeTask.h */,
 				ABB07D7020C6760400AA469B /* MXUpgradeTask.m */,
 				ABBEEFED20C674DA00F5CD27 /* NSString+LVHexStringToBinary.h */,
@@ -1892,6 +1898,7 @@
 				ABBEEFF120C674DA00F5CD27 /* NSString+LVHexStringToBinary.m in Sources */,
 				562622C71F7521FF009581B6 /* crypto_scrypt-check.c in Sources */,
 				562622C81F7521FF009581B6 /* crypto_scrypt-hexconvert.c in Sources */,
+				AB9B80212101CF2B00193883 /* LVDeviceAuthentication.m in Sources */,
 				562622C91F7521FF009581B6 /* crypto_scrypt-nosse.c in Sources */,
 				ABBEEFF020C674DA00F5CD27 /* LVReactExport.m in Sources */,
 				562622CA1F7521FF009581B6 /* crypto-mcf.c in Sources */,
@@ -1914,6 +1921,7 @@
 				5656771020CA84870033349A /* NSString+LVHexStringToBinary.m in Sources */,
 				5656771120CA84870033349A /* crypto_scrypt-check.c in Sources */,
 				5656771220CA84870033349A /* crypto_scrypt-hexconvert.c in Sources */,
+				AB9B80222101CF2C00193883 /* LVDeviceAuthentication.m in Sources */,
 				5656771320CA84870033349A /* crypto_scrypt-nosse.c in Sources */,
 				5656771420CA84870033349A /* LVReactExport.m in Sources */,
 				5656771520CA84870033349A /* crypto-mcf.c in Sources */,
