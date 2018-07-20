@@ -25,6 +25,10 @@ const localized_strings = {
     common_open_ettings: '设置',
     common_copy: '复制',
     common_retry: '重试',
+    common_continue: '继续',
+
+    // Alerts
+    alert_has_unfinished_transaction: '您目前尚有未完成交易，继续转账可能造成交易失败，是否继续操作？',
 
     //receive
     receive_title: '收款',
@@ -74,7 +78,7 @@ const localized_strings = {
     wallet_create_name_required: '请输入钱包名称',
     wallet_create_password_required: '请输入密码',
     wallet_create_confimpassword_required: '请输入确认密码',
-    wallet_create_password_mismatch: '密码与确认密码不匹配',
+    wallet_create_password_mismatch: '两次输入的密码不一致',
     wallet_create_name_unavailable: '钱包名字已存在',
     wallet_create_success_comment: '请妥善保管您的密码！共生钱包不存储用户密码，无法提供找回或重置功能',
     wallet_backup: '备份钱包',
@@ -299,6 +303,7 @@ const localized_strings = {
     // total title
     total_lvt: 'LVTC 总额',
     total_eth: 'ETH 总额',
+    total_amount: '总额',
     show_detail_amount: '交易金额',
     show_LVT_balance: 'LVTC 余额',
 

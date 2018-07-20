@@ -113,6 +113,11 @@ class AssetsScreen extends Component<Props, State> {
         this.setState({ wallet: LVWalletManager.getSelectedWallet() });
     };
 
+    onPressHeader = () => {
+        if (LVUtils.isNavigating()) { return }
+        this.props.navigation.navigate('Receive');
+    }
+
     onPressAddTokenToAssets = () => {
         if (LVUtils.isNavigating()) { return }
         this.props.navigation.navigate('TokenList');
@@ -172,7 +177,7 @@ class AssetsScreen extends Component<Props, State> {
                         right={selectImg}
                         onRightPress={this.onPressSelectWallet}
                     />
-                    <LVWalletHeader name={wallet.name} address={wallet.address} />
+                    <LVWalletHeader name={wallet.name} address={wallet.address} onPress={this.onPressHeader.bind(this)} />
                 </View>
 
                 <View style={styles.listHeader}>

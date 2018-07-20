@@ -101,7 +101,7 @@ type BalanceCardProps = {
 class LVWalletBalanceCard extends React.Component<BalanceCardProps> {
     render() {
         const { token, amount } = this.props;
-        const tokenImage = LVTokens.icons.get(token);
+        const tokenImage = LVTokens.icons.normal(token);
 
         const value = StringUtils.beautifyBalanceShow(amount);
         const balanceString = StringUtils.convertAmountToCurrencyString(value.result, ',', 0, true);

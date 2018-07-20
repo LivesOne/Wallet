@@ -7,30 +7,90 @@
 
 import LVNetworking from './LVNetworking';
 
+const tokenIcons = new Map([
+    ['ETH',  require('../assets/images/tokens/normal/ETH.png')],
+    ['LVTC', require('../assets/images/tokens/normal/LVT.png')],
+    ['USDT', require('../assets/images/tokens/normal/USDT.png')],
+    ['AE',  require('../assets/images/tokens/normal/AE.png')],
+    ['BAT', require('../assets/images/tokens/normal/BAT.png')],
+    ['BNB', require('../assets/images/tokens/normal/BNB.png')],
+    ['DGD', require('../assets/images/tokens/normal/DGD.png')],
+    ['GNT', require('../assets/images/tokens/normal/GNT.png')],
+    ['OMG', require('../assets/images/tokens/normal/OMG.png')],
+    ['REP', require('../assets/images/tokens/normal/REP.png')],
+    ['XRP', require('../assets/images/tokens/normal/XRP.png')],
+    ['ZIL', require('../assets/images/tokens/normal/ZIL.png')],
+    ['ZRX', require('../assets/images/tokens/normal/ZRX.png')]
+]);
+
+const tokenLargeIcons = new Map([
+    ['ETH',  require('../assets/images/tokens/large/ETH.png')],
+    ['LVTC', require('../assets/images/tokens/large/LVT.png')],
+    ['USDT', require('../assets/images/tokens/large/USDT.png')],
+    ['AE',  require('../assets/images/tokens/large/AE.png')],
+    ['BAT', require('../assets/images/tokens/large/BAT.png')],
+    ['BNB', require('../assets/images/tokens/large/BNB.png')],
+    ['DGD', require('../assets/images/tokens/large/DGD.png')],
+    ['GNT', require('../assets/images/tokens/large/GNT.png')],
+    ['OMG', require('../assets/images/tokens/large/OMG.png')],
+    ['REP', require('../assets/images/tokens/large/REP.png')],
+    ['XRP', require('../assets/images/tokens/large/XRP.png')],
+    ['ZIL', require('../assets/images/tokens/large/ZIL.png')],
+    ['ZRX', require('../assets/images/tokens/large/ZRX.png')]
+]);
+
+const tokenFullNames = new Map([
+    ['ETH',  'Ethereum Foundation'],
+    ['LVTC', 'LivesToken'],
+    ['USDT', 'Tether USD'],
+    ['AE',   'Aeternity'],
+    ['BAT',  'Basic Attention Token'],
+    ['BNB',  'BNB'],
+    ['DGD',  'Digix DAO'],
+    ['GNT',  'Golem Network Token'],
+    ['OMG',  'OmiseGO Token'],
+    ['REP',  'Augur Reputation'],
+    ['XRP',  'Ripple'],
+    ['ZIL',  'Zilliqa Token'],
+    ['ZRX',  '0x Protocol Token']
+]);
+
+class LVTokenIcons {
+    constructor() {}
+
+    has(token: string): boolean {
+        return tokenIcons.has(token.toUpperCase());
+    }
+
+    normal(token: string): any | void {
+        return tokenIcons.get(token.toUpperCase());
+    }
+
+    large(token: string): any | void {
+        return tokenLargeIcons.get(token.toUpperCase());
+    }
+}
+
 class LVTokens {
-    icons: Map<string, any>;
+    icons: LVTokenIcons;
     decimals: Map<string, number>;
     supported: Array<string>;
 
     constructor() {
-        this.icons = new Map([
-            ['eth', require('../assets/images/eth.png')],
-            ['LVTC', require('../assets/images/lvt.png')],
-            ['OMG', require('../assets/images/omg.png')],
-            ['XRP', require('../assets/images/xrp.png')]
-        ]);
-        this.decimals = new Map([
-            ['eth', 18],
-            ['LVTC', 18]
-        ]);
+        this.icons = new LVTokenIcons();
+        this.decimals = new Map([['eth', 18], ['LVTC', 18]]);
         this.supported = ['eth'];
+    }
+
+    fullname(token: string) : string {
+        return tokenFullNames.get(token.toUpperCase()) || token.toUpperCase();
     }
 
     async updateSupportedTokens() {
         try {
             var tokens = [];
             const object = await LVNetworking.fetchTokenList();
-            
+
             for (const key in object) {
                 if (object.hasOwnProperty(key)) {
                     tokens.push(key);
@@ -38,7 +98,6 @@ class LVTokens {
                 }
             }
 
-            tokens = tokens.filter(token => this.icons.has(token));
             this.supported = [...tokens, 'eth'];
         } catch (error) {
             console.log('update supported tokens error - ' + error);

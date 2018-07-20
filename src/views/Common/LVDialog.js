@@ -110,7 +110,7 @@ type ConfirmDialogProps = Props & {
     cancelTitleStyle?: Text.propTypes.style,
     onConfirm: Function,
     onCancel?: Function,
-    dismissAfterConfirm: boolean,
+    dismissAfterConfirm?: boolean,
     disableConfirm: boolean,
     disableCancel: boolean
 };
@@ -120,7 +120,7 @@ export class LVConfirmDialog extends React.Component<ConfirmDialogProps> {
     static defaultProps = {
         confirmTitle: '',
         cancelTitle: '',
-        dismissAfterConfirm: false,
+        dismissAfterConfirm: true,
         disableConfirm: false,
         disableCancel: false,
         tapToClose: false,
