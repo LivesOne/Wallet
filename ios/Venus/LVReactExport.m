@@ -10,6 +10,7 @@
 #include "libscrypt.h"
 #import "NSString+LVHexStringToBinary.h"
 #import "LVConfiguration.h"
+#import "LVDeviceAuthentication.h"
 
 @implementation LVReactExport
 
@@ -87,6 +88,51 @@ RCT_EXPORT_METHOD(updateAppConfig:(NSDictionary *)appConfig)
         if (manifest && manifest.length > 0) {
             LVConfiguration.enterpriseClientManifestURL = manifest;
         }
+    }
+}
+
+#pragma mark - Auth Support
+
+RCT_REMAP_METHOD(getAuthSupport,
+                 getAuthSupportWithResolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    NSDictionary *support = @{@"password" : @([LVDeviceAuthentication isDeviceAuthTypeAvailable:LVDeviceAuthTypePassword]),
+                              @"touchid" : @([LVDeviceAuthentication isDeviceAuthTypeAvailable:LVDeviceAuthTypeTouchID]),
+                              @"faceid" : @([LVDeviceAuthentication isDeviceAuthTypeAvailable:LVDeviceAuthTypeFaceID])
+                              };
+    
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:support
+                                                       options:NSJSONWritingPrettyPrinted
+                                                         error:&error];
+    
+    NSString *jsonString = @"";
+    
+    if (!jsonData) {
+        reject([@(error.code) stringValue], @"JSON Serialization Error", error);
+    } else {
+        jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+    
+    jsonString = [jsonString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    [jsonString stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    
+    resolve(jsonString);
+}
+
+RCT_REMAP_METHOD(startAuth,
+                 startAuth:(NSString *)param withResolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    if ([param isEqualToString:@"touchid"] || [param isEqualToString:@"faceid"]) {
+        [LVDeviceAuthentication evaluatePolicyWith:^(BOOL success, NSError * _Nullable error) {
+            if (success) {
+                resolve(@(YES));
+            } else {
+                reject([@(error.code) stringValue], error.localizedDescription, error);
+            }
+        }];
+    } else {
+        reject([@(-1) stringValue], @"Auth type not supported.", nil);
     }
 }
 

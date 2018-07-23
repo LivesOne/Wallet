@@ -2,3 +2,4 @@
 "new_app_version_detected_msg" = "New version detected, please update";
 "upgrade_now" = "Update now";
 "upgrade_next_time" = "Later";
+"need_auth_into_wallet" = "Touch the Home button to verify your fingerprint";
