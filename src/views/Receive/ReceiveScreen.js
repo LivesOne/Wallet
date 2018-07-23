@@ -247,7 +247,7 @@ class ReceiveScreen extends Component {
                         </Text>
                         <TouchableOpacity 
                             onPress = {() => {this.saveQrToDisk()}}
-                            style = {{marginLeft : Platform.OS === "ios" ? 0 : 25}}>
+                            style = {{marginLeft : 25}}>
                             <QRCode
                             getRef={(c) => (this.svg = c)}
                             style={styles.qrcode_pic}
