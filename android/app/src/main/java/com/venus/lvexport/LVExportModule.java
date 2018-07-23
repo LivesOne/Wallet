@@ -140,18 +140,26 @@ public class LVExportModule extends ReactContextBaseJavaModule {
             // 开始指纹验证
             FingerHelper.getInstance().init(getReactApplicationContext()).start(new FingerprintManagerCompat.AuthenticationCallback() {
 
-                int errorMax = 10;
+                int errorMax = 3;
+
+                boolean isActive = true;
 
                 @Override
                 public void onAuthenticationError(int errMsgId, CharSequence errString) {
-                    Toast.makeText(getReactApplicationContext() , errString , Toast.LENGTH_SHORT).show();
-                    occurError();
+                    String tip = "errMsgId:" + errMsgId + "--"+  errString;
+                    Log.i("authSupport" , tip);
+                    if(errMsgId != 5){
+                        Toast.makeText(getReactApplicationContext() , errString , Toast.LENGTH_SHORT).show();
+                        occurError(true);
+                    }
                 }
 
                 @Override
                 public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
-                    Toast.makeText(getReactApplicationContext() , helpString , Toast.LENGTH_SHORT).show();
-                    occurError();
+                    String tip = "helpMsgId:" + helpMsgId + "--"+  helpString;
+                    Log.i("authSupport" , tip);
+                    Toast.makeText(getReactApplicationContext() ,helpString , Toast.LENGTH_SHORT).show();
+                    occurError(false);
                 }
 
                 @Override
@@ -163,16 +171,21 @@ public class LVExportModule extends ReactContextBaseJavaModule {
                 @Override
                 public void onAuthenticationFailed() {
                     Toast.makeText(getReactApplicationContext() , getReactApplicationContext().getString(R.string.auth_touchid_not_match) , Toast.LENGTH_SHORT).show();
-                    occurError();
+                    occurError(false);
                 }
 
-                private void occurError(){
-                    if(errorMax == 0){
-                        promise.reject("error");
+                private void occurError(boolean shutdown){
+                    if(isActive && (errorMax == 0 || shutdown)){
+                        isActive = false;
+                        Log.i("authSupport" , "FingerHelper occurError");
+                        if(errorMax == 0){
+                            promise.reject("1" , "switch");
+                        } else {
+                            promise.reject("2" , "retry");
+                        }
                         FingerHelper.getInstance().cancel();
-                    }else{
-                        errorMax --;
                     }
+                    errorMax --;
                 }
             });
         }else{

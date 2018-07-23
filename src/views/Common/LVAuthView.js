@@ -29,6 +29,10 @@ import LVLoadingToast from '../Common/LVLoadingToast';
 const  AUTH_PASSWORD = 'password'; // 密码验证
 const  AUTH_TOUCH_ID = 'touchid'; // touchid 验证
 const  AUTH_FACE_ID = 'faceid'; // faceid 验证
+
+const AUTH_ERROR_SWITCH = "1";// 超出错误次数，切换验证方式
+const AUTH_ERROR_RETRY = "2";// 发生不匹配错误，点击重试
+
 const walletIcon = require('../../assets/images/assets_wallet.png');
 
 
@@ -103,6 +107,7 @@ export default class LVAuthView extends Component<Props> {
             this.setState({
                 firstAuth : this.getFirstAuth(),
                 secondAuth : this.getSecondAuth(),
+                isAuthing : false,
             });
         }
     }
@@ -116,17 +121,20 @@ export default class LVAuthView extends Component<Props> {
         });
         NativeModules.LVReactExport.startAuth(this.state.firstAuth)
         .then(result => {
-            this.pass();
             this.setState({
                 isAuthing : false,
             });
+            this.pass();
         })
         .catch(error => {
-            console.log("authSupport --- error:" + error);
+            console.log("authSupport --- error:" + error + "--code:" + error.code);
             this.setState({
                 isAuthing : false,
             });
-            this.switchAuth();
+            if(error.code === AUTH_ERROR_SWITCH){
+                this.switchAuth();
+            }else if(error.code === AUTH_ERROR_RETRY){
+            }
         });
     }
 
