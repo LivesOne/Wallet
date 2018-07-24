@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.cboy.rn.splashscreen.SplashScreen;
 import com.facebook.react.ReactActivity;
+import com.venus.utils.FingerHelper;
 
 public class MainActivity extends ReactActivity {
 
@@ -12,6 +13,7 @@ public class MainActivity extends ReactActivity {
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen.show(this);
         super.onCreate(savedInstanceState);
+        FingerHelper.getInstance().init(this);
     }
 
     /**

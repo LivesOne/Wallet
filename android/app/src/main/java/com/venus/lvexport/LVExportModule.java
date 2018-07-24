@@ -6,7 +6,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
+import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
@@ -15,7 +18,12 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.venus.BuildConfig;
 import com.venus.CryptoUtils;
+import com.venus.R;
 import com.venus.permission.CameraPermissionChecker;
+import com.venus.utils.FingerHelper;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -108,5 +116,80 @@ public class LVExportModule extends ReactContextBaseJavaModule {
     public void checkCameraPermission(Promise promise){
         boolean granted = CameraPermissionChecker.checkCameraPermission();
         promise.resolve(granted);
+    }
+
+    @ReactMethod
+    public void getAuthSupport(Promise promise){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("password" , true);
+            jsonObject.put("touchid" , FingerHelper.getInstance().hasEnrolledFingerprints());
+            jsonObject.put("faceid" , false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String result = jsonObject.toString();
+        Log.i("authSupport" , result);
+        promise.resolve(result);
+    }
+
+    @ReactMethod
+    public void startAuth(String authType , final Promise promise){
+        Log.i("authSupport" , "authType:" + authType);
+        if(!TextUtils.isEmpty(authType) && authType.equals("touchid")){
+            // 开始指纹验证
+            FingerHelper.getInstance().init(getReactApplicationContext()).start(new FingerprintManagerCompat.AuthenticationCallback() {
+
+                int errorMax = 3;
+
+                boolean isActive = true;
+
+                @Override
+                public void onAuthenticationError(int errMsgId, CharSequence errString) {
+                    String tip = "errMsgId:" + errMsgId + "--"+  errString;
+                    Log.i("authSupport" , tip);
+                    if(errMsgId != 5){
+                        Toast.makeText(getReactApplicationContext() , errString , Toast.LENGTH_SHORT).show();
+                        occurError(true);
+                    }
+                }
+
+                @Override
+                public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
+                    String tip = "helpMsgId:" + helpMsgId + "--"+  helpString;
+                    Log.i("authSupport" , tip);
+                    Toast.makeText(getReactApplicationContext() ,helpString , Toast.LENGTH_SHORT).show();
+                    occurError(false);
+                }
+
+                @Override
+                public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult result) {
+                    Toast.makeText(getReactApplicationContext() , getReactApplicationContext().getString(R.string.auth_touchid_match) , Toast.LENGTH_SHORT).show();
+                    promise.resolve("success");
+                }
+
+                @Override
+                public void onAuthenticationFailed() {
+                    Toast.makeText(getReactApplicationContext() , getReactApplicationContext().getString(R.string.auth_touchid_not_match) , Toast.LENGTH_SHORT).show();
+                    occurError(false);
+                }
+
+                private void occurError(boolean shutdown){
+                    if(isActive && (errorMax == 0 || shutdown)){
+                        isActive = false;
+                        Log.i("authSupport" , "FingerHelper occurError");
+                        if(errorMax == 0){
+                            promise.reject("1" , "switch");
+                        } else {
+                            promise.reject("2" , "retry");
+                        }
+                        FingerHelper.getInstance().cancel();
+                    }
+                    errorMax --;
+                }
+            });
+        }else{
+            promise.reject("error");
+        }
     }
 }

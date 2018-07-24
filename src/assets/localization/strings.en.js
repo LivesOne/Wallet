@@ -25,6 +25,10 @@ const localized_strings = {
     common_open_ettings: 'Open settings',
     common_copy: 'Copy',
     common_retry: 'Retry',
+    common_continue: 'Continue',
+
+    // Alerts
+    alert_has_unfinished_transaction: 'You have unfinished transaction. The transfer may fail if you continue. Continue or not?',
 
     //receive
     receive_title: 'Receive',
@@ -83,7 +87,7 @@ const localized_strings = {
     wallet_create_name_required: 'Please enter wallet name',
     wallet_create_password_required: 'Please enter password',
     wallet_create_confimpassword_required: 'Confirm your password',
-    wallet_create_password_mismatch: 'Passwords mismatch',
+    wallet_create_password_mismatch: 'Passwords do not match',
     wallet_create_name_unavailable: 'The name is unavailable',
     wallet_create_success: 'Successfully created!',
     wallet_create_success_comment:
@@ -307,6 +311,7 @@ const localized_strings = {
     // total title
     total_lvt: 'Total LVTC Amount',
     total_eth: 'Total ETH Amount',
+    total_amount: 'Total Amount',
     show_detail_amount: 'Transaction Amount',
     show_LVT_balance: 'LVTC Balance',
 

@@ -10,6 +10,7 @@ import { StyleSheet, ViewPropTypes, View, Text, Image, TouchableOpacity, Clipboa
 import { StringUtils } from '../../utils';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
+import LVUtils from '../../utils';
 import LVStrings from '../../assets/localization';
 
 import Toast from 'react-native-root-toast';
@@ -21,12 +22,25 @@ type Props = {
     style?: ViewPropTypes.style,
     name: ?string,
     address: ?string,
-    walletIcon?: number | React.Element<any>
+    walletIcon?: number | React.Element<any>,
+    onPress?: Function
 };
 
 export default class LVWalletHeader extends React.Component<Props> {
 
-    onPressCopy() {
+    constructor(props: any) {
+        super(props);
+        this.onPressHeader = this.onPressHeader.bind(this);
+        this.onPressCopy = this.onPressCopy.bind(this);
+    }
+
+    onPressHeader = () => {
+        if (this.props.onPress) {
+            this.props.onPress();
+        }
+    }
+
+    onPressCopy = () => {
         Clipboard.setString(TransferUtils.convertToHexHeader(this.props.address || ''));
         Toast.show(LVStrings.receive_copy_success, { position: Toast.positions.CENTER });
     }
@@ -37,18 +51,18 @@ export default class LVWalletHeader extends React.Component<Props> {
 
         return (
             <View style={[styles.container, this.props.style]}>
-                <View style={styles.inner}>
+                <TouchableOpacity style={styles.inner} activeOpacity={1} onPress={this.onPressHeader}>
                     <Image source={this.props.walletIcon || walletIcon} style={styles.img} resizeMode="contain" />
                     <View style={styles.infoView}>
                         <Text style={styles.title} numberOfLines={1} ellipsizeMode="middle">{name}</Text>
                         <View style={styles.addressView}>
                             <Text style={styles.address} numberOfLines={1} ellipsizeMode="middle">{address}</Text>
-                            <TouchableOpacity style={styles.copy} activeOpacity={0.8} onPress={this.onPressCopy.bind(this)}>
+                            <TouchableOpacity style={styles.copy} activeOpacity={0.8} onPress={this.onPressCopy}>
                                 <Text style={styles.copyText}>{LVStrings.common_copy}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
-                </View>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -106,7 +120,7 @@ const styles = StyleSheet.create({
     copy: {
         width: 39,
         height: 22,
-        marginLeft: 30,
+        marginLeft: LVUtils.getDeviceWidth() <= 320 ? 10 : 30,
         borderRadius: 3,
         justifyContent: 'center',
         backgroundColor: '#ffffff'

@@ -48,7 +48,7 @@ import { LVConfirmDialog } from '../Common/LVDialog';
 
 // import QRCode from 'react-native-qrcode';
 const receive_share = require("../../assets/images/receive_share.png");
-const lvt = require("../../assets/images/lvt.png");
+const lvt = require("../../assets/images/tokens/normal/LVT.png");
 const receive_change_wallet = require("../../assets/images/receive_change_wallet.png");
 const receive_wallet_blank = require("../../assets/images/wallet_blank.png");
 const goback_gray = require("../../assets/images/goback_gray.png");
@@ -247,7 +247,7 @@ class ReceiveScreen extends Component {
                         </Text>
                         <TouchableOpacity 
                             onPress = {() => {this.saveQrToDisk()}}
-                            style = {{marginLeft : Platform.OS === "ios" ? 0 : 25}}>
+                            style = {{marginLeft : 25}}>
                             <QRCode
                             getRef={(c) => (this.svg = c)}
                             style={styles.qrcode_pic}

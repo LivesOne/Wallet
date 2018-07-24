@@ -28,7 +28,7 @@ import TransferUtils from '../Transfer/TransferUtils';
 
 const IconBack = require('../../assets/images/back_grey.png');
 const receive_share = require("../../assets/images/receive_share.png");
-const lvt = require("../../assets/images/lvt.png");
+const lvt = require("../../assets/images/tokens/normal/LVT.png");
 class ReceiveTip extends Component {
     static navigationOptions = {
         header: null
