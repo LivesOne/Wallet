@@ -41,6 +41,9 @@ export class ModifyWalletPwd extends React.Component<Props, State> {
     };
 
     onSavePressed: Function;
+    onValidateOldPassword: Function;
+    onValidatePassword: Function;
+    onValidatePasswordConfirmation: Function;
 
     constructor() {
         super();
@@ -54,6 +57,9 @@ export class ModifyWalletPwd extends React.Component<Props, State> {
         }
         
         this.onSavePressed = this.onSavePressed.bind(this);
+        this.onValidateOldPassword = this.onValidateOldPassword.bind(this);
+        this.onValidatePassword = this.onValidatePassword.bind(this);
+        this.onValidatePasswordConfirmation = this.onValidatePasswordConfirmation.bind(this);
     }
 
     componentWillMount() {
@@ -63,45 +69,57 @@ export class ModifyWalletPwd extends React.Component<Props, State> {
         })
     }
 
+    onValidateOldPassword(): ?string {
+        const { curPwd } = this.state;
+        if (!curPwd) {
+            return LVStrings.wallet_edit_cur_pwd_required;
+        }
+        if (!WalletUtils.isPasswordValid(curPwd)) {
+            return LVStrings.wallet_import_invalid_password_warning;
+        }
+        return null;
+    }
+
+    onValidatePassword(): ?string {
+        const { newPwd, newConfirmPwd } = this.state;
+        if (!newPwd) {
+            return LVStrings.wallet_edit_new_pwd_required ;
+        }
+        if (!WalletUtils.isPasswordValid(newPwd)) {
+            return LVStrings.wallet_import_invalid_password_warning;
+        }
+        if (newPwd !== newConfirmPwd) {
+            return LVStrings.wallet_create_password_mismatch;
+        }
+        this.refs.newPasswordInput.setErrorText(null);
+        this.refs.newPasswordConfirmationInput.setErrorText(null);
+        return null;
+    }
+
+    onValidatePasswordConfirmation(): ?string {
+        const { newPwd, newConfirmPwd } = this.state;
+        if (!newConfirmPwd) {
+            return LVStrings.wallet_create_confimpassword_required ;
+        }
+        if (!WalletUtils.isPasswordValid(newConfirmPwd)) {
+            return LVStrings.wallet_import_invalid_password_warning;
+        }
+        if (newPwd !== newConfirmPwd) {
+            return LVStrings.wallet_create_password_mismatch;
+        }
+        this.refs.newPasswordInput.setErrorText(null);
+        this.refs.newPasswordConfirmationInput.setErrorText(null);
+        return null;
+    }
+
     async onSavePressed() {
         Keyboard.dismiss();
 
-        
         const {wallet, curPwd, newPwd, newConfirmPwd} = this.state;
-        if (!wallet) {
-            this.setState({alertMessage:LVStrings.wallet_edit_save_failed });
-            this.refs.alert.show();
-            return;
-        }
-
-        if (!curPwd) {
-            this.setState({alertMessage:LVStrings.wallet_edit_cur_pwd_required });
-            this.refs.alert.show();
-            return;
-        }
-
-        if (!WalletUtils.isPasswordValid(curPwd)) {
-            this.setState({alertMessage:LVStrings.wallet_import_invalid_password_warning });
-            this.refs.alert.show();
-            return;
-        }
-
-        if (!newPwd || !newConfirmPwd) {
-            this.setState({alertMessage:LVStrings.wallet_edit_new_pwd_required });
-            this.refs.alert.show();
-            return;
-        }
-
-        if (!WalletUtils.isPasswordValid(newPwd) || !WalletUtils.isPasswordValid(newConfirmPwd)) {
-            this.setState({alertMessage:LVStrings.wallet_import_invalid_password_warning });
-            this.refs.alert.show();
-            return;
-        }
-
-        if (newPwd !== newConfirmPwd) {
-            this.setState({alertMessage:LVStrings.wallet_create_password_mismatch });
-            this.refs.alert.show();
-            return;
+        if(!this.refs.oldPasswordInput.validate()
+            || !this.refs.newPasswordInput.validate() 
+            || !this.refs.newPasswordConfirmationInput.validate()) {
+                return;
         }
 
         this.refs.toast.show();
@@ -185,25 +203,31 @@ export class ModifyWalletPwd extends React.Component<Props, State> {
                         this.props.navigation.goBack() }}/>
                 <View style= {styles.container}>
                     <MXCrossTextInput
+                        ref={'oldPasswordInput'}
                         style={styles.textInput}
                         secureTextEntry={true}
                         withUnderLine={false}
                         titleText={LVStrings.profile_wallet_cur_password}
                         placeholder= { LVStrings.profile_wallet_cur_password }
+                        onValidation={()=> this.onValidateOldPassword() }
                         onTextChanged={ this.onCurPwdChanged.bind(this) }/>
                     <MXCrossTextInput
+                        ref={'newPasswordInput'}
                         style={styles.textInput}
                         secureTextEntry={true}
                         withUnderLine={false}
                         titleText={LVStrings.profile_wallet_new_password}
                         placeholder= { LVStrings.wallet_import_private_password_hint }
+                        onValidation={ ()=> this.onValidatePassword() }
                         onTextChanged={ this.onNewPwdChanged.bind(this) }
                     />
                     <MXCrossTextInput
+                        ref={'newPasswordConfirmationInput'}
                         style={styles.textInput}
                         secureTextEntry={true}
                         titleText={LVStrings.profile_wallet_password_confirm}
                         placeholder= { LVStrings.wallet_import_private_pwd_confirm_hint }
+                        onValidation= { ()=> this.onValidatePasswordConfirmation() }
                         onTextChanged={ this.onConfirmPwdChanged.bind(this) }
                     />
                     <View style={{ marginTop: 16, flexDirection: 'row'}}>

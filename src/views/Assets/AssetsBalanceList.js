@@ -10,17 +10,13 @@ import { StyleSheet, View, ViewPropTypes, FlatList, Text, Image, TouchableOpacit
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
+import LVTokens from '../../logic/LVTokens';
 import LVWallet from '../../logic/LVWallet';
 import { StringUtils } from '../../utils';
 import LVBalanceShowView from '../Common/LVBalanceShowView';
 
 const left_shadow = require('../../assets/images/assets_card_left_shadow.png');
 const right_shadow = require('../../assets/images/assets_card_right_shadow.png');
-
-const tokenImageIcons = {
-    LVTC: require('../../assets/images/lvt.png'),
-    eth: require('../../assets/images/eth.png')
-};
 
 type Props = {
     style?: ViewPropTypes.style,
@@ -31,17 +27,26 @@ type Props = {
 };
 
 export default class AssetsBalanceList extends React.Component<Props> {
-
     constructor() {
         super();
     }
 
     _keyExtractor = (item, index) => index.toString();
 
+    _processing_on_press_item = false;
     _onPressItem = (item: Object) => {
+        if (this._processing_on_press_item) {
+            return;
+        }
+        this._processing_on_press_item = true;
+
         if (this.props.onPressItem) {
             this.props.onPressItem(item.token);
         }
+
+        setTimeout(() => {
+            this._processing_on_press_item = false;
+        }, 600);
     };
 
     _renderItem = ({ item }) => (
@@ -62,8 +67,10 @@ export default class AssetsBalanceList extends React.Component<Props> {
 
     render() {
         const { style, wallet } = this.props;
-        const data = wallet.balance_list.map((balance) => {
-            return { token: balance.token, amount: wallet.getBalance(balance.token) };    
+
+        const unfilted = wallet.balance_list.filter(balance => wallet.isAvailable(balance.token));
+        const data = unfilted.map(balance => {
+            return { token: balance.token, amount: wallet.getBalance(balance.token) };
         });
 
         return (
@@ -94,7 +101,7 @@ type BalanceCardProps = {
 class LVWalletBalanceCard extends React.Component<BalanceCardProps> {
     render() {
         const { token, amount } = this.props;
-        const tokenImage = tokenImageIcons[token];
+        const tokenImage = LVTokens.icons.normal(token);
 
         const value = StringUtils.beautifyBalanceShow(amount);
         const balanceString = StringUtils.convertAmountToCurrencyString(value.result, ',', 0, true);
@@ -121,7 +128,7 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'flex-end',
+        alignItems: 'flex-end'
     },
     card: {
         flex: 1,

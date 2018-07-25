@@ -3,6 +3,7 @@
 'use strict'
 
 import { isAddress } from '../../utils/MXStringUtils';
+import LVTokens from '../../logic/LVTokens';
 const BN = require('bn.js');
 const ICAP = require('ethereumjs-icap');
 var Big = require('big.js');
@@ -88,8 +89,9 @@ export default class TransferUtils {
     }
 
     // value : Big Object 
-    static convert2BNHex(value: Object) : string {
-        let r = new BN(value.times(new Big(10).pow(18)).toFixed());
+    static convert2BNHex(value: Object, token: string) : string {
+        const decimal = LVTokens.decimals.get('BTC') || 18;
+        let r = new BN(value.times(new Big(10).pow(decimal)).toFixed());
         return '0x' + r.toString(16).toLowerCase();
     }
 
@@ -113,10 +115,10 @@ export default class TransferUtils {
     }
 
     static log(msg: string) {
-        if (__DEV__) {
-            console.log('transfer ---> ' + msg);
-        }
-        // console.log('transfer ---> ' + msg);
+        // if (__DEV__) {
+        //     console.log('transfer ---> ' + msg);
+        // }
+        console.log('transfer ---> ' + msg);
     }
 
     static testBN() {

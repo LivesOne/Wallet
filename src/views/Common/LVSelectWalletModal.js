@@ -50,6 +50,7 @@ export default class LVSelectWalletModal extends React.Component<Props> {
 
     _onPressItem = (address: string) => {
         LVWalletManager.setSelectedWallet(address);
+        LVWalletManager.saveToDisk();
         LVNotificationCenter.postNotification(LVNotification.walletChanged);
 
         this.refs.modal.close();

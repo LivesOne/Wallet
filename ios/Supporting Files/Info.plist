@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1.0</string>
+	<string>1.1.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>52</string>
+	<string>166</string>
 	<key>CodePushDeploymentKey</key>
 	<string>$(CODEPUSH_KEY)</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -39,16 +39,30 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Will be used for music service</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Will be used for bluetooth service</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Will be used for calendars service</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Your message to user when the camera is accessed for the first time</string>
+	<string>It will be used to scan QR code or upload images</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Provide local service</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Provide local service</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Your message to user when the microsphone is accessed for the first time</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Will be used for motion service</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string></string>
+	<string>We need the album permission of LivesOne wallet to save the QR code</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Your message to user when the photo library is accessed for the first time</string>
+	<string>We need the album permission of LivesOne wallet to save the QR code</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Will be used for speech service</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Enabling Face ID allows you quick and secure access to your wallet</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>DIN Alternate Bold.ttf</string>

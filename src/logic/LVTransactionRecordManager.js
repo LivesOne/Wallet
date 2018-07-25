@@ -7,6 +7,7 @@
 
 import Big from 'big.js';
 import Moment from 'moment';
+import LVTokens from './LVTokens';
 import LVWallet, { LVBalance } from './LVWallet';
 import LVNetworking from './LVNetworking';
 import LVWalletManager from './LVWalletManager';
@@ -75,7 +76,8 @@ class LVTransactionRecord {
             record.timestamp = json.timestamp;
         } else if (state !== 'failed') {
             try {
-                record.amount = new Big(json.value).times(new Big(10).pow(-18));
+                const decimal = LVTokens.decimals.get(record.token) || 18;
+                record.amount = new Big(json.value).times(new Big(10).pow(-1 * decimal));
             } catch (e) {
                 TransferUtils.log('error = ' + e.message + ' value = ' + json.value);
             }
@@ -183,10 +185,7 @@ export default class LVTransactionRecordManager {
 
         await this.refreshInProgressTransactionRecords(token);
 
-        var address = wallet.address;
-        if (address.substr(0, 2).toLowerCase() != '0x') {
-            address = '0x' + address;
-        }
+        const address = wallet.address.substr(0, 2).toLowerCase() == '0x' ? wallet.address : '0x' + wallet.address;
 
         const history: ?Array<any> = await LVNetworking.fetchTransactionHistory(address, token);
         if (history === null || history === undefined) return;
@@ -222,7 +221,7 @@ export default class LVTransactionRecordManager {
 
                 if (record.state != 'waiting') {
                     wallet.minusHoldingBalance(record.token, record.amount);
-                    wallet.minusHoldingBalance(LVWallet.ETH_TOKEN, record.minnerFee);
+                    wallet.removeHoldingBalance(LVWallet.ETH_TOKEN);
                 }
             }
         }

@@ -23,6 +23,12 @@ const localized_strings = {
     common_camera_not_authorized: 'Camera not authorized',
     common_next: 'Next',
     common_open_ettings: 'Open settings',
+    common_copy: 'Copy',
+    common_retry: 'Retry',
+    common_continue: 'Continue',
+
+    // Alerts
+    alert_has_unfinished_transaction: 'You have unfinished transaction. The transfer may fail if you continue. Continue or not?',
 
     //receive
     receive_title: 'Receive',
@@ -32,7 +38,7 @@ const localized_strings = {
     receive_copy_success: 'Successful copied',
     receive_save: 'Save the QR code',
     receive_empty: 'You haven’t add a wallet yet',
-    receive_save_finish: 'Completed',
+    receive_save_finish: 'Saved in the album',
 
     // inner error
     inner_common_error: 'Inner error',
@@ -56,7 +62,7 @@ const localized_strings = {
     wallet_importing_wallet: 'Importing wallet...',
     wallet_import_private_key_error: 'Private key format error',
     wallet_import_keystore_error: 'Keystore format error',
-    wallet_import_keystore_or_pwd_empty: "Keystore or password can't be empty",
+    wallet_import_keystore_or_pwd_empty: "Keystore can't be empty",
     wallet_import_private_key_required: 'Private key is required',
     wallet_import_success: 'Import succeed!',
     wallet_import_fail: 'Import failed!',
@@ -81,7 +87,7 @@ const localized_strings = {
     wallet_create_name_required: 'Please enter wallet name',
     wallet_create_password_required: 'Please enter password',
     wallet_create_confimpassword_required: 'Confirm your password',
-    wallet_create_password_mismatch: 'Passwords mismatch',
+    wallet_create_password_mismatch: 'Passwords do not match',
     wallet_create_name_unavailable: 'The name is unavailable',
     wallet_create_success: 'Successfully created!',
     wallet_create_success_comment:
@@ -94,6 +100,8 @@ const localized_strings = {
     wallet_disclaimer: 'Disclaimer',
     wallet_disclaimer_content:
         'Please make sure to keep your wallet backup safe. All losses due to wallet’s lost, stolen, and password forgotten have nothing to do with the platform.',
+    
+    wallet_details: 'Wallet details',
 
     //wallet edit
     wallet_edit_save_failed: 'Failed to save!',
@@ -121,6 +129,12 @@ const localized_strings = {
     recent_records: 'Recent transaction records',
     view_all_records: 'All records',
 
+    // Token List
+    token_list_title: 'Add token',
+    token_list_search_placeholder: 'Please enter the token name',
+    token_list_search_result_empty: 'No relevant token',
+    token_list_add_token: 'Add',
+
     // total amount
     total_amount: 'Total amount',
 
@@ -144,6 +158,9 @@ const localized_strings = {
     transaction_failure_message:
         'Transaction failed. Please make appropriate choice for transaction fee.',
     transaction_does_not_exist_message: 'The transaction does not exist. The transaction fee has returned to the wallet.',
+
+    transaction_check_progress: 'Check transaction progress',
+    transaction_check_detail: 'View details',
 
     // Transfer 转账
     transfer_lvt_insufficient: 'Your LVTC balance is insufficient. Please recharge.',
@@ -211,11 +228,30 @@ const localized_strings = {
     transfer_miner_tips: 'Miner fee',
     transfer_slow: 'Slow',
     transfer_fast: 'Fast',
+    transfer_advanced: 'Advanced',
+    transfer_advanced_gas: 'Please enter gas',
+    transfer_advanced_gas_price: 'Please enter gas price',
+    transfer_advanced_gas_data: 'Please enter the data parameter (optional)',
     transfer_current_eth: "Current wallet's ETH",
     transfer_hint:
         'The ETH in your current wallet will be deducted after the transaction is executed. The miner’s fees will not be refunded after the transaction is packaged.',
     transfer_payment_details: 'Payment details',
     transfer_address_in: 'Receiver Address',
+    transfer_minner_fee_fail: 'Your low miner fee may lead to failing transfer',
+    transfer_gas_format_hint: 'Gas should be a positive number',
+    transfer_advanced_gas_price_overLimit: 'It is recommended to enter gwei within 100',
+    transfer_gasprice_format_hint: 'Gas Price should be a positive number',
+
+    // MinnerFeeDetail
+    minnerfeedetail_title: 'What is Miner Fee?',
+    minnerfeedetail_content: '  On Ether chain, everyone may read data for free and write data by paying centain miner fee. Any online miner may participate in mining that consumes computing power and electric power, which is why miner fee is charged.\n Several transfer on chain must be performed in order, meaning second transfer must be started after the first finished(success or fail), or either the first or the second will fail.',
+    minnerfeedetail_transferFail: 'The transfer may fail in following cases:',
+    minnerfeedetail_title1: 'First, miner fee is so low that no miner accepts:',
+    minnerfeedetail_content1: "  Meaning the transfer fails and the fee will be returned. And it will show the transfer doesn't exist in the transaction records.",
+    minnerfeedetail_title2: 'Second, shortage of miner fee:',
+    minnerfeedetail_content2: '  Where the miner fee has been used up during the packaging(but unfinished), and it will show the transfer fails in the transaction records.',
+    minnerfeedetail_title3: 'Third, several continuous transfer is performed:',
+    minnerfeedetail_content3: "  Where according to Ether's regulation, when the second transfer is started before the first finished, the second will fail if first miner fee is higher than that of second, otherwise, the first will fail. And it will show the transfer doesn't exist in the transaction records.",
 
     // App Guide Message
     guide_button_title: 'Enter now',
@@ -265,6 +301,9 @@ const localized_strings = {
     network_error_network_lost: 'Your network is not connected, please try again!',
     network_timeout: 'Network timeout',
 
+    // WebView
+    webview_connection_failed: 'Connection failed',
+
     // exit
     exit_app_prompt: 'Exit App?',
     exit: 'Exit',
@@ -272,6 +311,7 @@ const localized_strings = {
     // total title
     total_lvt: 'Total LVTC Amount',
     total_eth: 'Total ETH Amount',
+    total_amount: 'Total Amount',
     show_detail_amount: 'Transaction Amount',
     show_LVT_balance: 'LVTC Balance',
 

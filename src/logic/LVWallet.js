@@ -21,11 +21,14 @@ class LVWallet {
     name: string;
     address: string;
     keystore: Object;
+    
     balance_list: Array<LVBalance>;
     holding_list: Array<LVBalance>; // withholding balacne list
+    available_tokens: Array<string>;
 
     static ETH_TOKEN = 'eth';
     static LVTC_TOKEN = 'LVTC';
+    static DEFAULT_AVAILABLE_TOKENS = [LVWallet.ETH_TOKEN, LVWallet.LVTC_TOKEN];
 
     constructor(name: string, keystore: Object) {
         this.name = name;
@@ -33,9 +36,27 @@ class LVWallet {
         this.keystore = keystore;
         this.balance_list = [];
         this.holding_list = [];
+        this.available_tokens = LVWallet.DEFAULT_AVAILABLE_TOKENS;
 
         this.lvtc = 0;
         this.eth = 0;
+    }
+
+    isAvailable(token: string): boolean {
+        return this.available_tokens.includes(token);
+    }
+
+    addAvailableToken(token: string) {
+        if (!this.isAvailable(token)) {
+            this.available_tokens.push(token);
+        }
+    }
+
+    removeAvailableToken(token: string) {
+        const index = this.available_tokens.indexOf(token);
+        if (index >= 0) {
+            this.available_tokens.splice(index, 1);
+        }
     }
 
     get lvtc(): Big {
@@ -74,6 +95,10 @@ class LVWallet {
         var balance: Big = get_balance_from_list(token, this.holding_list);
         balance = balance.minus(value);
         set_balance_for_list(token, balance.cmp(0) > 0 ? balance : 0, this.holding_list);
+    }
+
+    removeHoldingBalance(token: string) {
+        set_balance_for_list(token, 0, this.holding_list);
     }
 
     static emptyWallet(): LVWallet {

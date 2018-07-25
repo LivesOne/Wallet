@@ -60,7 +60,9 @@ type State = {
   keyStorePwd: string,
   alertMessage: ?string,
   fromPage: string,
-  keyboardHeight: number
+  keyboardHeight: number,
+  keystoreErrorText: ?string,
+  privateKeyErrorText: ?string
 };
 
 export default class AssetsImportPage extends React.Component<Props, State> {
@@ -82,18 +84,28 @@ export default class AssetsImportPage extends React.Component<Props, State> {
         alertMessage: '',
         fromPage: WalletUtils.OPEN_IMPORT_FROM_LAUNCH,
         keyboardHeight: 0,
+        keystoreErrorText: null,
+        privateKeyErrorText: null,
       }
       this.exitWhenSuccess = this.exitWhenSuccess.bind(this);
+      this.onValidateKeyStorePassword = this.onValidateKeyStorePassword.bind(this);
+      this.onValidatePrivateKeyPassword = this.onValidatePrivateKeyPassword.bind(this);
+      this.onValidatePrivateKeyConfirmPassword = this.onValidatePrivateKeyConfirmPassword.bind(this);
     }
 
     keyboardDidShowListener: Object;
     keyboardDidHideListener: Object;
+    onValidateKeyStorePassword: Function;
+    onValidatePrivateKeyPassword: Function;
+    onValidatePrivateKeyConfirmPassword: Function;
 
     componentWillMount = () => {
       let fromPage = WalletUtils.OPEN_IMPORT_FROM_LAUNCH;
       if (this.props.screenProps && this.props.screenProps.from) {
         fromPage = this.props.screenProps.from;
-      } 
+      } else if (this.props.navigation.state.params.from) {
+        fromPage = this.props.navigation.state.params.from;
+      }
       console.log('from = ' + fromPage);
       this.setState({fromPage: fromPage});
       if (Platform.OS === 'android') {
@@ -148,55 +160,72 @@ export default class AssetsImportPage extends React.Component<Props, State> {
       } 
       LVNotificationCenter.postNotification(LVNotification.walletChanged);
       LVNotificationCenter.postNotification(LVNotification.balanceChanged, wallet);
-      if (this.props.screenProps.dismiss) {
+      if (this.props.screenProps && this.props.screenProps.dismiss) {
         this.props.screenProps.dismiss('success');
+      } else {
+        this.props.navigation.goBack();
       }
     }
 
-    async onPrivateImportPress() {
-      const { privateKey, privateKeyPwd,privateKeyPwdAgain}  = this.state;
+    onValidatePrivateKeyPassword(): ?string {
+      const { privateKeyPwd, privateKeyPwdAgain }  = this.state;
 
-      if(!privateKey) {
-        this.setState({alertMessage:LVStrings.wallet_import_private_key_required });
-        this.refs.alert.show();
-        return;
+      if(!privateKeyPwd) {
+        return LVStrings.wallet_create_password_required;
+      }
+      if(!WalletUtils.isPasswordValid(privateKeyPwd)) {
+        return LVStrings.wallet_import_invalid_password_warning;
+      } 
+      if(privateKeyPwd !== privateKeyPwdAgain) {
+        return LVStrings.wallet_create_password_mismatch;
+      }
+      this.refs.privateKeyPasswordInput.setErrorText(null);
+      this.refs.privateKeyConfirmPasswordInput.setErrorText(null);
+      return null;
     }
 
-    if(!privateKeyPwd) {
-        this.setState({alertMessage:LVStrings.wallet_create_password_required });
-        this.refs.alert.show();
-        return;
+    onValidatePrivateKeyConfirmPassword(): ?string {
+      const { privateKeyPwd, privateKeyPwdAgain }  = this.state;
+      if(!privateKeyPwdAgain) {
+        return LVStrings.wallet_create_confimpassword_required;
+      }
+      if(!WalletUtils.isPasswordValid(privateKeyPwdAgain)) {
+        return LVStrings.wallet_import_invalid_password_warning;
+      } 
+      if(privateKeyPwd !== privateKeyPwdAgain) {
+        return LVStrings.wallet_create_password_mismatch;
+      }
+      this.refs.privateKeyPasswordInput.setErrorText(null);
+      this.refs.privateKeyConfirmPasswordInput.setErrorText(null);
+      return null;
     }
 
-    if(!WalletUtils.isPasswordValid(privateKeyPwd) || !WalletUtils.isPasswordValid(privateKeyPwdAgain)) {
-        this.setState({alertMessage:LVStrings.wallet_import_invalid_password_warning });
-        this.refs.alert.show();
-        return;
-    }    
-
-    if(!privateKeyPwdAgain) {
-        this.setState({alertMessage:LVStrings.wallet_create_confimpassword_required });
-        this.refs.alert.show();
-        return;
-    }
-
-    if(privateKeyPwd !== privateKeyPwdAgain) {
-        this.setState({alertMessage:LVStrings.wallet_create_password_mismatch });
-        this.refs.alert.show();
-        return;
-    }
-
-    if (!WalletUtils.isPrivateKeyValid(privateKey)) {
-      this.setState({alertMessage: LVStrings.wallet_import_private_key_error });
-      this.refs.alert.show();
+  async onPrivateImportPress() {
+    const { privateKey, privateKeyPwd,privateKeyPwdAgain}  = this.state;
+    if(!privateKey) {
+      this.setState({privateKeyErrorText:LVStrings.wallet_import_private_key_required });
       return;
     }
 
+    if (!WalletUtils.isPrivateKeyValid(privateKey)) {
+      this.setState({privateKeyErrorText: LVStrings.wallet_import_private_key_error });
+      return;
+    }
+
+    this.setState({privateKeyErrorText: null });
+
+    if(!this.refs.privateKeyPasswordInput.validate() 
+        || !this.refs.privateKeyConfirmPasswordInput.validate()) {
+        return;
+    }
+
+    Keyboard.dismiss();
     this.refs.toast.show();
     setTimeout(async ()=> {
       try {
         let defaultName = await WalletUtils.getDefaultName();
         let wallet = await LVWalletManager.importWalletWithPrivatekey(defaultName, privateKeyPwd, privateKey);
+        await LVWalletManager.updateWalletBalance(wallet);
         this.refs.toast.dismiss();
         
         const success = LVWalletManager.addWallet(wallet);
@@ -219,27 +248,43 @@ export default class AssetsImportPage extends React.Component<Props, State> {
     },500);
   }
 
+  onValidateKeyStorePassword(): ?string {
+    const { keyStorePwd } = this.state;
+    if(!keyStorePwd) {
+      return LVStrings.password_verify_required;
+    }
+
+    if(!WalletUtils.isPasswordValid(keyStorePwd)) {
+      return LVStrings.wallet_import_invalid_password_warning;
+    }
+    return null;
+  }
 
     async onKeystoreImportPress() {
-      const { keyStore, keyStorePwd } = this.state;
-      if (!keyStore || !keyStorePwd) {
-        this.setState({alertMessage: LVStrings.wallet_import_keystore_or_pwd_empty });
-        this.refs.alert.show();
-        return;
-      }
-
-      if(!WalletUtils.isPasswordValid(this.state.keyStorePwd)) {
-        this.setState({alertMessage: LVStrings.wallet_import_invalid_password_warning });
-        this.refs.alert.show();
+      const { keyStorePwd, keyStore } = this.state;
+      if (!keyStore) {
+        this.setState({
+          keystoreErrorText: LVStrings.wallet_import_keystore_or_pwd_empty
+        });
         return;
       }
 
       if (!WalletUtils.isValidKeyStoreStr(keyStore)) {
-        this.setState({alertMessage: LVStrings.wallet_import_keystore_error });
-        this.refs.alert.show();
+        this.setState({
+          keystoreErrorText: LVStrings.wallet_import_keystore_error
+        });
         return;
       }
 
+      this.setState({
+        keystoreErrorText: null
+      });
+
+      if(!this.refs.keystorePasswordInput.validate()){
+        return;
+      }
+
+      Keyboard.dismiss();
       this.refs.toast.show();
 
 
@@ -253,10 +298,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
     
           if (isPwdCorrect == false) {
             this.refs.toast.dismiss();
-            setTimeout(() => {
-              this.setState({alertMessage: LVStrings.inner_error_password_mismatch });
-              this.refs.alert.show();
-            }, 500);
+            this.refs.keystorePasswordInput.setErrorText(LVStrings.inner_error_password_mismatch);
             return;
           }
           
@@ -322,7 +364,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
           <MXNavigatorHeader
             title = {LVStrings.wallet_import_header}
             onLeftPress = {() => {
-                if(this.props.screenProps.dismiss) {
+                if(this.props.screenProps && this.props.screenProps.dismiss) {
                     this.props.screenProps.dismiss('canceled');
                 } else if(this.props.navigation){
                     this.props.navigation.goBack();
@@ -352,7 +394,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
 
     _renderKeystore = ()=> {
       return (
-        <View style={{ flex: 1}}>
+        <KeyboardDismissView style={{ flex: 1}}>
           <TextInput
             textAlignVertical={'top'}
             multiline= {true}
@@ -363,10 +405,13 @@ export default class AssetsImportPage extends React.Component<Props, State> {
             onChangeText={(newText)=>{this.setState({keyStore: newText.trim()})}}
             style={ styles.textInput }
           />
-
+          <Text style={styles.errorLabelStyle} ref={'keystoreErrorMsg'}>{this.state.keystoreErrorText}</Text>
+          
           <MXCrossTextInput
+            ref={'keystorePasswordInput'}
             style={[styles.crossTextInputStyle, {marginTop: 15}]}
             secureTextEntry={true}
+            onValidation={()=>this.onValidateKeyStorePassword()}
             titleText={LVStrings.wallet_import_keystore_password_label}
             onTextChanged={(newText)=>{ this.setState({keyStorePwd: newText}) }}
             placeholder={LVStrings.wallet_import_private_password_hint}
@@ -376,7 +421,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
             style={styles.importButtonStyle}
             title={LVStrings.wallet_import}
             onPress={ this.onKeystoreImportPress.bind(this) }/>
-        </View>
+        </KeyboardDismissView>
       );
     }
 
@@ -392,20 +437,25 @@ export default class AssetsImportPage extends React.Component<Props, State> {
               underlineColorAndroid = {'transparent'}
               style={ styles.textInput }
             />
+            <Text style={styles.errorLabelStyle} ref={'privateKeyErrorMsg'}>{this.state.privateKeyErrorText}</Text>
 
             <MXCrossTextInput
+              ref={'privateKeyPasswordInput'}
               style={[styles.crossTextInputStyle, {marginTop: 15}]}
               secureTextEntry={true}
               returnKeyType={'next'}
               withUnderLine={false}
               titleText={LVStrings.wallet_import_private_password_lable}
+              onValidation={()=> this.onValidatePrivateKeyPassword()}
               onTextChanged={(newText)=>{this.setState({privateKeyPwd: newText})}}
               placeholder={LVStrings.wallet_import_private_password_hint}
             />
 
             <MXCrossTextInput
+              ref={'privateKeyConfirmPasswordInput'}
               style={styles.crossTextInputStyle}
               secureTextEntry={true}
+              onValidation={()=> this.onValidatePrivateKeyConfirmPassword()}
               titleText={LVStrings.wallet_import_private_password_repeat_lable}
               onTextChanged={(newText)=>{this.setState({privateKeyPwdAgain: newText})}}
               placeholder={LVStrings.wallet_import_private_pwd_confirm_hint}
@@ -460,5 +510,10 @@ const styles = LVStyleSheet.create({
     },
     crossTextInputStyle: {
       height: MXCrossInputHeight
+    },
+    errorLabelStyle: {
+      marginTop: 5,
+      fontSize: 12,
+      color: LVColor.text.red
     }
   });

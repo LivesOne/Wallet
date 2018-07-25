@@ -52,11 +52,13 @@ import LVGradientPanel from '../Common/LVGradientPanel';
 import Toast from 'react-native-root-toast';
 import Transaction from 'ethereumjs-tx';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
+import TransferMinerTips from './TransferMinerTips';
 
 var Big = require('big.js');
 import LVBig from '../../logic/LVBig';
 import LVWallet from '../../logic/LVWallet';
 import { LVBalanceShowView } from '../Common/LVBalanceShowView';
+import * as _ from 'lodash'
 
 const addImg = require('../../assets/images/transfer_add_contracts.png');
 const scanImg = require('../../assets/images/transfer_scan.png');
@@ -186,7 +188,7 @@ class TransferScreen extends Component<Props, State> {
 
     async tryFetchParams() {
         const {wallet, amount, addressIn, token} = this.state;
-        console.log("token = " + token + " amount = " + amount);
+        TransferUtils.log("token = " + token + " amount = " + amount);
         if (wallet && amount.gt(0) && addressIn && TransferUtils.isValidAddress(addressIn)) {
             try {
                 let params = await TransferLogic.fetchTransactionParam(wallet.address, addressIn, amount, token);
@@ -194,8 +196,6 @@ class TransferScreen extends Component<Props, State> {
                 TransferUtils.log('tryFetchParams result = ' + JSON.stringify(params)
                 + ' minGap = ' +  range.min
                 + ' maxGap = ' +  range.max);
-                this.minerGap = TransferUtils.convertHex2Eth(params.gasPrice, params.gasLimit),
-                this.userHasSetGap = false;
                 this.setState({
                     transactionParams : params,
                     minGap: range.min,
@@ -203,13 +203,9 @@ class TransferScreen extends Component<Props, State> {
                 });
             } catch (error) {
                 this.setState({transactionParams: null})
-                this.minerGap = 0;
-                this.userHasSetGap = false;
             }
         } else {
             this.setState({transactionParams: null})
-            this.minerGap = 0;
-            this.userHasSetGap = false;
         }
     }
 
@@ -247,14 +243,20 @@ class TransferScreen extends Component<Props, State> {
    async  onAddressChanged(address: string) {
         await this.setState({addressIn: address.trim()});
         setTimeout(() => {
+            TransferUtils.log('onAddressChanged tryFetchParams');
             this.tryFetchParams();
         }, 100);
+    }
+
+    debouncePress = (onTextChanged:Function) =>  {
+        return _.debounce(onTextChanged, 500, {leading: false, trailing: true})
     }
 
     async onAmountChanged(newAmountText:string) {
         
         await this.setState({
-            amountText: newAmountText})
+                    amountText: newAmountText})
+        
         if (!TransferUtils.isBlank(newAmountText) && TransferUtils.isValidAmountStr(newAmountText)) {
             let amount = new Big(newAmountText);
             this.setState({amount: amount})
@@ -267,12 +269,8 @@ class TransferScreen extends Component<Props, State> {
                 this.refs.alert.show();
                 return;
             }
-            setTimeout(() => {
-                this.tryFetchParams();
-            }, 100);
+            this.tryFetchParams();
         } else {
-            this.minerGap = 0;
-            this.userHasSetGap = false;
             this.setState({transactionParams: null, amount:LVBig.getInitBig()})
         }
     }
@@ -283,7 +281,7 @@ class TransferScreen extends Component<Props, State> {
 
     refreshWalletDatas = async (needUpdateBalance: boolean = true) => {
         if (needUpdateBalance) {
-            await LVWalletManager.updateWalletBalance();
+            await LVWalletManager.updateSelectedWalletBalance();
         }
         const wallet = LVWalletManager.getSelectedWallet();
         if (wallet) {
@@ -297,6 +295,9 @@ class TransferScreen extends Component<Props, State> {
 
     async onTransferPresse() {
         const { wallet, addressIn, amount, curLVTC, curETH, amountText, token} = this.state;
+        
+        TransferUtils.log("trueValue = " + this.refs.gapSetter.getValue()
+            + " userHasSet = " + this.refs.gapSetter.getUserHasChanged());
         
         if (!addressIn) {
             this.setState({alertMessage:LVStrings.transfer_address_required });
@@ -339,6 +340,10 @@ class TransferScreen extends Component<Props, State> {
             this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
             this.refs.insufficientDialog.show();
             return;
+        }else if (token.toUpperCase() === 'ETH' && wallet && curETH.lt(this.refs.gapSetter.getValue() + Number(amountText))){
+            this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
+            this.refs.insufficientDialog.show();
+            return;
         } else if (isInsufficient) {
             this.setState({balanceTip: "LVTC" === token.toUpperCase() ? 
             LVStrings.transfer_lvt_insufficient : LVStrings.transfer_eth_insufficient});
@@ -359,28 +364,21 @@ class TransferScreen extends Component<Props, State> {
             this.refs.alert.show();
             return;
         }
+        
+        if (this.refs.gapSetter.getAdvancedSwitchedValue() && this.refs.gapSetter.getAdvancedFailValue()) {
+            return;
+        }
+
         this.refs.inputPwdDialog.show();
     }
 
     onSelectedContact(address: string) {
         this.refs.refAddressIn.setText(address);
     }
-
-    minerGap = 0;
-    userHasSetGap = false;
     
-    onGapChanged(newGap: number) {
-        if (newGap !== this.state.minerGap) {
-            this.minerGap = newGap;
-            this.userHasSetGap = true;
-        }
-    }
-
     resetUIState() {
         this.refs.refAddressIn.onPressClear();
         this.refs.refAmount.onPressClear();
-        this.minerGap = 0;
-        this.userHasSetGap = false;
         this.setState({
             transactionParams: null
         })
@@ -402,9 +400,14 @@ class TransferScreen extends Component<Props, State> {
             }, 500);
         }
         setTimeout(async ()=> {
-            let gasPrice = this.userHasSetGap ? TransferUtils.getSetGasPriceHexStr(this.refs.gapSetter.getValue(), transactionParams.gasLimit) : transactionParams.gasPrice;
+            let gasPrice = TransferUtils.getSetGasPriceHexStr(this.refs.gapSetter.getValue(), transactionParams.gasLimit);
+            let gasLimit =  transactionParams.gasLimit;
+            if (this.refs.gapSetter.getAdvancedSwitchedValue()) {
+                gasPrice = this.refs.gapSetter.getGasPriceValue + '0x'; //转化成16进制
+                gasLimit = this.refs.gapSetter.getGasValue + '0x';
+            }
             let rst = await TransferLogic.transaction(addressIn, password, amount, transactionParams.nonce,
-                transactionParams.gasLimit, gasPrice, transactionParams.token, transactionParams.chainID, wallet, token);
+                gasLimit, gasPrice, transactionParams.token, transactionParams.chainID, wallet, token);
             let success = rst && rst.result;
             if (success) {  
                 LVNotificationCenter.postNotification(LVNotification.transcationCreated, {
@@ -457,14 +460,16 @@ class TransferScreen extends Component<Props, State> {
         }
     }
 
+    onMinerTipsPress = ()=>{
+        this.props.navigation.navigate("TransferMinerTips");
+    }
+
     num = 0;
 
     render() {
-        //alert(PixelRatio.get());
-        //TransferUtils.log('minerGap = ' + this.minerGap + " userHasSet = " + this.userHasSetGap.toString());
         const {transactionParams} = this.state;
         return (
-            <View style={{flexDirection: 'column', flex: 1, justifyContent: 'space-between'}}>
+            <View style={{flexDirection: 'column', flex: 1, justifyContent: 'space-between',backgroundColor:LVColor.white}}>
                 {this.state.showModal && <TransferDetailModal
                     ref={'detailModal'}
                     isOpen= {this.state.showModal}
@@ -478,6 +483,16 @@ class TransferScreen extends Component<Props, State> {
                         this.refs.detailModal.dismiss();
                         this.onTransfer() }}
                 />}
+
+                    <MXNavigatorHeader
+                        style={{ backgroundColor: LVColor.white }}
+                        title={LVStrings.transfer}
+                        titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
+                        onLeftPress={() => {
+                            this.props.navigation.goBack();
+                        }}
+                        />
+                <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
                 <TouchableOpacity  style={ styles.container } activeOpacity={1} onPress={Keyboard.dismiss} >
                     <LVQrScanModal
                         barcodeReceived={(data)=>{
@@ -494,15 +509,6 @@ class TransferScreen extends Component<Props, State> {
                             }}
                         isOpen= {this.state.showQrScanModal}
                         onClosed = {()=>{this.setState({ showQrScanModal: false })}}/>
-
-                    <MXNavigatorHeader
-                        style={{ backgroundColor: LVColor.white }}
-                        title={LVStrings.transfer}
-                        titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
-                        onLeftPress={() => {
-                            this.props.navigation.goBack();
-                        }}
-                        />
                     <View style= { styles.headerBelow }>
                         <MXCrossTextInput 
                             ref={'refAddressIn'}
@@ -528,7 +534,7 @@ class TransferScreen extends Component<Props, State> {
                                 withUnderLine={false}
                                 inputContainerStyle={{marginTop:isAndroid ? 0 : 15}}
                                 boarderLineHeight={Platform.OS === 'android' ? 1 : 0}
-                                onTextChanged={this.onAmountChanged.bind(this)}/>
+                                onTextChanged={this.debouncePress(this.onAmountChanged.bind(this))}/>
                             
                             <View style={styles.curEth} />
                             <TransferMinerGapSetter 
@@ -536,20 +542,11 @@ class TransferScreen extends Component<Props, State> {
                                 enable={this.state.transactionParams !== null}
                                 minimumValue={this.state.minGap}
                                 maximumValue={this.state.maxGap}
+                                curETH={this.state.curETH.toFixed()}
+                                minerTipsCallBack = {this.onMinerTipsPress.bind(this)}
                                 defaultValue={transactionParams !== null?
                                 TransferUtils.convertHex2Eth(transactionParams.gasPrice, transactionParams.gasLimit) : 0}
-                                onGapChanged={this.onGapChanged.bind(this)}
                                 style = {styles.setter}/>
-                        <View style= { styles.curEth }>
-                            <Text style = {styles.text}>{LVStrings.transfer_current_eth}</Text>
-                            <LVBalanceShowView
-                                title={LVStrings.total_eth}
-                                unit={"ETH"}
-                                balance={this.state.curETH}
-                                textStyle={styles.textCurEth}
-                                showSeparator={true}
-                            />
-                        </View>   
                         <Text style = {styles.textHint}>{LVStrings.transfer_hint}</Text>
                         <View style = {styles.btnContainer}>
                             <MXButton 
@@ -584,6 +581,7 @@ class TransferScreen extends Component<Props, State> {
                     </LVConfirmDialog>
 
                 </TouchableOpacity>
+                </ScrollView>
             </View>
         )
     }
@@ -627,7 +625,7 @@ const styles = StyleSheet.create({
     textHint: {
         fontSize: 12,
         color: LVColor.text.grey1,
-        marginTop: 10,
+        marginTop: 20,
         marginBottom: 15 * pixelRatio,
     },
     btnContainer: {

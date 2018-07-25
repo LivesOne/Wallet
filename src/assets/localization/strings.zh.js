@@ -23,6 +23,12 @@ const localized_strings = {
     common_camera_not_authorized: '相机权限未开启',
     common_next: '下一步',
     common_open_ettings: '设置',
+    common_copy: '复制',
+    common_retry: '重试',
+    common_continue: '继续',
+
+    // Alerts
+    alert_has_unfinished_transaction: '您目前尚有未完成交易，继续转账可能造成交易失败，是否继续操作？',
 
     //receive
     receive_title: '收款',
@@ -32,7 +38,7 @@ const localized_strings = {
     receive_copy_success: '复制成功',
     receive_save: '保存二维码',
     receive_empty: '您还未添加钱包',
-    receive_save_finish: '保存完成',
+    receive_save_finish: '已保存到相册',
 
     // Wallet
     wallet_import: '导入',
@@ -51,14 +57,14 @@ const localized_strings = {
     wallet_importing_wallet: '导入钱包中...',
     wallet_import_private_key_error: '私钥格式错误',
     wallet_import_keystore_error: 'Keystore格式错误',
-    wallet_import_keystore_or_pwd_empty: 'Keystore或者密码不能为空！',
+    wallet_import_keystore_or_pwd_empty: 'Keystore不能为空',
     wallet_import_private_key_required: '私钥不能为空！',
     wallet_import_success: '导入成功！',
     wallet_import_fail: '导入失败！',
     wallet_import_tip_keystore_password: 'Keystore密码',
 
     wallet_create_wallet: '创建钱包',
-    wallet_create_hint_message: '请妥善保管您的密码！共生钱包不存储用户密码，无法提供找回或重置功能',
+    wallet_create_hint_message: '请妥善保管您的密码！为了您的资产安全，共生钱包不存储用户密码，所以无法提供找回或重置功能',
     wallet_creating_wallet: '创建钱包中...',
     wallet_create_name: '钱包名称',
     wallet_create_password_label: '钱包密码',
@@ -72,7 +78,7 @@ const localized_strings = {
     wallet_create_name_required: '请输入钱包名称',
     wallet_create_password_required: '请输入密码',
     wallet_create_confimpassword_required: '请输入确认密码',
-    wallet_create_password_mismatch: '密码与确认密码不匹配',
+    wallet_create_password_mismatch: '两次输入的密码不一致',
     wallet_create_name_unavailable: '钱包名字已存在',
     wallet_create_success_comment: '请妥善保管您的密码！共生钱包不存储用户密码，无法提供找回或重置功能',
     wallet_backup: '备份钱包',
@@ -84,6 +90,8 @@ const localized_strings = {
     wallet_disclaimer: '免责声明',
     wallet_disclaimer_content:
         '请确认已经导出的钱包备份的安全性，任何钱包的丢失、被盗、忘记密码等行为产生的损失均与平台无关',
+    
+    wallet_details: '钱包详情',
 
     // inner error
     inner_common_error: '内部错误',
@@ -122,6 +130,12 @@ const localized_strings = {
     recent_records: '最近交易记录',
     view_all_records: '查看全部记录',
 
+    // Token List
+    token_list_title: '添加币种',
+    token_list_search_placeholder: '请输入币种名称',
+    token_list_search_result_empty: '未找到相关Token',
+    token_list_add_token: '进行添加',
+
     // Transaction record
     transaction_records: '交易记录',
     transaction_records_no_data: '暂无记录',
@@ -141,6 +155,19 @@ const localized_strings = {
     transaction_time: '交易时间',
     transaction_failure_message: '转账失败，请合理配置矿工费。',
     transaction_does_not_exist_message: '交易不存在，矿工费退回原钱包。',
+    transaction_check_progress: '查询交易进度',
+    transaction_check_detail: '查看详情',
+
+    // MinnerFeeDetail
+    minnerfeedetail_title: '什么是矿工费',
+    minnerfeedetail_content: '  在以太链上，任何人都可以读写数据，数据的读取是免费的，但写入数据需要支付一定的矿工费用，网络上的任何矿工都可以参与挖矿。同时由于挖矿需要消耗一定的算力和电力，因此这也是矿工费的由来。\n  在链上进行多笔转账时，请在前一笔转账完成（状态变为转账成功或转账失败）后再发起转账，否则可能会造成失败。',
+    minnerfeedetail_transferFail: '转账失败的几种情况：',
+    minnerfeedetail_title1: '1.矿工费用过低：',
+    minnerfeedetail_content1: '  无矿工打包，转行失败，手续费退回，此时在交易记录中查询会显示交易不存在。',
+    minnerfeedetail_title2: '2.矿工费用不足：',
+    minnerfeedetail_content2: '  矿工已开始打包，打包过程中矿工费用已完全消耗（但尚未打包完成），此时交易记录中查询会显示交易失败。 ',
+    minnerfeedetail_title3: '3.连续发起多笔转账：',
+    minnerfeedetail_content3: '  在第一笔交易未完成时发起第二笔交易，若第一笔交易矿工费高于第二笔，则第二笔转账必定失败，且在交易记录中显示交易不存在；反之，第一笔交易失败。',
 
     // Transfer 转账
     transfer_lvt_insufficient: '您的LVTC余额不足，请充值！',
@@ -152,10 +179,13 @@ const localized_strings = {
     transfer_address_invalid: '请输入有效的收款人地址',
     transfer_amount_required: '转账金额不能为空',
     transfer_amount_format_hint: '转账金额必须为大于零的数字',
+    transfer_gas_format_hint: 'Gas值必须为大于零的数字',
+    transfer_gasprice_format_hint: 'GasPrice值必须为大于零的数字',
     transfer_miner_gap_not_access: '未获取相应矿工费数值，请检查网络',
     transfer_processing: '正在转账中...',
     transfer_success: '转账成功',
     transfer_fail: '转账失败',
+    transfer_minner_fee_fail: '您当前的矿工费较低，可能会转账失败',
     transfer_to_self_not_allowed: '不能给自己账户转账',
 
     // Profile
@@ -215,6 +245,11 @@ const localized_strings = {
     transfer_miner_tips: '矿工费用',
     transfer_slow: '慢',
     transfer_fast: '快',
+    transfer_advanced: '高级',
+    transfer_advanced_gas: '请输入gas',
+    transfer_advanced_gas_price: '请输入gas price（单位：gwei）',
+    transfer_advanced_gas_price_overLimit: '建议输入100以内的gwei',
+    transfer_advanced_gas_data: '请输入data参数（可选）',
     transfer_current_eth: '当前钱包ETH',
     transfer_hint: '执行交易后将扣除您当前钱包中的ETH, 交易打包后, 矿工费用将不予退还.',
     transfer_payment_details: '支付详情',
@@ -258,6 +293,9 @@ const localized_strings = {
     network_error_network_lost: '网络未连接，请重试!',
     network_timeout: '网络超时',
 
+    // WebView
+    webview_connection_failed: '连接失败',
+
     // exit
     exit_app_prompt: '退出钱包？',
     exit: '退出',
@@ -265,6 +303,7 @@ const localized_strings = {
     // total title
     total_lvt: 'LVTC 总额',
     total_eth: 'ETH 总额',
+    total_amount: '总额',
     show_detail_amount: '交易金额',
     show_LVT_balance: 'LVTC 余额',
 
@@ -280,7 +319,14 @@ const localized_strings = {
 
     // Permissions
     can_not_access_camera: '无法访问相机',
-    please_set_camera_author: '请到系统的⌜隐私设置⌟中，允许 共生钱包 访问⌜相机⌟'
+    please_set_camera_author: '请到系统的⌜隐私设置⌟中，允许 共生钱包 访问⌜相机⌟',
+
+
+    // Auth
+    auth_wake_text : '点击唤醒验证',
+    auth_use_password : '使用钱包密码登陆',
+    auth_use_face_id : 'Face ID解锁',
+    auth_use_finger : '指纹解锁',
 };
 
 export default localized_strings;

@@ -20,13 +20,13 @@ import WalletImportPage from '../Wallet/WalletImportPage';
 import ContactsManagerPage from '../contacts/ContactsManagerPage';
 import AddEditContactPage from '../contacts/AddEditContactPage';
 import LVTContactDetailPage from '../contacts/LVTContactDetailPage';
-import AssetsDetailsScreen from '../Assets/AssetsDetailsScreen'
+import AssetsDetailsScreen from '../Assets/AssetsDetailsScreen';
 import TransactionDetailsScreen from '../Assets/TransactionDetailsScreen';
 import ReceiveTip from '../Receive/ReceiveTip';
 import ReceiveScreen from '../Receive/ReceiveScreen';
 import TransferScreen from '../Transfer/TransferScreen';
 
-const ProfileNavigator = StackNavigator(
+const ProfileMainNavigator = StackNavigator(
     {
         Profile: { screen: ProfileScreen },
         About: { screen: AboutScreen },
@@ -34,8 +34,6 @@ const ProfileNavigator = StackNavigator(
         WalletDetailsPage: { screen: WalletDetailsPage },
         ModifyWalletName: { screen: ModifyWalletName },
         ModifyWalletPwd: { screen: ModifyWalletPwd },
-        WalletCreatePage: { screen: WalletCreatePage },
-        WalletImportPage: { screen: WalletImportPage },
         ContactList: { screen: ContactsManagerPage },
         AddEditContactPage: { screen: AddEditContactPage },
         LVTContactDetailPage: { screen: LVTContactDetailPage },
@@ -45,12 +43,35 @@ const ProfileNavigator = StackNavigator(
         ReceiveTip: { screen: ReceiveScreen },
     },
     {
+        mode: 'card',
         headerMode: 'none',
-        mode: Platform.OS === 'ios' ? 'card' : 'card',
         navigationOptions: {
             gesturesEnabled: true
         },
-        transitionConfig: Platform.OS === 'ios' ? () => {} : () => ({
+        transitionConfig: Platform.OS === 'ios' ? () => ({
+            transitionSpec: {
+                duration: 300,
+                easing: Easing.out(Easing.poly(4)),
+                timing: Animated.timing,
+              },
+              screenInterpolator: sceneProps => {
+                const { layout, position, scene } = sceneProps;
+                const { index } = scene;
+        
+                const width = layout.initWidth;
+                const translateX = position.interpolate({
+                  inputRange: [index - 1, index, index + 1],
+                  outputRange: [width, 0, 0],
+                });
+        
+                const opacity = position.interpolate({
+                  inputRange: [index - 1, index - 0.99, index],
+                  outputRange: [0, 1, 1],
+                });
+        
+                return { opacity, transform: [{ translateX }] };
+              }
+        }) : () => ({
             transitionSpec: {
                 duration: 300,
                 easing: Easing.out(Easing.poly(4)),
@@ -74,6 +95,18 @@ const ProfileNavigator = StackNavigator(
                 return { opacity, transform: [{ translateY }] };
             }
         })
+    }
+);
+
+const ProfileNavigator = StackNavigator(
+    {
+        Profile: { screen: ProfileMainNavigator },
+        WalletCreatePage: { screen: WalletCreatePage },
+        WalletImportPage: { screen: WalletImportPage }
+    },
+    {
+        mode: 'modal',
+        headerMode: 'none'
     }
 );
 

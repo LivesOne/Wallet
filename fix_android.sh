@@ -27,6 +27,4 @@ cp  RCTCameraViewFinder.java ./node_modules/react-native-camera/android/src/main
 
 cp svg.js $qrcode_file
 
-./node_modules/.bin/rn-nodeify --hack --install
-
 

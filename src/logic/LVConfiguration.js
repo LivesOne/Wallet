@@ -14,6 +14,7 @@ const LV_Key_HasAppGuidesEverDisplayed = '@Venus:HasAppGuidesEverDisplayed';
 const LV_Key_LastTransactionRecordsFilterStartDate = '@Venus:LastTransactionRecordsFilterStartDate';
 const LV_Key_LastTransactionRecordsFilterEndDate = '@Venus:LastTransactionRecordsFilterEndDate';
 const LV_Key_AnyWalletAvailable = '@Venus:AnyWalletAvailable';
+const LV_Key_HasSavedQrCodeToDisk = '@Venus:HasSavedQrCodeToDisk';
 
 class LVConfiguration {
     constructor() {}
@@ -73,6 +74,7 @@ class LVConfiguration {
     static async setLastTransactionRecordsFilterEndDate(date: string) {
         await LVPersistent.setString(LV_Key_LastTransactionRecordsFilterEndDate, date);
     }
+    
 }
 
 export default LVConfiguration;

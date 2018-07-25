@@ -14,7 +14,6 @@ import LVColor from '../../../styles/LVColor';
 import LVFontSize from '../../../styles/LVFontSize';
 import LVGradientPanel from '../../../views/Common/LVGradientPanel';
 import { converAddressToDisplayableText,adjust } from '../../../utils/MXStringUtils';
-import LVFullScreenModalView from '../../Common/LVFullScreenModalView';
 import LVWalletCreationNavigator from '../../Wallet/LVWalletCreationNavigator';
 import WalletImportPage from '../../Wallet/WalletImportPage';
 import LVWalletManager from '../../../logic/LVWalletManager';
@@ -26,7 +25,7 @@ import LVNotification from '../../../logic/LVNotification';
 import LVNetworking from '../../../logic/LVNetworking';
 import LVBig from '../../../logic/LVBig';
 import { ifIphoneX } from 'react-native-iphone-x-helper'
-import { iPhoneX_Bottom_Inset } from '../../../utils/MXUtils';
+import { iPhoneX_Bottom_Inset, isNavigating } from '../../../utils/MXUtils';
 const WalletIcon = require('../../../assets/images/wallet_grey.png');
 const ShowDetailsIcon = require('../../../assets/images/show_detail_arrow.png');
 const CreateWalletIcon = require('../../../assets/images/wm_create_wallet.png');
@@ -43,8 +42,7 @@ type State = {
 export class WalletManagerScreen extends Component<Props, State> {
     static navigationOptions = {
         header: null,
-        tabBarVisible: false,
-        gesturesEnabled: false
+        tabBarVisible: false
     };
 
     onCreateWalletPressed : Function;
@@ -73,11 +71,13 @@ export class WalletManagerScreen extends Component<Props, State> {
     }
     
     onCreateWalletPressed() {
-        this.refs.creationPage.show();
+        if (isNavigating()) { return }
+        this.props.navigation.navigate('WalletCreatePage', { from: WalletUtils.OPEN_CREATE_FROM_WALLET_MANAGER });
     }
 
     onImportWalletPressed() {
-        this.refs.importPage.show();
+        if (isNavigating()) { return }
+        this.props.navigation.navigate('WalletImportPage', { from: WalletUtils.OPEN_IMPORT_FROM_WALLET_MANAGER });
     }
 
     handleWalletChange() {
@@ -150,21 +150,6 @@ export class WalletManagerScreen extends Component<Props, State> {
                         </TouchableHighlight>
                     </View>
                 </View>
-                <LVFullScreenModalView ref={'creationPage'}>
-                    <LVWalletCreationNavigator screenProps={{dismiss: ()=> {
-                        console.log('dissmissing');
-                        this.refs.creationPage.dismiss()
-                        this.handleWalletChange();
-                    } 
-                }}/>
-                </LVFullScreenModalView>
-                <LVFullScreenModalView ref={'importPage'}>
-                    <LVWalletImportNavigator screenProps={{dismiss: ()=> {
-                        this.refs.importPage.dismiss();
-                        this.handleWalletChange();
-                    }, from: WalletUtils.OPEN_IMPORT_FROM_WALLET_MANAGER, 
-                }}/>
-                </LVFullScreenModalView>
             </View>
         );
     }
