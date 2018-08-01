@@ -176,7 +176,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
       if(!WalletUtils.isPasswordValid(privateKeyPwd)) {
         return LVStrings.wallet_import_invalid_password_warning;
       } 
-      if(privateKeyPwd !== privateKeyPwdAgain) {
+      if(privateKeyPwdAgain && privateKeyPwdAgain !== "" && privateKeyPwd !== privateKeyPwdAgain) {
         return LVStrings.wallet_create_password_mismatch;
       }
       this.refs.privateKeyPasswordInput.setErrorText(null);
@@ -192,7 +192,7 @@ export default class AssetsImportPage extends React.Component<Props, State> {
       if(!WalletUtils.isPasswordValid(privateKeyPwdAgain)) {
         return LVStrings.wallet_import_invalid_password_warning;
       } 
-      if(privateKeyPwd !== privateKeyPwdAgain) {
+      if(privateKeyPwdAgain && privateKeyPwdAgain !== "" && privateKeyPwd !== privateKeyPwdAgain) {
         return LVStrings.wallet_create_password_mismatch;
       }
       this.refs.privateKeyPasswordInput.setErrorText(null);

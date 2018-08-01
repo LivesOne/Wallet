@@ -39,7 +39,9 @@ const Base = LVStyleSheet.create({
   errorLabel: {
     flex:1,
     fontSize: 12,
-    color: LVColor.text.red
+    color: LVColor.text.red,
+    padding : 0,
+    includeFontPadding : false,
   },
   bottomStyle: {
     height: 1
