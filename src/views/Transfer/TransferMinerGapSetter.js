@@ -249,7 +249,7 @@ export class TransferMinerGapSetter extends Component<Props, State> {
                 <Text style={[styles.title,{color: LVColor.text.editTextContent}]}>
                     {this.props.curETH }
                 </Text>
-            </View>>
+            </View>
             <View style={styles.topContainer}>
                 <Text style={[styles.title, {color: LVColor.text.grey2, fontWeight:'100',}]}>
                     { LVStrings.transfer_advanced }
