@@ -140,15 +140,18 @@ export default class LVAuthView extends Component<Props> {
 
     async passwordAuth(){
         this.refs.toast.show();
-        var verifyResult = await LVWalletManager.verifyPassword(this.state.inputPassword, this.props.selectWallet.keystore);
-        console.log("authSupport , passwordAuth verifyResult :" + verifyResult)
-        if(verifyResult === true){
-            this.refs.toast.dismiss();
-            this.pass();
-        } else {
-            Toast.show(LVStrings.wallet_password_incorrect);
-            this.refs.toast.dismiss();
-        }
+        setTimeout(async () => {
+            var verifyResult = await LVWalletManager.verifyPassword(this.state.inputPassword, this.props.selectWallet.keystore);
+            console.log("authSupport , passwordAuth verifyResult :" + verifyResult)
+            if(verifyResult === true){
+                this.refs.toast.dismiss();
+                this.pass();
+            } else {
+                Toast.show(LVStrings.wallet_password_incorrect);
+                this.refs.toast.dismiss();
+            }
+        }, 500);
+        
     }
 
     onTextChanged(newText){
@@ -216,9 +219,7 @@ export default class LVAuthView extends Component<Props> {
                             height : 50,
                             marginTop : 20,
                         }}
-                        onPress= {() => {
-                            this.passwordAuth();
-                        }}
+                        onPress= {this.passwordAuth.bind(this)}
                         />
                 </View>}
 
