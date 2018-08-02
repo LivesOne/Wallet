@@ -28,7 +28,6 @@ class LVWallet {
 
     static ETH_TOKEN = 'eth';
     static LVTC_TOKEN = 'LVTC';
-    static DEFAULT_AVAILABLE_TOKENS = [LVWallet.ETH_TOKEN, LVWallet.LVTC_TOKEN];
 
     constructor(name: string, keystore: Object) {
         this.name = name;
@@ -36,7 +35,7 @@ class LVWallet {
         this.keystore = keystore;
         this.balance_list = [];
         this.holding_list = [];
-        this.available_tokens = LVWallet.DEFAULT_AVAILABLE_TOKENS;
+        this.available_tokens = [LVWallet.ETH_TOKEN, LVWallet.LVTC_TOKEN];
 
         this.lvtc = 0;
         this.eth = 0;
