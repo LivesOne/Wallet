@@ -82,13 +82,17 @@ export default class LVAuthView extends Component<Props> {
     }
 
     initAuthSupport = async () => {
-        const authSupportString = await NativeModules.LVReactExport.getAuthSupport();
-        const authSupport = JSON.parse(authSupportString);
-        this.authSupportList = [];
-        if(authSupport.faceid === true){
-            this.authSupportList.push(AUTH_FACE_ID);
-        }else if(authSupport.touchid === true){
-            this.authSupportList.push(AUTH_TOUCH_ID);
+        try {
+            const authSupportString = await NativeModules.LVReactExport.getAuthSupport();
+            const authSupport = JSON.parse(authSupportString);
+            this.authSupportList = [];
+            if (authSupport.faceid === true) {
+                this.authSupportList.push(AUTH_FACE_ID);
+            } else if (authSupport.touchid === true) {
+                this.authSupportList.push(AUTH_TOUCH_ID);
+            }
+        } catch (error) {
+
         }
 
         // if(authSupport.password === true){
