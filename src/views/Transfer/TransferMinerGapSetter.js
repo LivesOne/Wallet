@@ -53,6 +53,7 @@ export class TransferMinerGapSetter extends Component<Props, State> {
             isAdvancedValueFail:true
         }
         TransferUtils.log('default value = ' + this.getInitValue());
+        this.showFeeFailMessag = this.showFeeFailMessag.bind(this);
     }
 
     getInitValue() {
@@ -107,13 +108,22 @@ export class TransferMinerGapSetter extends Component<Props, State> {
     }
 
     onValueChange(value: number) {
-       var flag = false;
+        this.showFeeFailMessag(value);
+        this.setState({
+            value: value,
+            userHasChanged : true,
+        });
+    }
+
+    showFeeFailMessag = (value :number) =>{
+        if (isNaN(value)) {
+            return;
+        }
+        var flag = false;
         if (value < this.props.defaultValue) {
             flag = true;
         }
         this.setState({
-            value: value,
-            userHasChanged : true,
             isShowFeeFailMessage:flag,
         });
     }
@@ -179,6 +189,13 @@ export class TransferMinerGapSetter extends Component<Props, State> {
     }
 
     onAdvancedSwitched = (value:boolean) =>{
+        if (value) {
+            this.setState({
+                isShowFeeFailMessage:false
+            });
+        } else {
+            this.showFeeFailMessag(this.state.value);
+        }
         this.setState({
             advancedSwitchedValue:value
         });
@@ -206,8 +223,11 @@ export class TransferMinerGapSetter extends Component<Props, State> {
         this.setState({
             isAdvancedValueFail:false
         });
+        this.showFeeFailMessag(this.getValue());
         return null;
     }
+
+
 
     onValidateGasPriceValue = (value:?string)=>{
         if (!TransferUtils.isValidAmountStr(this.state.gasPriceValue)) {
@@ -222,6 +242,7 @@ export class TransferMinerGapSetter extends Component<Props, State> {
         if (parseInt(this.state.gasPriceValue) > 100) {
             return LVStrings.transfer_advanced_gas_price_overLimit;
         }
+        this.showFeeFailMessag(this.getValue());
         return null;
     }
 
@@ -290,7 +311,9 @@ export class TransferMinerGapSetter extends Component<Props, State> {
                 </View>
                 <Text style={styles.text}>{ LVStrings.transfer_fast }</Text>
             </View>
-            {
+            </View>
+            }
+              {
                 this.state.isShowFeeFailMessage
                 &&
                 <View style = {{marginTop:10,justifyContent: 'center',alignItems: 'center'}}>
@@ -298,8 +321,6 @@ export class TransferMinerGapSetter extends Component<Props, State> {
                     {LVStrings.transfer_minner_fee_fail}
                     </Text>
                 </View>
-            }
-            </View>
             }
         </View>
         )

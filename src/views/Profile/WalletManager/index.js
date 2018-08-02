@@ -133,7 +133,7 @@ export class WalletManagerScreen extends Component<Props, State> {
                     <View style={styles.bottomContainer}>
                         <TouchableHighlight style={styles.bottomButtonContainer} 
                                             onPress={this.onCreateWalletPressed}
-                                            underlayColor={LVColor.primary}>
+                                            underlayColor={LVColor.white}>
                             <View style={styles.bottomButtonContainer}>
                                 <Image source={CreateWalletIcon} style={styles.bottomIconStyle}/>
                                 <Text style={styles.bottomButtonText}>{LVStrings.wallet_create_wallet}</Text>
@@ -142,7 +142,7 @@ export class WalletManagerScreen extends Component<Props, State> {
                         <View style={styles.bottomSeparator}></View>
                         <TouchableHighlight style={styles.bottomButtonContainer} 
                                             onPress={this.onImportWalletPressed}
-                                            underlayColor={LVColor.primary}>
+                                            underlayColor={LVColor.white}>
                             <View style={styles.bottomButtonContainer}>
                                 <Image source={ImportWalletIcon} style={styles.bottomIconStyle}/>
                                 <Text style={styles.bottomButtonText}>{LVStrings.wallet_import_header}</Text>

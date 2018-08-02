@@ -590,7 +590,6 @@ class TransferScreen extends Component<Props, State> {
 const pixelRatio = PixelRatio.get();
 const styles = StyleSheet.create({
     container: {
-        height: MXUtils.getDeviceHeight(),
         backgroundColor: 'white',
     },
     textInput: {
@@ -626,14 +625,13 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: LVColor.text.grey1,
         marginTop: 20,
-        marginBottom: 15 * pixelRatio,
     },
     btnContainer: {
-        flex: 1,
+        marginTop: 15,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingBottom: 20* pixelRatio,
+        marginBottom: 20,
     },
     btn: {
         alignSelf: 'center',
