@@ -108,11 +108,13 @@ export class TransferMinerGapSetter extends Component<Props, State> {
     }
 
     onValueChange(value: number) {
-        this.showFeeFailMessag(value);
         this.setState({
             value: value,
             userHasChanged : true,
         });
+        setTimeout(() => {
+            this.showFeeFailMessag(value);
+        }, 100);
     }
 
     showFeeFailMessag = (value :number) =>{
@@ -191,7 +193,9 @@ export class TransferMinerGapSetter extends Component<Props, State> {
     onAdvancedSwitched = (value:boolean) =>{
         if (value) {
             this.setState({
-                isShowFeeFailMessage:false
+                isShowFeeFailMessage:false,
+                gasValue:'',
+                gasPriceValue:'',
             });
         } else {
             this.showFeeFailMessag(this.state.value);
@@ -205,12 +209,18 @@ export class TransferMinerGapSetter extends Component<Props, State> {
         this.setState({
             gasValue:value.trim()
         });
+        setTimeout(() => {
+            this.showFeeFailMessag(this.getValue());
+        }, 100);
     }
 
     onGasPriceValueChange = (value:string)=>{
         this.setState({
             gasPriceValue:value.trim()
         });
+        setTimeout(() => {
+            this.showFeeFailMessag(this.getValue());
+        }, 100);
     }
 
     onValidateGasValue = (value:?string)=>{
@@ -223,7 +233,9 @@ export class TransferMinerGapSetter extends Component<Props, State> {
         this.setState({
             isAdvancedValueFail:false
         });
-        this.showFeeFailMessag(this.getValue());
+        setTimeout(() => {
+            this.showFeeFailMessag(this.getValue());
+        }, 100);
         return null;
     }
 
@@ -242,7 +254,9 @@ export class TransferMinerGapSetter extends Component<Props, State> {
         if (parseInt(this.state.gasPriceValue) > 100) {
             return LVStrings.transfer_advanced_gas_price_overLimit;
         }
-        this.showFeeFailMessag(this.getValue());
+        setTimeout(() => {
+            this.showFeeFailMessag(this.getValue());
+        }, 100);
         return null;
     }
 
