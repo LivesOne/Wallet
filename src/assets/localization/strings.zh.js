@@ -115,7 +115,7 @@ const localized_strings = {
     wallet_password_incorrect: '密码错误',
     wallet_name_hint: '最多输入40位字符或20个汉字',
     wallet_name_invalid: '名称格式错误',
-    wallet_name_exceeds_limit: '钱包名称超过40位字符或20个汉字',
+    wallet_name_exceeds_limit: '最多输入40位字符或20个汉字',
     wallet_detail: '详情',
     //password verify
     password_verify_title: '密码验证',
