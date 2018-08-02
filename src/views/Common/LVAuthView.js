@@ -26,9 +26,9 @@ import LVWalletManager from '../../logic/LVWalletManager';
 import LVWallet from '../../logic/LVWallet';
 import LVLoadingToast from '../Common/LVLoadingToast';
 
-const  AUTH_PASSWORD = 'password'; // 密码验证
-const  AUTH_TOUCH_ID = 'touchid'; // touchid 验证
-const  AUTH_FACE_ID = 'faceid'; // faceid 验证
+export const  AUTH_PASSWORD = 'password'; // 密码验证
+export const  AUTH_TOUCH_ID = 'touchid'; // touchid 验证
+export const  AUTH_FACE_ID = 'faceid'; // faceid 验证
 
 const AUTH_ERROR_SWITCH = "1";// 超出错误次数，切换验证方式
 const AUTH_ERROR_RETRY = "2";// 发生不匹配错误，点击重试

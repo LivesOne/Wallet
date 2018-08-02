@@ -15,6 +15,7 @@ const LV_Key_LastTransactionRecordsFilterStartDate = '@Venus:LastTransactionReco
 const LV_Key_LastTransactionRecordsFilterEndDate = '@Venus:LastTransactionRecordsFilterEndDate';
 const LV_Key_AnyWalletAvailable = '@Venus:AnyWalletAvailable';
 const LV_Key_HasSavedQrCodeToDisk = '@Venus:HasSavedQrCodeToDisk';
+const LV_Key_NeedAuthLogin = '@Venus:NeedAuthLogin';
 
 class LVConfiguration {
     constructor() {}
@@ -75,6 +76,16 @@ class LVConfiguration {
         await LVPersistent.setString(LV_Key_LastTransactionRecordsFilterEndDate, date);
     }
     
+
+    // 是否允许验证登陆
+    
+    static async setNeedAuthLogin(need : boolean){
+        await LVPersistent.setBoolean(LV_Key_NeedAuthLogin, need);
+    }
+
+    static async getNeedAuthlogin(){
+        return await LVPersistent.getBoolean(LV_Key_NeedAuthLogin);
+    }
 }
 
 export default LVConfiguration;
