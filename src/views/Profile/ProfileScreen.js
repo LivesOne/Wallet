@@ -104,7 +104,7 @@ const styles = LVStyleSheet.create({
     },
     tableViewImage: {
         marginLeft: -2.5,
-        width: 26,
-        height: 26,
+        width: 21,
+        height: 21,
     },
 });
