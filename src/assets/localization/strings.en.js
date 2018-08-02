@@ -88,7 +88,7 @@ const localized_strings = {
     wallet_create_password_required: 'Please enter password',
     wallet_create_confimpassword_required: 'Confirm your password',
     wallet_create_password_mismatch: 'Passwords do not match',
-    wallet_create_name_unavailable: 'The name is unavailable',
+    wallet_create_name_unavailable: 'Wallet name already exists',
     wallet_create_success: 'Successfully created!',
     wallet_create_success_comment:
         'Please keep your password safe! LivesOne Wallet does not save or provide any function of regaining/resetting the user password.',
