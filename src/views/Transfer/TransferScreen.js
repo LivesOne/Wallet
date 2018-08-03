@@ -335,7 +335,9 @@ class TransferScreen extends Component<Props, State> {
             return;
         }
 
-        let isInsufficient = "LVTC" === token.toUpperCase() ? (curLVTC.lt(amount)) : (curETH.lt(amount));
+        let currentBalance =  wallet.getBalance(token);
+        let isInsufficient =  currentBalance.lt(amount);
+
         if (wallet && curETH.lt(this.refs.gapSetter.getValue())) {
             this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
             this.refs.insufficientDialog.show();
@@ -345,8 +347,7 @@ class TransferScreen extends Component<Props, State> {
             this.refs.insufficientDialog.show();
             return;
         } else if (isInsufficient) {
-            this.setState({balanceTip: "LVTC" === token.toUpperCase() ? 
-            LVStrings.transfer_lvt_insufficient : LVStrings.transfer_eth_insufficient});
+            this.setState({balanceTip: LVStrings.transfer_amount_insufficient });
             this.refs.insufficientDialog.show();
             return;
         }
