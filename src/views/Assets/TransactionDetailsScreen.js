@@ -6,7 +6,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity, Platform, NativeModules } from 'react-native';
 import { Separator } from 'react-native-tableview-simple';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
@@ -35,7 +35,21 @@ export default class TransactionDetailsScreen extends Component<Props> {
     onPressCheckDetail = () => {
         const { transactionRecord } = this.props.navigation.state.params;
         const { hash } = transactionRecord;
-        const url = 'https://etherscan.io/tx/' + hash;
+
+        let prod_url = 'https://etherscan.io/tx/' + hash;
+        let test_url = 'https://ropsten.etherscan.io/tx/' + hash;
+        let url = prod_url;
+
+        if (Platform.OS === 'ios') {
+            if (NativeModules.LVReactExport.isAdHoc || NativeModules.LVReactExport.isAppStore) {
+                url = prod_url;
+            } else {
+                url = test_url;
+            }
+        } else {
+            url = NativeModules.LVReactExport.isRelease ? prod_url : test_url;
+        }
+
         if (LVUtils.isNavigating()) { return; }
         this.props.navigation.navigate('WebView', { url: url, title: 'Transaction Information' });
     }
