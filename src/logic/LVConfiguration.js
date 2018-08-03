@@ -16,6 +16,7 @@ const LV_Key_LastTransactionRecordsFilterEndDate = '@Venus:LastTransactionRecord
 const LV_Key_AnyWalletAvailable = '@Venus:AnyWalletAvailable';
 const LV_Key_HasSavedQrCodeToDisk = '@Venus:HasSavedQrCodeToDisk';
 const LV_Key_NeedAuthLogin = '@Venus:NeedAuthLogin';
+const LV_Key_HasSetAuth = '@Venus:HasSetAuth';
 
 class LVConfiguration {
     constructor() {}
@@ -85,6 +86,16 @@ class LVConfiguration {
 
     static async getNeedAuthlogin(){
         return await LVPersistent.getBoolean(LV_Key_NeedAuthLogin);
+    }
+
+    // 是否已经弹出过设置验证解锁
+
+    static async setHasSetAuth(hasSet : boolean){
+        await LVPersistent.setBoolean(LV_Key_HasSetAuth, hasSet);
+    }
+
+    static async getHasSetAuth(){
+        return await LVPersistent.getBoolean(LV_Key_HasSetAuth);
     }
 }
 

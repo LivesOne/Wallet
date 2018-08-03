@@ -328,6 +328,8 @@ const localized_strings = {
     auth_use_face_id : 'Face ID解锁',
     auth_use_finger : '指纹解锁',
     auth_mine_use_password : '指纹解锁',
+    auth_do_start_auth : "是否开启",
+    auth_dialog_cancel : "稍后开启",
 };
 
 export default localized_strings;
