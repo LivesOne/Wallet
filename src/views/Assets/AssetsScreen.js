@@ -119,7 +119,6 @@ class AssetsScreen extends Component<Props, State> {
 
     handleStartAuth = () => {
         LVConfiguration.setNeedAuthLogin(true);
-        LVConfiguration.setHasSetAuth(true);
     }
 
     onPressHeader = () => {
@@ -159,6 +158,7 @@ class AssetsScreen extends Component<Props, State> {
         });
         if(!hasSet){
             this.refs.startAuthDialog.show();
+            LVConfiguration.setHasSetAuth(true);
         }
     }
 
