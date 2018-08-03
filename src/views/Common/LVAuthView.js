@@ -186,6 +186,10 @@ export default class LVAuthView extends Component<Props> {
     }
 
     async passwordAuth(){
+        if(this.state.inputPassword === "" || this.state.inputPassword === null){
+            Toast.show(LVStrings.password_verify_required);
+            return ;
+        }
         this.refs.toast.show();
         setTimeout(async () => {
             var verifyResult = await LVWalletManager.verifyPassword(this.state.inputPassword, this.state.selectWallet.keystore);
