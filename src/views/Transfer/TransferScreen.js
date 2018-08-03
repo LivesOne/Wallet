@@ -403,8 +403,8 @@ class TransferScreen extends Component<Props, State> {
             let gasPrice = TransferUtils.getSetGasPriceHexStr(this.refs.gapSetter.getValue(), transactionParams.gasLimit);
             let gasLimit =  transactionParams.gasLimit;
             if (this.refs.gapSetter.getAdvancedSwitchedValue()) {
-                gasPrice = this.refs.gapSetter.getGasPriceValue + '0x'; //转化成16进制
-                gasLimit = this.refs.gapSetter.getGasValue + '0x';
+                gasPrice = '0x' + this.refs.gapSetter.getGasPriceValue().toString(16); //转化成16进制
+                gasLimit = '0x'+  this.refs.gapSetter.getGasValue().toString(16);
             }
             let rst = await TransferLogic.transaction(addressIn, password, amount, transactionParams.nonce,
                 gasLimit, gasPrice, transactionParams.token, transactionParams.chainID, wallet, token);
