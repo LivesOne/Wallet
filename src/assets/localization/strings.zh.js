@@ -325,7 +325,7 @@ const localized_strings = {
     // Auth
     auth_wake_text : '点击唤醒验证',
     auth_verifing : '正在验证中...',
-    auth_use_password : '使用钱包密码登陆',
+    auth_use_password : '使用钱包密码登录',
     auth_use_face_id : '面容ID解锁',
     auth_use_finger : '指纹解锁',
     auth_mine_use_password : '密码解锁',
