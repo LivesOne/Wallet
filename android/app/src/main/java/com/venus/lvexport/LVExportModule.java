@@ -158,6 +158,9 @@ public class LVExportModule extends ReactContextBaseJavaModule {
                 public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
                     String tip = "helpMsgId:" + helpMsgId + "--"+  helpString;
                     Log.i("authSupport" , tip);
+                    if(TextUtils.isEmpty(helpString)){
+                        helpString = "error";
+                    }
                     Toast.makeText(getReactApplicationContext() ,helpString , Toast.LENGTH_SHORT).show();
                     occurError(false);
                 }
@@ -191,5 +194,10 @@ public class LVExportModule extends ReactContextBaseJavaModule {
         }else{
             promise.reject("error");
         }
+    }
+
+    @ReactMethod
+    public void cancelAuth(){
+        FingerHelper.getInstance().cancel();
     }
 }

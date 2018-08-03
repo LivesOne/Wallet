@@ -106,21 +106,37 @@ export default class LVAuthView extends Component<Props> {
             firstAuth : this.getFirstAuth(),
             secondAuth : this.getSecondAuth(),
         });
+        this.startAuth();
     }
 
     switchAuth(){
         if(this.authSupportList.length > 1){
             this.currentAuthIndex = this.currentAuthIndex === 0 ? 1 : 0;;
+            const firstAuth = this.getFirstAuth();
+            const secondAuth = this.getSecondAuth();
             this.setState({
-                firstAuth : this.getFirstAuth(),
-                secondAuth : this.getSecondAuth(),
+                firstAuth : firstAuth,
+                secondAuth : secondAuth,
                 isAuthing : false,
             });
+            console.log('authView , state.firstAuth :' + firstAuth);
+            if(firstAuth === AUTH_PASSWORD){
+                console.log("authView , cancelAuth~~~");
+                NativeModules.LVReactExport.cancelAuth();
+                this.setState({
+                    isAuthing : false,
+                });
+            }else{
+                console.log("authView , startAuth~~~");
+                setTimeout(() => {
+                    this.startAuth();
+                }, 100);
+            }
         }
     }
 
     async startAuth(){
-        if(this.state.isAuthing){
+        if(this.state.isAuthing || this.state.firstAuth === AUTH_PASSWORD){
             return ;
         }
         this.setState({
