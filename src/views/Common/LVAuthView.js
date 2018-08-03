@@ -335,7 +335,9 @@ const styles = StyleSheet.create({
         width : 240,
         height : 50,
         backgroundColor : "#fff9f9fa",
+        marginTop : 25,
         fontSize : 14,
+        textAlign : 'center',
     },
     bottomText : {
         alignSelf : 'center',
