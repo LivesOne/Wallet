@@ -328,6 +328,16 @@ const localized_strings = {
     // Permissions
     can_not_access_camera: 'Cannot access camera',
     please_set_camera_author: 'Please make sure Camera is turned on in Settings > LivesOne'
+
+    // Auth
+    auth_wake_text : 'Click to verify',
+    auth_verifing : 'Verifying...',
+    auth_use_password : 'Sign in with wallet password',
+    auth_use_face_id : 'Unlock with Face ID',
+    auth_use_finger : 'Unlock with Touch ID',
+    auth_mine_use_password : 'Unlock with password',
+    auth_do_start_auth : "Enable login verification or not",
+    auth_dialog_cancel : "Enable later",
 };
 
 export default localized_strings;
