@@ -252,6 +252,7 @@ export default class LVAuthView extends Component<Props> {
         const wallet = this.state.selectWallet || LVWallet.emptyWallet();
         return (
             <View style={styles.container}>
+                {Platform.OS === 'ios' && <StatusBar barStyle="dark-content"/>}
                 {authVisible && <TouchableOpacity style = {styles.authContainer}
                     onPress = {this.startAuth}>
                     <Image source = {authIcon}/>
