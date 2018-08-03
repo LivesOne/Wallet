@@ -65,11 +65,26 @@ static LVDeviceAuthentication *sharedInstance = nil;
     
     return NO;
 }
-+ (void)evaluatePolicyWith:(void (^)(BOOL, NSError * _Nullable))callback
+
+static NSString * const kAUTH_ERROR_SWITCH = @"1"; // 超出错误次数，切换验证方式
+static NSString * const kAUTH_ERROR_RETRY = @"2"; // 发生不匹配错误，点击重试
+
++ (void)evaluatePolicyWith:(void (^)(BOOL, NSString * __nullable, NSString * __nullable))callback
 {
     LAContext *contex = [LVDeviceAuthentication sharedInstance].contex;
     NSString  *reason = NSLocalizedString(@"need_auth_into_wallet", nil);
-    [contex evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:reason reply:callback];
+    [contex evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:reason reply:^(BOOL success, NSError * _Nullable error) {
+        if (success) {
+            callback(YES, nil, nil);
+        } else {
+            if (error.code == kLAErrorUserFallback) {
+                callback(NO, kAUTH_ERROR_SWITCH, error.localizedDescription);
+            }
+            else {
+                callback(NO, [@(error.code) stringValue], error.localizedDescription);
+            }
+        }
+    }];
 }
 
 @end

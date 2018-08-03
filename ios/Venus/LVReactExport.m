@@ -124,11 +124,11 @@ RCT_REMAP_METHOD(startAuth,
                  startAuth:(NSString *)param withResolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     if ([param isEqualToString:@"touchid"] || [param isEqualToString:@"faceid"]) {
-        [LVDeviceAuthentication evaluatePolicyWith:^(BOOL success, NSError * _Nullable error) {
+        [LVDeviceAuthentication evaluatePolicyWith:^(BOOL success, NSString * _Nullable errCode, NSString * _Nullable errMsg) {
             if (success) {
                 resolve(@(YES));
             } else {
-                reject([@(error.code) stringValue], error.localizedDescription, error);
+                reject(errCode, errMsg, nil);
             }
         }];
     } else {
