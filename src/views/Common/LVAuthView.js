@@ -33,7 +33,10 @@ export const  AUTH_FACE_ID = 'faceid'; // faceid 验证
 const AUTH_ERROR_SWITCH = "1";// 超出错误次数，切换验证方式
 const AUTH_ERROR_RETRY = "2";// 发生不匹配错误，点击重试
 
+
 const walletIcon = require('../../assets/images/assets_wallet.png');
+const touchIdIcon = require('../../assets/images/touch_id.png');
+const faceIdIcon = require('../../assets/images/face_id.png');
 
 
 type Props = {
@@ -187,12 +190,16 @@ export default class LVAuthView extends Component<Props> {
         let authVisible = true;
         let passwordVisible = true;
 
+        let authIcon = null;
+
         if(firstAuth === AUTH_FACE_ID){
             authVisible = true;
             passwordVisible = false;
+            authIcon = faceIdIcon;
         }else if(firstAuth === AUTH_TOUCH_ID){
             authVisible = true;
             passwordVisible = false;
+            authIcon = touchIdIcon;
         }else if(firstAuth === AUTH_PASSWORD){
             authVisible = false;
             passwordVisible = true;
@@ -203,8 +210,8 @@ export default class LVAuthView extends Component<Props> {
             <View style={styles.container}>
                 {authVisible && <TouchableOpacity style = {styles.authContainer}
                     onPress = {this.startAuth}>
-                    <Image source = {require('../../assets/images/face_id.png')}/>
-                    {!this.state.isAuthing && <Text style = {styles.wakeText}>{LVStrings.auth_wake_text}</Text>}
+                    <Image source = {authIcon}/>
+                    <Text style = {styles.wakeText}>{this.state.isAuthing ? LVStrings.auth_verifing : LVStrings.auth_wake_text}</Text>
                 </TouchableOpacity>}
 
                 {passwordVisible && <View style = {[styles.passwordContainer]}>

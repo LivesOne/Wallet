@@ -26,8 +26,8 @@ const SettingImage = require('../../assets/images/profile_setting.png');
 const AboutImage = require('../../assets/images/profile_about.png');
 
 const MineFaceidImage = require('../../assets/images/mine_faceid.png');
-const MineTouchIdImage = require('../../assets/images/mine_faceid.png');
-const MinePasswordImage = require('../../assets/images/mine_faceid.png');
+const MineTouchIdImage = require('../../assets/images/mine_touchid.png');
+const MinePasswordImage = require('../../assets/images/mine_password.png');
 
 const ProfileCell = (props) => (
     <Cell
