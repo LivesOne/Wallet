@@ -53,7 +53,7 @@ const localized_strings = {
     wallet_import_plain_private_key_hint: 'Private key plaintext',
     wallet_import_keystore_hint: 'Keystore text content',
     wallet_import_private_password_lable: 'Password',
-    wallet_import_private_password_hint: 'with least 6 characters includes special characters',
+    wallet_import_private_password_hint: 'with least 6 characters',
     wallet_import_invalid_password_warning: 'with least 6 characters includes special characters',
     wallet_import_private_password_repeat_lable: 'Confirm password',
     wallet_import_private_pwd_confirm_hint: 'Confirm password',
@@ -327,7 +327,17 @@ const localized_strings = {
 
     // Permissions
     can_not_access_camera: 'Cannot access camera',
-    please_set_camera_author: 'Please make sure Camera is turned on in Settings > LivesOne'
+    please_set_camera_author: 'Please make sure Camera is turned on in Settings > LivesOne',
+
+    // Auth
+    auth_wake_text : 'Click to verify',
+    auth_verifing : 'Verifying...',
+    auth_use_password : 'Sign in with wallet password',
+    auth_use_face_id : 'Unlock with Face ID',
+    auth_use_finger : 'Unlock with Touch ID',
+    auth_mine_use_password : 'Unlock with password',
+    auth_do_start_auth : "Enable login verification or not",
+    auth_dialog_cancel : "Enable later",
 };
 
 export default localized_strings;

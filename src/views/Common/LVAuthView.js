@@ -11,6 +11,7 @@ import {
     ListView,
     RefreshControl,
     Image,
+    ScrollView,
     View,
     Text,
     TextInput,
@@ -186,6 +187,10 @@ export default class LVAuthView extends Component<Props> {
     }
 
     async passwordAuth(){
+        if(this.state.inputPassword === "" || this.state.inputPassword === null){
+            Toast.show(LVStrings.password_verify_required);
+            return ;
+        }
         this.refs.toast.show();
         setTimeout(async () => {
             var verifyResult = await LVWalletManager.verifyPassword(this.state.inputPassword, this.state.selectWallet.keystore);
@@ -248,49 +253,55 @@ export default class LVAuthView extends Component<Props> {
         const wallet = this.state.selectWallet || LVWallet.emptyWallet();
         return (
             <View style={styles.container}>
-                {authVisible && <TouchableOpacity style = {styles.authContainer}
-                    onPress = {this.startAuth}>
-                    <Image source = {authIcon}/>
-                    <Text style = {styles.wakeText}>{this.state.isAuthing ? LVStrings.auth_verifing : LVStrings.auth_wake_text}</Text>
-                </TouchableOpacity>}
+                <ScrollView 
+                    contentContainerStyle = {styles.container}
+                keyboardShouldPersistTaps={'never'} showsVerticalScrollIndicator={false}>
+            
+                    {Platform.OS === 'ios' && <StatusBar barStyle="dark-content"/>}
+                    {authVisible && <TouchableOpacity style = {styles.authContainer}
+                        onPress = {this.startAuth}>
+                        <Image source = {authIcon}/>
+                        <Text style = {styles.wakeText}>{this.state.isAuthing ? LVStrings.auth_verifing : LVStrings.auth_wake_text}</Text>
+                    </TouchableOpacity>}
 
-                {passwordVisible && <View style = {[styles.passwordContainer]}>
-                    <Image source={this.props.walletIcon || walletIcon} style={styles.img} resizeMode="contain" />
-                    <TouchableOpacity style = {styles.nameTextContainer}
-                        onPress = {() => {this.setState({openSelectWallet : true})}}>
-                        <Text style = {styles.nameText}>{wallet.name}</Text>
-                        <Image source = {require("../../assets/images/auth_wallet_switch.png")}/>
-                    </TouchableOpacity>
-                    <TextInput style = {styles.passwordInput}
-                        secureTextEntry={true}
-                        onChangeText = {this.onTextChanged}
-                        underlineColorAndroid={"transparent"}
-                        placeholder = {LVStrings.wallet_create_password_required}
-                    ></TextInput>
-                    <MXButton 
-                        title = {LVStrings.common_confirm}
-                        style = {{
-                            width : 240,
-                            height : 50,
-                            marginTop : 20,
+                    {passwordVisible && <View style = {[styles.passwordContainer]}>
+                        <Image source={this.props.walletIcon || walletIcon} style={styles.img} resizeMode="contain" />
+                        <TouchableOpacity style = {styles.nameTextContainer}
+                            onPress = {() => {this.setState({openSelectWallet : true})}}>
+                            <Text style = {styles.nameText}>{wallet.name}</Text>
+                            <Image source = {require("../../assets/images/auth_wallet_switch.png")}/>
+                        </TouchableOpacity>
+                        <TextInput style = {styles.passwordInput}
+                            secureTextEntry={true}
+                            onChangeText = {this.onTextChanged}
+                            underlineColorAndroid={"transparent"}
+                            placeholder = {LVStrings.wallet_create_password_required}
+                        ></TextInput>
+                        <MXButton 
+                            title = {LVStrings.common_confirm}
+                            style = {{
+                                width : 240,
+                                height : 50,
+                                marginTop : 20,
+                            }}
+                            onPress= {this.passwordAuth.bind(this)}
+                            />
+                    </View>}
+
+                    {bottomVisible && <MXButton style = {styles.bottomText}
+                        title = {bottomText}
+                        isEmptyButtonType={true}
+                        rounded
+                        visible = {bottomVisible}
+                        onPress={() => {
+                            this.switchAuth();
                         }}
-                        onPress= {this.passwordAuth.bind(this)}
-                        />
-                </View>}
+                        />}
+                        
+                    <LVLoadingToast ref={'toast'} title={LVStrings.password_verifying} />
 
-                {bottomVisible && <MXButton style = {styles.bottomText}
-                    title = {bottomText}
-                    isEmptyButtonType={true}
-                    rounded
-                    visible = {bottomVisible}
-                    onPress={() => {
-                        this.switchAuth();
-                    }}
-                    />}
-                    
-                <LVLoadingToast ref={'toast'} title={LVStrings.password_verifying} />
-
-                <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
+                    <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
+                </ScrollView>
             </View>
         );
     }
@@ -331,7 +342,9 @@ const styles = StyleSheet.create({
         width : 240,
         height : 50,
         backgroundColor : "#fff9f9fa",
+        marginTop : 25,
         fontSize : 14,
+        textAlign : 'center',
     },
     bottomText : {
         alignSelf : 'center',

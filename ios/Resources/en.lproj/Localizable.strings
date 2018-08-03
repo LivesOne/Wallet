@@ -3,3 +3,20 @@
 "upgrade_now" = "Update now";
 "upgrade_next_time" = "Later";
 "need_auth_into_wallet" = "Touch the Home button to verify your fingerprint";
+"cancel" = "Cancel";
+"ok" = "OK";
+"settings" = "Settings";
+
+// Face ID
+"face_id" = "Face ID";
+"face_id_unavailable" = "Face ID is unavailable";
+"face_id_passcode_not_set" = "You need to set up system passcode first before using Face ID. Please go to System Setting - Face ID & Passcode - Enter Passcode";
+"face_id_not_available" = "Please go to \"System setting - LivesOne\" to allow access to Face ID.";
+"face_id_not_enrolled" = "You haven't set up Face ID yet. Please go to System Setting - Face ID & Passcode - Add a Face ID";
+
+// Touch ID
+"touch_id" = "Touch ID";
+"touch_id_unavailable" = "Touch ID is unavailable";
+"touch_id_passcode_not_set" = "To use Touch ID, you need to set up passcode first. Please go to \"setting\" - \"Touch ID & Passcode\" to turn on passcode.";
+"touch_id_not_available" = "Current device does not support Touch ID.";
+"touch_id_not_enrolled" = "You didn't set up Touch ID. Please go to \"setting\" - \"Touch ID & Passcode\" to add a fingerprint.";

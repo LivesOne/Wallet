@@ -55,7 +55,7 @@ export default class ProfleScreen extends Component<Props> {
         super(props);
         this.state = {
             supportAuthType : '',
-            authEnable : false,
+            authEnable : LVConfiguration.needAuthLogin === null ? false : LVConfiguration.needAuthLogin,
         };
     }
 
