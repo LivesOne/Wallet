@@ -53,7 +53,7 @@ const localized_strings = {
     wallet_import_plain_private_key_hint: 'Private key plaintext',
     wallet_import_keystore_hint: 'Keystore text content',
     wallet_import_private_password_lable: 'Password',
-    wallet_import_private_password_hint: 'with least 6 characters includes special characters',
+    wallet_import_private_password_hint: 'with least 6 characters',
     wallet_import_invalid_password_warning: 'with least 6 characters includes special characters',
     wallet_import_private_password_repeat_lable: 'Confirm password',
     wallet_import_private_pwd_confirm_hint: 'Confirm password',
