@@ -80,7 +80,9 @@ static NSString * const kAUTH_ERROR_RETRY = @"2"; // 发生不匹配错误，点
         if (success) {
             callback(YES, nil, nil);
         } else {
-            if (error.code == kLAErrorUserFallback || error.code == kLAErrorBiometryLockout) {
+            if (error.code == kLAErrorAuthenticationFailed
+                || error.code == kLAErrorUserFallback
+                || error.code == kLAErrorBiometryLockout) {
                 callback(NO, kAUTH_ERROR_SWITCH, error.localizedDescription);
             }
             else if (error.code == kLAErrorPasscodeNotSet
