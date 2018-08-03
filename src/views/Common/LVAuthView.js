@@ -25,6 +25,9 @@ import MXCrossTextInput from '../../components/MXCrossTextInput';
 import LVWalletManager from '../../logic/LVWalletManager';
 import LVWallet from '../../logic/LVWallet';
 import LVLoadingToast from '../Common/LVLoadingToast';
+import LVSelectWalletModal from '../Common/LVSelectWalletModal';
+import LVNotificationCenter from '../../logic/LVNotificationCenter';
+import LVNotification from '../../logic/LVNotification';
 
 export const  AUTH_PASSWORD = 'password'; // 密码验证
 export const  AUTH_TOUCH_ID = 'touchid'; // touchid 验证
@@ -73,15 +76,34 @@ export default class LVAuthView extends Component<Props> {
             secondAuth : null,
             inputPassword : null,
             isAuthing : false,
+            openSelectWallet : false,
+            selectWallet : props.selectWallet,
         };
         this.onTextChanged = this.onTextChanged.bind(this);
         this.passwordAuth = this.passwordAuth.bind(this);
         this.startAuth = this.startAuth.bind(this);
-        // this.initAuthSupport = this.initAuthSupport.bind(this);
+        this.handleWalletChange = this.handleWalletChange.bind(this);
     }
 
     componentWillMount(){
         this.initAuthSupport();
+    }
+
+    componentDidMount(){
+        LVNotificationCenter.addObserver(this, LVNotification.walletChanged, this.handleWalletChange);
+    }
+
+    componentWillUnmount(){
+        LVNotificationCenter.removeObservers(this);
+    }
+
+    onSelectWalletClosed = () => {
+        this.setState({ openSelectWallet: false });
+    };
+
+    handleWalletChange() {
+        const wallet = LVWalletManager.getSelectedWallet();
+        this.setState({ selectWallet: wallet });
     }
 
     initAuthSupport = async () => {
@@ -122,7 +144,9 @@ export default class LVAuthView extends Component<Props> {
             console.log('authView , state.firstAuth :' + firstAuth);
             if(firstAuth === AUTH_PASSWORD){
                 console.log("authView , cancelAuth~~~");
-                NativeModules.LVReactExport.cancelAuth();
+                if(Platform.OS === 'android'){
+                    NativeModules.LVReactExport.cancelAuth();
+                }
                 this.setState({
                     isAuthing : false,
                 });
@@ -164,7 +188,7 @@ export default class LVAuthView extends Component<Props> {
     async passwordAuth(){
         this.refs.toast.show();
         setTimeout(async () => {
-            var verifyResult = await LVWalletManager.verifyPassword(this.state.inputPassword, this.props.selectWallet.keystore);
+            var verifyResult = await LVWalletManager.verifyPassword(this.state.inputPassword, this.state.selectWallet.keystore);
             console.log("authSupport , passwordAuth verifyResult :" + verifyResult)
             if(verifyResult === true){
                 this.refs.toast.dismiss();
@@ -221,7 +245,7 @@ export default class LVAuthView extends Component<Props> {
             passwordVisible = true;
         }
 
-        const wallet = this.props.selectWallet || LVWallet.emptyWallet();
+        const wallet = this.state.selectWallet || LVWallet.emptyWallet();
         return (
             <View style={styles.container}>
                 {authVisible && <TouchableOpacity style = {styles.authContainer}
@@ -232,7 +256,11 @@ export default class LVAuthView extends Component<Props> {
 
                 {passwordVisible && <View style = {[styles.passwordContainer]}>
                     <Image source={this.props.walletIcon || walletIcon} style={styles.img} resizeMode="contain" />
-                    <Text style = {styles.nameText}>{wallet.name}</Text>
+                    <TouchableOpacity style = {styles.nameTextContainer}
+                        onPress = {() => {this.setState({openSelectWallet : true})}}>
+                        <Text style = {styles.nameText}>{wallet.name}</Text>
+                        <Image source = {require("../../assets/images/auth_wallet_switch.png")}/>
+                    </TouchableOpacity>
                     <TextInput style = {styles.passwordInput}
                         secureTextEntry={true}
                         onChangeText = {this.onTextChanged}
@@ -261,6 +289,8 @@ export default class LVAuthView extends Component<Props> {
                     />}
                     
                 <LVLoadingToast ref={'toast'} title={LVStrings.password_verifying} />
+
+                <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
             </View>
         );
     }
@@ -288,6 +318,10 @@ const styles = StyleSheet.create({
     },
     passwordContainer : {
         alignItems : 'center',
+    },
+    nameTextContainer : {
+        alignItems : 'flex-end',
+        flexDirection : 'row',
     },
     nameText : {
         fontSize : 18 ,
