@@ -11,7 +11,7 @@ import Switch from 'react-native-switch-pro';
 
 type Props = {
     onSwitched?: Function,
-    value : Boolean,
+    value? : Boolean,
     Style?:ViewPropTypes.style,
 }
 
