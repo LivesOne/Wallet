@@ -21,6 +21,8 @@ const LV_Key_HasSetAuth = '@Venus:HasSetAuth';
 class LVConfiguration {
     constructor() {}
 
+    static needAuthLogin = null;
+
     static async isAnyWalletAvailable() {
         return await LVPersistent.getBoolean(LV_Key_AnyWalletAvailable);
     }
@@ -81,11 +83,15 @@ class LVConfiguration {
     // 是否允许验证登陆
     
     static async setNeedAuthLogin(need : boolean){
+        this.needAuthLogin = need;
         await LVPersistent.setBoolean(LV_Key_NeedAuthLogin, need);
     }
 
     static async getNeedAuthlogin(){
-        return await LVPersistent.getBoolean(LV_Key_NeedAuthLogin);
+        if(this.needAuthLogin === null){
+            this.needAuthLogin = await LVPersistent.getBoolean(LV_Key_NeedAuthLogin);
+        }
+        return this.needAuthLogin;
     }
 
     // 是否已经弹出过设置验证解锁

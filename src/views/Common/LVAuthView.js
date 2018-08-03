@@ -186,6 +186,10 @@ export default class LVAuthView extends Component<Props> {
     }
 
     async passwordAuth(){
+        if(this.state.inputPassword === "" || this.state.inputPassword === null){
+            Toast.show(LVStrings.password_verify_required);
+            return ;
+        }
         this.refs.toast.show();
         setTimeout(async () => {
             var verifyResult = await LVWalletManager.verifyPassword(this.state.inputPassword, this.state.selectWallet.keystore);
@@ -331,7 +335,9 @@ const styles = StyleSheet.create({
         width : 240,
         height : 50,
         backgroundColor : "#fff9f9fa",
+        marginTop : 25,
         fontSize : 14,
+        textAlign : 'center',
     },
     bottomText : {
         alignSelf : 'center',

@@ -163,7 +163,7 @@ const localized_strings = {
     minnerfeedetail_content: '  在以太链上，任何人都可以读写数据，数据的读取是免费的，但写入数据需要支付一定的矿工费用，网络上的任何矿工都可以参与挖矿。同时由于挖矿需要消耗一定的算力和电力，因此这也是矿工费的由来。\n  在链上进行多笔转账时，请在前一笔转账完成（状态变为转账成功或转账失败）后再发起转账，否则可能会造成失败。',
     minnerfeedetail_transferFail: '转账失败的几种情况：',
     minnerfeedetail_title1: '1.矿工费用过低：',
-    minnerfeedetail_content1: '  无矿工打包，转行失败，手续费退回，此时在交易记录中查询会显示交易不存在。',
+    minnerfeedetail_content1: '  无矿工打包，转账失败，手续费退回，此时在交易记录中查询会显示交易不存在。',
     minnerfeedetail_title2: '2.矿工费用不足：',
     minnerfeedetail_content2: '  矿工已开始打包，打包过程中矿工费用已完全消耗（但尚未打包完成），此时交易记录中查询会显示交易失败。 ',
     minnerfeedetail_title3: '3.连续发起多笔转账：',
@@ -325,11 +325,11 @@ const localized_strings = {
     // Auth
     auth_wake_text : '点击唤醒验证',
     auth_verifing : '正在验证中...',
-    auth_use_password : '使用钱包密码登陆',
+    auth_use_password : '使用钱包密码登录',
     auth_use_face_id : '面容ID解锁',
     auth_use_finger : '指纹解锁',
-    auth_mine_use_password : '指纹解锁',
-    auth_do_start_auth : "是否开启",
+    auth_mine_use_password : '密码解锁',
+    auth_do_start_auth : "是否开启登录验证",
     auth_dialog_cancel : "稍后开启",
 };
 

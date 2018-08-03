@@ -197,7 +197,7 @@ class AssetsScreen extends Component<Props, State> {
 
     render() {
         const wallet = this.state.wallet || LVWallet.emptyWallet();
-        const authDialogTitle = LVStrings.auth_do_start_auth + this.state.authTypeString;
+        const authDialogTitle = LVStrings.auth_do_start_auth;
 
         return (
             <View style={styles.container}>
