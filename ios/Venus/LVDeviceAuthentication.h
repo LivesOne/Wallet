@@ -18,6 +18,6 @@ typedef NS_ENUM(NSUInteger, LVDeviceAuthType) {
 
 + (BOOL)isDeviceAuthTypeAvailable:(LVDeviceAuthType)type;
 
-+ (void)evaluatePolicyWith:(void(^)(BOOL success, NSError * __nullable error))callback;;
++ (void)evaluatePolicyWith:(void(^)(BOOL success, NSString * __nullable errCode, NSString * __nullable errMsg))callback;;
 
 @end

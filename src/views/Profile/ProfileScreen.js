@@ -6,13 +6,17 @@
 "use strict";
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Image, ScrollView,
+    NativeModules, } from 'react-native';
 import { Cell, Section, TableView, Separator } from 'react-native-tableview-simple';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
 import * as LVStyleSheet from '../../styles/LVStyleSheet';
+import { MXSwitch } from '../../components/MXSwitch/index';
+import { AUTH_FACE_ID, AUTH_TOUCH_ID, AUTH_PASSWORD } from '../Common/LVAuthView';
+import LVConfiguration from '../../logic/LVConfiguration';
 
 const WalletImage = require('../../assets/images/profile_wallet.png');
 const TradingImage = require('../../assets/images/profile_trading.png');
@@ -20,6 +24,10 @@ const ContactsImage = require('../../assets/images/profile_contacts.png');
 const FeedbackImage = require('../../assets/images/profile_feedback.png');
 const SettingImage = require('../../assets/images/profile_setting.png');
 const AboutImage = require('../../assets/images/profile_about.png');
+
+const MineFaceidImage = require('../../assets/images/mine_faceid.png');
+const MineTouchIdImage = require('../../assets/images/mine_touchid.png');
+const MinePasswordImage = require('../../assets/images/mine_password.png');
 
 const ProfileCell = (props) => (
     <Cell
@@ -43,7 +51,59 @@ export default class ProfleScreen extends Component<Props> {
         header: null
     };
 
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            supportAuthType : '',
+            authEnable : LVConfiguration.needAuthLogin === null ? false : LVConfiguration.needAuthLogin,
+        };
+    }
+
+    authEnableSwitched(enable : boolean){
+        LVConfiguration.setNeedAuthLogin(enable);
+    }
+
+    componentWillMount(){
+        this.initAuthSupport();
+    }
+
+    initAuthSupport = async () => {
+        try {
+            let supportAuthType = null;
+            let authEnable = await LVConfiguration.getNeedAuthlogin();
+
+            const authSupportString = await NativeModules.LVReactExport.getAuthSupport();
+            const authSupport = JSON.parse(authSupportString);
+            if (authSupport.faceid === true) {
+                supportAuthType = AUTH_FACE_ID;
+            } else if (authSupport.touchid === true) {
+                supportAuthType = AUTH_TOUCH_ID;
+            }else {
+                supportAuthType = AUTH_PASSWORD;
+            }
+
+            this.setState({
+                supportAuthType : supportAuthType,
+                authEnable : authEnable,
+            });
+            console.log("profileAuth current authSupportTYpe : " + supportAuthType + "---authEnable:" + authEnable);
+        } catch (error) {
+            console.log("profileAuth" + error);
+        }
+    }
+
     render() {
+
+        let authIcon = MinePasswordImage;
+        let authText = LVStrings.auth_mine_use_password;
+        if(this.state.supportAuthType === AUTH_FACE_ID){
+            authIcon = MineFaceidImage;
+            authText = LVStrings.auth_use_face_id;
+        } else if(this.state.supportAuthType === AUTH_TOUCH_ID){
+            authIcon = MineTouchIdImage;
+            authText = LVStrings.auth_use_finger;
+        }
+        
         return (
             <View style={styles.container}>
                 <MXNavigatorHeader
@@ -74,6 +134,20 @@ export default class ProfleScreen extends Component<Props> {
                             disableImageResize
                             image={<Image source={ContactsImage} style={styles.tableViewImage}/>}
                         />
+
+                        <View style = {styles.authViewContainer}>
+                            <Image style = {{marginLeft : 13}}
+                                source = {authIcon}/>
+
+                            <Text numberOfLines={1} style = {styles.authViewText}>
+                                {authText}
+                            </Text>
+
+                            <MXSwitch 
+                                value = {this.state.authEnable}
+                                onSwitched = {this.authEnableSwitched.bind(this)}
+                            />
+                        </View>
                     </Section>
                     <Section 
                         sectionPaddingTop={9} 
@@ -107,4 +181,18 @@ const styles = LVStyleSheet.create({
         width: 21,
         height: 21,
     },
+    authViewContainer : {
+        backgroundColor: LVColor.white,
+        alignItems: 'center', 
+        flexDirection: 'row', 
+        flex: 1, 
+        height:60, 
+        paddingRight : 10,
+    },
+    authViewText : {
+        flex : 1,
+        fontSize:15, 
+        marginLeft : 5,
+        color:LVColor.text.grey2
+    }
 });

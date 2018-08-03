@@ -11,6 +11,7 @@ import Switch from 'react-native-switch-pro';
 
 type Props = {
     onSwitched?: Function,
+    value? : Boolean,
     Style?:ViewPropTypes.style,
 }
 
@@ -18,8 +19,22 @@ type State = {
     currentValue:boolean,
 }
 export class MXSwitch extends Component<Props,State> {
-    state = {
-        currentValue:false,
+
+    static defaultProps = {
+        value : false,
+    }
+    
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            currentValue: props.value,
+        }
+    }
+
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            currentValue : nextProps.value,
+        });
     }
 
     onValueChange = (value:boolean)=>{

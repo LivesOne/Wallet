@@ -62,7 +62,7 @@ const localized_strings = {
     wallet_importing_wallet: 'Importing wallet...',
     wallet_import_private_key_error: 'Private key format error',
     wallet_import_keystore_error: 'Keystore format error',
-    wallet_import_keystore_or_pwd_empty: "Keystore can't be empty",
+    wallet_import_keystore_or_pwd_empty: "Keystore is required",
     wallet_import_private_key_required: 'Private key is required',
     wallet_import_success: 'Import succeed!',
     wallet_import_fail: 'Import failed!',
@@ -88,7 +88,7 @@ const localized_strings = {
     wallet_create_password_required: 'Please enter password',
     wallet_create_confimpassword_required: 'Confirm your password',
     wallet_create_password_mismatch: 'Passwords do not match',
-    wallet_create_name_unavailable: 'The name is unavailable',
+    wallet_create_name_unavailable: 'Wallet name already exists',
     wallet_create_success: 'Successfully created!',
     wallet_create_success_comment:
         'Please keep your password safe! LivesOne Wallet does not save or provide any function of regaining/resetting the user password.',

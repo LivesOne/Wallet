@@ -127,9 +127,10 @@ class VenusApp extends Component<Props, State> {
     }
 
 
-    _handleAppStateChange = (appState) => {
+    _handleAppStateChange = async (appState) => {
         if(appState === "active"){
-            if(this.appPauseTime !== 0){
+            const needAuthLogin = await LVConfiguration.getNeedAuthlogin();
+            if(this.appPauseTime !== 0 && needAuthLogin){
                 var currentTime = new Date().getTime();
                 var duration = currentTime - this.appPauseTime;
                 console.log("appPauseTime :" + this.appPauseTime  + "--currentTime:" + currentTime + "--duration:" + duration);
@@ -187,7 +188,9 @@ class VenusApp extends Component<Props, State> {
 
         const hasWallets = await LVConfiguration.isAnyWalletAvailable();
         const wallet = LVWalletManager.getSelectedWallet();
-        this.setState({ loading: false, hasAnyWallets: hasWallets , needShowAuth : (wallet === null) ? false : true , selectWallet : wallet});
+
+        const needAuthLogin = await LVConfiguration.getNeedAuthlogin();
+        this.setState({ loading: false, hasAnyWallets: hasWallets , needShowAuth : (wallet !== null && needAuthLogin) ? true : false , selectWallet : wallet});
     }
 
     componentWillUnmount() {

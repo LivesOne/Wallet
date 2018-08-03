@@ -6,14 +6,14 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { AppState, StyleSheet, Dimensions, Platform, StatusBar, ListView, RefreshControl, View, Text } from 'react-native';
+import { AppState, StyleSheet, Dimensions, Platform, StatusBar, ListView, RefreshControl, View, Text , NativeModules} from 'react-native';
 import Toast from 'react-native-root-toast';
 import Moment from 'moment';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVUtils from '../../utils';
 import LVStrings from '../../assets/localization';
-import LVDialog from '../Common/LVDialog';
+import LVDialog, { LVConfirmDialog } from '../Common/LVDialog';
 import LVWalletHeader from '../Common/LVWalletHeader';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 import LVTransactionRecordManager from '../../logic/LVTransactionRecordManager';
@@ -29,6 +29,7 @@ import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import AssetsBalanceList from './AssetsBalanceList';
 import TransactionRecordList from './TransactionRecordList';
 import TransactionDetailsScreen from './TransactionDetailsScreen';
+import LVConfiguration from '../../logic/LVConfiguration';
 
 const selectImg = require('../../assets/images/select_wallet.png');
 const addTokenImg = require('../../assets/images/assets_add_token.png');
@@ -42,6 +43,7 @@ type State = {
     wallet: ?LVWallet,
     openSelectWallet: boolean,
     refreshing: boolean,
+    authTypeString : string,
 };
 
 class AssetsScreen extends Component<Props, State> {
@@ -58,6 +60,7 @@ class AssetsScreen extends Component<Props, State> {
             wallet: wallet,
             openSelectWallet: false,
             refreshing: false,
+            authTypeString : LVStrings.auth_mine_use_password,
         };
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
@@ -76,6 +79,7 @@ class AssetsScreen extends Component<Props, State> {
         LVNotificationCenter.addObserver(this, LVNotification.balanceChanged, this.handleBalanceChange);
 
         this.refreshBalance();
+        this.initSetAuthDialog();
     }
 
     componentWillUnmount() {
@@ -113,6 +117,10 @@ class AssetsScreen extends Component<Props, State> {
         this.setState({ wallet: LVWalletManager.getSelectedWallet() });
     };
 
+    handleStartAuth = () => {
+        LVConfiguration.setNeedAuthLogin(true);
+    }
+
     onPressHeader = () => {
         if (LVUtils.isNavigating()) { return }
         this.props.navigation.navigate('Receive');
@@ -128,6 +136,31 @@ class AssetsScreen extends Component<Props, State> {
             this.props.navigation.navigate('AssetsDetails', { token: token });
         }
     };
+
+    async initSetAuthDialog(){
+        let hasSet = await LVConfiguration.getHasSetAuth();
+        let authTypeString = "";
+        try {
+            const authSupportString = await NativeModules.LVReactExport.getAuthSupport();
+            const authSupport = JSON.parse(authSupportString);
+            if (authSupport.faceid === true) {
+                authTypeString = LVStrings.auth_use_face_id;
+            } else if (authSupport.touchid === true) {
+                authTypeString = LVStrings.auth_use_finger;
+            } else {
+                authTypeString = LVStrings.auth_mine_use_password;
+            }
+        } catch (error) {
+
+        }
+        this.setState({
+            authTypeString : authTypeString,
+        });
+        if(!hasSet){
+            this.refs.startAuthDialog.show();
+            LVConfiguration.setHasSetAuth(true);
+        }
+    }
 
     async refreshBalance() {
         this.setState({ refreshing: true });
@@ -164,6 +197,7 @@ class AssetsScreen extends Component<Props, State> {
 
     render() {
         const wallet = this.state.wallet || LVWallet.emptyWallet();
+        const authDialogTitle = LVStrings.auth_do_start_auth;
 
         return (
             <View style={styles.container}>
@@ -188,6 +222,14 @@ class AssetsScreen extends Component<Props, State> {
                 <AssetsBalanceList style={styles.list} wallet={wallet} refreshing={this.state.refreshing} onRefresh={this.refreshBalance.bind(this)} onPressItem={this.onPressAssetsDetail.bind(this)} />
 
                 <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
+
+                <LVConfirmDialog 
+                    ref={'startAuthDialog'}
+                    title={authDialogTitle}  
+                    confirmTitle = {LVStrings.common_confirm}
+                    cancelTitle = {LVStrings.auth_dialog_cancel}
+                    onConfirm={()=> {this.handleStartAuth()}}
+                />
             </View>
         );
     }
