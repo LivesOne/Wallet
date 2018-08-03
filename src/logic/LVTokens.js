@@ -20,7 +20,8 @@ const tokenIcons = new Map([
     ['REP', require('../assets/images/tokens/normal/REP.png')],
     ['XRP', require('../assets/images/tokens/normal/XRP.png')],
     ['ZIL', require('../assets/images/tokens/normal/ZIL.png')],
-    ['ZRX', require('../assets/images/tokens/normal/ZRX.png')]
+    ['ZRX', require('../assets/images/tokens/normal/ZRX.png')],
+    ['UNKNOWN', require('../assets/images/tokens/normal/UNKNOWN.png')]
 ]);
 
 const tokenLargeIcons = new Map([
@@ -36,7 +37,8 @@ const tokenLargeIcons = new Map([
     ['REP', require('../assets/images/tokens/large/REP.png')],
     ['XRP', require('../assets/images/tokens/large/XRP.png')],
     ['ZIL', require('../assets/images/tokens/large/ZIL.png')],
-    ['ZRX', require('../assets/images/tokens/large/ZRX.png')]
+    ['ZRX', require('../assets/images/tokens/large/ZRX.png')],
+    ['UNKNOWN', require('../assets/images/tokens/large/UNKNOWN.png')]
 ]);
 
 const tokenFullNames = new Map([
@@ -58,16 +60,24 @@ const tokenFullNames = new Map([
 class LVTokenIcons {
     constructor() {}
 
-    has(token: string): boolean {
-        return tokenIcons.has(token.toUpperCase());
-    }
+    // has(token: string): boolean {
+    //     return tokenIcons.has(token.toUpperCase());
+    // }
 
     normal(token: string): any | void {
-        return tokenIcons.get(token.toUpperCase());
+        if (tokenIcons.has(token.toUpperCase())) {
+            return tokenIcons.get(token.toUpperCase());
+        } else {
+            return tokenIcons.get('UNKNOWN');
+        }
     }
 
     large(token: string): any | void {
-        return tokenLargeIcons.get(token.toUpperCase());
+        if (tokenLargeIcons.has(token.toUpperCase())) {
+            return tokenLargeIcons.get(token.toUpperCase());
+        } else {
+            return tokenLargeIcons.get('UNKNOWN');
+        }
     }
 }
 
