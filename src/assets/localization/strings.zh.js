@@ -328,8 +328,8 @@ const localized_strings = {
     auth_use_password : '使用钱包密码登陆',
     auth_use_face_id : '面容ID解锁',
     auth_use_finger : '指纹解锁',
-    auth_mine_use_password : '指纹解锁',
-    auth_do_start_auth : "是否开启",
+    auth_mine_use_password : '密码解锁',
+    auth_do_start_auth : "是否开启登录验证",
     auth_dialog_cancel : "稍后开启",
 };
 
