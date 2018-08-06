@@ -72,10 +72,6 @@ export default class AssetsBalanceList extends React.Component<Props> {
             return { token: token, amount: wallet.getBalance(token) };
         });
 
-        data.sort((a, b) => {
-            return a.token == LVWallet.ETH_TOKEN && b.token === LVWallet.LVTC_TOKEN ? 1 : 0;
-        });
-
         return (
             <FlatList
                 ref={'list'}

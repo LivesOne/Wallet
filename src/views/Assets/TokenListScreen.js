@@ -63,12 +63,8 @@ export default class TokenListScreen extends Component<Props, State> {
         if (LVUtils.isNavigating()) {
             return;
         }
-        this.lostBlur();
-        this.props.navigation.navigate('WebView', { url: 'https://lives.one' });
-    };
-
-    lostBlur = () => {
         Keyboard.dismiss();
+        this.props.navigation.navigate('WebView', { url: 'https://lives.one' });
     };
 
     onSearchBarTextChanged = async (text: string) => {
@@ -163,8 +159,6 @@ export default class TokenListScreen extends Component<Props, State> {
                     }}
                 />
                 <View style={{ flex: 1 }}>
-                    <TouchableOpacity style={styles.touchContainer} onPress={this.lostBlur.bind(this)} />
-
                     <MXSearchBar
                         ref={'searchBar'}
                         style={{ marginTop: 10 }}
@@ -188,6 +182,8 @@ export default class TokenListScreen extends Component<Props, State> {
                             data={data}
                             keyExtractor={this._keyExtractor}
                             renderItem={this._renderItem}
+                            keyboardDismissMode={'on-drag'}
+                            keyboardShouldPersistTaps={'always'}
                             showsVerticalScrollIndicator={false}
                             showsHorizontalScrollIndicator={false}
                             ListEmptyComponent={() => <View />}
@@ -211,7 +207,13 @@ type ItemProps = {
 };
 
 class LVTokenRecordItem extends React.Component<ItemProps> {
+
+    onPressItem = () => {
+        Keyboard.dismiss();
+    }
+
     onPressButton = () => {
+        Keyboard.dismiss();
         if (this.props.onPressAddButton) {
             this.props.onPressAddButton();
         }
@@ -223,11 +225,13 @@ class LVTokenRecordItem extends React.Component<ItemProps> {
         const showButton = token != LVWallet.ETH_TOKEN && token != LVWallet.LVTC_TOKEN;
         return (
             <View style={styles.record}>
-                <Image style={styles.icon} source={image} resizeMode="contain" />
-                <View style={styles.middle}>
-                    <Text style={styles.token}>{token.toUpperCase()}</Text>
-                    <Text style={styles.fullname}>{fullname}</Text>
-                </View>
+                <TouchableOpacity style={styles.recordLeft} activeOpacity={1} onPress={this.onPressItem.bind(this)}>
+                    <Image style={styles.icon} source={image} resizeMode="contain" />
+                    <View style={styles.middle}>
+                        <Text style={styles.token}>{token.toUpperCase()}</Text>
+                        <Text style={styles.fullname}>{fullname}</Text>
+                    </View>
+                </TouchableOpacity>
                 {showButton ? (
                     <MXTouchableImage source={buttonIcon} onPress={this.onPressButton.bind(this)} />
                 ) : (
@@ -243,9 +247,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: LVColor.white
     },
-    touchContainer: {
-        ...StyleSheet.absoluteFillObject
-    },
     record: {
         height: 60,
         marginLeft: 16,
@@ -254,6 +255,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: LVColor.white
+    },
+    recordLeft: {
+        flex: 1, 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        alignItems: 'center'
     },
     icon: {
         width: 29,

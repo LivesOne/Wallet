@@ -108,7 +108,7 @@ class LVTokens {
                 }
             }
 
-            this.supported = [...tokens, 'eth'];
+            this.supported = ['eth', ...tokens];
         } catch (error) {
             console.log('update supported tokens error - ' + error);
         }
