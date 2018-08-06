@@ -187,6 +187,7 @@ const localized_strings = {
     transfer_fail: '转账失败',
     transfer_minner_fee_fail: '您当前的矿工费较低，可能会转账失败',
     transfer_to_self_not_allowed: '不能给自己账户转账',
+    transfer_advanced_gasprice_failed: '请合理设置gas或gas price',
 
     // Profile
     profile_wallet_manager: '钱包管理',

@@ -178,7 +178,7 @@ const localized_strings = {
     transfer_success: 'Transfer succeed',
     transfer_fail: 'Transfer failed',
     transfer_to_self_not_allowed: 'Transfer to self is not allowed',
-
+    transfer_advanced_gasprice_failed: 'Set the gas or gas price reasonably',
     // Profile
     profile_wallet_manager: 'Wallet management',
     profile_trading_record: 'Transaction records',

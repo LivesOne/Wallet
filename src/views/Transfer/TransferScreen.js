@@ -354,7 +354,9 @@ class TransferScreen extends Component<Props, State> {
         }
 
         if (this.refs.gapSetter.getValue() === 0) {
-            this.setState({alertMessage:LVStrings.transfer_miner_gap_not_access });
+            this.setState({
+                alertMessage:this.refs.gapSetter.getAdvancedSwitchedValue() ? LVStrings.transfer_advanced_gasprice_failed :LVStrings.transfer_miner_gap_not_access 
+            });
             this.refs.alert.show();
             return;
         }
@@ -581,7 +583,6 @@ class TransferScreen extends Component<Props, State> {
                         onConfirm={()=>{this.props.navigation.navigate("Receive")}} >
                         <Text style={{color: '#697585',fontSize: 16, padding: 4 , textAlign : 'center'}}>{this.state.balanceTip}</Text>
                     </LVConfirmDialog>
-
                 </TouchableOpacity>
                 </KeyboardAwareScrollView>
             </View>
