@@ -130,7 +130,7 @@ export default class WalletCreatePage extends Component<Props,State> {
             const wallet = await LVWalletManager.createWallet(this.state.name, this.state.password);
             console.log(wallet);
             LVWalletManager.addWallet(wallet);
-            LVWalletManager.saveToDisk();
+            await LVWalletManager.saveToDisk();
             this.refs.toast.dismiss();
 
             LVNotificationCenter.postNotification(LVNotification.walletChanged);
