@@ -258,7 +258,8 @@ const styles = StyleSheet.create({
         backgroundColor: LVColor.white
     },
     recordLeft: {
-        flex: 1, 
+        flex: 1,
+        height: '100%',
         flexDirection: 'row', 
         justifyContent: 'space-between', 
         alignItems: 'center'
