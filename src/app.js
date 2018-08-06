@@ -281,9 +281,10 @@ class VenusApp extends Component<Props, State> {
 }
 
 const LVAppLoadingView = () => {
-    const imageStyle = Platform.OS === 'ios' ? { marginTop: 210 } : { alignItems: 'center' };
+    const viewStyle = Platform.OS === 'ios' ? { justifyContent: 'flex-start' } : { justifyContent: 'center' };
+    const imageStyle = Platform.OS === 'ios' ? { marginTop: 210 } : {};
     return (
-        <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
+        <View style={[{ flex: 1, alignItems: 'center' }, viewStyle]}>
             <Image style={imageStyle} source={require('./assets/images/logo.png')} />
         </View>
     );
