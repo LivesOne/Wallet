@@ -162,6 +162,7 @@ export default class TokenListScreen extends Component<Props, State> {
                     <MXSearchBar
                         ref={'searchBar'}
                         style={{ marginTop: 10 }}
+                        textInputStyle={{ fontSize: 14 }}
                         placeholder={LVStrings.token_list_search_placeholder}
                         onFocus={this.onSearchBarFocus}
                         onTextChanged={this.onSearchBarTextChanged}
