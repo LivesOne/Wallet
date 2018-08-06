@@ -162,6 +162,7 @@ export default class TokenListScreen extends Component<Props, State> {
                     <MXSearchBar
                         ref={'searchBar'}
                         style={{ marginTop: 10 }}
+                        textInputStyle={{ fontSize: 14 }}
                         placeholder={LVStrings.token_list_search_placeholder}
                         onFocus={this.onSearchBarFocus}
                         onTextChanged={this.onSearchBarTextChanged}
@@ -257,7 +258,8 @@ const styles = StyleSheet.create({
         backgroundColor: LVColor.white
     },
     recordLeft: {
-        flex: 1, 
+        flex: 1,
+        height: '100%',
         flexDirection: 'row', 
         justifyContent: 'space-between', 
         alignItems: 'center'
