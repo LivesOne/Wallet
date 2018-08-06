@@ -53,6 +53,7 @@ import Toast from 'react-native-root-toast';
 import Transaction from 'ethereumjs-tx';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import TransferMinerTips from './TransferMinerTips';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 var Big = require('big.js');
 import LVBig from '../../logic/LVBig';
@@ -493,7 +494,7 @@ class TransferScreen extends Component<Props, State> {
                             this.props.navigation.goBack();
                         }}
                         />
-                <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
+                <KeyboardAwareScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
                 <TouchableOpacity  style={ styles.container } activeOpacity={1} onPress={Keyboard.dismiss} >
                     <LVQrScanModal
                         barcodeReceived={(data)=>{
@@ -582,7 +583,7 @@ class TransferScreen extends Component<Props, State> {
                     </LVConfirmDialog>
 
                 </TouchableOpacity>
-                </ScrollView>
+                </KeyboardAwareScrollView>
             </View>
         )
     }
