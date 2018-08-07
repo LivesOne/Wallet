@@ -112,6 +112,7 @@ class VenusApp extends Component<Props, State> {
 
     async componentWillMount() {
         StatusBar.setBarStyle('light-content', false);
+        LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletImportOrCreateSuccess);
         LVNotificationCenter.addObserver(this, LVNotification.walletImported, this.handleWalletImportOrCreateSuccess);
         LVNotificationCenter.addObserver(this, LVNotification.walletCreateSuccessPageDismiss, this.handleWalletImportOrCreateSuccess);
         // 解决Android修改语言后无法立即生效问题
