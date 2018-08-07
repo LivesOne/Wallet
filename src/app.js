@@ -112,6 +112,7 @@ class VenusApp extends Component<Props, State> {
 
     async componentWillMount() {
         StatusBar.setBarStyle('light-content', false);
+        LVNotificationCenter.addObserver(this, LVNotification.walletsNumberChanged, this.handleWalletImportOrCreateSuccess);
         LVNotificationCenter.addObserver(this, LVNotification.walletImported, this.handleWalletImportOrCreateSuccess);
         LVNotificationCenter.addObserver(this, LVNotification.walletCreateSuccessPageDismiss, this.handleWalletImportOrCreateSuccess);
         // 解决Android修改语言后无法立即生效问题
@@ -289,7 +290,7 @@ const LVAppLoadingView = () => {
             {Platform.OS === 'android' && <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <View>
                     <Image source={require('./assets/images/logo.png')} />
-                    <View style={{ width: '100%', height: 200 }} />
+                    <View style={{ width: '100%', height: 80 }} />
                 </View>
             </View>}
         </View>
