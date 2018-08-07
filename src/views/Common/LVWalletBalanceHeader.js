@@ -37,6 +37,8 @@ export default class LVWalletBalanceHeader extends React.Component<Props> {
             <View style={[styles.container, this.props.style]}>
                 <Image source={this.props.tokenIcon || tokenIcon} style={styles.image} resizeMode="contain" />
                 <View style={styles.bottom}>
+                    <Text style={[styles.token], { color: 'transparent' }}>{token.toUpperCase()}</Text>
+                    {ellipsis && <Text style={[styles.ellipsis], { color: 'transparent' }}>...</Text>}
                     <LVBalanceShowView
                         title={totalAmountTitle}
                         unit={token.toUpperCase()}
@@ -64,13 +66,13 @@ const styles = StyleSheet.create({
         marginTop: 13
     },
     bottom: {
+        width: '100%',
         marginTop: 7,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'flex-start'
     },
     balance: {
-        paddingLeft: 25,
         fontSize: 29,
         fontFamily: 'DINAlternate-Bold',
         textAlign: 'center',
