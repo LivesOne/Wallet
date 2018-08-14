@@ -90,7 +90,7 @@ export default class TransferUtils {
 
     // value : Big Object 
     static convert2BNHex(value: Object, token: string) : string {
-        const decimal = LVTokens.decimals.get('BTC') || 18;
+        const decimal = LVTokens.decimals.get(token) || 18;
         let r = new BN(value.times(new Big(10).pow(decimal)).toFixed());
         return '0x' + r.toString(16).toLowerCase();
     }
