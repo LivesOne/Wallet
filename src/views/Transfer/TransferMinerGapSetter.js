@@ -94,7 +94,9 @@ export class TransferMinerGapSetter extends Component<Props, State> {
 
     getValue() {
         if (this.state.advancedSwitchedValue) {
-            return parseInt(this.state.gasPriceValue) * parseInt(this.state.gasValue)/  Math.pow(10, 9);
+            let gasValue = parseInt(this.state.gasPriceValue) * parseInt(this.state.gasValue) / Math.pow(10, 9);
+            // 保留8位小数
+            return  Number(TransferUtils.convertMinnerGap(gasValue));
         }
         return this.state.userHasChanged ? this.state.value : this.getInitValue();
     }
