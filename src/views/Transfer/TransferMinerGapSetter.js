@@ -297,12 +297,14 @@ export class TransferMinerGapSetter extends Component<Props, State> {
                     style={{height:50,width:'100%'}}
                     placeholder={LVStrings.transfer_advanced_gas}
                     withUnderLine={true}
+                    keyboardType = {'numeric'}
                     onValidation={this.onValidateGasValue.bind(this)}
                     onTextChanged={this.onGasValueChange.bind(this)}/>
                 <MXCrossTextInput
                     style={{height:50,width:'100%'}}
                     placeholder={LVStrings.transfer_advanced_gas_price}
                     withUnderLine={true}
+                    keyboardType = {'numeric'}
                     onValidation={this.onValidateGasPriceValue.bind(this)}
                     onTextChanged={this.onGasPriceValueChange.bind(this)}/>
             </View>
