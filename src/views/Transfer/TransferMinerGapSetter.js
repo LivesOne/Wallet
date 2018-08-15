@@ -96,7 +96,7 @@ export class TransferMinerGapSetter extends Component<Props, State> {
         if (this.state.advancedSwitchedValue) {
             return parseInt(this.state.gasPriceValue) * parseInt(this.state.gasValue)/  Math.pow(10, 9);
         }
-        return this.state.userHasChanged ? this.state.value : this.props.defaultValue;
+        return this.state.userHasChanged ? this.state.value : this.getInitValue();
     }
 
     getUserHasChanged() {
