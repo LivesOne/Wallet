@@ -493,6 +493,7 @@ class TransferScreen extends Component<Props, State> {
                         title={LVStrings.transfer}
                         titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
                         onLeftPress={() => {
+                            Keyboard.dismiss();
                             this.props.navigation.goBack();
                         }}
                         />
