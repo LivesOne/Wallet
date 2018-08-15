@@ -27,4 +27,9 @@ public class MainActivity extends ReactActivity {
         return "Venus";
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        FingerHelper.getInstance().cancel();
+    }
 }

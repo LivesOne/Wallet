@@ -150,8 +150,8 @@ public class LVExportModule extends ReactContextBaseJavaModule {
                     Log.i("authSupport" , tip);
                     if(errMsgId != 5){
                         Toast.makeText(getReactApplicationContext() , errString , Toast.LENGTH_SHORT).show();
-                        occurError(true);
                     }
+                    occurError(true);
                 }
 
                 @Override
