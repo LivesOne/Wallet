@@ -105,7 +105,7 @@ export default class TransactionDetailsScreen extends Component<Props> {
                             {state === 'waiting' && (
                                 <LVLinkText text={LVStrings.transaction_check_progress} onPress={this.onPressCheckDetail.bind(this)}/>
                             )}
-                            {state === 'failed' && (
+                            {(state === 'failed' || state === 'ok') && (
                                 <LVLinkText text={LVStrings.transaction_check_detail} onPress={this.onPressCheckDetail.bind(this)}/>
                             )}
                         </View>
