@@ -178,6 +178,7 @@ public class LVExportModule extends ReactContextBaseJavaModule {
                 }
 
                 private void occurError(boolean shutdown){
+                    errorMax --;
                     if(isActive && (errorMax == 0 || shutdown)){
                         isActive = false;
                         Log.i("authSupport" , "FingerHelper occurError");
@@ -188,7 +189,6 @@ public class LVExportModule extends ReactContextBaseJavaModule {
                         }
                         FingerHelper.getInstance().cancel();
                     }
-                    errorMax --;
                 }
             });
         }else{
