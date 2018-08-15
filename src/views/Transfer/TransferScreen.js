@@ -19,7 +19,8 @@ import {
     PixelRatio,
     NetInfo,
     StatusBar,
-    BackHandler
+    BackHandler,
+    AppState
 } from 'react-native';
 import MXCrossTextInput from './../../components/MXCrossTextInput';
 import MXTouchableImage from '../../components/MXTouchableImage';
@@ -88,6 +89,7 @@ type State = {
     inputPwd: string,
     balanceTip:string,
     amountText: string,
+    appActiveStatusFlag: boolean
 };
 
 class TransferScreen extends Component<Props, State> {
@@ -120,6 +122,7 @@ class TransferScreen extends Component<Props, State> {
             alertMessage: '',
             inputPwd: '',
             balanceTip:'',
+            appActiveStatusFlag:false
         }
         this.onSelectedContact = this.onSelectedContact.bind(this);
     }
@@ -129,7 +132,8 @@ class TransferScreen extends Component<Props, State> {
         LVNotificationCenter.addObserver(this, LVNotification.balanceChanged, this.handlerBalanceChange);
         LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.refreshWalletDatas);
         LVNotificationCenter.addObserver(this, LVNotification.networkStatusChanged, this.handleNeworkChange);
-        
+        AppState.addEventListener('change', this._handleAppStateChange);
+
         // this.fixAndroidPaste();
         if (this.props.navigation.state.key === null) {
             this.props.navigation.state.key = 'keyTransfer';
@@ -236,9 +240,27 @@ class TransferScreen extends Component<Props, State> {
         TransferUtils.log('balance change');
         await this.refreshWalletDatas(false)
     }
+    
+    _handleAppStateChange = (nextAppState)=>{
+        if (nextAppState!= null && nextAppState === 'active') {
+            //如果是true ，表示从后台进入了前台 ，请求数据，刷新页面。或者做其他的逻辑
+            if (this.state.appActiveStatusFlag) {
+                //这里的逻辑表示 ，第一次进入前台的时候 ，不会进入这个判断语句中。
+                // 因为初始化的时候是false ，当进入后台的时候 ，flag才是true ，
+                // 当第二次进入前台的时候 ，这里就是true ，就走进来了。
+                StatusBar.setBarStyle('default', true);
+            }
+            this.setState({ appActiveStatusFlag: false});
+        }else if(nextAppState != null && nextAppState === 'background'){
+          this.setState({ appActiveStatusFlag: true});
+        }
+     
+      }
+    
 
     componentWillUnmount() {
         LVNotificationCenter.removeObservers(this);
+        AppState.removeEventListener('change', this._handleAppStateChange);
     }
 
    async  onAddressChanged(address: string) {
@@ -279,7 +301,7 @@ class TransferScreen extends Component<Props, State> {
     componentWillMount() {
         StatusBar.setBarStyle('default', true);
     }
-
+    
     refreshWalletDatas = async (needUpdateBalance: boolean = true) => {
         if (needUpdateBalance) {
             await LVWalletManager.updateSelectedWalletBalance();
@@ -296,7 +318,7 @@ class TransferScreen extends Component<Props, State> {
 
     async onTransferPresse() {
         Keyboard.dismiss();
-        
+
         const { wallet, addressIn, amount, curLVTC, curETH, amountText, token} = this.state;
         
         TransferUtils.log("trueValue = " + this.refs.gapSetter.getValue()
