@@ -295,6 +295,8 @@ class TransferScreen extends Component<Props, State> {
     }
 
     async onTransferPresse() {
+        Keyboard.dismiss();
+        
         const { wallet, addressIn, amount, curLVTC, curETH, amountText, token} = this.state;
         
         TransferUtils.log("trueValue = " + this.refs.gapSetter.getValue()
