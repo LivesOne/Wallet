@@ -135,7 +135,7 @@ class VenusApp extends Component<Props, State> {
                 var currentTime = new Date().getTime();
                 var duration = currentTime - this.appPauseTime;
                 console.log("appPauseTime :" + this.appPauseTime  + "--currentTime:" + currentTime + "--duration:" + duration);
-                if(duration > 1000*60*1){
+                if(duration > 1000*60*5){
 
                     const wallet = LVWalletManager.getSelectedWallet();
                     this.setState({
