@@ -51,7 +51,7 @@ export default class TransactionDetailsScreen extends Component<Props> {
         }
 
         if (LVUtils.isNavigating()) { return; }
-        this.props.navigation.navigate('WebView', { url: url, title: 'Transaction Information' });
+        this.props.navigation.navigate('WebView', { url: url, title: LVStrings.transaction_details });
     }
 
     render() {

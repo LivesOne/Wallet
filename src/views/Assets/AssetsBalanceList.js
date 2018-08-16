@@ -15,6 +15,8 @@ import LVWallet from '../../logic/LVWallet';
 import { StringUtils } from '../../utils';
 import LVBalanceShowView from '../Common/LVBalanceShowView';
 
+import Big from 'big.js';
+
 const left_shadow = require('../../assets/images/assets_card_left_shadow.png');
 const right_shadow = require('../../assets/images/assets_card_right_shadow.png');
 
@@ -93,7 +95,7 @@ export default class AssetsBalanceList extends React.Component<Props> {
 
 type BalanceCardProps = {
     token: string,
-    amount: Object,
+    amount: Big,
     onPressItem: Function
 };
 
@@ -102,8 +104,7 @@ class LVWalletBalanceCard extends React.Component<BalanceCardProps> {
         const { token, amount } = this.props;
         const tokenImage = LVTokens.icons.normal(token);
 
-        const value = StringUtils.beautifyBalanceShow(amount);
-        const balanceString = StringUtils.convertAmountToCurrencyString(value.result, ',', 0, true);
+        var balanceString = StringUtils.convertAmountToCurrencyString(amount, ',', 4, false);
 
         return (
             <View style={styles.record}>

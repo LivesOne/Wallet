@@ -121,6 +121,9 @@ export class TransferMinerGapSetter extends Component<Props, State> {
 
     showFeeFailMessag = (value :number) =>{
         if (isNaN(value)) {
+            this.setState({
+                isShowFeeFailMessage:false,
+            });
             return;
         }
         var flag = false;

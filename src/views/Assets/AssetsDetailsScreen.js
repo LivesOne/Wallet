@@ -163,7 +163,7 @@ class AssetsDetailsScreen extends Component<Props, State> {
             return;
         }
 
-        const isFound = LVTransactionRecordManager.records.findIndex(r => r.type === 'waiting') != -1;
+        const isFound = LVTransactionRecordManager.records.findIndex(r => r.state === 'waiting') != -1;
         if (isFound) {
             this.refs.alert.show();
         } else {
