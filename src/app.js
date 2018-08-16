@@ -17,7 +17,8 @@ import {
     BackHandler,
     Platform,
     NativeModules,
-    AppState
+    AppState,
+    Keyboard
 } from 'react-native';
 import LVStrings from './assets/localization';
 import LVConfiguration from './logic/LVConfiguration';
@@ -136,12 +137,12 @@ class VenusApp extends Component<Props, State> {
                 var duration = currentTime - this.appPauseTime;
                 console.log("appPauseTime :" + this.appPauseTime  + "--currentTime:" + currentTime + "--duration:" + duration);
                 if(duration > 1000*60*5){
-
                     const wallet = LVWalletManager.getSelectedWallet();
                     this.setState({
                         needShowAuth : true,
                         selectWallet : wallet,
                     });
+                    Keyboard.dismiss();
                 }
             }
             this.appPauseTime = 0;
