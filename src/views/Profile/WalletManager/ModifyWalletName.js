@@ -105,7 +105,9 @@ export class ModifyWalletName extends React.Component<Props, State> {
         if(!this.refs.textinput.validate()) {
             return;
         }
-        
+
+        this.refs.textinput.suppressValidator();
+
         wallet.name = name;
         try {
             await LVWalletManager.updateWallet(wallet);
