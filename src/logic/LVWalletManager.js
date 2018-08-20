@@ -10,6 +10,7 @@ import LVPersistent from './LVPersistent';
 import LVConfiguration from './LVConfiguration';
 import LVNotificationCenter from '../logic/LVNotificationCenter';
 import LVNotification from '../logic/LVNotification';
+import LVTokens from './LVTokens';
 import LVNetworking from './LVNetworking';
 import LVTransactionRecordManager from './LVTransactionRecordManager';
 import WalletUtils from '../views/Wallet/WalletUtils';
@@ -55,6 +56,11 @@ class WalletManager {
                     var wallet = new LVWallet(obj.name, obj.keystore);
                     obj.balance_list && obj.balance_list.forEach(b => wallet.setBalance(b.token, b.value));
                     obj.holding_list && obj.holding_list.forEach(b => wallet.addHoldingBalance(b.token, b.value));
+                    if (obj.available_tokens !== null && 
+                        obj.available_tokens !== undefined 
+                        && obj.available_tokens.length > 0) {
+                        wallet.available_tokens = obj.available_tokens;
+                    }
                     this.wallets.push(wallet);
                 });
             }
@@ -127,13 +133,12 @@ class WalletManager {
 
     async updateWalletBalance(wallet: LVWallet) {
         try {
-            const tokens_except_eth = await LVNetworking.fetchTokenList();
-            const tokens = [...tokens_except_eth, LVWallet.ETH_TOKEN];
+            await LVTokens.updateSupportedTokens();
             const address = wallet.address.substr(0, 2).toLowerCase() == '0x' ? wallet.address : '0x' + wallet.address;
-            const balances = await LVNetworking.fetchBalances(address, tokens);
+            const balances = await LVNetworking.fetchBalances(address, LVTokens.supported);
             console.log(balances);
 
-            tokens.forEach(token => {
+            LVTokens.supported.forEach(token => {
                 wallet.setBalance(token, balances[token]);
             });
 

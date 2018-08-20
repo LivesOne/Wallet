@@ -22,6 +22,7 @@ type Props = {
     onFocus?:Function,
     onEndEditing?:Function,
     text?:string,
+    textInputStyle?: ViewPropTypes.style
 }
 
 type State = {
@@ -62,7 +63,7 @@ export default class MXSearchBar extends Component<Props,State> {
     };
 
     render (){
-        const {placeholder,keyboardType,style,onFocus,onEndEditing,text} = this.props;
+        const {placeholder,keyboardType,style,onFocus,onEndEditing,text, textInputStyle} = this.props;
         return (
             <View style = {[styles.containView,style]}>
                 <View style = {{marginLeft:10}}>
@@ -75,7 +76,7 @@ export default class MXSearchBar extends Component<Props,State> {
                             placeholderTextColor={LVColor.text.placeHolder}
                             value={this.state.currentText}
                             keyboardType={keyboardType}
-                            style={styles.textInput}
+                            style={[styles.textInput, textInputStyle]}
                             returnKeyType={'search'}
                             clearButtonMode={'while-editing'}
                             onChangeText={this.onChangeText.bind(this)}

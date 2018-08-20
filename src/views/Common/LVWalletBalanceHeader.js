@@ -12,19 +12,10 @@ import Big from 'big.js';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVStrings from '../../assets/localization';
+import LVTokens from '../../logic/LVTokens';
 import LVBalanceShowView from '../Common/LVBalanceShowView';
 
 const walletIcon = require('../../assets/images/assets_wallet.png');
-
-const tokenImageIcons = {
-    LVTC: require('../../assets/images/lvt_large.png'),
-    eth: require('../../assets/images/eth_large.png')
-};
-
-const totalAmountStrings = {
-    LVTC: LVStrings.total_lvt,
-    eth: LVStrings.total_eth
-}
 
 type Props = {
     style?: ViewPropTypes.style,
@@ -36,8 +27,8 @@ type Props = {
 export default class LVWalletBalanceHeader extends React.Component<Props> {
     render() {
         const { token, balance } = this.props;
-        const tokenIcon = tokenImageIcons[token];
-        const totalAmountTitle = totalAmountStrings[token];
+        const tokenIcon = LVTokens.icons.large(token);
+        const totalAmountTitle = token.toUpperCase() + ' ' + LVStrings.total_amount;
 
         const balanceShow = StringUtils.beautifyBalanceShow(balance);
         const ellipsis = balanceShow.hasShrink && balanceShow.result == '0.00000000000';
@@ -46,6 +37,8 @@ export default class LVWalletBalanceHeader extends React.Component<Props> {
             <View style={[styles.container, this.props.style]}>
                 <Image source={this.props.tokenIcon || tokenIcon} style={styles.image} resizeMode="contain" />
                 <View style={styles.bottom}>
+                    <Text style={[styles.token], { color: 'transparent' }}>{token.toUpperCase()}</Text>
+                    {ellipsis && <Text style={[styles.ellipsis], { color: 'transparent' }}>...</Text>}
                     <LVBalanceShowView
                         title={totalAmountTitle}
                         unit={token.toUpperCase()}
@@ -73,13 +66,13 @@ const styles = StyleSheet.create({
         marginTop: 13
     },
     bottom: {
+        width: '100%',
         marginTop: 7,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'flex-start'
     },
     balance: {
-        paddingLeft: 25,
         fontSize: 29,
         fontFamily: 'DINAlternate-Bold',
         textAlign: 'center',

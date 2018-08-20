@@ -85,7 +85,7 @@ export class LVBalanceShowView extends Component<Props> {
                     </View>
 
                 </Modal>
-                <Text style={[styles.text, this.props.textStyle]}> { values } </Text>
+                <Text style={[styles.text, this.props.textStyle]}>{values}</Text>
             </TouchableOpacity>
         )
     }

@@ -13,6 +13,7 @@ import {
   isNotEmptyString,
   formatCurrency,
   isIphoneX,
+  isNavigating,
   log,
 } from './MXUtils';
 
@@ -30,6 +31,7 @@ const PLUtils = {
   isEmptyString,
   isNotEmptyString,
   isIphoneX,
+  isNavigating,
   log,
 };
 

@@ -19,7 +19,8 @@ import {
     PixelRatio,
     NetInfo,
     StatusBar,
-    BackHandler
+    BackHandler,
+    AppState
 } from 'react-native';
 import MXCrossTextInput from './../../components/MXCrossTextInput';
 import MXTouchableImage from '../../components/MXTouchableImage';
@@ -52,6 +53,8 @@ import LVGradientPanel from '../Common/LVGradientPanel';
 import Toast from 'react-native-root-toast';
 import Transaction from 'ethereumjs-tx';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
+import TransferMinerTips from './TransferMinerTips';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 var Big = require('big.js');
 import LVBig from '../../logic/LVBig';
@@ -86,6 +89,7 @@ type State = {
     inputPwd: string,
     balanceTip:string,
     amountText: string,
+    appActiveStatusFlag: boolean
 };
 
 class TransferScreen extends Component<Props, State> {
@@ -118,6 +122,7 @@ class TransferScreen extends Component<Props, State> {
             alertMessage: '',
             inputPwd: '',
             balanceTip:'',
+            appActiveStatusFlag:false
         }
         this.onSelectedContact = this.onSelectedContact.bind(this);
     }
@@ -127,7 +132,8 @@ class TransferScreen extends Component<Props, State> {
         LVNotificationCenter.addObserver(this, LVNotification.balanceChanged, this.handlerBalanceChange);
         LVNotificationCenter.addObserver(this, LVNotification.transcationRecordsChanged, this.refreshWalletDatas);
         LVNotificationCenter.addObserver(this, LVNotification.networkStatusChanged, this.handleNeworkChange);
-        
+        AppState.addEventListener('change', this._handleAppStateChange);
+
         // this.fixAndroidPaste();
         if (this.props.navigation.state.key === null) {
             this.props.navigation.state.key = 'keyTransfer';
@@ -234,9 +240,27 @@ class TransferScreen extends Component<Props, State> {
         TransferUtils.log('balance change');
         await this.refreshWalletDatas(false)
     }
+    
+    _handleAppStateChange = (nextAppState)=>{
+        if (nextAppState!= null && nextAppState === 'active') {
+            //如果是true ，表示从后台进入了前台 ，请求数据，刷新页面。或者做其他的逻辑
+            if (this.state.appActiveStatusFlag) {
+                //这里的逻辑表示 ，第一次进入前台的时候 ，不会进入这个判断语句中。
+                // 因为初始化的时候是false ，当进入后台的时候 ，flag才是true ，
+                // 当第二次进入前台的时候 ，这里就是true ，就走进来了。
+                StatusBar.setBarStyle('default', true);
+            }
+            this.setState({ appActiveStatusFlag: false});
+        }else if(nextAppState != null && nextAppState === 'background'){
+          this.setState({ appActiveStatusFlag: true});
+        }
+     
+      }
+    
 
     componentWillUnmount() {
         LVNotificationCenter.removeObservers(this);
+        AppState.removeEventListener('change', this._handleAppStateChange);
     }
 
    async  onAddressChanged(address: string) {
@@ -277,7 +301,7 @@ class TransferScreen extends Component<Props, State> {
     componentWillMount() {
         StatusBar.setBarStyle('default', true);
     }
-
+    
     refreshWalletDatas = async (needUpdateBalance: boolean = true) => {
         if (needUpdateBalance) {
             await LVWalletManager.updateSelectedWalletBalance();
@@ -293,6 +317,8 @@ class TransferScreen extends Component<Props, State> {
     }
 
     async onTransferPresse() {
+        Keyboard.dismiss();
+
         const { wallet, addressIn, amount, curLVTC, curETH, amountText, token} = this.state;
         
         TransferUtils.log("trueValue = " + this.refs.gapSetter.getValue()
@@ -334,20 +360,27 @@ class TransferScreen extends Component<Props, State> {
             return;
         }
 
-        let isInsufficient = "LVTC" === token.toUpperCase() ? (curLVTC.lt(amount)) : (curETH.lt(amount));
+        let currentBalance =  wallet.getBalance(token);
+        let isInsufficient =  currentBalance.lt(amount);
+
         if (wallet && curETH.lt(this.refs.gapSetter.getValue())) {
             this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
             this.refs.insufficientDialog.show();
             return;
+        }else if (token.toUpperCase() === 'ETH' && wallet && curETH.lt(this.refs.gapSetter.getValue() + Number(amountText))){
+            this.setState({balanceTip:LVStrings.transfer_eth_insufficient});
+            this.refs.insufficientDialog.show();
+            return;
         } else if (isInsufficient) {
-            this.setState({balanceTip: "LVTC" === token.toUpperCase() ? 
-            LVStrings.transfer_lvt_insufficient : LVStrings.transfer_eth_insufficient});
+            this.setState({balanceTip: LVStrings.transfer_amount_insufficient });
             this.refs.insufficientDialog.show();
             return;
         }
 
         if (this.refs.gapSetter.getValue() === 0) {
-            this.setState({alertMessage:LVStrings.transfer_miner_gap_not_access });
+            this.setState({
+                alertMessage:this.refs.gapSetter.getAdvancedSwitchedValue() ? LVStrings.transfer_advanced_gasprice_failed :LVStrings.transfer_miner_gap_not_access 
+            });
             this.refs.alert.show();
             return;
         }
@@ -359,6 +392,11 @@ class TransferScreen extends Component<Props, State> {
             this.refs.alert.show();
             return;
         }
+        
+        if (this.refs.gapSetter.getAdvancedSwitchedValue() && this.refs.gapSetter.getAdvancedFailValue()) {
+            return;
+        }
+
         this.refs.inputPwdDialog.show();
     }
 
@@ -391,8 +429,13 @@ class TransferScreen extends Component<Props, State> {
         }
         setTimeout(async ()=> {
             let gasPrice = TransferUtils.getSetGasPriceHexStr(this.refs.gapSetter.getValue(), transactionParams.gasLimit);
+            let gasLimit =  transactionParams.gasLimit;
+            if (this.refs.gapSetter.getAdvancedSwitchedValue()) {
+                gasPrice = '0x' + this.refs.gapSetter.getGasPriceValue().toString(16); //转化成16进制
+                gasLimit = '0x'+  this.refs.gapSetter.getGasValue().toString(16);
+            }
             let rst = await TransferLogic.transaction(addressIn, password, amount, transactionParams.nonce,
-                transactionParams.gasLimit, gasPrice, transactionParams.token, transactionParams.chainID, wallet, token);
+                gasLimit, gasPrice, transactionParams.token, transactionParams.chainID, wallet, token);
             let success = rst && rst.result;
             if (success) {  
                 LVNotificationCenter.postNotification(LVNotification.transcationCreated, {
@@ -445,12 +488,16 @@ class TransferScreen extends Component<Props, State> {
         }
     }
 
+    onMinerTipsPress = ()=>{
+        this.props.navigation.navigate("TransferMinerTips");
+    }
+
     num = 0;
 
     render() {
         const {transactionParams} = this.state;
         return (
-            <View style={{flexDirection: 'column', flex: 1, justifyContent: 'space-between'}}>
+            <View style={{flexDirection: 'column', flex: 1, justifyContent: 'space-between',backgroundColor:LVColor.white}}>
                 {this.state.showModal && <TransferDetailModal
                     ref={'detailModal'}
                     isOpen= {this.state.showModal}
@@ -464,6 +511,17 @@ class TransferScreen extends Component<Props, State> {
                         this.refs.detailModal.dismiss();
                         this.onTransfer() }}
                 />}
+
+                    <MXNavigatorHeader
+                        style={{ backgroundColor: LVColor.white }}
+                        title={LVStrings.transfer}
+                        titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
+                        onLeftPress={() => {
+                            Keyboard.dismiss();
+                            this.props.navigation.goBack();
+                        }}
+                        />
+                <KeyboardAwareScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
                 <TouchableOpacity  style={ styles.container } activeOpacity={1} onPress={Keyboard.dismiss} >
                     <LVQrScanModal
                         barcodeReceived={(data)=>{
@@ -480,15 +538,6 @@ class TransferScreen extends Component<Props, State> {
                             }}
                         isOpen= {this.state.showQrScanModal}
                         onClosed = {()=>{this.setState({ showQrScanModal: false })}}/>
-
-                    <MXNavigatorHeader
-                        style={{ backgroundColor: LVColor.white }}
-                        title={LVStrings.transfer}
-                        titleStyle={{color: LVColor.text.grey2, fontSize: LVSize.large}}
-                        onLeftPress={() => {
-                            this.props.navigation.goBack();
-                        }}
-                        />
                     <View style= { styles.headerBelow }>
                         <MXCrossTextInput 
                             ref={'refAddressIn'}
@@ -522,21 +571,11 @@ class TransferScreen extends Component<Props, State> {
                                 enable={this.state.transactionParams !== null}
                                 minimumValue={this.state.minGap}
                                 maximumValue={this.state.maxGap}
-                                // defaultValue={this.state.minGap * 0.1}
-                                // defaultValue={this.state.maxGap * 1.1}
+                                curETH={this.state.curETH.toFixed()}
+                                minerTipsCallBack = {this.onMinerTipsPress.bind(this)}
                                 defaultValue={transactionParams !== null?
                                 TransferUtils.convertHex2Eth(transactionParams.gasPrice, transactionParams.gasLimit) : 0}
                                 style = {styles.setter}/>
-                        <View style= { styles.curEth }>
-                            <Text style = {styles.text}>{LVStrings.transfer_current_eth}</Text>
-                            <LVBalanceShowView
-                                title={LVStrings.total_eth}
-                                unit={"ETH"}
-                                balance={this.state.curETH}
-                                textStyle={styles.textCurEth}
-                                showSeparator={true}
-                            />
-                        </View>   
                         <Text style = {styles.textHint}>{LVStrings.transfer_hint}</Text>
                         <View style = {styles.btnContainer}>
                             <MXButton 
@@ -566,11 +605,11 @@ class TransferScreen extends Component<Props, State> {
                         ref={'insufficientDialog'}
                         title={LVStrings.alert_hint}  
                         dismissAfterConfirm = {true}
-                        onConfirm={()=>{this.props.navigation.navigate("ReceiveTip")}} >
+                        onConfirm={()=>{this.props.navigation.navigate("Receive")}} >
                         <Text style={{color: '#697585',fontSize: 16, padding: 4 , textAlign : 'center'}}>{this.state.balanceTip}</Text>
                     </LVConfirmDialog>
-
                 </TouchableOpacity>
+                </KeyboardAwareScrollView>
             </View>
         )
     }
@@ -579,7 +618,6 @@ class TransferScreen extends Component<Props, State> {
 const pixelRatio = PixelRatio.get();
 const styles = StyleSheet.create({
     container: {
-        height: MXUtils.getDeviceHeight(),
         backgroundColor: 'white',
     },
     textInput: {
@@ -614,15 +652,14 @@ const styles = StyleSheet.create({
     textHint: {
         fontSize: 12,
         color: LVColor.text.grey1,
-        marginTop: 10,
-        marginBottom: 15 * pixelRatio,
+        marginTop: 20,
     },
     btnContainer: {
-        flex: 1,
+        marginTop: 15,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingBottom: 20* pixelRatio,
+        marginBottom: 20,
     },
     btn: {
         alignSelf: 'center',

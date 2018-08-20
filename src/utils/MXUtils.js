@@ -37,11 +37,11 @@ export const checkEqualPwd = (pwd: string, rePwd: string) => {
   return pwd && rePwd && pwd !== null && rePwd !== null && pwd.trim() === rePwd.trim();
 };
 
-export const isEmptyString = (str: string) => {
+export const isEmptyString = (str: ?string) => {
   return (str === null || str === undefined || str === '');
 }
 
-export const isNotEmptyString = (str: string) => {
+export const isNotEmptyString = (str: ?string) => {
   return (str !== null && str !== undefined && str !== '');
 }
 
@@ -126,6 +126,16 @@ export async function backupWallet(wallet: Object, password: string) {
       WalletUtils.log(JSON.stringify(r));
   }
 };
+
+var processing_navigate = false;
+export function isNavigating() {
+  if (processing_navigate) { 
+    return true; 
+  }
+  processing_navigate = true;
+  setTimeout(() => { processing_navigate = false; }, 600);
+  return false;
+}
 // const PORTRAIT = 'PORTRAIT';
 // const LANDSCAPE = 'LANDSCAPE';
 //

@@ -24,7 +24,7 @@ if (Platform.OS === 'ios') {
 }
 
 const API = {
-    GET_TOKEN_LIST: HOST + '/wallet/token/list',
+    GET_TOKEN_LIST: HOST + '/wallet/token/list/v2',
     GET_BALANCE: HOST + '/wallet/balance',
     GET_BALANCES: HOST + '/wallet/balances',
     GET_MARKET: HOST + '/wallet/market',

@@ -3,4 +3,6 @@
 
 
     <string name="app_name">LivesOne</string>
+    <string name="auth_touchid_not_match">TouchID mismatch</string>
+    <string name="auth_touchid_match">verify success</string>
 </resources>

@@ -49,14 +49,13 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
 
     componentDidMount() {
         StatusBar.setBarStyle('default', true);
-        LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
         if (Platform.OS === 'android') {
             BackHandler.addEventListener("hardwareBackPress", this.handleBack.bind(this));
         }
     }
 
     handleBack = () => {
-        LVNotificationCenter.postNotification(LVNotification.walletsNumberChanged);
+        LVNotificationCenter.postNotification(LVNotification.walletCreateSuccessPageDismiss);
     };
 
     onVerifyResult(success: boolean, password: string) {
@@ -98,11 +97,7 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
     }
 
     goBack() {
-        if (this.props.screenProps.dismiss) {
-            this.props.screenProps.dismiss();
-        } else {
-            this.props.navigation.goBack();
-        }
+        LVNotificationCenter.postNotification(LVNotification.walletCreateSuccessPageDismiss);
     }
 
     async verifyPassword(inputPwd: string) {
@@ -119,13 +114,7 @@ export default class WalletCreateSuccessPage extends Component<Props,State> {
             <View style={styles.container}>
                 <MXNavigatorHeader
                     title={LVStrings.wallet_create_wallet}
-                    onLeftPress={() => {
-                        if (this.props.screenProps.dismiss) {
-                            this.props.screenProps.dismiss();
-                        } else {
-                            this.props.navigation.goBack();
-                        }
-                    }}
+                    onLeftPress={this.goBack.bind(this)}
                 />
                 <View style={styles.contentContainer}>
                     <Image source={createSuccessImage} style={styles.image} />

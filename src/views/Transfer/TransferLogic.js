@@ -15,7 +15,7 @@ export default class TransferLogic {
     static async fetchTransactionParam(from: string, to: string, value: Object, token: string) {
         let f = TransferUtils.convertToHexHeader(from);
         let t = TransferUtils.convertToHexHeader(to);
-        let v = TransferUtils.convert2BNHex(value);
+        let v = TransferUtils.convert2BNHex(value, token);
         TransferUtils.log('tryFetchParams request = ' + JSON.stringify({from: f, to: t, value: v, token: token}));
         return await LVNetworking.fetchTransactionParam(f, t, v, token);
     }
@@ -29,7 +29,7 @@ export default class TransferLogic {
             nonce: string, gasLimit: string, gasPrice: string, token: string, chainId: string, wallet: Object, type: string) {
         let to = TransferUtils.convertToHexHeader(toAddress);
         let from = TransferUtils.convertToHexHeader(wallet.address);
-        let v = TransferUtils.convert2BNHex(value);
+        let v = TransferUtils.convert2BNHex(value, type);
         return new Promise((resolve, reject) => {
             let params = {from: from, to: to, value: v, nonce: nonce, gasLimit: gasLimit, gasPrice: gasPrice, lvtc: wallet.lvtc, eth: wallet.eth};
             TransferUtils.log('transfer params = '+ JSON.stringify(params));

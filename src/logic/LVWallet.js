@@ -21,8 +21,10 @@ class LVWallet {
     name: string;
     address: string;
     keystore: Object;
+    
     balance_list: Array<LVBalance>;
     holding_list: Array<LVBalance>; // withholding balacne list
+    available_tokens: Array<string>;
 
     static ETH_TOKEN = 'eth';
     static LVTC_TOKEN = 'LVTC';
@@ -33,9 +35,27 @@ class LVWallet {
         this.keystore = keystore;
         this.balance_list = [];
         this.holding_list = [];
+        this.available_tokens = [LVWallet.ETH_TOKEN, LVWallet.LVTC_TOKEN];
 
         this.lvtc = 0;
         this.eth = 0;
+    }
+
+    isAvailable(token: string): boolean {
+        return this.available_tokens.includes(token);
+    }
+
+    addAvailableToken(token: string) {
+        if (!this.isAvailable(token)) {
+            this.available_tokens.push(token);
+        }
+    }
+
+    removeAvailableToken(token: string) {
+        const index = this.available_tokens.indexOf(token);
+        if (index >= 0) {
+            this.available_tokens.splice(index, 1);
+        }
     }
 
     get lvtc(): Big {

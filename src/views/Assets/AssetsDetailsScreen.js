@@ -14,6 +14,7 @@ import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVUtils from '../../utils';
 import LVStrings from '../../assets/localization';
+import LVDialog, { LVConfirmDialog } from '../Common/LVDialog';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
 import LVWalletBalanceHeader from '../Common/LVWalletBalanceHeader';
 import LVConfiguration from '../../logic/LVConfiguration';
@@ -62,6 +63,7 @@ class AssetsDetailsScreen extends Component<Props, State> {
         this.onReceiverButtonPressed = this.onReceiverButtonPressed.bind(this);
         this.onTransferButtonPressed = this.onTransferButtonPressed.bind(this);
         this.handleBackPress = this.handleBackPress.bind(this);
+        this.navigateToTransferScreen = this.navigateToTransferScreen.bind(this);
     }
 
     componentWillMount() {
@@ -132,9 +134,6 @@ class AssetsDetailsScreen extends Component<Props, State> {
             const records = LVTransactionRecordManager.records.filter(r => r.token === this.state.token);
             const waitings = records.filter(r => r.state === 'waiting');
 
-            console.log('record: ' + cached_records.length + ' -> ' + records.length);
-            console.log('waitings: ' + cached_waitings.length + ' -> ' + waitings.length);
-
             if (records.length > cached_records.length || waitings.length < cached_waitings.length) {
                 await LVWalletManager.updateSelectedWalletBalance();
                 const wallet = LVWalletManager.getSelectedWallet();
@@ -153,10 +152,26 @@ class AssetsDetailsScreen extends Component<Props, State> {
     }
 
     onReceiverButtonPressed = () => {
+        if (LVUtils.isNavigating()) {
+            return;
+        }
         this.props.navigation.navigate('Receive');
     };
 
     onTransferButtonPressed = () => {
+        if (LVUtils.isNavigating()) {
+            return;
+        }
+
+        const isFound = LVTransactionRecordManager.records.findIndex(r => r.state === 'waiting') != -1;
+        if (isFound) {
+            this.refs.alert.show();
+        } else {
+            this.navigateToTransferScreen();
+        }
+    };
+
+    navigateToTransferScreen = () => {
         const { token } = this.props.navigation.state.params;
         this.props.navigation.navigate('Transfer', { token: token, from: 'assets' });
     };
@@ -164,7 +179,7 @@ class AssetsDetailsScreen extends Component<Props, State> {
     handleBackPress = () => {
         const { params } = this.props.navigation.state;
         if (params.keyTransfer !== null && params.keyTransfer !== undefined) {
-            console.log("key = " + params.keyTransfer)
+            console.log('key = ' + params.keyTransfer);
             this.props.navigation.goBack(params.keyTransfer);
             return true;
         } else {
@@ -178,7 +193,9 @@ class AssetsDetailsScreen extends Component<Props, State> {
         const { token, wallet, records, startDate, endDate } = this.state;
 
         const startTimestamp = Moment(startDate, 'YYYY-MM-DD').format('X');
-        const endTimestamp = Moment(endDate, 'YYYY-MM-DD').add(1, 'days').format('X');
+        const endTimestamp = Moment(endDate, 'YYYY-MM-DD')
+            .add(1, 'days')
+            .format('X');
 
         const filteredRecords = records.filter(r => r.timestamp >= startTimestamp && r.timestamp <= endTimestamp);
 
@@ -237,6 +254,20 @@ class AssetsDetailsScreen extends Component<Props, State> {
                         </TouchableOpacity>
                     </View>
                 </View>
+
+                <LVConfirmDialog
+                    ref={'alert'}
+                    title={LVStrings.alert_warning}
+                    confirmTitle={LVStrings.common_continue}
+                    cancelTitle={LVStrings.common_cancel}
+                    onConfirm={() => {
+                        setTimeout(() => {
+                            this.navigateToTransferScreen();
+                        }, 300);
+                    }}
+                >
+                    <Text style={styles.alertMessage}>{LVStrings.alert_has_unfinished_transaction}</Text>
+                </LVConfirmDialog>
             </View>
         );
     }
@@ -339,6 +370,14 @@ const styles = StyleSheet.create({
     bottomButtonText: {
         color: '#657182',
         fontSize: 15
+    },
+    alertMessage: {
+        paddingLeft: 25,
+        paddingRight: 25,
+        lineHeight: 20,
+        fontSize: 16,
+        textAlign: 'center',
+        color: '#697585'
     }
 });
 

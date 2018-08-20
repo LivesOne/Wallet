@@ -49,6 +49,9 @@ export default class WalletCreatePage extends Component<Props,State> {
     };
 
     createWallet : Function;
+    onValidateWalletName: Function;
+    onValidatePassword: Function;
+    onValidateConfirmPassword: Function;
 
     constructor() {
         super();
@@ -60,6 +63,10 @@ export default class WalletCreatePage extends Component<Props,State> {
             alertMessage: '',
             fromScreen: null
         };
+
+        this.onValidateWalletName = this.onValidateWalletName.bind(this);
+        this.onValidatePassword = this.onValidatePassword.bind(this);
+        this.onValidateConfirmPassword = this.onValidateConfirmPassword.bind(this);
     }
 
     componentDidMount() {
@@ -67,67 +74,63 @@ export default class WalletCreatePage extends Component<Props,State> {
         if (navigation && navigation.state && navigation.state.params) {
             this.setState({ fromScreen: navigation.state.params.from });
         }
-        this.refs.wallet_creation_alert.show();
+    }
+
+    onValidateWalletName(): ?string {
+        if(!this.state.name) {
+            return LVStrings.wallet_create_name_required;
+        }
+    
+        if (WalletUtils.getLength(this.state.name) > 40) {
+            return LVStrings.wallet_name_exceeds_limit;
+        }
+
+        if (!WalletUtils.isNameValid(this.state.name)) {
+            return LVStrings.wallet_name_invalid;
+        } 
+
+        if(!LVWalletManager.isWalletNameAvailable(this.state.name)) {
+            return LVStrings.wallet_create_name_unavailable;
+        }
+        
+        return null;
+    }
+
+    onValidatePassword() : ?string {
+        if(!this.state.password) {
+            return LVStrings.wallet_create_password_required;
+        }
+        if(!WalletUtils.isPasswordValid(this.state.password)) {
+            return LVStrings.wallet_import_invalid_password_warning;
+        }  
+        return null;
+    }
+
+    onValidateConfirmPassword(): ?string {
+        if(!this.state.confirmPassword) {
+            return LVStrings.wallet_create_confimpassword_required;
+        }
+
+        if(this.state.password !== this.state.confirmPassword) {
+            return LVStrings.wallet_create_password_mismatch;
+        }
+        return null;
     }
 
     async createWallet() {
         Keyboard.dismiss();
-        
-        if(!this.state.name) {
-            this.setState({alertMessage:LVStrings.wallet_create_name_required });
-            this.refs.alert.show();
+        if(!this.refs.walletNameTextInput.validate() 
+            || !this.refs.passwordInput.validate()
+            || !this.refs.confirmPasswordInput.validate()) {
             return;
         }
-
-        if (WalletUtils.getLength(this.state.name) > 40) {
-            this.setState({alertMessage:LVStrings.wallet_name_exceeds_limit });
-            this.refs.alert.show();
-            return;
-        }
-
-        if (!WalletUtils.isNameValid(this.state.name)) {
-            this.setState({alertMessage:LVStrings.wallet_name_invalid });
-            this.refs.alert.show();
-            return;
-        } 
-
-        if(!LVWalletManager.isWalletNameAvailable(this.state.name)) {
-            this.setState({alertMessage:LVStrings.wallet_create_name_unavailable });
-            this.refs.alert.show();
-            return;
-        }
-
-        if(!this.state.password) {
-            this.setState({alertMessage:LVStrings.wallet_create_password_required });
-            this.refs.alert.show();
-            return;
-        }
-
-        if(!WalletUtils.isPasswordValid(this.state.password)) {
-            this.setState({alertMessage:LVStrings.wallet_import_invalid_password_warning });
-            this.refs.alert.show();
-            return;
-        }    
-
-        if(!this.state.confirmPassword) {
-            this.setState({alertMessage:LVStrings.wallet_create_confimpassword_required });
-            this.refs.alert.show();
-            return;
-        }
-
-        if(this.state.password !== this.state.confirmPassword) {
-            this.setState({alertMessage:LVStrings.wallet_create_password_mismatch });
-            this.refs.alert.show();
-            return;
-        }
-
-        this.refs.toast.show();
       
+        this.refs.toast.show();
         setTimeout(async ()=> {
             const wallet = await LVWalletManager.createWallet(this.state.name, this.state.password);
             console.log(wallet);
             LVWalletManager.addWallet(wallet);
-            LVWalletManager.saveToDisk();
+            await LVWalletManager.saveToDisk();
             this.refs.toast.dismiss();
 
             LVNotificationCenter.postNotification(LVNotification.walletChanged);
@@ -158,31 +161,37 @@ export default class WalletCreatePage extends Component<Props,State> {
                     <LVKeyboardDismissView style={styles.content}>
                         <View style={styles.textInputContainer}>
                             <MXCrossTextInput
+                                ref={'walletNameTextInput'}
                                 style={styles.crossInputStyle}
                                 placeholder={LVStrings.wallet_name_hint}
                                 titleText={LVStrings.wallet_create_name}
                                 textAlignCenter={true}
                                 withUnderLine={false}
+                                onValidation={()=> this.onValidateWalletName()}
                                 onTextChanged={(text) => this.setState({ name: text.trim() })} />
                             <MXCrossTextInput
+                                ref={'passwordInput'}
                                 style={styles.crossInputStyle}
                                 placeholder={LVStrings.wallet_create_password}
                                 titleText={LVStrings.wallet_create_password_label}
                                 textAlignCenter={true}
                                 secureTextEntry
                                 withUnderLine={false}
+                                onValidation={()=>this.onValidatePassword()}
                                 onTextChanged={(text) => this.setState({ password: text })} />
                             <MXCrossTextInput
+                                ref={'confirmPasswordInput'}
                                 style={styles.crossInputStyle}
                                 placeholder={LVStrings.wallet_create_password_verify}
                                 titleText={LVStrings.wallet_create_confirm_password_label}
                                 textAlignCenter={true}
                                 secureTextEntry
+                                onValidation={()=> this.onValidateConfirmPassword()}
                                 withUnderLine={true}
                                 onTextChanged={(text) => this.setState({ confirmPassword: text })} />
                         </View>
                         <View style={styles.bottomContainer}>
-                            <Text style={styles.descriptionTextStyle}>{LVStrings.wallet_create_explaination}</Text>
+                            <Text style={styles.descriptionTextStyle}>{LVStrings.wallet_create_hint_message}</Text>
                             <MXButton
                                 rounded
                                 title={LVStrings.wallet_create}
@@ -196,13 +205,6 @@ export default class WalletCreatePage extends Component<Props,State> {
                     </LVKeyboardDismissView>
                 </KeyboardAwareScrollView>
                 <LVLoadingToast ref={'toast'} title={LVStrings.wallet_creating_wallet} />
-                <LVDialog ref={'alert'} title={LVStrings.alert_hint} height={225} message={this.state.alertMessage || ''} buttonTitle={LVStrings.alert_ok} />
-                <LVDialog ref={'wallet_creation_alert'}
-                    message={LVStrings.wallet_create_hint_message}
-                    buttonTitle={LVStrings.alert_ok}
-                    messageStyle={{ color: LVColor.text.yellow, marginBottom: 13 }}
-                    width={280}
-                    height={210} />
             </View>
              
         )
@@ -247,7 +249,8 @@ const styles = LVStyleSheet.create({
         marginTop: 15
     },
     bottomContainer: {
-        flexDirection: 'column'
+        flexDirection: 'column',
+        marginTop: 5
     },
     descriptionTextStyle: {
         fontSize: LVFontSize.xsmall,

@@ -110,7 +110,7 @@ type ConfirmDialogProps = Props & {
     cancelTitleStyle?: Text.propTypes.style,
     onConfirm: Function,
     onCancel?: Function,
-    dismissAfterConfirm: boolean,
+    dismissAfterConfirm?: boolean,
     disableConfirm: boolean,
     disableCancel: boolean
 };
@@ -118,9 +118,9 @@ type ConfirmDialogProps = Props & {
 export class LVConfirmDialog extends React.Component<ConfirmDialogProps> {
 
     static defaultProps = {
-        confirmTitle: LVStrings.common_confirm,
-        cancelTitle: LVStrings.common_cancel,
-        dismissAfterConfirm: false,
+        confirmTitle: '',
+        cancelTitle: '',
+        dismissAfterConfirm: true,
         disableConfirm: false,
         disableCancel: false,
         tapToClose: false,
@@ -182,7 +182,13 @@ export class LVConfirmDialog extends React.Component<ConfirmDialogProps> {
         const lineWidth = StyleSheet.hairlineWidth;
         const lineColor = "#F5F6FA";
 
-        const { confirmTitle, cancelTitle } = this.props;
+        let { confirmTitle, cancelTitle } = this.props;
+        if(confirmTitle === ''){
+            confirmTitle = LVStrings.common_confirm;   
+        };
+        if(cancelTitle === ''){
+            cancelTitle = LVStrings.common_cancel;
+        };
         const childrenHeight = this.props.children ? ( this.props.children.props.height || 64) : 0;
         const modalWidth = { width: this.props.width || '90%' };
         const modalHeight = {

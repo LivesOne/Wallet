@@ -2,7 +2,7 @@
 'use strict'
 
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Platform, ViewPropTypes} from 'react-native';
+import { Text, View, StyleSheet, Platform, ViewPropTypes,TouchableOpacity,Image} from 'react-native';
 import Slider from "react-native-slider";
 
 import PropTypes from 'prop-types';
@@ -11,38 +11,49 @@ import LVSize from '../../styles/LVFontSize';
 import LVStrings from '../../assets/localization';
 import * as MXUtils from '../../utils/MXUtils'
 import TransferUtils from './TransferUtils';
+import MXSwitch from '../../components/MXSwitch/index'
+import MXCrossTextInput from '../../components/MXCrossTextInput';
+
+
 var DeviceInfo = require('react-native-device-info');
+
+const FeeImage = require('../../assets/images/transfer_fee_tip.png');
 
 type Props = {
     enable: bool,
     minimumValue: number,
     maximumValue: number,
     defaultValue: number,
-    style: ViewPropTypes.style
+    curETH: string,
+    style: ViewPropTypes.style,
+    minerTipsCallBack?:Function,
 };
 
 type State = {
     value: number,
-    userHasChanged: boolean
+    userHasChanged: boolean,
+    advancedSwitchedValue:bool,
+    gasValue:string,
+    gasPriceValue:string,
+    isAdvancedValueFail:bool,
+    isShowFeeFailMessage:bool,
 };
 
 export class TransferMinerGapSetter extends Component<Props, State> {
-    static propTypes = {
-        enable: PropTypes.bool,
-        minimumValue: PropTypes.number,
-        maximumValue: PropTypes.number,
-        defaultValue: PropTypes.number,
-    }; 
-
     _beginEnable: false;
-
     constructor(props: any) {
         super(props);
         this.state = {
             value: this.getInitValue(), 
-            userHasChanged: false
+            userHasChanged: false,
+            advancedSwitchedValue: false,
+            gasValue:'',
+            gasPriceValue:'',
+            isShowFeeFailMessage:false,
+            isAdvancedValueFail:true
         }
         TransferUtils.log('default value = ' + this.getInitValue());
+        this.showFeeFailMessag = this.showFeeFailMessag.bind(this);
     }
 
     getInitValue() {
@@ -55,9 +66,26 @@ export class TransferMinerGapSetter extends Component<Props, State> {
         }
     }
 
+    getGasValue = ()=>{
+        return this.state.gasValue;
+    }
+
+    getGasPriceValue = ()=>{
+        return this.state.gasPriceValue;
+    }
+
+    getAdvancedSwitchedValue = ()=>{
+        return this.state.advancedSwitchedValue;
+    }
+
+    getAdvancedFailValue = ()=>{
+        return this.state.isAdvancedValueFail;
+    }
+
     calculateValue() {
         if (this.props.enable) {
-            return TransferUtils.convertMinnerGap(this.getValue()) + ' ETH';
+            let gas = TransferUtils.convertMinnerGap(this.getValue());
+            return ((isNaN(gas)?'--':gas) + ' ETH');
             // return this.getValue() + ' ETH';
         } else {
             return '-- ETH'
@@ -65,18 +93,45 @@ export class TransferMinerGapSetter extends Component<Props, State> {
     }
 
     getValue() {
-        return this.state.userHasChanged ? this.state.value : this.props.defaultValue;
+        if (this.state.advancedSwitchedValue) {
+            let gasValue = parseInt(this.state.gasPriceValue) * parseInt(this.state.gasValue) / Math.pow(10, 9);
+            // 保留8位小数
+            return  Number(TransferUtils.convertMinnerGap(gasValue));
+        }
+        return this.state.userHasChanged ? this.state.value : this.getInitValue();
     }
 
     getUserHasChanged() {
-        return this.state.userHasChanged;
+        if (this.state.advancedSwitchedValue) {
+            const flag = true;
+            return flag.toString();
+        }
+        return this.state.userHasChanged.toString();
     }
 
     onValueChange(value: number) {
-
         this.setState({
             value: value,
-            userHasChanged : true
+            userHasChanged : true,
+        });
+        setTimeout(() => {
+            this.showFeeFailMessag(value);
+        }, 100);
+    }
+
+    showFeeFailMessag = (value :number) =>{
+        if (isNaN(value)) {
+            this.setState({
+                isShowFeeFailMessage:false,
+            });
+            return;
+        }
+        var flag = false;
+        if (value < this.props.defaultValue) {
+            flag = true;
+        }
+        this.setState({
+            isShowFeeFailMessage:flag,
         });
     }
 
@@ -134,16 +189,132 @@ export class TransferMinerGapSetter extends Component<Props, State> {
         return false;
     }
 
+    clickFeeTip = () => {
+        if (this.props.minerTipsCallBack) {
+            this.props.minerTipsCallBack();
+        }
+    }
+
+    onAdvancedSwitched = (value:boolean) =>{
+        if (value) {
+            this.setState({
+                isShowFeeFailMessage:false,
+                gasValue:'',
+                gasPriceValue:'',
+            });
+        } else {
+            this.showFeeFailMessag(this.state.value);
+        }
+        this.setState({
+            advancedSwitchedValue:value
+        });
+    }
+
+    onGasValueChange = (value:string)=>{
+        this.setState({
+            gasValue:value.trim()
+        });
+        setTimeout(() => {
+            this.showFeeFailMessag(this.getValue());
+        }, 100);
+    }
+
+    onGasPriceValueChange = (value:string)=>{
+        this.setState({
+            gasPriceValue:value.trim()
+        });
+        setTimeout(() => {
+            this.showFeeFailMessag(this.getValue());
+        }, 100);
+    }
+
+    onValidateGasValue = (value:?string)=>{
+        if (!TransferUtils.isValidAmountStr(this.state.gasValue)) {
+            this.setState({
+                isAdvancedValueFail:true
+            });    
+            return LVStrings.transfer_gas_format_hint;
+        }
+        this.setState({
+            isAdvancedValueFail:false
+        });
+        setTimeout(() => {
+            this.showFeeFailMessag(this.getValue());
+        }, 100);
+        return null;
+    }
+
+
+
+    onValidateGasPriceValue = (value:?string)=>{
+        if (!TransferUtils.isValidAmountStr(this.state.gasPriceValue)) {
+            this.setState({
+                isAdvancedValueFail:true
+            });    
+            return LVStrings.transfer_gasprice_format_hint;
+        }
+        this.setState({
+            isAdvancedValueFail:false
+        });
+        if (parseInt(this.state.gasPriceValue) > 100) {
+            return LVStrings.transfer_advanced_gas_price_overLimit;
+        }
+        setTimeout(() => {
+            this.showFeeFailMessag(this.getValue());
+        }, 100);
+        return null;
+    }
+
     render() {
         const {maximumValue, minimumValue} = this.props;
         return (
         <View style={[styles.container, this.props.style]} >
             <View style={styles.topContainer}>
-                <Text style={[styles.title, {color: LVColor.text.grey2, fontWeight:'100',}]}>{ LVStrings.transfer_miner_tips }</Text>
+                <View style={{flexDirection: 'row',alignItems: 'center'}}>
+                    <Text style={[styles.title, {color: LVColor.text.grey2, fontWeight:'100',}]}>
+                        { LVStrings.transfer_miner_tips }
+                    </Text>
+                    <TouchableOpacity style = {{marginLeft: 10}} onPress = {this.clickFeeTip.bind(this)} activeOpacity = {0.8}>
+                        <Image source = {FeeImage}/>
+                    </TouchableOpacity>
+                </View>
                 <View style={[styles.tipsContainner, {borderColor:this.props.enable ? LVColor.primary: '#DDDDDD'}]}>
                     <Text style={[styles.tipsIndicator, {color: true ? LVColor.white : '#DDDDDD'}]}>{ this.calculateValue() }</Text>
                 </View>
             </View>
+            <View style={styles.topContainer}>
+                <Text style={[styles.title, {color: LVColor.text.grey2, fontWeight:'100',}]}>
+                    { LVStrings.transfer_current_eth }
+                </Text>
+                <Text style={[styles.title,{color: LVColor.text.editTextContent}]}>
+                    {this.props.curETH }
+                </Text>
+            </View>
+            <View style={styles.topContainer}>
+                <Text style={[styles.title, {color: LVColor.text.grey2, fontWeight:'100',}]}>
+                    { LVStrings.transfer_advanced }
+                </Text>
+                <MXSwitch onSwitched = {this.onAdvancedSwitched.bind(this)}/>
+            </View>
+            {this.state.advancedSwitchedValue?
+            <View style = {{justifyContent: "center",alignItems: 'center',marginTop:10,marginBottom:13}}>
+                <MXCrossTextInput
+                    style={{height:50,width:'100%'}}
+                    placeholder={LVStrings.transfer_advanced_gas}
+                    withUnderLine={true}
+                    keyboardType = {'numeric'}
+                    onValidation={this.onValidateGasValue.bind(this)}
+                    onTextChanged={this.onGasValueChange.bind(this)}/>
+                <MXCrossTextInput
+                    style={{height:50,width:'100%'}}
+                    placeholder={LVStrings.transfer_advanced_gas_price}
+                    withUnderLine={true}
+                    keyboardType = {'numeric'}
+                    onValidation={this.onValidateGasPriceValue.bind(this)}
+                    onTextChanged={this.onGasPriceValueChange.bind(this)}/>
+            </View>
+            :
+            <View style = {{backgroundColor: LVColor.white}}>
             <View style={styles.sliderContainer}>
                 <Text style={styles.text}>{ LVStrings.transfer_slow }</Text>
                 <View  style= {styles.sliderWrapper}>
@@ -159,9 +330,19 @@ export class TransferMinerGapSetter extends Component<Props, State> {
                         minimumTrackTintColor={LVColor.primary}
                     />
                 </View>
-                
                 <Text style={styles.text}>{ LVStrings.transfer_fast }</Text>
             </View>
+            </View>
+            }
+              {
+                this.state.isShowFeeFailMessage
+                &&
+                <View style = {{marginTop:10,justifyContent: 'center',alignItems: 'center'}}>
+                    <Text style= {{fontSize:12,color:LVColor.text.red}}>
+                    {LVStrings.transfer_minner_fee_fail}
+                    </Text>
+                </View>
+            }
         </View>
         )
     }
@@ -179,7 +360,6 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 15,
         color: LVColor.white,
-        marginBottom:5,
         fontWeight:'300',
     },
     tipsContainner: {
@@ -199,7 +379,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
         marginTop: 20,
-        marginBottom:20,
     },
     sliderWrapper: {
         width: '75%',

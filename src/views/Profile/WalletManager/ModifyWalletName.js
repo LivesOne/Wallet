@@ -35,6 +35,7 @@ export class ModifyWalletName extends React.Component<Props, State> {
     };
 
     onSavePressed: Function;
+    onValidateWalletName: Function;
 
     constructor() {
         super();
@@ -45,6 +46,7 @@ export class ModifyWalletName extends React.Component<Props, State> {
             alertMessage: ''
         }
         this.onSavePressed = this.onSavePressed.bind(this);
+        this.onValidateWalletName = this.onValidateWalletName.bind(this);
     }
 
     componentWillMount() {
@@ -66,6 +68,30 @@ export class ModifyWalletName extends React.Component<Props, State> {
         this.setState({name: newName})
     }
 
+    onValidateWalletName() {
+        const { name, wallet } = this.state;
+        if (!name) {
+            return LVStrings.wallet_edit_new_name_required ;
+        }
+
+        if (name === wallet.name) {
+            return LVStrings.wallet_edit_equal_to_old;
+        } 
+        
+        if (WalletUtils.getLength(name) > 40) {
+            return LVStrings.wallet_name_exceeds_limit;
+        }
+
+        if (!WalletUtils.isNameValid(name)) {
+            return LVStrings.wallet_name_invalid;
+        } 
+
+        if(!LVWalletManager.isWalletNameAvailable(name)) {
+            return LVStrings.wallet_create_name_unavailable;
+        }
+        return null;
+    }
+
     async onSavePressed() {
         Keyboard.dismiss();
         const {name, wallet} = this.state;
@@ -75,33 +101,8 @@ export class ModifyWalletName extends React.Component<Props, State> {
             this.refs.alert.show();
             return;
         }
-        if (!name) {
-            this.setState({alertMessage:LVStrings.wallet_edit_new_name_required });
-            this.refs.alert.show();
-            return;
-        }
 
-        if (name === wallet.name) {
-            this.setState({alertMessage:LVStrings.wallet_edit_equal_to_old });
-            this.refs.alert.show();
-            return;
-        } 
-
-        if (WalletUtils.getLength(name) > 40) {
-            this.setState({alertMessage:LVStrings.wallet_name_exceeds_limit });
-            this.refs.alert.show();
-            return;
-        }
-
-        if (!WalletUtils.isNameValid(name)) {
-            this.setState({alertMessage:LVStrings.wallet_name_invalid });
-            this.refs.alert.show();
-            return;
-        } 
-
-        if(!LVWalletManager.isWalletNameAvailable(name)) {
-            this.setState({alertMessage:LVStrings.wallet_create_name_unavailable });
-            this.refs.alert.show();
+        if(!this.refs.textinput.validate()) {
             return;
         }
         
@@ -139,6 +140,7 @@ export class ModifyWalletName extends React.Component<Props, State> {
                             style={styles.textInput}
                             placeholder= { LVStrings.wallet_name_hint }
                             onTextChanged={ this.onTextChanged.bind(this) }
+                            onValidation={ ()=> this.onValidateWalletName() }
                         />
                         <MXButton
                             rounded                

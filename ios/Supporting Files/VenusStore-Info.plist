@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1.0</string>
+	<string>1.1.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>58</string>
+	<string>166</string>
 	<key>CodePushDeploymentKey</key>
 	<string>$(CODEPUSH_KEY)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
@@ -58,11 +58,13 @@
 	<key>NSMotionUsageDescription</key>
 	<string>Will be used for motion service</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>It will be used to change profile pictures or save images</string>
+	<string>We need the album permission of LivesOne wallet to save the QR code</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Will be used when saving avatar or images</string>
+	<string>We need the album permission of LivesOne wallet to save the QR code</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Will be used for speech service</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Enabling Face ID allows you quick and secure access to your wallet</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>DIN Alternate Bold.ttf</string>

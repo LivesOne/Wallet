@@ -6,18 +6,19 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { AppState, StyleSheet, Dimensions, Platform, StatusBar, ListView, RefreshControl, View, Text } from 'react-native';
+import { AppState, StyleSheet, Dimensions, Platform, StatusBar, ListView, RefreshControl, View, Text , NativeModules} from 'react-native';
 import Toast from 'react-native-root-toast';
 import Moment from 'moment';
 import LVSize from '../../styles/LVFontSize';
 import LVColor from '../../styles/LVColor';
 import LVUtils from '../../utils';
 import LVStrings from '../../assets/localization';
-import LVDialog from '../Common/LVDialog';
+import LVDialog, { LVConfirmDialog } from '../Common/LVDialog';
 import LVWalletHeader from '../Common/LVWalletHeader';
 import LVSelectWalletModal from '../Common/LVSelectWalletModal';
 import LVTransactionRecordManager from '../../logic/LVTransactionRecordManager';
 import MXNavigatorHeader from '../../components/MXNavigatorHeader';
+import MXTouchableImage from '../../components/MXTouchableImage';
 import LVWallet from '../../logic/LVWallet';
 import LVWalletManager from '../../logic/LVWalletManager';
 import LVNetworking from '../../logic/LVNetworking';
@@ -28,8 +29,10 @@ import LVNotificationCenter from '../../logic/LVNotificationCenter';
 import AssetsBalanceList from './AssetsBalanceList';
 import TransactionRecordList from './TransactionRecordList';
 import TransactionDetailsScreen from './TransactionDetailsScreen';
+import LVConfiguration from '../../logic/LVConfiguration';
 
 const selectImg = require('../../assets/images/select_wallet.png');
+const addTokenImg = require('../../assets/images/assets_add_token.png');
 const LVLastAssetsRefreshTimeKey = '@Venus:LastAssetsRefreshTime';
 
 const isIOS = Platform.OS === 'ios';
@@ -40,6 +43,7 @@ type State = {
     wallet: ?LVWallet,
     openSelectWallet: boolean,
     refreshing: boolean,
+    authTypeString : string,
 };
 
 class AssetsScreen extends Component<Props, State> {
@@ -56,6 +60,7 @@ class AssetsScreen extends Component<Props, State> {
             wallet: wallet,
             openSelectWallet: false,
             refreshing: false,
+            authTypeString : LVStrings.auth_mine_use_password,
         };
         this.onPressSelectWallet = this.onPressSelectWallet.bind(this);
         this.onSelectWalletClosed = this.onSelectWalletClosed.bind(this);
@@ -74,6 +79,7 @@ class AssetsScreen extends Component<Props, State> {
         LVNotificationCenter.addObserver(this, LVNotification.balanceChanged, this.handleBalanceChange);
 
         this.refreshBalance();
+        this.initSetAuthDialog();
     }
 
     componentWillUnmount() {
@@ -109,23 +115,52 @@ class AssetsScreen extends Component<Props, State> {
 
     handleBalanceChange = () => {
         this.setState({ wallet: LVWalletManager.getSelectedWallet() });
+    };
+
+    handleStartAuth = () => {
+        LVConfiguration.setNeedAuthLogin(true);
     }
 
-    _processing_assets_detail_pressed = false;
-    onPressAssetsDetail = (token: string) => {
-        if (this._processing_showall_pressed) {
-            return;
-        }
-        this._processing_assets_detail_pressed = true;
+    onPressHeader = () => {
+        if (LVUtils.isNavigating()) { return }
+        this.props.navigation.navigate('Receive');
+    }
 
+    onPressAddTokenToAssets = () => {
+        if (LVUtils.isNavigating()) { return }
+        this.props.navigation.navigate('TokenList');
+    }
+
+    onPressAssetsDetail = (token: string) => {
         if (this.state.wallet) {
             this.props.navigation.navigate('AssetsDetails', { token: token });
         }
-
-        setTimeout(async () => {
-            this._processing_assets_detail_pressed = false;
-        }, 200);
     };
+
+    async initSetAuthDialog(){
+        let hasSet = await LVConfiguration.getHasSetAuth();
+        let authTypeString = "";
+        try {
+            const authSupportString = await NativeModules.LVReactExport.getAuthSupport();
+            const authSupport = JSON.parse(authSupportString);
+            if (authSupport.faceid === true) {
+                authTypeString = LVStrings.auth_use_face_id;
+            } else if (authSupport.touchid === true) {
+                authTypeString = LVStrings.auth_use_finger;
+            } else {
+                authTypeString = LVStrings.auth_mine_use_password;
+            }
+        } catch (error) {
+
+        }
+        this.setState({
+            authTypeString : authTypeString,
+        });
+        if(!hasSet){
+            this.refs.startAuthDialog.show();
+            LVConfiguration.setHasSetAuth(true);
+        }
+    }
 
     async refreshBalance() {
         this.setState({ refreshing: true });
@@ -162,6 +197,7 @@ class AssetsScreen extends Component<Props, State> {
 
     render() {
         const wallet = this.state.wallet || LVWallet.emptyWallet();
+        const authDialogTitle = LVStrings.auth_do_start_auth;
 
         return (
             <View style={styles.container}>
@@ -175,12 +211,25 @@ class AssetsScreen extends Component<Props, State> {
                         right={selectImg}
                         onRightPress={this.onPressSelectWallet}
                     />
-                    <LVWalletHeader name={wallet.name} address={wallet.address} />
+                    <LVWalletHeader name={wallet.name} address={wallet.address} onPress={this.onPressHeader.bind(this)} />
+                </View>
+
+                <View style={styles.listHeader}>
+                    <Text style={styles.listHeaderText}>{LVStrings.wallet_details}</Text>
+                    <MXTouchableImage style={styles.listHeaderIcon} source={addTokenImg} onPress={this.onPressAddTokenToAssets.bind(this)}/>
                 </View>
 
                 <AssetsBalanceList style={styles.list} wallet={wallet} refreshing={this.state.refreshing} onRefresh={this.refreshBalance.bind(this)} onPressItem={this.onPressAssetsDetail.bind(this)} />
 
                 <LVSelectWalletModal isOpen={this.state.openSelectWallet} onClosed={this.onSelectWalletClosed} />
+
+                <LVConfirmDialog 
+                    ref={'startAuthDialog'}
+                    title={authDialogTitle}  
+                    confirmTitle = {LVStrings.common_confirm}
+                    cancelTitle = {LVStrings.auth_dialog_cancel}
+                    onConfirm={()=> {this.handleStartAuth()}}
+                />
             </View>
         );
     }
@@ -204,10 +253,28 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: LVColor.primary
     },
+    listHeader: {
+        height: 50,
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: LVColor.background.assets
+    },
+    listHeaderText: {
+        marginLeft: 15,
+        fontFamily: 'SFProText-Medium',
+        fontSize: LVSize.small,
+        color: LVColor.text.grey2,
+    },
+    listHeaderIcon: {
+        width: 26,
+        height: 26,
+        marginRight: 15
+    },
     list: {
         flex: 1,
         width: '100%',
-        paddingTop: 15,
         backgroundColor: LVColor.background.assets
     }
 });
