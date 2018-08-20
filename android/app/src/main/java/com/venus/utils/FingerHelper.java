@@ -7,6 +7,8 @@ import android.support.v4.os.CancellationSignal;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.venus.R;
+
 /**
  * Created by hanli on 2018/7/16.
  */
@@ -57,7 +59,7 @@ public class FingerHelper {
     
     public void start(FingerprintManagerCompat.AuthenticationCallback callback){
         if(hasEnrolledFingerprints()){
-            Toast.makeText(mContext, "开始验证指纹", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, mContext.getString(R.string.auth_touchid_start), Toast.LENGTH_SHORT).show();
             mCancel = new CancellationSignal();
             if(callback == null){
                 callback = new FingerprintManagerCompat.AuthenticationCallback() {

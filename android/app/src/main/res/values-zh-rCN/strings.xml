@@ -3,6 +3,7 @@
 
     <string name="app_name">共生钱包</string>
 
+    <string name="auth_touchid_start">开始验证指纹</string>
     <string name="auth_touchid_not_match">指纹不匹配</string>
     <string name="auth_touchid_match">验证成功</string>
 </resources>
