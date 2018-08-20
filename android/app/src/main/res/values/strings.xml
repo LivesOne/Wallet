@@ -3,6 +3,6 @@
 
 
     <string name="app_name">LivesOne</string>
-    <string name="auth_touchid_not_match">指纹不匹配</string>
-    <string name="auth_touchid_match">验证成功</string>
+    <string name="auth_touchid_not_match">TouchID mismatch</string>
+    <string name="auth_touchid_match">verify success</string>
 </resources>
