@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
     passwordInput : {
         width : 240,
         height : 50,
-        backgroundColor : "#fff9f9fa",
+        backgroundColor : "#f9f9fa",
         marginTop : 25,
         fontSize : 14,
         textAlign : 'center',
