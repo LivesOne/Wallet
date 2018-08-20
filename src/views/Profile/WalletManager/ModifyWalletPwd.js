@@ -88,7 +88,7 @@ export class ModifyWalletPwd extends React.Component<Props, State> {
         if (!WalletUtils.isPasswordValid(newPwd)) {
             return LVStrings.wallet_import_invalid_password_warning;
         }
-        if (newPwd !== newConfirmPwd) {
+        if (newConfirmPwd && newPwd !== newConfirmPwd) {
             return LVStrings.wallet_create_password_mismatch;
         }
         this.refs.newPasswordInput.setErrorText(null);
