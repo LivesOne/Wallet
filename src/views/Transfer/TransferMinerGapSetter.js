@@ -150,6 +150,7 @@ export class TransferMinerGapSetter extends Component<Props, State> {
         }
 
         if (this.props.enable && nextProps.enable) {
+            this.setState({ isShowFeeFailMessage:false});
             if (this.props.defaultValue != nextProps.defaultValue) {
                 setTimeout(() => {
                     this.setState({
@@ -166,7 +167,8 @@ export class TransferMinerGapSetter extends Component<Props, State> {
         
         if (this.props.enable && !nextProps) {
             setTimeout(() => {
-                this.setState({value : 0, userHasChanged: false})
+                this.setState({value : 0, 
+                    userHasChanged: false})
                 TransferUtils.log("禁止 min = " + this.props.minimumValue + " max = " + this.props.maximumValue
             + " default = " + this.props.defaultValue 
             + " value = " + this.getValue()+ " userHasSet = " + this.getUserHasChanged());
