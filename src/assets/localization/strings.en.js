@@ -241,6 +241,7 @@ const localized_strings = {
     transfer_gas_format_hint: 'Gas should be a positive number',
     transfer_advanced_gas_price_overLimit: 'It is recommended to enter gwei within 100',
     transfer_gasprice_format_hint: 'Gas Price should be a positive number',
+    transfer_advanced_gas_fail: 'GAS is too low. Transfer may fail.',
 
     // MinnerFeeDetail
     minnerfeedetail_title: 'What is Miner Fee?',

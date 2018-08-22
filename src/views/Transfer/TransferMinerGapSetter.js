@@ -237,6 +237,15 @@ export class TransferMinerGapSetter extends Component<Props, State> {
             });    
             return LVStrings.transfer_gas_format_hint;
         }
+        if (!isNaN(this.state.gasValue) && this.state.gasValue != null) {
+            let result = this.state.gasValue;
+            console.log(result);
+            let isPositive = parseFloat(result) < this.props.minimumValue * Math.pow(10,9);
+            if (isPositive) {
+                return LVStrings.transfer_advanced_gas_fail;
+            } 
+        }
+
         this.setState({
             isAdvancedValueFail:false
         });

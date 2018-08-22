@@ -251,6 +251,7 @@ const localized_strings = {
     transfer_advanced_gas_price: '请输入gas price（单位：gwei）',
     transfer_advanced_gas_price_overLimit: '建议输入100以内的gwei',
     transfer_advanced_gas_data: '请输入data参数（可选）',
+    transfer_advanced_gas_fail: 'gas配置过低，可能转账失败',
     transfer_current_eth: '当前钱包ETH',
     transfer_hint: '执行交易后将扣除您当前钱包中的ETH, 交易打包后, 矿工费用将不予退还.',
     transfer_payment_details: '支付详情',
