@@ -14,6 +14,7 @@ import {
     Platform,
     Text,
     Image,
+    Alert,
     ScrollView,
     Clipboard,
     CameraRoll,
@@ -44,6 +45,8 @@ import Toast from 'react-native-root-toast';
 import TransferUtils from '../Transfer/TransferUtils';
 import LVConfiguration from '../../logic/LVConfiguration';
 import { LVConfirmDialog } from '../Common/LVDialog';
+
+import Permissions from 'react-native-permissions'
 
 
 // import QRCode from 'react-native-qrcode';
@@ -187,7 +190,34 @@ class ReceiveScreen extends Component {
     }
 
     
-    saveQrToDisk() {
+    saveQrToDisk = async () => {
+
+        let isAuthorized = true;
+
+        if (Platform.OS === 'ios') {
+            const response = await Permissions.request('photo');
+            // Response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+            if (response != 'authorized') {
+                isAuthorized = false;
+                Alert.alert(
+                    LVStrings.can_not_access_photos,
+                    LVStrings.please_set_photos_author,
+                    [
+                        {
+                            text: LVStrings.common_cancel,
+                            onPress: () => console.log('Permission denied'),
+                            style: 'cancel',
+                        },
+                        { text: LVStrings.common_open_ettings, onPress: Permissions.openSettings },
+                    ],
+                )
+            }
+        }
+
+        if (false === isAuthorized) {
+            return;
+        }
+        
         this.svg.toDataURL((data) => {
             RNFS.writeFile(RNFS.CachesDirectoryPath+"/some-name.png", data, 'base64')
               .then((success) => {

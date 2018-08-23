@@ -323,6 +323,9 @@ const localized_strings = {
     can_not_access_camera: '无法访问相机',
     please_set_camera_author: '请到系统的⌜隐私设置⌟中，允许 共生钱包 访问⌜相机⌟',
 
+    can_not_access_photos: '无法访问照片',
+    please_set_photos_author: '请到系统的⌜隐私设置⌟中，允许 共生钱包 访问⌜照片⌟',
+
 
     // Auth
     auth_wake_text : '点击唤醒验证',
