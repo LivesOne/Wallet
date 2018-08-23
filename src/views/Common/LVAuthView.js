@@ -184,7 +184,7 @@ export default class LVAuthView extends Component<Props> {
                 this.switchAuth();
                 if(Platform.OS === "ios"){
                     this.setState({
-                        bottomVisible : false,
+                        switchVisible : false,
                     });
                 }
             }else if(error.code === AUTH_ERROR_RETRY){
@@ -220,7 +220,7 @@ export default class LVAuthView extends Component<Props> {
 
     pass(){
         this.setState({
-            bottomVisible : true,
+            switchVisible : true,
         });
         this.props.needShowAuthChange && this.props.needShowAuthChange(false);
     }
