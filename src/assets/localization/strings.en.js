@@ -78,7 +78,7 @@ const localized_strings = {
     wallet_create_confirm_password_label: 'Confirm password',
     wallet_create_explaination:
         'Please set as complicated password as possible because it would be used to encrypt the address',
-    wallet_create_password: 'with least 6 characters includes special characters',
+    wallet_create_password: 'with least 6 characters',
     wallet_create_password_verify: 'Confirm password',
     wallet_create_comment: 'The password is used to encrypt the wallet address, please try to make it complex',
     wallet_create: 'Create',
