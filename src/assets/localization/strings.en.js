@@ -330,6 +330,9 @@ const localized_strings = {
     can_not_access_camera: 'Cannot access camera',
     please_set_camera_author: 'Please make sure Camera is turned on in Settings > LivesOne',
 
+    can_not_access_photos: 'Cannot access photos',
+    please_set_photos_author: 'Please make sure Photos is turned on in Settings > LivesOne',
+
     // Auth
     auth_wake_text : 'Click to verify',
     auth_verifing : 'Verifying...',
