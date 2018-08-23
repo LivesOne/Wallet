@@ -265,7 +265,7 @@ export default class LVAuthView extends Component<Props> {
             <View style={styles.container}>
                 <ScrollView 
                     contentContainerStyle = {styles.container}
-                keyboardShouldPersistTaps={'never'} showsVerticalScrollIndicator={false}>
+                keyboardShouldPersistTaps={'handled'} showsVerticalScrollIndicator={false}>
             
                     {Platform.OS === 'ios' && <StatusBar barStyle="dark-content"/>}
                     {authVisible && <TouchableOpacity style = {styles.authContainer}
