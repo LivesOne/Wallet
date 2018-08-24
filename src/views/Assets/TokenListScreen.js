@@ -64,7 +64,7 @@ export default class TokenListScreen extends Component<Props, State> {
             return;
         }
         Keyboard.dismiss();
-        this.props.navigation.navigate('WebView', { url: 'https://lives.one' });
+        this.props.navigation.navigate('WebView', { url: 'https://lives.one/forum/d/39279--' });
     };
 
     onSearchBarTextChanged = async (text: string) => {
