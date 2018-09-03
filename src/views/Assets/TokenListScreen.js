@@ -222,6 +222,7 @@ class LVTokenRecordItem extends React.Component<ItemProps> {
 
     render() {
         const { token, image, available, fullname } = this.props;
+        const tokenName = (token === 'USDT') ? 'USDT(ERC20)' : token.toUpperCase();
         const buttonIcon = available ? addTokenDisableIcon : addTokenIcon;
         const showButton = token != LVWallet.ETH_TOKEN && token != LVWallet.LVTC_TOKEN;
         return (
@@ -229,7 +230,7 @@ class LVTokenRecordItem extends React.Component<ItemProps> {
                 <TouchableOpacity style={styles.recordLeft} activeOpacity={1} onPress={this.onPressItem.bind(this)}>
                     <Image style={styles.icon} source={image} resizeMode="contain" />
                     <View style={styles.middle}>
-                        <Text style={styles.token}>{token.toUpperCase()}</Text>
+                        <Text style={styles.token}>{tokenName}</Text>
                         <Text style={styles.fullname}>{fullname}</Text>
                     </View>
                 </TouchableOpacity>
