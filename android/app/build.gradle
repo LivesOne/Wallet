@@ -98,8 +98,8 @@ android {
         applicationId "com.venus"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 3
-        versionName "1.1.0"
+        versionCode 4
+        versionName "1.0.4"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
