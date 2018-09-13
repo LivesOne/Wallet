@@ -8,5 +8,5 @@
 "CFBundleDisplayName" = "LivesOne";
 "CFBundleName" = "LivesOne";
 "NSCameraUsageDescription" = "LivesWallet needs to access to your camera. Allow this APP to use your camera?";
-"NSPhotoLibraryUsageDescription" = "LivesWallet needs to access to your camera. Allow this APP to use your camera?";
+"NSPhotoLibraryUsageDescription" = "LivesWallet needs to access to your photos. Allow this APP to use your photos?";
 "NSFaceIDUsageDescription" = "Enabling Face ID allows you quick and secure access to your wallet";

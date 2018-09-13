@@ -103,6 +103,7 @@ class LVWalletBalanceCard extends React.Component<BalanceCardProps> {
     render() {
         const { token, amount } = this.props;
         const tokenImage = LVTokens.icons.normal(token);
+        const tokenName = (token === 'USDT') ? 'USDT(ERC20)' : token.toUpperCase();
 
         var balanceString = StringUtils.convertAmountToCurrencyString(amount, ',', 4, true);
         if (balanceString.endsWith('.0000')) {
@@ -115,7 +116,7 @@ class LVWalletBalanceCard extends React.Component<BalanceCardProps> {
                 <TouchableOpacity style={styles.card} activeOpacity={0.6} onPress={this.props.onPressItem}>
                     <View style={styles.left}>
                         <Image style={styles.image} source={tokenImage} resizeMode="contain" />
-                        <Text style={styles.token}>{token.toUpperCase()}</Text>
+                        <Text style={styles.token}>{tokenName}</Text>
                     </View>
                     <Text style={styles.balance}>{balanceString}</Text>
                 </TouchableOpacity>

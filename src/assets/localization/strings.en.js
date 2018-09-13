@@ -78,7 +78,7 @@ const localized_strings = {
     wallet_create_confirm_password_label: 'Confirm password',
     wallet_create_explaination:
         'Please set as complicated password as possible because it would be used to encrypt the address',
-    wallet_create_password: 'with least 6 characters includes special characters',
+    wallet_create_password: 'with least 6 characters',
     wallet_create_password_verify: 'Confirm password',
     wallet_create_comment: 'The password is used to encrypt the wallet address, please try to make it complex',
     wallet_create: 'Create',
@@ -241,6 +241,7 @@ const localized_strings = {
     transfer_gas_format_hint: 'Gas should be a positive number',
     transfer_advanced_gas_price_overLimit: 'It is recommended to enter gwei within 100',
     transfer_gasprice_format_hint: 'Gas Price should be a positive number',
+    transfer_advanced_gas_fail: 'GAS is too low. Transfer may fail.',
 
     // MinnerFeeDetail
     minnerfeedetail_title: 'What is Miner Fee?',
@@ -328,6 +329,9 @@ const localized_strings = {
     // Permissions
     can_not_access_camera: 'Cannot access camera',
     please_set_camera_author: 'Please make sure Camera is turned on in Settings > LivesOne',
+
+    can_not_access_photos: 'Cannot access photos',
+    please_set_photos_author: 'Please make sure Photos is turned on in Settings > LivesOne',
 
     // Auth
     auth_wake_text : 'Click to verify',

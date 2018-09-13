@@ -9,6 +9,9 @@ import { NetInfo, Platform, NativeModules } from 'react-native';
 import LVStrings from '../assets/localization';
 import TransferUtils from '../views/Transfer/TransferUtils';
 
+
+const HOST_ONLINE_TEST = 'http://office.metellica.cn:33332';// 模拟线上的测试环境
+
 const HOST_TEST = 'http://office.metellica.cn:51515';
 const HOST_ONLINE = 'https://coreapi.lives.one';
 let HOST = HOST_ONLINE;

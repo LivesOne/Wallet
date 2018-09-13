@@ -37,6 +37,7 @@ type State = {
     gasPriceValue:string,
     isAdvancedValueFail:bool,
     isShowFeeFailMessage:bool,
+    feeFailMessageValue:string
 };
 
 export class TransferMinerGapSetter extends Component<Props, State> {
@@ -50,7 +51,8 @@ export class TransferMinerGapSetter extends Component<Props, State> {
             gasValue:'',
             gasPriceValue:'',
             isShowFeeFailMessage:false,
-            isAdvancedValueFail:true
+            isAdvancedValueFail:true,
+            feeFailMessageValue:''
         }
         TransferUtils.log('default value = ' + this.getInitValue());
         this.showFeeFailMessag = this.showFeeFailMessag.bind(this);
@@ -128,7 +130,21 @@ export class TransferMinerGapSetter extends Component<Props, State> {
         }
         var flag = false;
         if (value < this.props.defaultValue) {
+            this.setState({
+                feeFailMessageValue:LVStrings.transfer_minner_fee_fail
+            });
             flag = true;
+        }
+         if (!isNaN(this.state.gasValue) && this.state.gasValue != null) {
+            let result = this.state.gasValue;
+            console.log(result);
+            let isPositive = parseFloat(result) < this.props.minimumValue * Math.pow(10,9);
+            if (isPositive) {
+                this.setState({
+                feeFailMessageValue:LVStrings.transfer_advanced_gas_fail
+            })
+                flag = true;
+            } 
         }
         this.setState({
             isShowFeeFailMessage:flag,
@@ -150,6 +166,7 @@ export class TransferMinerGapSetter extends Component<Props, State> {
         }
 
         if (this.props.enable && nextProps.enable) {
+            this.setState({ isShowFeeFailMessage:false});
             if (this.props.defaultValue != nextProps.defaultValue) {
                 setTimeout(() => {
                     this.setState({
@@ -166,7 +183,8 @@ export class TransferMinerGapSetter extends Component<Props, State> {
         
         if (this.props.enable && !nextProps) {
             setTimeout(() => {
-                this.setState({value : 0, userHasChanged: false})
+                this.setState({value : 0, 
+                    userHasChanged: false})
                 TransferUtils.log("禁止 min = " + this.props.minimumValue + " max = " + this.props.maximumValue
             + " default = " + this.props.defaultValue 
             + " value = " + this.getValue()+ " userHasSet = " + this.getUserHasChanged());
@@ -235,6 +253,7 @@ export class TransferMinerGapSetter extends Component<Props, State> {
             });    
             return LVStrings.transfer_gas_format_hint;
         }
+       
         this.setState({
             isAdvancedValueFail:false
         });
@@ -339,7 +358,7 @@ export class TransferMinerGapSetter extends Component<Props, State> {
                 &&
                 <View style = {{marginTop:10,justifyContent: 'center',alignItems: 'center'}}>
                     <Text style= {{fontSize:12,color:LVColor.text.red}}>
-                    {LVStrings.transfer_minner_fee_fail}
+                    {this.state.feeFailMessageValue}
                     </Text>
                 </View>
             }

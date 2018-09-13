@@ -79,6 +79,7 @@ export default class LVAuthView extends Component<Props> {
             isAuthing : false,
             openSelectWallet : false,
             selectWallet : props.selectWallet,
+            switchVisible : true,
         };
         this.onTextChanged = this.onTextChanged.bind(this);
         this.passwordAuth = this.passwordAuth.bind(this);
@@ -181,6 +182,11 @@ export default class LVAuthView extends Component<Props> {
             });
             if(error.code === AUTH_ERROR_SWITCH){
                 this.switchAuth();
+                if(Platform.OS === "ios"){
+                    this.setState({
+                        switchVisible : false,
+                    });
+                }
             }else if(error.code === AUTH_ERROR_RETRY){
             }
         });
@@ -213,11 +219,14 @@ export default class LVAuthView extends Component<Props> {
     }
 
     pass(){
+        this.setState({
+            switchVisible : true,
+        });
         this.props.needShowAuthChange && this.props.needShowAuthChange(false);
     }
 
     render(){
-        const {firstAuth , secondAuth} = this.state;
+        const {firstAuth , secondAuth , switchVisible} = this.state;
 
         let bottomText = LVStrings.auth_use_password;
         let bottomVisible = false;
@@ -231,6 +240,7 @@ export default class LVAuthView extends Component<Props> {
                 bottomText = LVStrings.auth_use_password;
             }
         }
+        bottomVisible = (bottomVisible && switchVisible);
 
         let authVisible = true;
         let passwordVisible = true;
@@ -255,7 +265,7 @@ export default class LVAuthView extends Component<Props> {
             <View style={styles.container}>
                 <ScrollView 
                     contentContainerStyle = {styles.container}
-                keyboardShouldPersistTaps={'never'} showsVerticalScrollIndicator={false}>
+                keyboardShouldPersistTaps={'handled'} showsVerticalScrollIndicator={false}>
             
                     {Platform.OS === 'ios' && <StatusBar barStyle="dark-content"/>}
                     {authVisible && <TouchableOpacity style = {styles.authContainer}
